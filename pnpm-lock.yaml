@@ -83,6 +83,9 @@ importers:
       payload-admin-bar:
         specifier: ^1.0.6
         version: 1.0.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      payload-media-grid-plugin:
+        specifier: ^0.0.16
+        version: 0.0.16(payload@3.15.1(graphql@16.10.0)(monaco-editor@0.52.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.2))
       prism-react-renderer:
         specifier: ^2.3.1
         version: 2.4.1(react@19.0.0)
@@ -3770,6 +3773,11 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+
+  payload-media-grid-plugin@0.0.16:
+    resolution: {integrity: sha512-cJWrPbjxhlVz/aTnjPjuNA1QZ3pLv8AbdUi58uw8cD+bwBy4P2UEkz4VuxK/Z40pjRZhDqs3hJ7WVCDvU6cVHA==}
+    peerDependencies:
+      payload: 3.0.0-beta.53
 
   payload@3.15.1:
     resolution: {integrity: sha512-QM4A/tVXKRW+aURlmLHwNgjAH7D4NVJR3MWr6eSnn+zZxf/82KS8E5U6fgnGD08vmSkCqAnPf7P37afMa4hAqQ==}
@@ -9248,6 +9256,10 @@ snapshots:
     dependencies:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
+
+  payload-media-grid-plugin@0.0.16(payload@3.15.1(graphql@16.10.0)(monaco-editor@0.52.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.2)):
+    dependencies:
+      payload: 3.15.1(graphql@16.10.0)(monaco-editor@0.52.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.2)
 
   payload@3.15.1(graphql@16.10.0)(monaco-editor@0.52.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.2):
     dependencies:

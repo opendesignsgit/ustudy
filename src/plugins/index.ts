@@ -11,6 +11,12 @@ import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
 
+
+
+import {mediaGridPlugin} from './payload-media-grid-plugin-main/src'
+import { Media } from '../collections/Media'
+
+
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 
@@ -26,7 +32,7 @@ const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
 
 export const plugins: Plugin[] = [
   redirectsPlugin({
-    collections: ['pages', 'posts'],
+    collections: ['pages', 'posts', 'media'],
     overrides: {
       // @ts-expect-error - This is a valid override, mapped fields don't resolve to the same type
       fields: ({ defaultFields }) => {
@@ -91,4 +97,11 @@ export const plugins: Plugin[] = [
     },
   }),
   payloadCloudPlugin(),
+  mediaGridPlugin({
+    collections: {
+      [Media.slug]: true,
+    },
+    enabled:true,
+  }),
+
 ]

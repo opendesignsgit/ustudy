@@ -5,11 +5,19 @@ import {
   HeadingFeature,
   InlineToolbarFeature,
   lexicalEditor,
+  UnorderedListFeature,
+  UploadFeature,
+  EXPERIMENTAL_TableFeature,
 } from '@payloadcms/richtext-lexical'
 
 import { link } from '@/fields/link'
 
 const columnFields: Field[] = [
+  {
+    name: 'customclass',
+    type: 'text',
+    label: 'Custom Class',
+  },
   {
     name: 'size',
     type: 'select',
@@ -43,6 +51,9 @@ const columnFields: Field[] = [
           HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
           FixedToolbarFeature(),
           InlineToolbarFeature(),
+          UnorderedListFeature(), 
+          UploadFeature(),
+          EXPERIMENTAL_TableFeature(),
         ]
       },
     }),
@@ -73,5 +84,15 @@ export const Content: Block = {
       },
       fields: columnFields,
     },
+    {
+      name: 'customcontainerclass',
+      type: 'text',
+      label: 'Custom Container Class',
+    },
+    {
+      name: 'backgroundimage',
+      type: 'upload',
+      relationTo: 'media',
+    }
   ],
 }
