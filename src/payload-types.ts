@@ -17,6 +17,8 @@ export interface Config {
     categories: Category;
     users: User;
     courses: Course;
+    'learning-lab': LearningLab;
+    events: Event;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -34,6 +36,8 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
+    'learning-lab': LearningLabSelect<false> | LearningLabSelect<true>;
+    events: EventsSelect<false> | EventsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -161,6 +165,7 @@ export interface Page {
 export interface Post {
   id: number;
   title: string;
+  excerpt?: string | null;
   heroImage?: (number | null) | Media;
   content: {
     root: {
@@ -197,6 +202,14 @@ export interface Post {
     | null;
   slug?: string | null;
   slugLock?: boolean | null;
+  /**
+   * Add an external link to the post
+   */
+  externalLink?: string | null;
+  /**
+   * Add a featured image to the post
+   */
+  featuredImage?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -387,7 +400,8 @@ export interface CallToActionBlock {
 export interface ContentBlock {
   columns?:
     | {
-        size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+        customclass?: string | null;
+        size?: ('oneFourth' | 'oneThird' | 'half' | 'twoThirds' | 'full') | null;
         richText?: {
           root: {
             type: string;
@@ -403,6 +417,7 @@ export interface ContentBlock {
           };
           [k: string]: unknown;
         } | null;
+        colbackgroundimage?: (number | null) | Media;
         enableLink?: boolean | null;
         link?: {
           type?: ('reference' | 'custom') | null;
@@ -426,6 +441,8 @@ export interface ContentBlock {
         id?: string | null;
       }[]
     | null;
+  customcontainerclass?: string | null;
+  backgroundimage?: (number | null) | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'content';
@@ -698,7 +715,6 @@ export interface Course {
   };
   relatedPosts?: (number | Post)[] | null;
   categories?: (number | Category)[] | null;
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
   meta?: {
     title?: string | null;
     /**
@@ -723,6 +739,107 @@ export interface Course {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "learning-lab".
+ */
+export interface LearningLab {
+  id: number;
+  title: string;
+  excerpt?: string | null;
+  heroImage?: (number | null) | Media;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  relatedPosts?: (number | Post)[] | null;
+  categories?: (number | Category)[] | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
+  authors?: (number | User)[] | null;
+  populatedAuthors?:
+    | {
+        id?: string | null;
+        name?: string | null;
+      }[]
+    | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: number;
+  title: string;
+  heroImage?: (number | null) | Media;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  relatedPosts?: (number | Post)[] | null;
+  categories?: (number | Category)[] | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
+  authors?: (number | User)[] | null;
+  populatedAuthors?:
+    | {
+        id?: string | null;
+        name?: string | null;
+      }[]
+    | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  /**
+   * Add an external link to the post
+   */
+  externalLink?: string | null;
+  eventfrom?: string | null;
+  eventto?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -741,6 +858,10 @@ export interface Redirect {
       | ({
           relationTo: 'posts';
           value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'media';
+          value: number | Media;
         } | null);
     url?: string | null;
   };
@@ -775,7 +896,7 @@ export interface Search {
   title?: string | null;
   priority?: number | null;
   doc: {
-    relationTo: 'courses';
+    relationTo: 'posts';
     value: number | Post;
   };
   slug?: string | null;
@@ -916,6 +1037,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'courses';
         value: number | Course;
+      } | null)
+    | ({
+        relationTo: 'learning-lab';
+        value: number | LearningLab;
+      } | null)
+    | ({
+        relationTo: 'events';
+        value: number | Event;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1063,8 +1192,10 @@ export interface ContentBlockSelect<T extends boolean = true> {
   columns?:
     | T
     | {
+        customclass?: T;
         size?: T;
         richText?: T;
+        colbackgroundimage?: T;
         enableLink?: T;
         link?:
           | T
@@ -1078,6 +1209,8 @@ export interface ContentBlockSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  customcontainerclass?: T;
+  backgroundimage?: T;
   id?: T;
   blockName?: T;
 }
@@ -1121,6 +1254,7 @@ export interface FormBlockSelect<T extends boolean = true> {
  */
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
+  excerpt?: T;
   heroImage?: T;
   content?: T;
   relatedPosts?: T;
@@ -1142,6 +1276,8 @@ export interface PostsSelect<T extends boolean = true> {
       };
   slug?: T;
   slugLock?: T;
+  externalLink?: T;
+  featuredImage?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1302,6 +1438,72 @@ export interface CoursesSelect<T extends boolean = true> {
       };
   slug?: T;
   slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "learning-lab_select".
+ */
+export interface LearningLabSelect<T extends boolean = true> {
+  title?: T;
+  excerpt?: T;
+  heroImage?: T;
+  content?: T;
+  relatedPosts?: T;
+  categories?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  publishedAt?: T;
+  authors?: T;
+  populatedAuthors?:
+    | T
+    | {
+        id?: T;
+        name?: T;
+      };
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  title?: T;
+  heroImage?: T;
+  content?: T;
+  relatedPosts?: T;
+  categories?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  publishedAt?: T;
+  authors?: T;
+  populatedAuthors?:
+    | T
+    | {
+        id?: T;
+        name?: T;
+      };
+  slug?: T;
+  slugLock?: T;
+  externalLink?: T;
+  eventfrom?: T;
+  eventto?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1614,6 +1816,21 @@ export interface Footer {
         id?: string | null;
       }[]
     | null;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1659,6 +1876,7 @@ export interface FooterSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  content?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1683,6 +1901,14 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'courses';
           value: number | Course;
+        } | null)
+      | ({
+          relationTo: 'learning-lab';
+          value: number | LearningLab;
+        } | null)
+      | ({
+          relationTo: 'events';
+          value: number | Event;
         } | null);
     global?: string | null;
     user?: (number | null) | User;

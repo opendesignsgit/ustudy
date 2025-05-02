@@ -14,6 +14,15 @@ import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import EducationPromoSection from '@/components/Home/hero-intro'
+import AboutUstudy from '@/components/Home/about-ustudy'
+import WhyChooseUs from '@/components/Home/why-choose-us'
+import AcademicPathSlider from '@/components/Home/academic-path-slider'
+import UniversitySolutionSection from '@/components/Home/university-solution'
+import StudyDestinationCarousel from '@/components/Home/study-destination'
+import UniversitySlider from '@/components/Home/university-slider'
+import FooterForm from '@/components/Home/footer-form'
+import Footer from '@/components/Home/footer'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -68,15 +77,30 @@ export default async function Page({ params: paramsPromise }: Args) {
   const { hero, layout } = page
 
   return (
-    <article className="pt-16 pb-24">
+    <article className={`pt-8 ${slug}`}>
       <PageClient />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
 
-      <RenderHero {...hero} />
-      <RenderBlocks blocks={layout} />
+      
+      {slug === 'home-new' ? (
+        <div>
+          <EducationPromoSection></EducationPromoSection>
+          <AboutUstudy></AboutUstudy>
+          <WhyChooseUs></WhyChooseUs>
+          <AcademicPathSlider></AcademicPathSlider>
+          <UniversitySolutionSection></UniversitySolutionSection>
+          <StudyDestinationCarousel></StudyDestinationCarousel>
+          <UniversitySlider></UniversitySlider>
+          <FooterForm></FooterForm>
+          <Footer></Footer>
+        </div>
+      ) : (
+        <RenderBlocks blocks={layout} />
+      )}
+
     </article>
   )
 }

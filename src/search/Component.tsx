@@ -23,7 +23,7 @@ export const Search: React.FC = () => {
         }}
       >
         <Label htmlFor="search" className="sr-only">
-          Search
+          Search Courses
         </Label>
         <Input
           id="search"

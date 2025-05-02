@@ -75,6 +75,11 @@ export const Posts: CollectionConfig<'posts'> = {
       required: true,
     },
     {
+      name: 'excerpt',
+      type: 'textarea',
+      required: false,
+    },
+    {
       type: 'tabs',
       tabs: [
         {
@@ -218,6 +223,25 @@ export const Posts: CollectionConfig<'posts'> = {
       ],
     },
     ...slugField(),
+    {
+      name: 'externalLink',
+      type: 'text',
+      label: 'External Link',
+      admin: {
+        description: 'Add an external link to the post',
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'featuredImage',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Featured Image',
+      admin: {
+        description: 'Add a featured image to the post',
+        position: 'sidebar',
+      },
+    },
   ],
   hooks: {
     afterChange: [revalidatePost],

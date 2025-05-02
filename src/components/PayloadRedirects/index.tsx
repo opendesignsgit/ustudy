@@ -31,12 +31,17 @@ export const PayloadRedirects: React.FC<Props> = async ({ disableNotFound, url }
       redirectUrl = `${redirectItem.to?.reference?.relationTo !== 'pages' ? `/${redirectItem.to?.reference?.relationTo}` : ''}/${
         document?.slug
       }`
-    } else {
+    } else if (
+      typeof redirectItem.to?.reference?.value === 'object' &&
+      (redirectItem.to?.reference?.relationTo === 'pages' || redirectItem.to?.reference?.relationTo === 'posts')
+    ) {
+      // Narrowing the type to Page or Post by checking relationTo
+      const value = redirectItem.to?.reference?.value as Page | Post
       redirectUrl = `${redirectItem.to?.reference?.relationTo !== 'pages' ? `/${redirectItem.to?.reference?.relationTo}` : ''}/${
-        typeof redirectItem.to?.reference?.value === 'object'
-          ? redirectItem.to?.reference?.value?.slug
-          : ''
+        value.slug
       }`
+    } else {
+      redirectUrl = ''
     }
 
     if (redirectUrl) redirect(redirectUrl)

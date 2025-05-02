@@ -13,9 +13,6 @@ import { beforeSyncWithSearch } from '@/search/beforeSync'
 
 
 
-import {mediaGridPlugin} from './payload-media-grid-plugin-main/src'
-import { Media } from '../collections/Media'
-
 
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -97,11 +94,5 @@ export const plugins: Plugin[] = [
     },
   }),
   payloadCloudPlugin(),
-  mediaGridPlugin({
-    collections: {
-      [Media.slug]: true,
-    },
-    enabled:true,
-  }),
 
 ]
