@@ -41,9 +41,6 @@ export const Courses: CollectionConfig<'courses'> = {
     read: authenticatedOrPublished,
     update: authenticated,
   },
-  // This config controls what's populated by default when a post is referenced
-  // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
-  // Type safe if the collection slug generic is passed to `CollectionConfig` - `CollectionConfig<'courses'>
   defaultPopulate: {
     title: true,
     slug: true,
@@ -54,7 +51,6 @@ export const Courses: CollectionConfig<'courses'> = {
     },
   },
   admin: {
-    
     group: 'Courses',
     defaultColumns: ['title', 'slug', 'updatedAt'],
     livePreview: {
@@ -92,17 +88,6 @@ export const Courses: CollectionConfig<'courses'> = {
               type: 'upload',
               relationTo: 'media',
             },
-            // {
-            //   name: 'content',
-            //   type: 'blocks',
-            //   blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
-            //   required: true,
-            //   admin: {
-            //     initCollapsed: true,
-            //   },
-             
-            //   label: false,
-            // },
             {
               name: 'content',
               type: 'richText',
@@ -171,13 +156,9 @@ export const Courses: CollectionConfig<'courses'> = {
             MetaImageField({
               relationTo: 'media',
             }),
-
             MetaDescriptionField({}),
             PreviewField({
-              // if the `generateUrl` function is configured
               hasGenerateFn: true,
-
-              // field paths to match the target field for data
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
             }),
@@ -214,29 +195,39 @@ export const Courses: CollectionConfig<'courses'> = {
       hasMany: true,
       relationTo: 'users',
     },
-    // This field is only used to populate the user data via the `populateAuthors` hook
-    // This is because the `user` collection has access control locked to protect user privacy
-    // GraphQL will also not return mutated user data that differs from the underlying schema
     {
-      name: 'populatedAuthors',
-      type: 'array',
-      access: {
-        update: () => false,
-      },
+      name: 'university',
+      type: 'relationship',
+      relationTo: 'universities',
+      required: true,
       admin: {
-        disabled: true,
-        readOnly: true,
+        position: 'sidebar',
       },
-      fields: [
-        {
-          name: 'id',
-          type: 'text',
-        },
-        {
-          name: 'name',
-          type: 'text',
-        },
+    },
+    {
+      name: 'degreeProgram',
+      type: 'text',
+    },
+    {
+      name: 'studyYears',
+      type: 'number',
+    },
+    {
+      name: 'studyMode',
+      type: 'select',
+      options: [
+        { label: 'Full-time', value: 'full-time' },
+        { label: 'Part-time', value: 'part-time' },
+        { label: 'Online', value: 'online' },
       ],
+    },
+    {
+      name: 'intakeMonths',
+      type: 'text',
+    },
+    {
+      name: 'description',
+      type: 'textarea',
     },
     ...slugField(),
   ],
@@ -248,7 +239,7 @@ export const Courses: CollectionConfig<'courses'> = {
   versions: {
     drafts: {
       autosave: {
-        interval: 100, // We set this interval for optimal live preview
+        interval: 100,
       },
       schedulePublish: true,
     },

@@ -1,15 +1,13 @@
-import type { Metadata } from 'next/types'
+import CountryFlagSlider from "./components/CountryFlagSlider";
+import FiltersClient from "./components/FiltersClient";
+import CoursesPaginationClient from "./components/CoursesPaginationClient";
 
-import { CollectionArchive } from '@/components/CollectionArchive'
-import { PageRange } from '@/components/PageRange'
-import { Pagination } from '@/components/Pagination'
+export const dynamic = "force-static";
+export const revalidate = 600;
+
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
-import PageClient from './page.client'
-
-export const dynamic = 'force-static'
-export const revalidate = 600
 
 export default async function Page() {
   const payload = await getPayload({ config: configPromise })
@@ -17,7 +15,7 @@ export default async function Page() {
   const courses = await payload.find({
     collection: 'courses',
     depth: 1,
-    limit: 12,
+    limit: 7,
     overrideAccess: false,
     select: {
       title: true,
@@ -26,38 +24,34 @@ export default async function Page() {
       meta: true,
     },
   })
-
+  console.log(courses);
+  
   return (
     <div className="pt-24 pb-24">
-      <PageClient />
-      <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none">
-          <h1>Courses</h1>
+      {/* Country Slider */}
+      <CountryFlagSlider />
+
+      <div className="container flex gap-8">
+        {/* Sidebar */}
+        <div className="w-1/4">
+          <div className="bg-gray-100 rounded p-4">
+            <h2 className="font-semibold mb-4">Filters</h2>
+            {/* Countries Filter */}
+            <FiltersClient />
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="w-3/4">
+          <div className="mb-4 flex justify-between items-center">
+            <div>
+              <h2 className="text-lg font-semibold">76 List of Degrees</h2>
+            </div>
+          </div>
+
+          <CoursesPaginationClient />
         </div>
       </div>
-
-      <div className="container mb-8">
-        <PageRange
-          collection="courses"
-          currentPage={courses.page}
-          limit={12}
-          totalDocs={courses.totalDocs}
-        />
-      </div>
-
-      <CollectionArchive posts={courses.docs} />
-
-      <div className="container">
-        {courses.totalPages > 1 && courses.page && (
-          <Pagination page={courses.page} totalPages={courses.totalPages} />
-        )}
-      </div>
     </div>
-  )
-}
-
-export function generateMetadata(): Metadata {
-  return {
-    title: `Payload Website Template Posts`,
-  }
+  );
 }
