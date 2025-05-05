@@ -17,6 +17,8 @@ export interface Config {
     categories: Category;
     users: User;
     courses: Course;
+    universities: University;
+    countries: Country;
     'learning-lab': LearningLab;
     events: Event;
     redirects: Redirect;
@@ -36,6 +38,8 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
+    universities: UniversitiesSelect<false> | UniversitiesSelect<true>;
+    countries: CountriesSelect<false> | CountriesSelect<true>;
     'learning-lab': LearningLabSelect<false> | LearningLabSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
@@ -725,17 +729,42 @@ export interface Course {
   };
   publishedAt?: string | null;
   authors?: (number | User)[] | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
+  university: number | University;
+  degreeProgram?: string | null;
+  studyYears?: number | null;
+  studyMode?: ('full-time' | 'part-time' | 'online') | null;
+  intakeMonths?: string | null;
+  description?: string | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "universities".
+ */
+export interface University {
+  id: number;
+  title: string;
+  logo: number | Media;
+  country: number | Country;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries".
+ */
+export interface Country {
+  id: number;
+  name: string;
+  code: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1037,6 +1066,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'courses';
         value: number | Course;
+      } | null)
+    | ({
+        relationTo: 'universities';
+        value: number | University;
+      } | null)
+    | ({
+        relationTo: 'countries';
+        value: number | Country;
       } | null)
     | ({
         relationTo: 'learning-lab';
@@ -1430,17 +1467,40 @@ export interface CoursesSelect<T extends boolean = true> {
       };
   publishedAt?: T;
   authors?: T;
-  populatedAuthors?:
-    | T
-    | {
-        id?: T;
-        name?: T;
-      };
+  university?: T;
+  degreeProgram?: T;
+  studyYears?: T;
+  studyMode?: T;
+  intakeMonths?: T;
+  description?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "universities_select".
+ */
+export interface UniversitiesSelect<T extends boolean = true> {
+  title?: T;
+  logo?: T;
+  country?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries_select".
+ */
+export interface CountriesSelect<T extends boolean = true> {
+  name?: T;
+  code?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
