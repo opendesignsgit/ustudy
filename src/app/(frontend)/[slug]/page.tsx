@@ -6,6 +6,7 @@ import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import { homeStatic } from '@/endpoints/seed/home-static'
+import './home.css'
 
 import type { Page as PageType } from '@/payload-types'
 
@@ -77,30 +78,24 @@ export default async function Page({ params: paramsPromise }: Args) {
   const { hero, layout } = page
 
   return (
-    <article className={`pt-8 ${slug}`}>
+    <article className={`${slug}`}>
       <PageClient />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
 
-      
-      {slug === 'home-new' ? (
-        <div>
-          <EducationPromoSection></EducationPromoSection>
-          <AboutUstudy></AboutUstudy>
-          <WhyChooseUs></WhyChooseUs>
-          <AcademicPathSlider></AcademicPathSlider>
-          <UniversitySolutionSection></UniversitySolutionSection>
-          <StudyDestinationCarousel></StudyDestinationCarousel>
-          <UniversitySlider></UniversitySlider>
-          <FooterForm></FooterForm>
-          <Footer></Footer>
-        </div>
-      ) : (
-        <RenderBlocks blocks={layout} />
-      )}
-
+      <div>
+        <EducationPromoSection></EducationPromoSection>
+        <AboutUstudy></AboutUstudy>
+        <WhyChooseUs></WhyChooseUs>
+        <AcademicPathSlider></AcademicPathSlider>
+        <UniversitySolutionSection></UniversitySolutionSection>
+        <StudyDestinationCarousel></StudyDestinationCarousel>
+        <UniversitySlider></UniversitySlider>
+        <FooterForm></FooterForm>
+        <Footer></Footer>
+      </div>
     </article>
   )
 }

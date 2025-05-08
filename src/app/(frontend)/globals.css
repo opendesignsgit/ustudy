@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Arial';
+  src: url('/public/fonts/Arial-BoldMT.woff2') format('woff2'),
+      url('/public/fonts/Arial-BoldMT.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Arial';
+  src: url('/public/fonts/ArialMT.woff2') format('woff2'),
+      url('/public/fonts/ArialMT.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
 
   h1,
@@ -106,6 +124,7 @@ html[data-theme='light'] {
   opacity: initial;
 }
 
+body{font-family: 'Arial'; font-size: 18px;font-weight: 500;letter-spacing: -0.2px;background: #ffffff;}
 
 header {
   padding-block: 10px;
@@ -145,7 +164,7 @@ body header nav a.text-primary {
 body header nav a svg.text-primary {
   color: #333333;
 }
-
+body>footer{display: none;}
 footer{padding-block: 8vh;}
 footer>.container>.prose>p{margin: 0;line-height: 0%;}
 footer .container.my-16{margin-block: 0;}
@@ -157,6 +176,39 @@ footer .footer-content p a{color: #ffffff;}
 footer .footer-content ul {list-style: none;padding-left: 0;}
 footer .footer-content ul li a{color: #ffffff;text-decoration: none;}
 
+.footformboxs{position: relative;-webkit-transform: translateY(-50%);-ms-transform: translateY(-50%);transform: translateY(-50%);margin-bottom: -25vh;}
+.TfootContCol{width: 40%;padding-block: 10vh;padding-inline: 2vw 5vw; border-top-right-radius: 40vw;border-bottom-right-radius: 40vw;}
+.TfootContCol h2{font-size: 3vw;line-height: 1;margin-bottom: 10px;}
+.TfootContCol p{font-weight: 400;}
+.TfootFormCol{width: 60%;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;padding-inline: 2vw;}
+.formboxs{margin-inline: -15px;}
+.formboxs .form-col{padding-inline:15px;width: 50%;margin-bottom: 20px;}
+.formboxs .form-col.fullcol{width: 100%;}
+.formboxs input{width: 100%;background: transparent;line-height: 3;border-bottom: 1px solid #CCCCCC;color: #000000;}
+.formboxs textarea{width: 100%;background: transparent;line-height: 1.2;border-bottom: 1px solid #CCCCCC;height: 70px;color: #000000;padding-top: 10px;}
+.formboxs input:focus,.formboxs input:focus-visible{outline: none;border-bottom-color: #0056d2;}
+.formboxs textarea:focus,.formboxs textarea:focus-visible{outline: none;border-bottom-color: #0056d2;}
+.formboxs button{background: #0056d2;color: #ffffff;padding-inline: 3vw;line-height: 45px;border-radius: 30px;letter-spacing: 1px;}
+
+.footbtm{padding-bottom: 5vh;}
+.footbtm .footmcol{-webkit-box-flex: 1;-ms-flex: 1 1 auto;flex: 1 1 auto;position: relative;}
+.footbtm .footmcol::before{content: '';position: absolute;width: 1px;height: 100%;top: 0;right: 10%;background: rgb(255 255 255 / 10%);}
+.footbtm .footTitle{margin-bottom: 3vh;letter-spacing: 1px;font-weight: 400;font-size: 1.1vw;}
+.footbtm address{font-style: normal;font-weight: 400;letter-spacing: 0.4px;}
+footer .footbtm ul li{font-style: normal;font-weight: 400;letter-spacing: 0.4px;margin-top: 0!important;padding-block: 10px;font-weight: 500;}
+footer .footbtm ul li:first-child{padding-top: 0;}
+footer .footbtm ul li a{display: block;font-size: 18px;}
+.footcorightrow{border-top: 1px solid rgb(255 255 255 / 10%);}
+.footcorightrow p{font-weight: 400;letter-spacing: 0;}
+.footcorightrow p img{width: 25px;height: 25px;margin-left: 10px;}
+.footSmedialist{margin-top: 4vh;}
+footer .footbtm ul.footSmediaul{}
+footer .footbtm ul.footSmediaul li{padding: 0;margin-right: 10px;}
+footer .footbtm ul.footSmediaul li a{width: 35px;aspect-ratio: 1;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;background: #ffffff;border-radius: 50%;color: #1e3a8a;    padding-top: 2px;border: 1px solid #ffffff;}
+footer .footbtm ul.footSmediaul li a:hover{background: #1e3a8a;color: #ffffff;}
+
+.contlink p.mailpara{}
+.contlink p.phonepara{}
 
 .pagebannersec {
   -webkit-box-align: center;
