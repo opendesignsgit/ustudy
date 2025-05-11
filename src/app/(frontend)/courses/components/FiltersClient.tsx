@@ -85,11 +85,7 @@ const FiltersClient: React.FC = () => {
 
   const countries = [
     { name: "Malaysia", flag: "🇲🇾" },
-    { name: "Barbados", flag: "🇧🇧" },
-    { name: "Kazakhstan", flag: "🇰🇿" },
     { name: "Singapore", flag: "🇸🇬" },
-    { name: "Kyrgyzstan", flag: "🇰🇬" },
-    { name: "Tajikistan", flag: "🇹🇯" },
   ];
 
   const filterOptions = {
@@ -113,7 +109,7 @@ const FiltersClient: React.FC = () => {
         onClear={clearFilters}
       />
       {/* Country Slider */}
-      <div className="mb-4">
+      {/* <div className="mb-4">
         <h3 className="font-medium mb-2">Countries (Slider)</h3>
         <div className="flex overflow-x-auto gap-4 py-2">
           {countries.map((country) => (
@@ -131,7 +127,7 @@ const FiltersClient: React.FC = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
       
 
       {/* Countries Filter with Collapse and Search */}
