@@ -774,8 +774,14 @@ export interface Course {
     };
     [k: string]: unknown;
   };
-  relatedPosts?: (number | Post)[] | null;
-  categories?: (number | Category)[] | null;
+  description?: string | null;
+  university: number | University;
+  degreeProgram?: string | null;
+  department?: string | null;
+  studyArea?: string | null;
+  studyYears?: number | null;
+  studyMode?: ('full-time' | 'part-time' | 'online') | null;
+  intakeMonths?: string | null;
   meta?: {
     title?: string | null;
     /**
@@ -786,12 +792,6 @@ export interface Course {
   };
   publishedAt?: string | null;
   authors?: (number | User)[] | null;
-  university: number | University;
-  degreeProgram?: string | null;
-  studyYears?: number | null;
-  studyMode?: ('full-time' | 'part-time' | 'online') | null;
-  intakeMonths?: string | null;
-  description?: string | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -820,6 +820,7 @@ export interface Country {
   id: number;
   name: string;
   code: string;
+  logo?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
 }
@@ -1513,8 +1514,14 @@ export interface CoursesSelect<T extends boolean = true> {
   title?: T;
   heroImage?: T;
   content?: T;
-  relatedPosts?: T;
-  categories?: T;
+  description?: T;
+  university?: T;
+  degreeProgram?: T;
+  department?: T;
+  studyArea?: T;
+  studyYears?: T;
+  studyMode?: T;
+  intakeMonths?: T;
   meta?:
     | T
     | {
@@ -1524,12 +1531,6 @@ export interface CoursesSelect<T extends boolean = true> {
       };
   publishedAt?: T;
   authors?: T;
-  university?: T;
-  degreeProgram?: T;
-  studyYears?: T;
-  studyMode?: T;
-  intakeMonths?: T;
-  description?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
@@ -1556,6 +1557,7 @@ export interface UniversitiesSelect<T extends boolean = true> {
 export interface CountriesSelect<T extends boolean = true> {
   name?: T;
   code?: T;
+  logo?: T;
   updatedAt?: T;
   createdAt?: T;
 }

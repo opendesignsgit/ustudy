@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
-
+import { PayloadRequest } from 'payload';
+import { Response } from 'express'
 import {
   BlocksFeature,
   FixedToolbarFeature,
@@ -44,8 +45,7 @@ export const Courses: CollectionConfig<'courses'> = {
   defaultPopulate: {
     title: true,
     slug: true,
-    categories: true,
-    meta: {
+      meta: {
       image: true,
       description: true,
     },
@@ -72,6 +72,31 @@ export const Courses: CollectionConfig<'courses'> = {
       }),
     useAsTitle: 'title',
   },
+  endpoints: [
+    {
+      path: '/filter',
+      method: 'get',
+      handler: (async (req: PayloadRequest, res: Response) => {
+        try {
+          const { university, studyArea } = req.query;
+          
+          const result = await req.payload.find({
+            collection: 'courses',
+            where: {
+              ...(university ? { 'university': { equals: university } } : {}),
+              ...(studyArea ? { 'studyArea': { equals: studyArea } } : {})
+            },
+            limit: 100
+          });
+          
+          res.status(200).json(result);
+        } catch (error) {
+          console.error('Filter error:', error);
+          res.status(500).json({ error: 'Filtering failed' });
+        }
+      }) as any // This type assertion resolves the TypeScript error
+    }
+  ],
   fields: [
     {
       name: 'title',
@@ -108,35 +133,74 @@ export const Courses: CollectionConfig<'courses'> = {
               label: false,
               required: true,
             },
+            {
+              name: 'description',
+              type: 'textarea',
+            },
           ],
           label: 'Content',
         },
         {
           fields: [
+            // {
+            //   name: 'relatedPosts',
+            //   type: 'relationship',
+            //   admin: {
+            //     position: 'sidebar',
+            //   },
+            //   filterOptions: ({ id }) => {
+            //     return {
+            //       id: {
+            //         not_in: [id],
+            //       },
+            //     }
+            //   },
+            //   hasMany: true,
+            //   relationTo: 'posts',
+            // },
+            // {
+            //   name: 'categories',
+            //   type: 'relationship',
+            //   admin: {
+            //     position: 'sidebar',
+            //   },
+            //   hasMany: true,
+            //   relationTo: 'categories',
+            // },
             {
-              name: 'relatedPosts',
+              name: 'university',
               type: 'relationship',
-              admin: {
-                position: 'sidebar',
-              },
-              filterOptions: ({ id }) => {
-                return {
-                  id: {
-                    not_in: [id],
-                  },
-                }
-              },
-              hasMany: true,
-              relationTo: 'posts',
+              relationTo: 'universities',
+              required: true,
             },
             {
-              name: 'categories',
-              type: 'relationship',
-              admin: {
-                position: 'sidebar',
-              },
-              hasMany: true,
-              relationTo: 'categories',
+              name: 'degreeProgram',
+              type: 'text',
+            },
+            {
+              name: 'department',
+              type: 'text',
+            },
+            {
+              name: 'studyArea',
+              type: 'text',
+            },
+            {
+              name: 'studyYears',
+              type: 'number',
+            },
+            {
+              name: 'studyMode',
+              type: 'select',
+              options: [
+                { label: 'Full-time', value: 'full-time' },
+                { label: 'Part-time', value: 'part-time' },
+                { label: 'Online', value: 'online' },
+              ],
+            },
+            {
+              name: 'intakeMonths',
+              type: 'text',
             },
           ],
           label: 'Meta',
@@ -194,40 +258,6 @@ export const Courses: CollectionConfig<'courses'> = {
       },
       hasMany: true,
       relationTo: 'users',
-    },
-    {
-      name: 'university',
-      type: 'relationship',
-      relationTo: 'universities',
-      required: true,
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'degreeProgram',
-      type: 'text',
-    },
-    {
-      name: 'studyYears',
-      type: 'number',
-    },
-    {
-      name: 'studyMode',
-      type: 'select',
-      options: [
-        { label: 'Full-time', value: 'full-time' },
-        { label: 'Part-time', value: 'part-time' },
-        { label: 'Online', value: 'online' },
-      ],
-    },
-    {
-      name: 'intakeMonths',
-      type: 'text',
-    },
-    {
-      name: 'description',
-      type: 'textarea',
     },
     ...slugField(),
   ],

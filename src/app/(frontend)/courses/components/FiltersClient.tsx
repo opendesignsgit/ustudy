@@ -1,264 +1,272 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
-import AppliedFilters from "./AppliedFilters";
+import React, { useState, useEffect } from 'react'
+import AppliedFilters from './AppliedFilters'
 
-type FiltersState = {
-  countries: string[];
-  universities: string[];
-  studyAreas: string[];
-};
+type FilterState = {
+  countries: string[]
+  universities: string[]
+  degreePrograms: string[]
+  departments: string[]
+  studyAreas: string[]
+  studyYears: string[]
+  studyModes: string[]
+}
 
 type SearchTermsState = {
-  countries: string;
-  universities: string;
-  studyAreas: string;
-};
+  countries: string
+  universities: string
+  degreePrograms: string
+  departments: string
+  studyAreas: string
+  studyYears: string
+  studyModes: string
+}
 
 type CollapsedSectionsState = {
-  countries: boolean;
-  universities: boolean;
-  studyAreas: boolean;
-};
+  countries: boolean
+  universities: boolean
+  degreePrograms: boolean
+  departments: boolean
+  studyAreas: boolean
+  studyYears: boolean
+  studyModes: boolean
+}
 
-const FiltersClient: React.FC = () => {
-  const [filters, setFilters] = useState<FiltersState>({
+const FiltersClient = ({ 
+  onFilterChange,
+  courses
+}: {
+  onFilterChange: (filters: FilterState) => void,
+  courses: any[]
+}) => {
+  // Generate all possible filter options from courses data
+  const generateFilterOptions = () => {
+    const options = {
+      countries: new Set<string>(),
+      universities: new Set<string>(),
+      degreePrograms: new Set<string>(),
+      departments: new Set<string>(),
+      studyAreas: new Set<string>(),
+      studyYears: new Set<string>(),
+      studyModes: new Set<string>()
+    }
+
+    courses.forEach(course => {
+      // Handle country (nested under university.country)
+      if (course.university?.country?.name) {
+        options.countries.add(course.university.country.name)
+      }
+      
+      // Handle other fields
+      if (course.university?.title) options.universities.add(course.university.title)
+      if (course.degreeProgram) options.degreePrograms.add(course.degreeProgram)
+      if (course.department) options.departments.add(course.department)
+      if (course.studyArea) options.studyAreas.add(course.studyArea)
+      if (course.studyYears) options.studyYears.add(course.studyYears.toString())
+      if (course.studyMode) options.studyModes.add(course.studyMode)
+    })
+
+    return {
+      countries: Array.from(options.countries).sort(),
+      universities: Array.from(options.universities).sort(),
+      degreePrograms: Array.from(options.degreePrograms).sort(),
+      departments: Array.from(options.departments).sort(),
+      studyAreas: Array.from(options.studyAreas).sort(),
+      studyYears: Array.from(options.studyYears).sort(),
+      studyModes: Array.from(options.studyModes).sort()
+    }
+  }
+
+  // State management
+  const [filterOptions, setFilterOptions] = useState(generateFilterOptions())
+  const [filters, setFilters] = useState<FilterState>({
     countries: [],
     universities: [],
+    degreePrograms: [],
+    departments: [],
     studyAreas: [],
-  });
+    studyYears: [],
+    studyModes: []
+  })
   const [searchTerms, setSearchTerms] = useState<SearchTermsState>({
-    countries: "",
-    universities: "",
-    studyAreas: "",
-  });
-  const [collapsedSections, setCollapsedSections] =
-    useState<CollapsedSectionsState>({
-      countries: false,
-      universities: false,
-      studyAreas: false,
-    });
+    countries: '',
+    universities: '',
+    degreePrograms: '',
+    departments: '',
+    studyAreas: '',
+    studyYears: '',
+    studyModes: ''
+  })
+  const [collapsedSections, setCollapsedSections] = useState<CollapsedSectionsState>({
+    countries: false,
+    universities: false,
+    degreePrograms: false,
+    departments: false,
+    studyAreas: false,
+    studyYears: false,
+    studyModes: false
+  })
 
-      const handleRemoveFilter = (filter: string) => {
-    setFilters((prevFilters) => ({
-      countries: prevFilters.countries.filter((item) => item !== filter),
-      universities: prevFilters.universities.filter((item) => item !== filter),
-      studyAreas: prevFilters.studyAreas.filter((item) => item !== filter),
-    }));
-  };
-  const handleFilterChange = (category: keyof FiltersState, value: string) => {
-    const updatedFilter = {
-      ...filters,
-      [category]: filters[category].includes(value)
-        ? filters[category].filter((item) => item !== value)
-        : [...filters[category], value],
-    };
-    setFilters(updatedFilter);
-  };
+  // Update filter options when courses change
+  useEffect(() => {
+    setFilterOptions(generateFilterOptions())
+  }, [courses])
 
+  // Notify parent when filters change
+  useEffect(() => {
+    onFilterChange(filters)
+  }, [filters, onFilterChange])
+
+  // Handle filter selection changes
+  const handleFilterChange = (category: keyof FilterState, value: string) => {
+    setFilters(prev => ({
+      ...prev,
+      [category]: prev[category].includes(value)
+        ? prev[category].filter(item => item !== value)
+        : [...prev[category], value]
+    }))
+  }
+
+  // Handle search term changes
   const handleSearchChange = (category: keyof SearchTermsState, value: string) => {
-    setSearchTerms({
-      ...searchTerms,
-      [category]: value,
-    });
-  };
+    setSearchTerms(prev => ({ ...prev, [category]: value }))
+  }
 
+  // Toggle filter section collapse
   const toggleCollapse = (category: keyof CollapsedSectionsState) => {
-    setCollapsedSections({
-      ...collapsedSections,
-      [category]: !collapsedSections[category],
-    });
-  };
+    setCollapsedSections(prev => ({ ...prev, [category]: !prev[category] }))
+  }
 
+  // Clear all filters
   const clearFilters = () => {
     setFilters({
       countries: [],
       universities: [],
+      degreePrograms: [],
+      departments: [],
       studyAreas: [],
-    });
-    setSearchTerms({
-      countries: "",
-      universities: "",
-      studyAreas: "",
-    });
-  };
+      studyYears: [],
+      studyModes: []
+    })
+  }
 
-  const countries = [
-    { name: "Malaysia", flag: "🇲🇾" },
-    { name: "Barbados", flag: "🇧🇧" },
-    { name: "Kazakhstan", flag: "🇰🇿" },
-    { name: "Singapore", flag: "🇸🇬" },
-    { name: "Kyrgyzstan", flag: "🇰🇬" },
-    { name: "Tajikistan", flag: "🇹🇯" },
-  ];
+  // Remove specific filter
+  const handleRemoveFilter = (filter: string) => {
+    const [type, value] = filter.split(': ')
+    const categoryMap: Record<string, keyof FilterState> = {
+      'Country': 'countries',
+      'University': 'universities',
+      'Program': 'degreePrograms',
+      'Department': 'departments',
+      'Area': 'studyAreas',
+      'Years': 'studyYears',
+      'Mode': 'studyModes'
+    }
+    
+    const category = categoryMap[type]
+    if (category) {
+      setFilters(prev => ({
+        ...prev,
+        [category]: prev[category].filter(item => item !== value)
+      }))
+    }
+  }
 
-  const filterOptions = {
-    universities: [
-      "Brickfields Asia College",
-      "Veritas University College",
-      "Kokshetau State University",
-      "Bridgetown International University",
-      "Kazakh-Russian Medical University",
-    ],
-    studyAreas: ["Science", "Technology", "Arts", "Business", "Engineering"],
-  };
+  // Generate applied filters with labels
+  const appliedFilters = [
+    ...filters.countries.map(c => `Country: ${c}`),
+    ...filters.universities.map(u => `University: ${u}`),
+    ...filters.degreePrograms.map(d => `Program: ${d}`),
+    ...filters.departments.map(d => `Department: ${d}`),
+    ...filters.studyAreas.map(s => `Area: ${s}`),
+    ...filters.studyYears.map(y => `Years: ${y}`),
+    ...filters.studyModes.map(m => `Mode: ${m}`)
+  ]
+
+  // Filter sections configuration
+  const filterSections = [
+    { key: 'countries', label: 'Countries' },
+    { key: 'universities', label: 'Universities' },
+    { key: 'degreePrograms', label: 'Degree Programs' },
+    { key: 'departments', label: 'Departments' },
+    { key: 'studyAreas', label: 'Study Areas' },
+    { key: 'studyYears', label: 'Study Years' },
+    { key: 'studyModes', label: 'Study Modes' }
+  ]
 
   return (
-      <div className="bg-gray-100 rounded p-4">
-          
-            {/* Applied Filters */}
-      <AppliedFilters
-        appliedFilters={Object.values(filters).flat()}
-        onRemove={handleRemoveFilter}
-        onClear={clearFilters}
-      />
-      {/* Country Slider */}
-      <div className="mb-4">
-        <h3 className="font-medium mb-2">Countries (Slider)</h3>
-        <div className="flex overflow-x-auto gap-4 py-2">
-          {countries.map((country) => (
+    <div className="bg-gray-100 rounded p-4">
+      {/* Applied Filters */}
+      {appliedFilters.length > 0 && (
+        <AppliedFilters
+          appliedFilters={appliedFilters}
+          onRemove={handleRemoveFilter}
+          onClear={clearFilters}
+        />
+      )}
+
+      {/* Filter Sections */}
+      {filterSections.map(({ key, label }) => {
+        const filterKey = key as keyof typeof filterOptions
+        return filterOptions[filterKey].length > 0 ? (
+          <div key={key} className="mb-4">
             <div
-              key={country.name}
-              className={`flex flex-col items-center cursor-pointer ${
-                filters.countries.includes(country.name)
-                  ? "text-blue-500 font-bold"
-                  : "text-gray-700"
-              }`}
-              onClick={() => handleFilterChange("countries", country.name)}
+              className="flex justify-between items-center cursor-pointer"
+              onClick={() => toggleCollapse(key as keyof CollapsedSectionsState)}
             >
-              <span className="text-3xl">{country.flag}</span>
-              <span className="text-sm mt-1">{country.name}</span>
+              <h3 className="font-medium">{label}</h3>
+              <button className="text-sm text-blue-500">
+                {collapsedSections[key as keyof CollapsedSectionsState] ? 'Expand' : 'Collapse'}
+              </button>
             </div>
-          ))}
-        </div>
-      </div>
-      
 
-      {/* Countries Filter with Collapse and Search */}
-      <div className="mb-4">
-        {/* Collapsible Title */}
-        <div
-          className="flex justify-between items-center cursor-pointer"
-          onClick={() => toggleCollapse("countries")}
-        >
-          <h3 className="font-medium">Countries (Filter)</h3>
-          <button className="text-sm text-blue-500">
-            {collapsedSections.countries ? "Expand" : "Collapse"}
-          </button>
-        </div>
-
-        {/* Collapsible Content */}
-        {!collapsedSections.countries && (
-          <div>
-            {/* Search Box */}
-            <input
-              type="text"
-              className="w-full p-2 border border-gray-300 rounded mb-2"
-              placeholder="Search countries"
-              value={searchTerms.countries}
-              onChange={(e) => handleSearchChange("countries", e.target.value)}
-            />
-            {/* Country List */}
-            <div className="space-y-2 max-h-40 overflow-y-auto">
-              {countries
-                .filter((country) =>
-                  country.name
-                    .toLowerCase()
-                    .includes(searchTerms.countries.toLowerCase())
-                )
-                .map((country) => (
-                  <div key={country.name}>
-                    <input
-                      type="checkbox"
-                      id={country.name}
-                      value={country.name}
-                      onChange={() =>
-                        handleFilterChange("countries", country.name)
-                      }
-                      checked={filters.countries.includes(country.name)}
-                    />
-                    <label htmlFor={country.name} className="ml-2">
-                      {country.name}
-                    </label>
-                  </div>
-                ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-    
-
-      {/* Filters for Universities and Study Areas */}
-      {Object.keys(filterOptions).map((category) => (
-        <div key={category} className="mb-4">
-          {/* Collapsible Title */}
-          <div
-            className="flex justify-between items-center cursor-pointer"
-            onClick={() =>
-              toggleCollapse(category as keyof CollapsedSectionsState)
-            }
-          >
-            <h3 className="font-medium capitalize">{category}</h3>
-            <button className="text-sm text-blue-500">
-              {collapsedSections[category as keyof CollapsedSectionsState]
-                ? "Expand"
-                : "Collapse"}
-            </button>
-          </div>
-
-          {/* Filter Options */}
-          {!collapsedSections[category as keyof CollapsedSectionsState] && (
-            <div>
-              {/* Search Box */}
-              <input
-                type="text"
-                className="w-full p-2 border border-gray-300 rounded mb-2"
-                placeholder={`Search ${category}`}
-                value={searchTerms[category as keyof SearchTermsState]}
-                onChange={(e) =>
-                  handleSearchChange(
-                    category as keyof SearchTermsState,
-                    e.target.value
-                  )
-                }
-              />
-              {/* Filter List */}
-              <div className="space-y-2 max-h-40 overflow-y-auto">
-                {filterOptions[category as keyof typeof filterOptions]
-                  .filter((option) =>
-                    option
-                      .toLowerCase()
-                      .includes(
-                        searchTerms[category as keyof SearchTermsState]?.toLowerCase()
+            {!collapsedSections[key as keyof CollapsedSectionsState] && (
+              <div>
+                <input
+                  type="text"
+                  className="w-full p-2 border border-gray-300 rounded mb-2"
+                  placeholder={`Search ${label.toLowerCase()}`}
+                  value={searchTerms[key as keyof SearchTermsState]}
+                  onChange={(e) => handleSearchChange(key as keyof SearchTermsState, e.target.value)}
+                />
+                <div className="space-y-2 max-h-40 overflow-y-auto">
+                  {filterOptions[filterKey]
+                    .filter(option => 
+                      option.toLowerCase().includes(
+                        searchTerms[key as keyof SearchTermsState].toLowerCase()
                       )
-                  )
-                  .map((option) => (
-                    <div key={option}>
-                      <input
-                        type="checkbox"
-                        id={option}
-                        value={option}
-                        onChange={() =>
-                          handleFilterChange(category as keyof FiltersState, option)
-                        }
-                        checked={filters[category as keyof FiltersState]?.includes(
-                          option
-                        )}
-                      />
-                      <label htmlFor={option} className="ml-2">
-                        {option}
-                      </label>
-                    </div>
-                  ))}
+                    )
+                    .map(option => (
+                      <div
+                        key={`${key}-${option}`}
+                        className={`flex items-center p-1 rounded cursor-pointer transition-colors ${
+                          filters[filterKey].includes(option)
+                            ? 'bg-blue-100 text-blue-700 font-semibold'
+                            : 'hover:bg-gray-100'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          id={`${key}-${option}`}
+                          checked={filters[filterKey].includes(option)}
+                          onChange={() => handleFilterChange(filterKey, option)}
+                          className="mr-2 accent-blue-500"
+                        />
+                        <label htmlFor={`${key}-${option}`} className="text-sm w-full">
+                          {option}
+                        </label>
+                      </div>
+                    ))}
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-      ))}
+            )}
+          </div>
+        ) : null
+      })}
     </div>
-  );
-};
+  )
+}
 
-export default FiltersClient;
+export default FiltersClient
 //final

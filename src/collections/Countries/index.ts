@@ -26,5 +26,14 @@ export const Countries: CollectionConfig = {
       required: true,
       label: 'Country Code',
     },
+    {
+      name: 'logo',
+      type: 'upload',
+      label: 'Country Flag/Logo',
+      relationTo: 'media', // This assumes you have a media collection
+      filterOptions: {
+        mimeType: { contains: 'image' }, // Only allow image files
+      },
+    },
   ],
 }
