@@ -68,7 +68,7 @@ const Footer = () => {
           {/* Useful Links Section */}
           <div className="footmcol">
             <h3 className="footTitle">USEFUL LINK</h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-sm fonteighteen">
               <li>
                 <Link href="/">About Us</Link>
               </li>
@@ -87,7 +87,7 @@ const Footer = () => {
           {/* Policy Links Section */}
           <div className="footmcol">
             <h3 className="footTitle">POLICY LINK</h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-sm fonteighteen">
               <li>
                 <Link href="/">Terms & Condition</Link>
               </li>

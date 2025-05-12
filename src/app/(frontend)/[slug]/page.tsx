@@ -24,6 +24,8 @@ import StudyDestinationCarousel from '@/components/Home/study-destination'
 import UniversitySlider from '@/components/Home/university-slider'
 import FooterForm from '@/components/Home/footer-form'
 import Footer from '@/components/Home/footer'
+import Services from '@/components/Services/Services'
+import Contactus from '@/components/Contactus/Contactus'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -85,17 +87,39 @@ export default async function Page({ params: paramsPromise }: Args) {
 
       {draft && <LivePreviewListener />}
 
-      <div>
-        <EducationPromoSection></EducationPromoSection>
-        <AboutUstudy></AboutUstudy>
-        <WhyChooseUs></WhyChooseUs>
-        <AcademicPathSlider></AcademicPathSlider>
-        <UniversitySolutionSection></UniversitySolutionSection>
-        <StudyDestinationCarousel></StudyDestinationCarousel>
-        <UniversitySlider></UniversitySlider>
-        <FooterForm></FooterForm>
-        <Footer></Footer>
-      </div>
+      {slug === 'home' ? (
+        <div>
+          <EducationPromoSection></EducationPromoSection>
+          <AboutUstudy></AboutUstudy>
+          <WhyChooseUs></WhyChooseUs>
+          <AcademicPathSlider></AcademicPathSlider>
+          <UniversitySolutionSection></UniversitySolutionSection>
+          <StudyDestinationCarousel></StudyDestinationCarousel>
+          <UniversitySlider></UniversitySlider>
+          <FooterForm></FooterForm>
+          <Footer></Footer>
+        </div>
+      ) : (
+        <RenderBlocks blocks={layout} />
+      )}
+      {slug === 'services' ? (
+        <div>
+          <Services></Services>
+          <FooterForm></FooterForm>
+          <Footer></Footer>
+        </div>
+      ) : (
+        <RenderBlocks blocks={layout} />
+      )}
+      {slug === 'contact-us' ? (
+        <div>
+          <Contactus></Contactus>
+          <FooterForm></FooterForm>
+          <Footer></Footer>
+        </div>
+      ) : (
+        <RenderBlocks blocks={layout} />
+      )}
     </article>
   )
 }

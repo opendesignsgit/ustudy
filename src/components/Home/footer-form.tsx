@@ -2,7 +2,7 @@ import React from 'react'
 
 const FooterForm = () => {
   return (
-    <div className="bg-blue-900 text-white">
+    <div className="bg-white text-white footformSec relative">
       <div className="container mx-auto">
         <div className="bg-[#F0F6FF] rounded-[2vw] overflow-hidden flex footformboxs">
           <div className="text-white bg-[#0056D2] TfootContCol">
