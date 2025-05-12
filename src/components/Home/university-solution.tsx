@@ -3,6 +3,12 @@ import React from 'react'
 // Array to hold card data
 const sections = [
   {
+    title: 'COUNSELING AND GUIDANCE',
+    description:
+      'Ustudy provides personalized counseling and guidance to help you choose the right academic and career path.',
+    icon: '📄', // Replace with an actual icon or component
+  },
+  {
     title: 'APPLICATION GUIDANCE',
     description:
       'Ustudy offers expert application guidance, ensuring your documents are accurate and submissions timely.',
@@ -17,7 +23,7 @@ const sections = [
   {
     title: 'TICKETING PROCESS',
     description:
-      'We help ensure your travel aligns with your academic schedule and is as cost-effective as possible.',
+      'Ustudy offers guidance in booking flights for students traveling abroad for their education.',
     icon: '✈️', // Replace with an actual icon or component
   },
   {
@@ -29,18 +35,19 @@ const sections = [
   {
     title: "DOS AND DON'TS",
     description:
-      "Ustudy's Dos and Don'ts guide ensures you are well-prepared for cultural and academic life abroad.",
+      'Ustudy’s Dos and Don’ts guide ensures you are well-prepared for cultural and academic life abroad.',
     icon: '📖', // Replace with an actual icon or component
   },
   {
     title: 'ACCOMMODATION AREA',
-    description: "We help you choose a location that's safe, convenient, and within your budget.",
+    description:
+      'Ustudy assists in finding the right accommodation, whether on-campus or off-campus, for a comfortable living experience.',
     icon: '🏠', // Replace with an actual icon or component
   },
   {
     title: 'POST LANDING FORMALITIES',
     description:
-      'We ensure you complete all required formalities smoothly after you arrive in your destination country.',
+      'Ustudy provides support for post-landing formalities, including immigration and orientation.',
     icon: '📋', // Replace with an actual icon or component
   },
   {
@@ -76,7 +83,7 @@ const UniversitySolutionSection = () => {
         {/* Cards Grid */}
         {/* Top Row: Five Cards */}
         <div className="flex flex-wrap justify-center halinoneBox">
-          {sections.slice(0, 9).map((section, index) => (
+          {sections.slice(0, 10).map((section, index) => (
             <div
               key={index}
               className="bg-white halinoneItems relative"

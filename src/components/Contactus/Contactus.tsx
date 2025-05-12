@@ -28,7 +28,7 @@ const Contactus = () => {
               <div className="contliICont relative">
                 <h3>Send us a Mail</h3>
                 <p>
-                  <Link href="mailto:contact@kp.ueducate.in">contact@kp.ueducate.in</Link>
+                  <Link href="mailto:info@ustudyglobal.in">info@ustudyglobal.in</Link>
                 </p>
               </div>
             </div>

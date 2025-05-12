@@ -73,10 +73,11 @@ const service = () => {
         </div>
         <div className="inpbancont absolute top-0 left-0 w-full h-full z-10">
           <div className="container relative h-full flex flex-col items-center justify-center text-center">
-            <h1 className="ffamilyTNR">Comprehensive Support for Your Educational Journey</h1>
+            <h1 className="ffamilyTNR">Comprehensive Support for Your Educational Journey </h1>
             <p className="fonteighteen">
-              We provide tailored services to guide you from course selection <br />
-              to successful admission.
+              We provide tailored services to guide you from course selection to successful
+              admission. With <br />
+              expert support at every step, we make your path to education seamless and efficient.
             </p>
           </div>
         </div>
