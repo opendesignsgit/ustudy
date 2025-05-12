@@ -16,14 +16,14 @@ export const CollectionArchiveCourses: React.FC<Props> = (props) => {
   const { posts, relationTo = 'posts', customClass, numberOfCol } = props
 
   return (
-    <div className={cn('container', customClass)}>
+    <div className={cn('coursListBox', customClass)}>
       <div>
-        <div className="grid grid-cols-4 sm:grid-cols-8 lg:grid-cols-12 gap-y-4 gap-x-4 lg:gap-y-8 lg:gap-x-8 xl:gap-x-8">
+        <div className="flex flex-wrap clboxssview">
           {posts?.map((result, index) => {
             if (typeof result === 'object' && result !== null) {
               return (
-                <div className={`col-span-12`} key={index}>
-                  <CoursesCard className="h-full" doc={result} relationTo={relationTo} showCategories />
+                <div className="flex-full clboxItemview" key={index}>
+                  <CoursesCard doc={result} relationTo={relationTo} showCategories />
                 </div>
               )
             }

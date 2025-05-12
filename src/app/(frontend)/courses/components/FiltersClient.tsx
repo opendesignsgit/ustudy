@@ -33,11 +33,11 @@ type CollapsedSectionsState = {
   studyModes: boolean
 }
 
-const FiltersClient = ({ 
+const FiltersClient = ({
   onFilterChange,
-  courses
+  courses,
 }: {
-  onFilterChange: (filters: FilterState) => void,
+  onFilterChange: (filters: FilterState) => void
   courses: any[]
 }) => {
   // Generate all possible filter options from courses data
@@ -49,15 +49,15 @@ const FiltersClient = ({
       departments: new Set<string>(),
       studyAreas: new Set<string>(),
       studyYears: new Set<string>(),
-      studyModes: new Set<string>()
+      studyModes: new Set<string>(),
     }
 
-    courses.forEach(course => {
+    courses.forEach((course) => {
       // Handle country (nested under university.country)
       if (course.university?.country?.name) {
         options.countries.add(course.university.country.name)
       }
-      
+
       // Handle other fields
       if (course.university?.title) options.universities.add(course.university.title)
       if (course.degreeProgram) options.degreePrograms.add(course.degreeProgram)
@@ -74,7 +74,7 @@ const FiltersClient = ({
       departments: Array.from(options.departments).sort(),
       studyAreas: Array.from(options.studyAreas).sort(),
       studyYears: Array.from(options.studyYears).sort(),
-      studyModes: Array.from(options.studyModes).sort()
+      studyModes: Array.from(options.studyModes).sort(),
     }
   }
 
@@ -87,7 +87,7 @@ const FiltersClient = ({
     departments: [],
     studyAreas: [],
     studyYears: [],
-    studyModes: []
+    studyModes: [],
   })
   const [searchTerms, setSearchTerms] = useState<SearchTermsState>({
     countries: '',
@@ -96,7 +96,7 @@ const FiltersClient = ({
     departments: '',
     studyAreas: '',
     studyYears: '',
-    studyModes: ''
+    studyModes: '',
   })
   const [collapsedSections, setCollapsedSections] = useState<CollapsedSectionsState>({
     countries: false,
@@ -105,7 +105,7 @@ const FiltersClient = ({
     departments: false,
     studyAreas: false,
     studyYears: false,
-    studyModes: false
+    studyModes: false,
   })
 
   // Update filter options when courses change
@@ -120,22 +120,22 @@ const FiltersClient = ({
 
   // Handle filter selection changes
   const handleFilterChange = (category: keyof FilterState, value: string) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
       [category]: prev[category].includes(value)
-        ? prev[category].filter(item => item !== value)
-        : [...prev[category], value]
+        ? prev[category].filter((item) => item !== value)
+        : [...prev[category], value],
     }))
   }
 
   // Handle search term changes
   const handleSearchChange = (category: keyof SearchTermsState, value: string) => {
-    setSearchTerms(prev => ({ ...prev, [category]: value }))
+    setSearchTerms((prev) => ({ ...prev, [category]: value }))
   }
 
   // Toggle filter section collapse
   const toggleCollapse = (category: keyof CollapsedSectionsState) => {
-    setCollapsedSections(prev => ({ ...prev, [category]: !prev[category] }))
+    setCollapsedSections((prev) => ({ ...prev, [category]: !prev[category] }))
   }
 
   // Clear all filters
@@ -147,7 +147,7 @@ const FiltersClient = ({
       departments: [],
       studyAreas: [],
       studyYears: [],
-      studyModes: []
+      studyModes: [],
     })
   }
 
@@ -155,33 +155,33 @@ const FiltersClient = ({
   const handleRemoveFilter = (filter: string) => {
     const [type, value] = filter.split(': ')
     const categoryMap: Record<string, keyof FilterState> = {
-      'Country': 'countries',
-      'University': 'universities',
-      'Program': 'degreePrograms',
-      'Department': 'departments',
-      'Area': 'studyAreas',
-      'Years': 'studyYears',
-      'Mode': 'studyModes'
+      Country: 'countries',
+      University: 'universities',
+      Program: 'degreePrograms',
+      Department: 'departments',
+      Area: 'studyAreas',
+      Years: 'studyYears',
+      Mode: 'studyModes',
     }
-    
+
     const category = categoryMap[type]
     if (category) {
-      setFilters(prev => ({
+      setFilters((prev) => ({
         ...prev,
-        [category]: prev[category].filter(item => item !== value)
+        [category]: prev[category].filter((item) => item !== value),
       }))
     }
   }
 
   // Generate applied filters with labels
   const appliedFilters = [
-    ...filters.countries.map(c => `Country: ${c}`),
-    ...filters.universities.map(u => `University: ${u}`),
-    ...filters.degreePrograms.map(d => `Program: ${d}`),
-    ...filters.departments.map(d => `Department: ${d}`),
-    ...filters.studyAreas.map(s => `Area: ${s}`),
-    ...filters.studyYears.map(y => `Years: ${y}`),
-    ...filters.studyModes.map(m => `Mode: ${m}`)
+    ...filters.countries.map((c) => `Country: ${c}`),
+    ...filters.universities.map((u) => `University: ${u}`),
+    ...filters.degreePrograms.map((d) => `Program: ${d}`),
+    ...filters.departments.map((d) => `Department: ${d}`),
+    ...filters.studyAreas.map((s) => `Area: ${s}`),
+    ...filters.studyYears.map((y) => `Years: ${y}`),
+    ...filters.studyModes.map((m) => `Mode: ${m}`),
   ]
 
   // Filter sections configuration
@@ -192,11 +192,11 @@ const FiltersClient = ({
     { key: 'departments', label: 'Departments' },
     { key: 'studyAreas', label: 'Study Areas' },
     { key: 'studyYears', label: 'Study Years' },
-    { key: 'studyModes', label: 'Study Modes' }
+    { key: 'studyModes', label: 'Study Modes' },
   ]
 
   return (
-    <div className="bg-gray-100 rounded p-4">
+    <div className="FListInrow">
       {/* Applied Filters */}
       {appliedFilters.length > 0 && (
         <AppliedFilters
@@ -210,37 +210,41 @@ const FiltersClient = ({
       {filterSections.map(({ key, label }) => {
         const filterKey = key as keyof typeof filterOptions
         return filterOptions[filterKey].length > 0 ? (
-          <div key={key} className="mb-4">
+          <div key={key} className="ItemBoxs">
             <div
-              className="flex justify-between items-center cursor-pointer"
+              className="IboxTitles flex justify-between items-center cursor-pointer"
               onClick={() => toggleCollapse(key as keyof CollapsedSectionsState)}
             >
-              <h3 className="font-medium">{label}</h3>
-              <button className="text-sm text-blue-500">
+              <h3>{label}</h3>
+              <button>
                 {collapsedSections[key as keyof CollapsedSectionsState] ? 'Expand' : 'Collapse'}
               </button>
             </div>
 
             {!collapsedSections[key as keyof CollapsedSectionsState] && (
-              <div>
-                <input
-                  type="text"
-                  className="w-full p-2 border border-gray-300 rounded mb-2"
-                  placeholder={`Search ${label.toLowerCase()}`}
-                  value={searchTerms[key as keyof SearchTermsState]}
-                  onChange={(e) => handleSearchChange(key as keyof SearchTermsState, e.target.value)}
-                />
-                <div className="space-y-2 max-h-40 overflow-y-auto">
+              <div className="IboxSearchlist">
+                <div className="IboxSearinput">
+                  <input
+                    type="text"
+                    className="w-full p-2 border border-gray-300 rounded-[30px]"
+                    placeholder={`Search ${label.toLowerCase()}`}
+                    value={searchTerms[key as keyof SearchTermsState]}
+                    onChange={(e) =>
+                      handleSearchChange(key as keyof SearchTermsState, e.target.value)
+                    }
+                  />
+                </div>
+                <div className="itmlistul space-y-2 max-h-40 overflow-y-auto">
                   {filterOptions[filterKey]
-                    .filter(option => 
-                      option.toLowerCase().includes(
-                        searchTerms[key as keyof SearchTermsState].toLowerCase()
-                      )
+                    .filter((option) =>
+                      option
+                        .toLowerCase()
+                        .includes(searchTerms[key as keyof SearchTermsState].toLowerCase()),
                     )
-                    .map(option => (
+                    .map((option) => (
                       <div
                         key={`${key}-${option}`}
-                        className={`flex items-center p-1 rounded cursor-pointer transition-colors ${
+                        className={`itmlistulli cursor-pointer transition-colors ${
                           filters[filterKey].includes(option)
                             ? 'bg-blue-100 text-blue-700 font-semibold'
                             : 'hover:bg-gray-100'
@@ -253,7 +257,7 @@ const FiltersClient = ({
                           onChange={() => handleFilterChange(filterKey, option)}
                           className="mr-2 accent-blue-500"
                         />
-                        <label htmlFor={`${key}-${option}`} className="text-sm w-full">
+                        <label htmlFor={`${key}-${option}`} className="">
                           {option}
                         </label>
                       </div>

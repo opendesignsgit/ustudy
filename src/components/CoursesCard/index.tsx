@@ -8,8 +8,10 @@ import type { Post } from '@/payload-types'
 
 import { Media } from '@/components/Media'
 
-export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title' | 'externalLink' | 'heroImage' | 'excerpt' | 'university'> &
-  { logo?: string; collegeName?: string } // Added fields for logo and collegeName
+export type CardPostData = Pick<
+  Post,
+  'slug' | 'categories' | 'meta' | 'title' | 'externalLink' | 'heroImage' | 'excerpt' | 'university'
+> & { logo?: string; collegeName?: string } // Added fields for logo and collegeName
 
 export const CoursesCard: React.FC<{
   alignItems?: 'center'
@@ -20,9 +22,19 @@ export const CoursesCard: React.FC<{
   title?: string
 }> = (props) => {
   const { card, link } = useClickableCard({})
+
   const { className, doc, showCategories, title: titleFromProps } = props
   const relationTo = props.relationTo ?? 'posts'
-  const { slug, categories, meta, title, externalLink, heroImage: secondaryImage, excerpt, university } = doc || {}
+  const {
+    slug,
+    categories,
+    meta,
+    title,
+    externalLink,
+    heroImage: secondaryImage,
+    excerpt,
+    university,
+  } = doc || {}
   const { description, image: metaImage } = meta || {}
 
   const hasCategories = categories && Array.isArray(categories) && categories.length > 0
@@ -34,17 +46,11 @@ export const CoursesCard: React.FC<{
   const universityTitle = university?.title // Get the logo URL from university
 
   return (
-    <article
-      className={cn(
-        'border border-border rounded-lg overflow-hidden bg-white shadow-md hover:shadow-lg transition-shadow duration-300',
-        className,
-      )}
-      ref={card.ref}
-    >
+    <article className={cn(className)} ref={card.ref}>
       <div className="flex relative">
         {/* Logo in the top-right corner */}
         {logoUrl && (
-          <div className="absolute top-2 right-2 z-10">
+          <div className="absolute top-2 right-2 z-10 Universitylogo">
             <img
               src={logoUrl}
               alt={`${university?.title || 'University'} logo`}
@@ -53,30 +59,27 @@ export const CoursesCard: React.FC<{
           </div>
         )}
 
-
         {/* Left Section: Image */}
-        <div className="relative w-1/4">
+        <div className="relative w-1/4 courseimgbox">
           {metaImage ? (
             <Media resource={metaImage} size="100%" />
           ) : secondaryImage !== null ? (
             <Media resource={secondaryImage} size="100%" />
           ) : (
-            <div className="flex items-center justify-center h-full bg-gray-200 text-gray-500">No image</div>
+            <div className="flex items-center justify-center h-full bg-gray-200 text-gray-500">
+              No image
+            </div>
           )}
         </div>
 
         {/* Right Section: Content */}
-        <div className="p-4 w-3/4">
+        <div className="w-3/4 courseContbox">
           {/* College Name */}
-          {universityTitle && (
-            <div className="text-sm font-semibold text-gray-700 mb-2">
-              {universityTitle}
-            </div>
-          )}
+          {universityTitle && <h5>{universityTitle}</h5>}
 
           {/* University Name / Categories */}
           {showCategories && hasCategories && (
-            <div className="text-xs font-semibold text-blue-700 uppercase mb-2">
+            <h5 className="">
               {categories?.map((category, index) => {
                 if (typeof category === 'object') {
                   const { title: titleFromCategory } = category
@@ -92,14 +95,19 @@ export const CoursesCard: React.FC<{
                 }
                 return null
               })}
-            </div>
+            </h5>
           )}
 
           {/* Course Title */}
           {titleToUse && (
             <h3 className="text-lg font-bold mb-2">
               {externalLink ? (
-                <a className="hover:underline" href={href} target="_blank" rel="noopener noreferrer">
+                <a
+                  className="hover:underline"
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {titleToUse}
                 </a>
               ) : (
@@ -111,7 +119,7 @@ export const CoursesCard: React.FC<{
           )}
 
           {/* Course Details */}
-          <div className="text-sm text-gray-600 mb-4 flex flex-wrap gap-2">
+          <div className="cousindetlcol text-sm text-gray-600 mb-4 flex flex-wrap gap-2">
             <div className="flex items-center gap-1">
               <span className="material-icons place text-blue-500"></span>
               <span>Malaysia</span>

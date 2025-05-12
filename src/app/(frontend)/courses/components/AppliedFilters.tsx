@@ -1,12 +1,12 @@
-"use client";
+'use client'
 
-import React from "react";
+import React from 'react'
 
 type AppliedFiltersProps = {
-  appliedFilters?: string[]; // Marking as optional with a default fallback
-  onRemove: (filter: string) => void; // Callback to remove a specific filter
-  onClear: () => void; // Callback to clear all filters
-};
+  appliedFilters?: string[] // Marking as optional with a default fallback
+  onRemove: (filter: string) => void // Callback to remove a specific filter
+  onClear: () => void // Callback to clear all filters
+}
 
 const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   appliedFilters = [], // Fallback to an empty array if undefined
@@ -14,12 +14,12 @@ const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   onClear,
 }) => {
   if (appliedFilters.length === 0) {
-    return null; // Don't show the component if there are no filters applied.
+    return null // Don't show the component if there are no filters applied.
   }
 
   return (
-    <div className="bg-white p-4 rounded shadow mb-4">
-      <h3 className="font-medium mb-2">Applied Filters</h3>
+    <div className="ApplieBox">
+      <h3>Applied Filters</h3>
       <div className="flex flex-wrap gap-2">
         {appliedFilters.map((filter, index) => (
           <div
@@ -36,15 +36,12 @@ const AppliedFilters: React.FC<AppliedFiltersProps> = ({
           </div>
         ))}
       </div>
-      <button
-        className="mt-3 text-sm text-red-500 underline"
-        onClick={onClear}
-      >
+      <button className="mt-3 text-sm text-red-500 underline" onClick={onClear}>
         Clear All
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default AppliedFilters;
+export default AppliedFilters
 //final

@@ -493,7 +493,7 @@ footer .footbtm ul.footSmediaul li a:hover {
 }
 .SerBoxsList .SerLists .SListCont h3 {
   font-size: 1.3vw;
-  font-weight: 400;
+  font-weight: 600;
   color: #000000;
   letter-spacing: -0.5px;
   line-height: 1;
@@ -645,6 +645,166 @@ footer .footbtm ul.footSmediaul li a:hover {
 .contforminrow .ColR {
   width: 40%;
 }
+.FlagListSec {
+  margin-bottom: 8vh;
+}
+.flagSlider {
+}
+.flagSlider button.slick-arrow {
+  z-index: 99;
+  width: 40px;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+.flagSlider button.slick-arrow::before {
+  content: '';
+  width: 100%;
+  display: block;
+  height: 100%;
+  opacity: 1;
+}
+.flagSlider button.slick-prev {
+  left: -10px;
+  transform: translate(-100%, -50%);
+}
+.flagSlider button.slick-next {
+  right: -10px;
+  transform: translate(100%, -50%);
+}
+.flagSlider button.slick-prev::before {
+  background: url(/media/Slider-arrow-left-icon.png) no-repeat center center;
+  background-size: 100%;
+}
+.flagSlider button.slick-next::before {
+  background: url(/media/Slider-arrow-right-icon.png) no-repeat center center;
+  background-size: 100%;
+}
+.countryitems {
+}
+.countryitems img {
+  border-radius: 50%;
+  border: 1px solid #cccccc;
+}
+.countryitems h5 {
+  color: #000000;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 1.2vw;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+.ListFilerSec {
+  color: #777777;
+}
+.FlistCol {
+}
+.FListInrow {
+  border: 15px solid #f0f6ff;
+  border-radius: 10px;
+}
+.ItemBoxs {
+  border-bottom: 15px solid #f0f6ff;
+  padding: 15px;
+}
+.IboxTitles {
+}
+.IboxTitles h3 {
+  color: #0056d2;
+  font-weight: bold;
+}
+.IboxTitles button {
+  font-size: 0;
+  width: 20px;
+  height: 20px;
+  background: url(/media/expand-icon.png);
+}
+
+.IboxSearinput {
+  margin-block: 10px 15px;
+}
+.IboxSearinput input {
+  padding: 0 20px;
+  background: #f0f6ff;
+  line-height: 2vw;
+  font-size: 14px;
+}
+.IboxSearinput input:focus,
+.IboxSearinput input:focus-visible {
+  box-shadow: none;
+  border-color: #0050c2;
+  outline: none;
+}
+.itmlistul {
+}
+.itmlistulli {
+  font-weight: 500;
+}
+.itmlistulli input {
+}
+.itmlistulli label {
+}
+.listshowtopbox {
+  background: #f0f6ff;
+  padding: 15px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+}
+.listshowtopbox select {
+  border-color: #dbeafe;
+  font-size: 14px;
+  padding: 0 10px;
+  height: 30px;
+  border-radius: 20px;
+}
+.listshowtopbox select:focus,
+.listshowtopbox select:focus-visible {
+  outline: none;
+}
+h3.showtitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000000;
+  text-transform: uppercase;
+}
+.clboxssview {
+}
+.coursListBox article {
+  padding: 15px;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+.coursListBox .clboxssview .clboxItemview:last-child article {
+  margin-bottom: 0;
+}
+.coursListBox article .Universitylogo {
+}
+.coursListBox article .Universitylogo img {
+}
+.coursListBox article .courseimgbox {
+}
+.coursListBox article .courseimgbox img {
+  width: 100%;
+  aspect-ratio: 2/1.5;
+  object-fit: cover;
+}
+.coursListBox article .courseContbox {
+  padding-inline: 35px;
+}
+.coursListBox article .courseContbox h5 {
+  color: #000000;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.coursListBox article .courseContbox h3 {
+}
+.coursListBox article .courseContbox .cousindetlcol {
+}
+
+/****** Sivashanmugam Stylesheet End ******/
 
 .pagebannersec {
   -webkit-box-align: center;
