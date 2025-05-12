@@ -53,7 +53,7 @@ const CountryFlagSlider = () => {
     prevArrow: <SamplePrevArrow />,
   };
 
-  if (loading) return <div>Loading countries...</div>;
+  if (loading) return <div className="flex justify-center w-full"><div className="w-96"></div></div>;
 
   return (
     <div className="flex justify-center w-full">
@@ -126,3 +126,4 @@ const SamplePrevArrow = (props: any) => {
 };
 
 export default CountryFlagSlider;
+//final

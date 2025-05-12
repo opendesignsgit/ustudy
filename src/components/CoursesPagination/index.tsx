@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import {
   Pagination as PaginationComponent,
   PaginationContent,
@@ -7,29 +7,37 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '@/components/ui/pagination';
-import React from 'react';
+} from '@/components/ui/pagination'
+import { cn } from '@/utilities/cn'
+import React from 'react'
 
-export const CoursesPaginationAjax: React.FC<{
-  className?: string;
-  page: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-}> = ({ className, page, totalPages, onPageChange }) => {
-  const hasNextPage = page < totalPages;
-  const hasPrevPage = page > 1;
+export const CoursesPagination: React.FC<{
+  className?: string
+  page: number
+  totalPages: number
+  onPageChange?: (page: number) => void
+}> = (props) => {
+  const { className, page, totalPages, onPageChange } = props
+  const hasNextPage = page < totalPages
+  const hasPrevPage = page > 1
 
-  const hasExtraPrevPages = page - 1 > 1;
-  const hasExtraNextPages = page + 1 < totalPages;
+  const hasExtraPrevPages = page - 1 > 1
+  const hasExtraNextPages = page + 1 < totalPages
+
+  const handlePageChange = (newPage: number) => {
+    if (onPageChange) {
+      onPageChange(newPage)
+    }
+  }
 
   return (
-    <div className={className}>
+    <div className={cn('my-12', className)}>
       <PaginationComponent>
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
               disabled={!hasPrevPage}
-              onClick={() => onPageChange(page - 1)}
+              onClick={() => hasPrevPage && handlePageChange(page - 1)}
             />
           </PaginationItem>
 
@@ -41,21 +49,28 @@ export const CoursesPaginationAjax: React.FC<{
 
           {hasPrevPage && (
             <PaginationItem>
-              <PaginationLink onClick={() => onPageChange(page - 1)}>
+              <PaginationLink
+                onClick={() => handlePageChange(page - 1)}
+              >
                 {page - 1}
               </PaginationLink>
             </PaginationItem>
           )}
 
           <PaginationItem>
-            <PaginationLink isActive>
+            <PaginationLink
+              isActive
+              onClick={() => handlePageChange(page)}
+            >
               {page}
             </PaginationLink>
           </PaginationItem>
 
           {hasNextPage && (
             <PaginationItem>
-              <PaginationLink onClick={() => onPageChange(page + 1)}>
+              <PaginationLink
+                onClick={() => handlePageChange(page + 1)}
+              >
                 {page + 1}
               </PaginationLink>
             </PaginationItem>
@@ -70,11 +85,12 @@ export const CoursesPaginationAjax: React.FC<{
           <PaginationItem>
             <PaginationNext
               disabled={!hasNextPage}
-              onClick={() => onPageChange(page + 1)}
+              onClick={() => hasNextPage && handlePageChange(page + 1)}
             />
           </PaginationItem>
         </PaginationContent>
       </PaginationComponent>
     </div>
-  );
-};
+  )
+}
+//final

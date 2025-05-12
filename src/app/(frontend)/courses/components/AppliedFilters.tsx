@@ -47,3 +47,4 @@ const AppliedFilters: React.FC<AppliedFiltersProps> = ({
 };
 
 export default AppliedFilters;
+//final

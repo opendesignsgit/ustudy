@@ -8,7 +8,7 @@ import type { Post } from '@/payload-types'
 
 import { Media } from '@/components/Media'
 
-export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title' | 'externalLink' | 'heroImage' | 'excerpt'> &
+export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title' | 'externalLink' | 'heroImage' | 'excerpt' | 'university'> &
   { logo?: string; collegeName?: string } // Added fields for logo and collegeName
 
 export const CoursesCard: React.FC<{
@@ -22,14 +22,16 @@ export const CoursesCard: React.FC<{
   const { card, link } = useClickableCard({})
   const { className, doc, showCategories, title: titleFromProps } = props
   const relationTo = props.relationTo ?? 'posts'
-  const { slug, categories, meta, title, externalLink, heroImage: secondaryImage, excerpt, logo, collegeName } = doc || {}
+  const { slug, categories, meta, title, externalLink, heroImage: secondaryImage, excerpt, university } = doc || {}
   const { description, image: metaImage } = meta || {}
 
   const hasCategories = categories && Array.isArray(categories) && categories.length > 0
   const titleToUse = titleFromProps || title
-  const sanitizedDescription = description?.replace(/\s/g, ' ') // Replace non-breaking space with white space
-  const sanitizedExcerpt = excerpt?.replace(/\s/g, ' ') // Replace non-breaking space with white space
+  const sanitizedDescription = description?.replace(/\s/g, ' ')
+  const sanitizedExcerpt = excerpt?.replace(/\s/g, ' ')
   const href = externalLink ? externalLink : `/${relationTo}/${slug}`
+  const logoUrl = university?.logo?.url // Get the logo URL from university
+  const universityTitle = university?.title // Get the logo URL from university
 
   return (
     <article
@@ -41,15 +43,16 @@ export const CoursesCard: React.FC<{
     >
       <div className="flex relative">
         {/* Logo in the top-right corner */}
-        {logo && (
-          <div className="absolute top-2 right-2">
+        {logoUrl && (
+          <div className="absolute top-2 right-2 z-10">
             <img
-              src={logo}
-              alt="Institution Logo"
-              className="h-10 w-auto object-contain"
+              src={logoUrl}
+              alt={`${university?.title || 'University'} logo`}
+              className="h-10 w-auto object-contain bg-white p-1 rounded"
             />
           </div>
         )}
+
 
         {/* Left Section: Image */}
         <div className="relative w-1/4">
@@ -65,9 +68,9 @@ export const CoursesCard: React.FC<{
         {/* Right Section: Content */}
         <div className="p-4 w-3/4">
           {/* College Name */}
-          {collegeName && (
+          {universityTitle && (
             <div className="text-sm font-semibold text-gray-700 mb-2">
-              {collegeName}
+              {universityTitle}
             </div>
           )}
 
@@ -110,19 +113,19 @@ export const CoursesCard: React.FC<{
           {/* Course Details */}
           <div className="text-sm text-gray-600 mb-4 flex flex-wrap gap-2">
             <div className="flex items-center gap-1">
-              <span className="material-icons text-blue-500">place</span>
+              <span className="material-icons place text-blue-500"></span>
               <span>Malaysia</span>
             </div>
             <div className="flex items-center gap-1">
-              <span className="material-icons text-blue-500">school</span>
+              <span className="material-icons school text-blue-500"></span>
               <span>Under Graduate</span>
             </div>
             <div className="flex items-center gap-1">
-              <span className="material-icons text-blue-500">schedule</span>
+              <span className="material-icons schedule text-blue-500"></span>
               <span>3 Years</span>
             </div>
             <div className="flex items-center gap-1">
-              <span className="material-icons text-blue-500">calendar_today</span>
+              <span className="material-icons intake text-blue-500"></span>
               <span>Jan, May & Sep</span>
             </div>
           </div>
