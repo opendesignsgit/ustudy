@@ -786,11 +786,27 @@ h3.showtitle {
 }
 .coursListBox article .Universitylogo img {
 }
+.descriptbox {
+}
+.descriptbox p {
+  font-weight: 500;
+  color: #333333;
+  letter-spacing: 0;
+}
 .coursListBox article .courseimgbox {
+}
+.coursListBox article .courseimgbox > div {
+  position: relative;
+  height: 100%;
+}
+.coursListBox article .courseimgbox > div > picture {
+  position: relative;
+  height: 100%;
 }
 .coursListBox article .courseimgbox img {
   width: 100%;
-  aspect-ratio: 2/1.5;
+  /* aspect-ratio: 1;     */
+  height: 100%;
   object-fit: cover;
 }
 .coursListBox article .courseContbox {
@@ -810,6 +826,7 @@ h3.showtitle {
 .coursListBox article .courseContbox .cousindetlcol {
   border-bottom: 1px solid #cccccc;
   padding-bottom: 10px;
+  font-weight: 500;
 }
 
 .coursListBox article .courseContbox a.expolrlink {
@@ -864,6 +881,37 @@ h3.showtitle {
 }
 .flitmsvBoxs .flitmsviews:hover button {
   color: #0056d1;
+}
+
+.coursPaginBox {
+}
+.coursPaginBox nav {
+}
+.coursPaginBox nav ul {
+}
+.coursPaginBox nav ul li {
+}
+.coursPaginBox nav ul li button {
+  border-radius: 50%;
+  border: 1px solid #cccccc;
+  color: #777777;
+  padding: 0;
+  width: 40px;
+  aspect-ratio: 1;
+}
+.coursPaginBox nav ul li button:hover {
+  border-color: #0056d1;
+  background: #0056d1;
+  color: #ffffff;
+}
+.coursPaginBox nav ul li button span {
+  font-size: 0;
+  display: none;
+}
+.coursPaginBox nav ul li button[aria-current='page'] {
+  color: #0056d1;
+  border-color: #0056d1;
+  background: transparent;
 }
 
 /****** Sivashanmugam Stylesheet End ******/
