@@ -704,6 +704,9 @@ footer .footbtm ul.footSmediaul li a:hover {
   border: 15px solid #f0f6ff;
   border-radius: 10px;
 }
+.FListInrow .ApplieBox {
+  display: none;
+}
 .ItemBoxs {
   border-bottom: 15px solid #f0f6ff;
   padding: 15px;
@@ -783,25 +786,133 @@ h3.showtitle {
 }
 .coursListBox article .Universitylogo img {
 }
+.descriptbox {
+}
+.descriptbox p {
+  font-weight: 500;
+  color: #333333;
+  letter-spacing: 0;
+}
 .coursListBox article .courseimgbox {
+}
+.coursListBox article .courseimgbox > div {
+  position: relative;
+  height: 100%;
+}
+.coursListBox article .courseimgbox > div > picture {
+  position: relative;
+  height: 100%;
 }
 .coursListBox article .courseimgbox img {
   width: 100%;
-  aspect-ratio: 2/1.5;
+  /* aspect-ratio: 1;     */
+  height: 100%;
   object-fit: cover;
 }
 .coursListBox article .courseContbox {
+  padding-block: 0;
   padding-inline: 35px;
 }
 .coursListBox article .courseContbox h5 {
   color: #000000;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
 }
 .coursListBox article .courseContbox h3 {
+  color: #0056d2;
+  font-weight: 600;
+  font-size: 1.1vw;
 }
 .coursListBox article .courseContbox .cousindetlcol {
+  border-bottom: 1px solid #cccccc;
+  padding-bottom: 10px;
+  font-weight: 500;
+}
+
+.coursListBox article .courseContbox a.expolrlink {
+  background: transparent;
+  color: #0056d2;
+  padding: 0 20px;
+  line-height: 2;
+  border: 1px solid #0056d2;
+  border-radius: 30px;
+  font-size: 14px;
+  display: block;
+  font-weight: 600;
+}
+.coursListBox article .courseContbox a.expolrlink:hover {
+  background: #0056d2;
+  color: #ffffff;
+}
+
+.ApplieBox h3 {
+  margin-bottom: 10px;
+  color: #0056d2;
+  font-weight: 600;
+}
+
+.ApplieBox button.cleatbtn {
+  color: #000000;
+  text-decoration: unset;
+  font-weight: 600;
+}
+.AppliedTitles {
+  flex: 1;
+}
+
+.flitmsvBoxs {
+}
+.flitmsvBoxs .flitmsviews {
+  font-weight: 500;
+  background: #0056d1;
+  padding: 5px 10px;
+  line-height: 1;
+  border-radius: 30px;
+  border: 1px solid #0056d1;
+  color: #fff;
+  cursor: pointer;
+}
+.flitmsvBoxs .flitmsviews button {
+  color: #fff;
+}
+.flitmsvBoxs .flitmsviews:hover {
+  background: #f0f6ff;
+  color: #0056d1;
+}
+.flitmsvBoxs .flitmsviews:hover button {
+  color: #0056d1;
+}
+
+.coursPaginBox {
+}
+.coursPaginBox nav {
+}
+.coursPaginBox nav ul {
+}
+.coursPaginBox nav ul li {
+}
+.coursPaginBox nav ul li button {
+  border-radius: 50%;
+  border: 1px solid #cccccc;
+  color: #777777;
+  padding: 0;
+  width: 40px;
+  aspect-ratio: 1;
+}
+.coursPaginBox nav ul li button:hover {
+  border-color: #0056d1;
+  background: #0056d1;
+  color: #ffffff;
+}
+.coursPaginBox nav ul li button span {
+  font-size: 0;
+  display: none;
+}
+.coursPaginBox nav ul li button[aria-current='page'] {
+  color: #0056d1;
+  border-color: #0056d1;
+  background: transparent;
 }
 
 /****** Sivashanmugam Stylesheet End ******/

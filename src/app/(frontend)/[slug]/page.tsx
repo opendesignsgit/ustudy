@@ -114,7 +114,6 @@ export default async function Page({ params: paramsPromise }: Args) {
       {slug === 'contact-us' ? (
         <div>
           <Contactus></Contactus>
-          <FooterForm></FooterForm>
           <Footer></Footer>
         </div>
       ) : (

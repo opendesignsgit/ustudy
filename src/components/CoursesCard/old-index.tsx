@@ -4,32 +4,14 @@ import useClickableCard from '@/utilities/useClickableCard'
 import Link from 'next/link'
 import React, { Fragment } from 'react'
 
-import type { Course } from '@/payload-types'
+import type { Post } from '@/payload-types'
 
 import { Media } from '@/components/Media'
 
 export type CardPostData = Pick<
-  Course,
-  | 'title'
-  | 'slug'
-  | 'description'
-  | 'heroImage'
-  | 'university'
-  | 'degreeProgram'
-  | 'department'
-  | 'studyArea'
-  | 'studyYears'
-  | 'studyMode'
-  | 'intakeMonths'
-  | 'meta'
-> & {
-  // Additional fields that might be populated from relations
-  categories?: Array<{ title?: string }>
-  externalLink?: string
-  excerpt?: string
-  logo?: string
-  collegeName?: string
-}
+  Post,
+  'slug' | 'categories' | 'meta' | 'title' | 'externalLink' | 'heroImage' | 'excerpt' | 'university'
+> & { logo?: string; collegeName?: string } // Added fields for logo and collegeName
 
 export const CoursesCard: React.FC<{
   alignItems?: 'center'
@@ -40,6 +22,7 @@ export const CoursesCard: React.FC<{
   title?: string
 }> = (props) => {
   const { card, link } = useClickableCard({})
+
   const { className, doc, showCategories, title: titleFromProps } = props
   const relationTo = props.relationTo ?? 'posts'
   const {
@@ -51,46 +34,19 @@ export const CoursesCard: React.FC<{
     heroImage: secondaryImage,
     excerpt,
     university,
-    degreeProgram,
-    department,
-    studyArea,
-    studyYears,
-    studyMode,
-    intakeMonths,
-    description,
   } = doc || {}
-
-  const { image: metaImage } = meta || {}
+  const { description, image: metaImage } = meta || {}
 
   const hasCategories = categories && Array.isArray(categories) && categories.length > 0
   const titleToUse = titleFromProps || title
+  const sanitizedDescription = description?.replace(/\s/g, ' ')
   const sanitizedExcerpt = excerpt?.replace(/\s/g, ' ')
   const href = externalLink ? externalLink : `/${relationTo}/${slug}`
-  const logoUrl = university?.logo?.url
-  const universityTitle = university?.title
-  const countryName = university?.country?.name || 'Malaysia'
-
-  // Map degree program codes to full names
-  const degreeProgramMap: Record<string, string> = {
-    UG: 'Under Graduate',
-    PG: 'Post Graduate',
-    DP: 'Diploma',
-    PHD: 'PhD',
-  }
-
-  // Format study years display
-  const formatStudyYears = (years: number) => {
-    return years === 1 ? `${years} Year` : `${years} Years`
-  }
+  const logoUrl = university?.logo?.url // Get the logo URL from university
+  const universityTitle = university?.title // Get the logo URL from university
 
   return (
-    <article
-      className={cn(
-        'border border-border rounded-lg overflow-hidden bg-white shadow-md hover:shadow-lg transition-shadow duration-300',
-        className,
-      )}
-      ref={card.ref}
-    >
+    <article className={cn(className)} ref={card.ref}>
       <div className="flex relative">
         {/* Logo in the top-right corner */}
         {logoUrl && (
@@ -117,13 +73,13 @@ export const CoursesCard: React.FC<{
         </div>
 
         {/* Right Section: Content */}
-        <div className="p-4 w-3/4 courseContbox">
+        <div className="w-3/4 courseContbox">
           {/* College Name */}
           {universityTitle && <h5>{universityTitle}</h5>}
 
           {/* University Name / Categories */}
           {showCategories && hasCategories && (
-            <h5>
+            <h5 className="">
               {categories?.map((category, index) => {
                 if (typeof category === 'object') {
                   const { title: titleFromCategory } = category
@@ -163,52 +119,27 @@ export const CoursesCard: React.FC<{
           )}
 
           {/* Course Details */}
-          <div className="cousindetlcol text-sm text-gray-600 mb-4 flex flex-wrap gap-5">
+          <div className="cousindetlcol text-sm text-gray-600 mb-4 flex flex-wrap gap-2">
             <div className="flex items-center gap-1">
-              <img src="/media/coursesicons/courses-map-pin.svg" alt="" />
-              <span>{countryName}</span>
+              <span className="material-icons place text-blue-500"></span>
+              <span>Malaysia</span>
             </div>
-            {degreeProgram && (
-              <div className="flex items-center gap-1">
-                <img src="/media/coursesicons/courses-graduation-cap.svg" alt="" />
-                <span>{degreeProgram}</span>
-              </div>
-            )}
-            {studyYears && (
-              <div className="flex items-center gap-1">
-                <img src="/media/coursesicons/courses-clock-time.svg" alt="" />
-                <span>{formatStudyYears(studyYears)}</span>
-              </div>
-            )}
-            {studyMode && (
-              <div className="flex items-center gap-1">
-                <img src="/media/coursesicons/courses-on-off-line.svg" alt="" />
-                <span>{studyMode === 'part-time' ? 'Part Time' : 'Full Time'}</span>
-              </div>
-            )}
-            {intakeMonths && (
-              <div className="flex items-center gap-1">
-                <img src="/media/coursesicons/courses-date.svg" alt="" />
-                <span>{intakeMonths}</span>
-              </div>
-            )}
+            <div className="flex items-center gap-1">
+              <span className="material-icons school text-blue-500"></span>
+              <span>Under Graduate</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="material-icons schedule text-blue-500"></span>
+              <span>3 Years</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="material-icons intake text-blue-500"></span>
+              <span>Jan, May & Sep</span>
+            </div>
           </div>
 
-          {/* Department and Study Area */}
-          {/* {(department || studyArea) && (
-            <div className="text-sm text-gray-700 mb-2">
-              {department && <span className="font-medium">{department}</span>}
-              {department && studyArea && <span> - </span>}
-              {studyArea && <span>{studyArea}</span>}
-            </div>
-          )} */}
-
-          {/* Description or Excerpt */}
-          <div className="descriptbox">
-            {(description || excerpt) && (
-              <p className="text-sm mb-4">{description || sanitizedExcerpt}</p>
-            )}
-          </div>
+          {/* Excerpt */}
+          {excerpt && <p className="text-sm text-gray-700 mb-4">{sanitizedExcerpt}</p>}
 
           {/* Explore More Button */}
           <div className="flex">
@@ -221,3 +152,4 @@ export const CoursesCard: React.FC<{
     </article>
   )
 }
+//final

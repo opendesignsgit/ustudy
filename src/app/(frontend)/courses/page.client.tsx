@@ -150,7 +150,7 @@ const PageClient = ({
 
                 {/* Applied Filters */}
                 {appliedFilters.length > 0 && (
-                  <div className="mb-4">
+                  <div className="">
                     <AppliedFilters
                       appliedFilters={appliedFilters}
                       onRemove={handleRemoveFilter}

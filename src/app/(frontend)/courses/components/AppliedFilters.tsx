@@ -18,25 +18,24 @@ const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   }
 
   return (
-    <div className="ApplieBox">
-      <h3>Applied Filters</h3>
-      <div className="flex flex-wrap gap-2">
-        {appliedFilters.map((filter, index) => (
-          <div
-            key={index}
-            className="flex items-center bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm"
-          >
-            <span>{filter}</span>
-            <button
-              onClick={() => onRemove(filter)}
-              className="ml-2 text-red-500 hover:text-red-700"
-            >
-              ✕
-            </button>
-          </div>
-        ))}
+    <div className="ApplieBox flex items-center">
+      <div className="AppliedTitles">
+        <h3>Applied Filters</h3>
+        <div className="flitmsvBoxs flex items-center text-sm">
+          {appliedFilters.map((filter, index) => (
+            <div key={index} className="flitmsviews flex items-center text-sm">
+              <span>{filter}</span>
+              <button
+                onClick={() => onRemove(filter)}
+                className="ml-2 text-red-500 hover:text-red-700"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
-      <button className="mt-3 text-sm text-red-500 underline" onClick={onClear}>
+      <button className="ml-auto text-sm text-red-500 underline cleatbtn" onClick={onClear}>
         Clear All
       </button>
     </div>
