@@ -142,11 +142,8 @@ export const CoursesCard: React.FC<{
           {excerpt && <p className="text-sm text-gray-700 mb-4">{sanitizedExcerpt}</p>}
 
           {/* Explore More Button */}
-          <div>
-            <Link
-              href={href}
-              className="inline-block bg-blue-500 text-white text-sm font-semibold py-2 px-4 rounded hover:bg-blue-600 transition-colors"
-            >
+          <div className="flex">
+            <Link href={href} className="expolrlink">
               Explore More
             </Link>
           </div>

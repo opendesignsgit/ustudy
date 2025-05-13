@@ -198,13 +198,13 @@ const FiltersClient = ({
   return (
     <div className="FListInrow">
       {/* Applied Filters */}
-      {appliedFilters.length > 0 && (
+      {/* {appliedFilters.length > 0 && (
         <AppliedFilters
           appliedFilters={appliedFilters}
           onRemove={handleRemoveFilter}
           onClear={clearFilters}
         />
-      )}
+      )} */}
 
       {/* Filter Sections */}
       {filterSections.map(({ key, label }) => {
@@ -246,7 +246,7 @@ const FiltersClient = ({
                         key={`${key}-${option}`}
                         className={`itmlistulli cursor-pointer transition-colors ${
                           filters[filterKey].includes(option)
-                            ? 'bg-blue-100 text-blue-700 font-semibold'
+                            ? 'text-blue-700 font-semibold'
                             : 'hover:bg-gray-100'
                         }`}
                       >
