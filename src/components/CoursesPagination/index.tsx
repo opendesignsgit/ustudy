@@ -31,7 +31,7 @@ export const CoursesPagination: React.FC<{
   }
 
   return (
-    <div className={cn('my-12', className)}>
+    <div className={cn('my-12 flex items-center', className)}>
       <PaginationComponent>
         <PaginationContent>
           <PaginationItem>
@@ -49,30 +49,19 @@ export const CoursesPagination: React.FC<{
 
           {hasPrevPage && (
             <PaginationItem>
-              <PaginationLink
-                onClick={() => handlePageChange(page - 1)}
-              >
-                {page - 1}
-              </PaginationLink>
+              <PaginationLink onClick={() => handlePageChange(page - 1)}>{page - 1}</PaginationLink>
             </PaginationItem>
           )}
 
           <PaginationItem>
-            <PaginationLink
-              isActive
-              onClick={() => handlePageChange(page)}
-            >
+            <PaginationLink isActive onClick={() => handlePageChange(page)}>
               {page}
             </PaginationLink>
           </PaginationItem>
 
           {hasNextPage && (
             <PaginationItem>
-              <PaginationLink
-                onClick={() => handlePageChange(page + 1)}
-              >
-                {page + 1}
-              </PaginationLink>
+              <PaginationLink onClick={() => handlePageChange(page + 1)}>{page + 1}</PaginationLink>
             </PaginationItem>
           )}
 

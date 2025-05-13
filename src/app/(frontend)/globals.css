@@ -889,6 +889,28 @@ h3.showtitle {
 .coursPaginBox nav {
 }
 .coursPaginBox nav ul {
+  position: relative;
+  padding-inline: 20px;
+}
+.coursPaginBox nav ul::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  top: 50%;
+  left: 0;
+  background: #cccccc;
+  transform: translateX(-100%);
+}
+.coursPaginBox nav ul::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  top: 50%;
+  right: 0;
+  background: #cccccc;
+  transform: translateX(100%);
 }
 .coursPaginBox nav ul li {
 }
