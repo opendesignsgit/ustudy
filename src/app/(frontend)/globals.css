@@ -810,6 +810,7 @@ h3.showtitle {
   object-fit: cover;
 }
 .coursListBox article .courseContbox {
+  padding-block: 0;
   padding-inline: 35px;
 }
 .coursListBox article .courseContbox h5 {
