@@ -1,6 +1,4 @@
 import type { CollectionConfig } from 'payload'
-import { PayloadRequest } from 'payload';
-import { Response } from 'express'
 import {
   BlocksFeature,
   FixedToolbarFeature,
@@ -24,6 +22,8 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
+import { withFiltersEndpoint } from '../endpoints/withFilters'
+import { addFilterOptions } from './hooks/afterOperation'
 
 import {
   MetaDescriptionField,
@@ -36,6 +36,7 @@ import { slugField } from '@/fields/slug'
 
 export const Courses: CollectionConfig<'courses'> = {
   slug: 'courses',
+  endpoints: [withFiltersEndpoint],
   access: {
     create: authenticated,
     delete: authenticated,
@@ -72,31 +73,6 @@ export const Courses: CollectionConfig<'courses'> = {
       }),
     useAsTitle: 'title',
   },
-  endpoints: [
-    {
-      path: '/filter',
-      method: 'get',
-      handler: (async (req: PayloadRequest, res: Response) => {
-        try {
-          const { university, studyArea } = req.query;
-          
-          const result = await req.payload.find({
-            collection: 'courses',
-            where: {
-              ...(university ? { 'university': { equals: university } } : {}),
-              ...(studyArea ? { 'studyArea': { equals: studyArea } } : {})
-            },
-            limit: 100
-          });
-          
-          res.status(200).json(result);
-        } catch (error) {
-          console.error('Filter error:', error);
-          res.status(500).json({ error: 'Filtering failed' });
-        }
-      }) as any // This type assertion resolves the TypeScript error
-    }
-  ],
   fields: [
     {
       name: 'title',
@@ -142,31 +118,6 @@ export const Courses: CollectionConfig<'courses'> = {
         },
         {
           fields: [
-            // {
-            //   name: 'relatedPosts',
-            //   type: 'relationship',
-            //   admin: {
-            //     position: 'sidebar',
-            //   },
-            //   filterOptions: ({ id }) => {
-            //     return {
-            //       id: {
-            //         not_in: [id],
-            //       },
-            //     }
-            //   },
-            //   hasMany: true,
-            //   relationTo: 'posts',
-            // },
-            // {
-            //   name: 'categories',
-            //   type: 'relationship',
-            //   admin: {
-            //     position: 'sidebar',
-            //   },
-            //   hasMany: true,
-            //   relationTo: 'categories',
-            // },
             {
               name: 'university',
               type: 'relationship',
@@ -265,6 +216,7 @@ export const Courses: CollectionConfig<'courses'> = {
     afterChange: [revalidatePost],
     afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],
+    afterOperation: [addFilterOptions],    
   },
   versions: {
     drafts: {

@@ -9,28 +9,51 @@ import FiltersClient from './components/FiltersClient'
 import CountryFlagSlider from './components/CountryFlagSlider'
 import AppliedFilters from './components/AppliedFilters'
 
-const PageClient = ({
-  initialCourses,
-  defaultLimit = 12,
-}: {
-  initialCourses: {
-    docs: any[]
-    totalDocs: number
-    totalPages: number
-    page: number
+type Course = {
+  id: string
+  title: string
+  university: {
+    title: string
+    country: {
+      name: string
+    }
   }
-  defaultLimit?: number
-}) => {
+  degreeProgram: string
+  department: string
+  studyArea: string
+  studyYears: number
+  studyMode: string
+  // Add other course properties as needed
+}
+
+type CoursesResponse = {
+  docs: Course[]
+  totalDocs: number
+  totalPages: number
+  page: number
+}
+
+const PageClient = () => {
   const { setHeaderTheme } = useHeaderTheme()
-  const [courses, setCourses] = useState(initialCourses)
+  const [courses, setCourses] = useState<CoursesResponse>({
+    docs: [],
+    totalDocs: 0,
+    totalPages: 1,
+    page: 1,
+  })
   const [isLoading, setIsLoading] = useState(false)
-  const [currentPage, setCurrentPage] = useState(initialCourses.page || 1)
-  const [limit, setLimit] = useState(defaultLimit)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [limit, setLimit] = useState(5)
   const [filters, setFilters] = useState({
     countries: [] as string[],
     universities: [] as string[],
     studyAreas: [] as string[],
+    degreePrograms: [] as string[],
+    departments: [] as string[],
+    studyYears: [] as string[],
+    studyModes: [] as string[],
   })
+  const [allCourses, setAllCourses] = useState<Course[]>([])
 
   useEffect(() => {
     setHeaderTheme('light')
@@ -44,21 +67,31 @@ const PageClient = ({
         countries: string[]
         universities: string[]
         studyAreas: string[]
-      },
+        degreePrograms: string[]
+        departments: string[]
+        studyYears: string[]
+        studyModes: string[]
+      }
     ) => {
       setIsLoading(true)
       try {
-        const filterParams = new URLSearchParams()
-        Object.entries(filters).forEach(([key, values]) => {
-          if (values && values.length > 0) {
-            values.forEach((value) => filterParams.append(key, value))
-          }
+        const response = await fetch('/api/get-courses', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            page,
+            limit,
+            filters,
+          }),
         })
 
-        const response = await fetch(
-          `/api/courses?page=${page}&limit=${limit}&${filterParams.toString()}`,
-        )
-        const data = await response.json()
+        if (!response.ok) {
+          throw new Error('Failed to fetch courses')
+        }
+
+        const data: CoursesResponse = await response.json()
         setCourses(data)
         setCurrentPage(page)
       } catch (error) {
@@ -67,8 +100,50 @@ const PageClient = ({
         setIsLoading(false)
       }
     },
-    [],
+    []
   )
+
+  const fetchAllCourses = useCallback(async () => {
+    try {
+      const response = await fetch('/api/get-courses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          limit: 5, // Adjust based on your expected maximum courses
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch all courses')
+      }
+
+      const data: CoursesResponse = await response.json()
+      setAllCourses(data.docs)
+    } catch (error) {
+      console.error('Error fetching all courses:', error)
+    }
+  }, [])
+
+  // Fetch initial data
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      setIsLoading(true)
+      try {
+        await Promise.all([
+          fetchCourses(1, limit, filters),
+          fetchAllCourses()
+        ])
+      } catch (error) {
+        console.error('Error fetching initial data:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchInitialData()
+  }, [limit, fetchCourses, fetchAllCourses])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -83,10 +158,18 @@ const PageClient = ({
   }, [])
 
   const handleFilterChange = useCallback(
-    (newFilters: { countries: string[]; universities: string[]; studyAreas: string[] }) => {
+    (newFilters: {
+      countries: string[]
+      universities: string[]
+      studyAreas: string[]
+      degreePrograms: string[]
+      departments: string[]
+      studyYears: string[]
+      studyModes: string[]
+    }) => {
       setFilters(newFilters)
     },
-    [],
+    []
   )
 
   const handleRemoveFilter = useCallback(
@@ -95,10 +178,14 @@ const PageClient = ({
         countries: filters.countries.filter((item) => item !== filter),
         universities: filters.universities.filter((item) => item !== filter),
         studyAreas: filters.studyAreas.filter((item) => item !== filter),
+        degreePrograms: filters.degreePrograms.filter((item) => item !== filter),
+        departments: filters.departments.filter((item) => item !== filter),
+        studyYears: filters.studyYears.filter((item) => item !== filter),
+        studyModes: filters.studyModes.filter((item) => item !== filter),
       }
       setFilters(updatedFilters)
     },
-    [filters],
+    [filters]
   )
 
   const clearFilters = useCallback(() => {
@@ -106,14 +193,25 @@ const PageClient = ({
       countries: [],
       universities: [],
       studyAreas: [],
+      degreePrograms: [],
+      departments: [],
+      studyYears: [],
+      studyModes: [],
     })
   }, [])
 
-  const appliedFilters = [...filters.countries, ...filters.universities, ...filters.studyAreas]
+  const appliedFilters = [
+    ...filters.countries.map((c) => `Country: ${c}`),
+    ...filters.universities.map((u) => `University: ${u}`),
+    ...filters.degreePrograms.map((d) => `Program: ${d}`),
+    ...filters.departments.map((d) => `Department: ${d}`),
+    ...filters.studyAreas.map((s) => `Area: ${s}`),
+    ...filters.studyYears.map((y) => `Years: ${y}`),
+    ...filters.studyModes.map((m) => `Mode: ${m}`),
+  ]
 
   return (
     <div className="pt-24 pb-24">
-      {/* Country Slider */}
       <CountryFlagSlider />
       <section className="ListFilerSec">
         <div className="container mx-auto">
@@ -121,11 +219,10 @@ const PageClient = ({
             <div className="FlistCol flColLeft w-1/4">
               <FiltersClient
                 onFilterChange={handleFilterChange}
-                courses={courses.docs} // Pass the array of courses
+                courses={allCourses}
               />
             </div>
 
-            {/* Main Content */}
             <div className="FlistCol flColRight w-3/4">
               <div className="listshowtopbox">
                 <div className="flex justify-between items-center">
@@ -148,7 +245,6 @@ const PageClient = ({
                   </select>
                 </div>
 
-                {/* Applied Filters */}
                 {appliedFilters.length > 0 && (
                   <div className="">
                     <AppliedFilters
@@ -196,4 +292,3 @@ const PageClient = ({
 }
 
 export default PageClient
-//final

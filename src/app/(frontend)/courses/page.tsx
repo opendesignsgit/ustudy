@@ -1,26 +1,12 @@
 import type { Metadata } from 'next/types'
-import { CollectionArchiveCourses } from '@/components/CollectionArchiveCourses'
-import { PageRange } from '@/components/PageRange'
-import { Pagination } from '@/components/Pagination'
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
 import PageClient from './page.client'
 import Image from 'next/image'
-
+import FooterForm from '@/components/Home/footer-form'
+import Footer from '@/components/Home/footer'
 export const dynamic = 'force-static'
 export const revalidate = 600
 
 export default async function Page() {
-  const payload = await getPayload({ config: configPromise })
-  const initialLimit = 5 // Default limit for initial load
-
-  const initialCourses = await payload.find({
-    collection: 'courses',
-    depth: 3, // Changed from 1 to 3 to properly populate nested relationships
-    limit: initialLimit,
-    overrideAccess: false,
-  })
-
   return (
     <div>
       <div className="couresList">
@@ -39,23 +25,16 @@ export default async function Page() {
             </div>
           </div>
         </section>
-        <PageClient
-          initialCourses={{
-            docs: initialCourses.docs || [],
-            totalDocs: initialCourses.totalDocs || 0,
-            totalPages: initialCourses.totalPages || 1,
-            page: initialCourses.page || 1,
-          }}
-          defaultLimit={initialLimit}
-        />
+        <PageClient />
       </div>
+      <FooterForm />
+      <Footer/>
     </div>
   )
 }
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Ktec Ustudy Academy - All Courses Page`,
+    title: `Ustudy Academy - All Courses Page`,
   }
 }
-//final
