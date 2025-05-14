@@ -153,7 +153,10 @@ const FiltersClient = ({
 
   // Remove specific filter
   const handleRemoveFilter = (filter: string) => {
-    const [type, value] = filter.split(': ')
+    // Split the filter string into type and value
+    const [type, ...valueParts] = filter.split(': ')
+    const value = valueParts.join(': ') // Rejoin in case value contains ': '
+    
     const categoryMap: Record<string, keyof FilterState> = {
       Country: 'countries',
       University: 'universities',
@@ -198,13 +201,13 @@ const FiltersClient = ({
   return (
     <div className="FListInrow">
       {/* Applied Filters */}
-      {/* {appliedFilters.length > 0 && (
+      {appliedFilters.length > 0 && (
         <AppliedFilters
           appliedFilters={appliedFilters}
           onRemove={handleRemoveFilter}
           onClear={clearFilters}
         />
-      )} */}
+      )}
 
       {/* Filter Sections */}
       {filterSections.map(({ key, label }) => {
@@ -246,7 +249,7 @@ const FiltersClient = ({
                         key={`${key}-${option}`}
                         className={`itmlistulli cursor-pointer transition-colors ${
                           filters[filterKey].includes(option)
-                            ? 'text-blue-700 font-semibold'
+                            ? 'bg-blue-100 text-blue-700 font-semibold'
                             : 'hover:bg-gray-100'
                         }`}
                       >
