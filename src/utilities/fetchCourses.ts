@@ -81,3 +81,4 @@ export async function getAllCoursesForFilters() {
 
   return result.docs || []
 }
+//finsl

@@ -9,7 +9,7 @@ export const Countries: CollectionConfig = {
     delete: ({ req: { user } }) => Boolean(user), // Only authenticated users
   },
   admin: {
-    group: 'Configurations',
+    group: 'Universities',
     useAsTitle: 'name',
     defaultColumns: ['name', 'code'],
   },

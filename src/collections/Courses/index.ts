@@ -34,6 +34,29 @@ import {
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from '@/fields/slug'
 
+
+const SimpleHiddenCollection = (slug: string): CollectionConfig => ({
+  slug,
+  admin: {
+    hidden: true,
+    useAsTitle: 'name'
+  },
+  fields: [
+    {
+      name: 'name',
+      type: 'text',
+      required: true,
+    },
+  ],
+})
+
+export const IntakeMonths: CollectionConfig = SimpleHiddenCollection('intake-months')
+export const StudyModes: CollectionConfig = SimpleHiddenCollection('study-modes')
+export const StudyYears: CollectionConfig = SimpleHiddenCollection('study-years')
+export const StudyAreas: CollectionConfig = SimpleHiddenCollection('study-areas')
+export const Departments: CollectionConfig = SimpleHiddenCollection('departments')
+export const DegreePrograms: CollectionConfig = SimpleHiddenCollection('degree-programs')
+
 export const Courses: CollectionConfig<'courses'> = {
   slug: 'courses',
   endpoints: [withFiltersEndpoint],
@@ -52,7 +75,7 @@ export const Courses: CollectionConfig<'courses'> = {
     },
   },
   admin: {
-    group: 'Courses',
+    group: 'Universities',
     defaultColumns: ['title', 'slug', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) => {
@@ -79,6 +102,10 @@ export const Courses: CollectionConfig<'courses'> = {
       type: 'text',
       required: true,
     },
+    {
+      name: 'description',
+      type: 'textarea',
+    }, 
     {
       type: 'tabs',
       tabs: [
@@ -108,10 +135,6 @@ export const Courses: CollectionConfig<'courses'> = {
               }),
               label: false,
               required: true,
-            },
-            {
-              name: 'description',
-              type: 'textarea',
             },
           ],
           label: 'Content',
@@ -156,6 +179,7 @@ export const Courses: CollectionConfig<'courses'> = {
           ],
           label: 'Meta',
         },
+        
         {
           name: 'meta',
           label: 'SEO',

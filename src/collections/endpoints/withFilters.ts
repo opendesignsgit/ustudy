@@ -7,7 +7,7 @@ export const withFiltersEndpoint: Endpoint = {
     const { docs } = await payload.find({
         collection: 'courses',
         depth: 3,
-        limit: 1000,
+        limit: 5,
     });
 
     const filters = {

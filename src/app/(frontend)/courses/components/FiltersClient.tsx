@@ -153,10 +153,13 @@ const FiltersClient = ({
 
   // Remove specific filter
   const handleRemoveFilter = (filter: string) => {
-    // Split the filter string into type and value
-    const [type, ...valueParts] = filter.split(': ')
-    const value = valueParts.join(': ') // Rejoin in case value contains ': '
-    
+    // Split only on the first occurrence of ': '
+    const separatorIndex = filter.indexOf(': ');
+    if (separatorIndex === -1) return;
+
+    const type = filter.substring(0, separatorIndex);
+    const value = filter.substring(separatorIndex + 2); // +2 to skip ': '
+
     const categoryMap: Record<string, keyof FilterState> = {
       Country: 'countries',
       University: 'universities',
@@ -165,16 +168,16 @@ const FiltersClient = ({
       Area: 'studyAreas',
       Years: 'studyYears',
       Mode: 'studyModes',
-    }
+    };
 
-    const category = categoryMap[type]
+    const category = categoryMap[type];
     if (category) {
-      setFilters((prev) => ({
+      setFilters(prev => ({
         ...prev,
-        [category]: prev[category].filter((item) => item !== value),
-      }))
+        [category]: prev[category].filter(item => item !== value)
+      }));
     }
-  }
+  };
 
   // Generate applied filters with labels
   const appliedFilters = [
@@ -211,9 +214,9 @@ const FiltersClient = ({
 
       {/* Filter Sections */}
       {filterSections.map(({ key, label }) => {
-        const filterKey = key as keyof typeof filterOptions
+        const filterKey = key as keyof typeof filterOptions;
         return filterOptions[filterKey].length > 0 ? (
-          <div key={key} className="ItemBoxs">
+          <div key={`${key}-${filters[filterKey].join(',')}`} className="ItemBoxs">
             <div
               className="IboxTitles flex justify-between items-center cursor-pointer"
               onClick={() => toggleCollapse(key as keyof CollapsedSectionsState)}
