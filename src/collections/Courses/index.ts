@@ -19,10 +19,11 @@ import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { SliderBlock } from '@/blocks/SliderBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
-import { withFiltersEndpoint } from '../endpoints/withFilters'
+// import { withFiltersEndpoint } from '../endpoints/withFilters'
 import { addFilterOptions } from './hooks/afterOperation'
 
 import {
@@ -59,7 +60,7 @@ export const DegreePrograms: CollectionConfig = SimpleHiddenCollection('degree-p
 
 export const Courses: CollectionConfig<'courses'> = {
   slug: 'courses',
-  endpoints: [withFiltersEndpoint],
+  // endpoints: [withFiltersEndpoint],
   access: {
     create: authenticated,
     delete: authenticated,
@@ -124,7 +125,7 @@ export const Courses: CollectionConfig<'courses'> = {
                   return [
                     ...rootFeatures,
                     HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                    BlocksFeature({ blocks: [Banner, Code, MediaBlock, CallToAction, Content, Archive, FormBlock] }),
+                    BlocksFeature({ blocks: [Banner, Code, MediaBlock, CallToAction, Content, Archive, FormBlock, SliderBlock] }),
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),
                     HorizontalRuleFeature(),

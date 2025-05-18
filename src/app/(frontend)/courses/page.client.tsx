@@ -8,22 +8,36 @@ import { CoursesPagination } from '@/components/CoursesPagination'
 import FiltersClient from './components/FiltersClient'
 import CountryFlagSlider from './components/CountryFlagSlider'
 import AppliedFilters from './components/AppliedFilters'
-
-type Course = {
+import { CoursesCard, CardPostData } from '@/components/CoursesCard'
+type Course = CardPostData & {
   id: string
   title: string
+  slug: string
+  description?: string
+  heroImage?: any
   university: {
+    id: string
     title: string
+    logo?: {
+      url: string
+    }
     country: {
       name: string
     }
+    updatedAt: string
+    createdAt: string
   }
   degreeProgram: string
   department: string
   studyArea: string
   studyYears: number
   studyMode: string
-  // Add other course properties as needed
+  intakeMonths?: string
+  meta?: {
+    image?: any
+    description?: string
+  }
+  categories?: Array<{ title?: string }>
 }
 
 type CoursesResponse = {
@@ -32,6 +46,8 @@ type CoursesResponse = {
   totalPages: number
   page: number
 }
+
+
 
 const PageClient = () => {
   const { setHeaderTheme } = useHeaderTheme()
@@ -53,6 +69,8 @@ const PageClient = () => {
     studyYears: [] as string[],
     studyModes: [] as string[],
   })
+
+  
   const [allCourses, setAllCourses] = useState<Course[]>([])
 
   useEffect(() => {
@@ -60,48 +78,56 @@ const PageClient = () => {
   }, [setHeaderTheme])
 
   const fetchCourses = useCallback(
-    async (
-      page: number,
-      limit: number,
-      filters: {
-        countries: string[]
-        universities: string[]
-        studyAreas: string[]
-        degreePrograms: string[]
-        departments: string[]
-        studyYears: string[]
-        studyModes: string[]
-      }
-    ) => {
-      setIsLoading(true)
-      try {
-        const response = await fetch('/api/get-courses', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            page,
-            limit,
-            filters,
-          }),
-        })
+  async (
+    page: number,
+    limit: number,
+    filters: {
+      countries: string[]
+      universities: string[]
+      studyAreas: string[]
+      degreePrograms: string[]
+      departments: string[]
+      studyYears: string[]
+      studyModes: string[]
+    }
+  ) => {
+    setIsLoading(true)
+    try {
+      const response = await fetch('/api/get-courses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          page,
+          limit,
+          filters,
+        }),
+      })
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch courses')
-        }
-
-        const data: CoursesResponse = await response.json()
-        setCourses(data)
-        setCurrentPage(page)
-      } catch (error) {
-        console.error('Error fetching courses:', error)
-      } finally {
-        setIsLoading(false)
+      if (!response.ok) {
+        throw new Error('Failed to fetch courses')
       }
-    },
-    []
-  )
+
+      const data: CoursesResponse = await response.json()
+      
+      // Filter out Medical department courses on the client side
+      const filteredData = {
+        ...data,
+        docs: data.docs.filter(course => course.department !== 'Medical'),
+        totalDocs: data.totalDocs - data.docs.filter(course => course.department === 'Medical').length
+      }
+
+      setCourses(filteredData)
+      setCurrentPage(page)
+    } catch (error) {
+      console.error('Error fetching courses:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  },
+  []
+)
 
   const fetchAllCourses = useCallback(async () => {
     try {
@@ -172,6 +198,7 @@ const PageClient = () => {
     []
   )
 
+
   const handleRemoveFilter = useCallback(
     (filter: string) => {
       const updatedFilters = {
@@ -200,6 +227,7 @@ const PageClient = () => {
     })
   }, [])
 
+
   const appliedFilters = [
     ...filters.countries.map((c) => `Country: ${c}`),
     ...filters.universities.map((u) => `University: ${u}`),
@@ -218,9 +246,11 @@ const PageClient = () => {
           <div className="flex gap-8">
             <div className="FlistCol flColLeft w-1/4">
               <FiltersClient
-                onFilterChange={handleFilterChange}
-                courses={allCourses}
-              />
+        filters={filters}
+        setFilters={setFilters}
+        courses={allCourses}
+        clearFilters={clearFilters}
+      />
             </div>
 
             <div className="FlistCol flColRight w-3/4">
@@ -267,11 +297,11 @@ const PageClient = () => {
                 </div>
               ) : (
                 <CollectionArchiveCourses
-                  posts={courses.docs}
-                  numberOfCol={4}
-                  relationTo="courses"
-                  key={`courses-${currentPage}-${limit}-${JSON.stringify(filters)}`}
-                />
+  courses={courses.docs as CardPostData[]}
+  numberOfCol={4}
+  relationTo="courses"
+  key={`courses-${currentPage}-${limit}-${JSON.stringify(filters)}`}
+/>
               )}
 
               <div className="coursPaginBox">
@@ -292,3 +322,4 @@ const PageClient = () => {
 }
 
 export default PageClient
+//final

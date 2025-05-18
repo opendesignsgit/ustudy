@@ -8,6 +8,16 @@ import type { Course } from '@/payload-types'
 
 import { Media } from '@/components/Media'
 
+type University = {
+  logo?: {
+    url: string;
+  };
+  title?: string;
+  country?: {
+    name: string;
+  };
+};
+
 export type CardPostData = Pick<
   Course,
   | 'title'
@@ -29,6 +39,7 @@ export type CardPostData = Pick<
   excerpt?: string
   logo?: string
   collegeName?: string
+  University?: University
 }
 
 export const CoursesCard: React.FC<{
@@ -66,9 +77,9 @@ export const CoursesCard: React.FC<{
   const titleToUse = titleFromProps || title
   const sanitizedExcerpt = excerpt?.replace(/\s/g, ' ')
   const href = externalLink ? externalLink : `/${relationTo}/${slug}`
-  const logoUrl = university?.logo?.url
-  const universityTitle = university?.title
-  const countryName = university?.country?.name || 'Malaysia'
+  const logoUrl = (university as any)?.logo?.url;
+  const universityTitle = (university as any)?.title
+  const countryName = (university as any)?.country?.name || 'Malaysia'
 
   // Map degree program codes to full names
   const degreeProgramMap: Record<string, string> = {
@@ -97,7 +108,7 @@ export const CoursesCard: React.FC<{
           <div className="absolute top-2 right-2 z-10 Universitylogo">
             <img
               src={logoUrl}
-              alt={`${university?.title || 'University'} logo`}
+              alt={`${universityTitle || 'University'} logo`}
               className="h-10 w-auto object-contain bg-white p-1 rounded"
             />
           </div>

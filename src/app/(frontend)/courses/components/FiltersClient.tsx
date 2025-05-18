@@ -1,3 +1,4 @@
+// FiltersClient.tsx
 'use client'
 
 import React, { useState, useEffect } from 'react'
@@ -34,12 +35,18 @@ type CollapsedSectionsState = {
 }
 
 const FiltersClient = ({
-  onFilterChange,
+  filters,
+  setFilters,
   courses,
+  clearFilters,
 }: {
-  onFilterChange: (filters: FilterState) => void
+  filters: FilterState
+  setFilters: (filters: FilterState) => void
   courses: any[]
+  clearFilters: () => void
 }) => {
+
+
   // Generate all possible filter options from courses data
   const generateFilterOptions = () => {
     const options = {
@@ -80,15 +87,6 @@ const FiltersClient = ({
 
   // State management
   const [filterOptions, setFilterOptions] = useState(generateFilterOptions())
-  const [filters, setFilters] = useState<FilterState>({
-    countries: [],
-    universities: [],
-    degreePrograms: [],
-    departments: [],
-    studyAreas: [],
-    studyYears: [],
-    studyModes: [],
-  })
   const [searchTerms, setSearchTerms] = useState<SearchTermsState>({
     countries: '',
     universities: '',
@@ -113,20 +111,44 @@ const FiltersClient = ({
     setFilterOptions(generateFilterOptions())
   }, [courses])
 
-  // Notify parent when filters change
-  useEffect(() => {
-    onFilterChange(filters)
-  }, [filters, onFilterChange])
-
   // Handle filter selection changes
   const handleFilterChange = (category: keyof FilterState, value: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      [category]: prev[category].includes(value)
-        ? prev[category].filter((item) => item !== value)
-        : [...prev[category], value],
-    }))
+    const newFilters = {
+      ...filters,
+      [category]: filters[category].includes(value)
+        ? filters[category].filter((item) => item !== value)
+        : [...filters[category], value],
+    }
+    setFilters(newFilters)
   }
+
+  const handleRemoveFilter = (type: string, value: string) => {
+  console.log('handleRemoveFilter called with type:', type);
+  console.log('handleRemoveFilter called with value:', value);
+
+  const categoryMap: Record<string, keyof FilterState> = {
+    Country: 'countries',
+    University: 'universities',
+    Program: 'degreePrograms',
+    Department: 'departments',
+    Area: 'studyAreas',
+    Years: 'studyYears',
+    Mode: 'studyModes',
+  };
+
+  const category = categoryMap[type];
+  if (category) {
+    const newFilters = {
+      ...filters,
+      [category]: filters[category].filter((item) => item !== value)
+    }
+    console.log('newFilters:', newFilters);
+    setFilters(newFilters)
+  }
+}
+
+
+
 
   // Handle search term changes
   const handleSearchChange = (category: keyof SearchTermsState, value: string) => {
@@ -137,47 +159,6 @@ const FiltersClient = ({
   const toggleCollapse = (category: keyof CollapsedSectionsState) => {
     setCollapsedSections((prev) => ({ ...prev, [category]: !prev[category] }))
   }
-
-  // Clear all filters
-  const clearFilters = () => {
-    setFilters({
-      countries: [],
-      universities: [],
-      degreePrograms: [],
-      departments: [],
-      studyAreas: [],
-      studyYears: [],
-      studyModes: [],
-    })
-  }
-
-  // Remove specific filter
-  const handleRemoveFilter = (filter: string) => {
-    // Split only on the first occurrence of ': '
-    const separatorIndex = filter.indexOf(': ');
-    if (separatorIndex === -1) return;
-
-    const type = filter.substring(0, separatorIndex);
-    const value = filter.substring(separatorIndex + 2); // +2 to skip ': '
-
-    const categoryMap: Record<string, keyof FilterState> = {
-      Country: 'countries',
-      University: 'universities',
-      Program: 'degreePrograms',
-      Department: 'departments',
-      Area: 'studyAreas',
-      Years: 'studyYears',
-      Mode: 'studyModes',
-    };
-
-    const category = categoryMap[type];
-    if (category) {
-      setFilters(prev => ({
-        ...prev,
-        [category]: prev[category].filter(item => item !== value)
-      }));
-    }
-  };
 
   // Generate applied filters with labels
   const appliedFilters = [
@@ -205,11 +186,12 @@ const FiltersClient = ({
     <div className="FListInrow">
       {/* Applied Filters */}
       {appliedFilters.length > 0 && (
-        <AppliedFilters
-          appliedFilters={appliedFilters}
-          onRemove={handleRemoveFilter}
-          onClear={clearFilters}
-        />
+<AppliedFilters
+        appliedFilters={appliedFilters}
+        onRemove={handleRemoveFilter}
+        onClear={clearFilters}
+      />
+
       )}
 
       {/* Filter Sections */}
@@ -279,4 +261,3 @@ const FiltersClient = ({
 }
 
 export default FiltersClient
-//final

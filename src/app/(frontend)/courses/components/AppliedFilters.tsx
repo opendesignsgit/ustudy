@@ -4,10 +4,12 @@ import React from 'react'
 
 type AppliedFiltersProps = {
   appliedFilters: string[]
-  onRemove: (filter: string) => void
+  onRemove: (type: string, value: string) => void
   onClear: () => void
 }
 
+
+// AppliedFilters.tsx
 const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   appliedFilters = [],
   onRemove,
@@ -16,6 +18,21 @@ const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   if (appliedFilters.length === 0) {
     return null
   }
+
+const handleRemove = (filter: string) => {
+  console.log('handleRemove called with filter:', filter);
+  const separatorIndex = filter.indexOf(': ');
+  if (separatorIndex === -1) {
+    console.log('Invalid filter format');
+    return;
+  }
+
+  const type = filter.substring(0, separatorIndex);
+  const value = filter.substring(separatorIndex + 2);
+
+  console.log('Calling onRemove with type:', type, 'and value:', value);
+  onRemove(type, value);
+}
 
   return (
     <div className="ApplieBox flex items-center gap-2 p-4 bg-gray-50 rounded-lg mb-4">
@@ -27,9 +44,9 @@ const AppliedFilters: React.FC<AppliedFiltersProps> = ({
               key={index} 
               className="flitmsviews flex items-center gap-1 bg-white px-3 py-1 rounded-full border border-gray-200"
             >
-              <span>{filter}</span>
+              <span className="truncate">{filter}</span>
               <button
-                onClick={() => onRemove(filter)}
+                onClick={() => handleRemove(filter)}
                 className="ml-1 text-gray-500 hover:text-red-500 transition-colors"
                 aria-label={`Remove ${filter}`}
               >
