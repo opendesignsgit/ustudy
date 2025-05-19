@@ -267,6 +267,7 @@ footer .footer-content ul li a {
   line-height: 3;
   border-bottom: 1px solid #cccccc;
   color: #000000;
+  font-size: 1.1vw;
 }
 .formboxs textarea {
   width: 100%;
@@ -276,6 +277,7 @@ footer .footer-content ul li a {
   height: 70px;
   color: #000000;
   padding-top: 10px;
+  font-size: 1.1vw;
 }
 .formboxs input:focus,
 .formboxs input:focus-visible {
@@ -375,8 +377,13 @@ footer .footbtm ul.footSmediaul li a {
   background: #ffffff;
   border-radius: 50%;
   color: #1e3a8a;
-  padding-top: 2px;
+  padding: 6px;
   border: 1px solid #ffffff;
+}
+
+footer .footbtm ul.footSmediaul li a svg {
+  width: 100%;
+  aspect-ratio: 1;
 }
 footer .footbtm ul.footSmediaul li a:hover {
   background: #1e3a8a;
@@ -449,7 +456,7 @@ footer .footbtm ul.footSmediaul li a:hover {
   top: 0;
   left: 0;
   background: #0056d2;
-  opacity: 0.85;
+  opacity: 0.75;
   z-index: 2;
 }
 .inerpageban h1 {
@@ -588,6 +595,8 @@ footer .footbtm ul.footSmediaul li a:hover {
 }
 .contliItems p {
   letter-spacing: 0;
+  font-size: 20px;
+  letter-spacing: -0.5px;
 }
 .contliItems address {
   font-style: normal;
@@ -627,7 +636,7 @@ footer .footbtm ul.footSmediaul li a:hover {
   color: #0056d1;
 }
 .ifrmeSec {
-  padding-bottom: 10vh;
+  padding-bottom: 0vh;
 }
 .ifrmeSec iframe {
   width: 100%;
@@ -639,7 +648,7 @@ footer .footbtm ul.footSmediaul li a:hover {
 .contforminrow .ColL {
   background: #f0f6ff;
   width: 60%;
-  margin-block: 10px;
+  margin-block: 0px;
   padding: 4vw;
 }
 .contforminrow .ColR {
