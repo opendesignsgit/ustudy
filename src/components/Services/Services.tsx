@@ -98,7 +98,7 @@ const Services = () => {
     <>
       <section className="inerpageban servbansec relative">
         <div className="inpbanimg relative">
-          <img src="/media/innerbanimg.jpg" alt="Services" />
+          <img src="/media/services/service-ban-img.jpg" alt="Services" />
         </div>
         <div className="inpbancont absolute top-0 left-0 w-full h-full z-10">
           <div className="container relative h-full flex flex-col items-center justify-center text-center">

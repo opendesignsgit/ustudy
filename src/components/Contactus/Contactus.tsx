@@ -6,7 +6,7 @@ const Contactus = () => {
     <>
       <section className="inerpageban servbansec relative">
         <div className="inpbanimg relative">
-          <img src="/media/innerbanimg.jpg" alt="Services" />
+          <img src="/media/services/contactus-ban-img.jpg" alt="Services" />
         </div>
         <div className="inpbancont absolute top-0 left-0 w-full h-full z-10">
           <div className="container relative h-full flex flex-col items-center justify-center text-center">
@@ -51,7 +51,7 @@ const Contactus = () => {
               <div className="contliICont relative">
                 <h3>Address</h3>
                 <address>
-                  1st floor, Chettinad Chambers, 39, Dr Radha Krishnan Salai, 5th Street, Mylapore,
+                  2nd floor, Chettinad Chambers, 39, Dr Radha Krishnan Salai, 5th Street, Mylapore,
                   Chennai- 600 004.
                 </address>
               </div>
