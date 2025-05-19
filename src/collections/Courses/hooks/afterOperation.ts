@@ -67,3 +67,4 @@ export const addFilterOptions: AfterOperationHook<'courses'> = async ({
     return result
   }
 }
+//final

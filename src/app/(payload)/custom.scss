@@ -24,5 +24,15 @@ div.table {
   padding-left: 15px;
 }
 
-
+.nav__link-indicator {
+    position: absolute;
+    z-index: -1;
+    display: block;
+    inset-inline-start: -1.5384615385rem;
+    width: 130%;
+    height: 20px;
+    border-start-end-radius: 2px;
+    border-end-end-radius: 2px;
+    background: rgb(225 0 0 / 56%);
+}
 

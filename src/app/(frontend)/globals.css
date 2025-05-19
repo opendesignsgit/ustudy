@@ -23,6 +23,7 @@
 }
 
 @layer base {
+
   h1,
   h2,
   h3,
@@ -171,40 +172,51 @@ body header nav a.text-primary {
 body header nav a svg.text-primary {
   color: #333333;
 }
-body > footer {
+
+body>footer {
   display: none;
 }
+
 footer {
   padding-block: 8vh;
 }
-footer > .container > .prose > p {
+
+footer>.container>.prose>p {
   margin: 0;
   line-height: 0%;
 }
+
 footer .container.my-16 {
   margin-block: 0;
 }
+
 footer .col-span-4 {
   grid-column: span 3 / span 3;
 }
+
 footer .footer-content h5 {
   font-size: 18px;
   font-weight: 500;
   color: #ffffff;
 }
+
 footer .footer-content h5 br {
   display: none;
 }
+
 footer .footer-content h5 strong {
   color: #ffffff;
 }
+
 footer .footer-content p a {
   color: #ffffff;
 }
+
 footer .footer-content ul {
   list-style: none;
   padding-left: 0;
 }
+
 footer .footer-content ul li a {
   color: #ffffff;
   text-decoration: none;
@@ -213,6 +225,7 @@ footer .footer-content ul li a {
 .footformboxs {
   position: relative;
 }
+
 .footformSec::before {
   content: '';
   position: absolute;
@@ -222,6 +235,7 @@ footer .footer-content ul li a {
   left: 0;
   background: #1e3a8a;
 }
+
 .TfootContCol {
   width: 40%;
   padding-block: 10vh;
@@ -229,14 +243,17 @@ footer .footer-content ul li a {
   border-top-right-radius: 40vw;
   border-bottom-right-radius: 40vw;
 }
+
 .TfootContCol h2 {
   font-size: 3vw;
   line-height: 1;
   margin-bottom: 10px;
 }
+
 .TfootContCol p {
   font-weight: 400;
 }
+
 .TfootFormCol {
   width: 60%;
   display: -webkit-box;
@@ -250,17 +267,21 @@ footer .footer-content ul li a {
   justify-content: center;
   padding-inline: 2vw;
 }
+
 .formboxs {
   margin-inline: -15px;
 }
+
 .formboxs .form-col {
   padding-inline: 15px;
   width: 50%;
   margin-bottom: 20px;
 }
+
 .formboxs .form-col.fullcol {
   width: 100%;
 }
+
 .formboxs input {
   width: 100%;
   background: transparent;
@@ -269,6 +290,7 @@ footer .footer-content ul li a {
   color: #000000;
   font-size: 1.1vw;
 }
+
 .formboxs textarea {
   width: 100%;
   background: transparent;
@@ -279,16 +301,19 @@ footer .footer-content ul li a {
   padding-top: 10px;
   font-size: 1.1vw;
 }
+
 .formboxs input:focus,
 .formboxs input:focus-visible {
   outline: none;
   border-bottom-color: #0056d2;
 }
+
 .formboxs textarea:focus,
 .formboxs textarea:focus-visible {
   outline: none;
   border-bottom-color: #0056d2;
 }
+
 .formboxs button {
   background: #0056d2;
   color: #ffffff;
@@ -301,12 +326,14 @@ footer .footer-content ul li a {
 .footbtm {
   padding-bottom: 5vh;
 }
+
 .footbtm .footmcol {
   -webkit-box-flex: 1;
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
   position: relative;
 }
+
 .footbtm .footmcol::before {
   content: '';
   position: absolute;
@@ -316,17 +343,20 @@ footer .footer-content ul li a {
   right: 10%;
   background: rgb(255 255 255 / 10%);
 }
+
 .footbtm .footTitle {
   margin-bottom: 3vh;
   letter-spacing: 1px;
   font-weight: 400;
   font-size: 1.1vw;
 }
+
 .footbtm address {
   font-style: normal;
   font-weight: 400;
   letter-spacing: 0.4px;
 }
+
 footer .footbtm ul li {
   font-style: normal;
   font-weight: 400;
@@ -335,33 +365,41 @@ footer .footbtm ul li {
   padding-block: 10px;
   font-weight: 500;
 }
+
 footer .footbtm ul li:first-child {
   padding-top: 0;
 }
+
 footer .footbtm ul li a {
   display: block;
 }
+
 .footcorightrow {
   border-top: 1px solid rgb(255 255 255 / 10%);
 }
+
 .footcorightrow p {
   font-weight: 400;
   letter-spacing: 0;
 }
+
 .footcorightrow p img {
   width: 25px;
   height: 25px;
   margin-left: 10px;
 }
+
 .footSmedialist {
   margin-top: 4vh;
 }
-footer .footbtm ul.footSmediaul {
-}
+
+footer .footbtm ul.footSmediaul {}
+
 footer .footbtm ul.footSmediaul li {
   padding: 0;
   margin-right: 10px;
 }
+
 footer .footbtm ul.footSmediaul li a {
   width: 35px;
   aspect-ratio: 1;
@@ -390,26 +428,28 @@ footer .footbtm ul.footSmediaul li a:hover {
   color: #ffffff;
 }
 
-.contlink p.mailpara {
-}
-.contlink p.phonepara {
-}
+.contlink p.mailpara {}
+
+.contlink p.phonepara {}
 
 .secpadblock {
   padding-block: 12vh;
 }
+
 .ffamilyTNR {
   font-family: Times New Roman;
 }
+
 .fonteighteen {
   font-size: 18px;
 }
 
-.sectitle {
-}
+.sectitle {}
+
 .sectitle.textcenter {
   text-align: center;
 }
+
 .sectitle h2 {
   font-family: Times New Roman;
   color: #0056d2;
@@ -417,20 +457,25 @@ footer .footbtm ul.footSmediaul li a:hover {
   line-height: 1.1;
   margin-bottom: 10px;
 }
+
 .sectitle p {
   color: #333333;
   letter-spacing: 0px;
   line-height: 1.4;
 }
+
 .sectitle.whitetext h2 {
   color: #ffffff;
 }
+
 .sectitle.whitetext p {
   color: #ffffff;
 }
+
 .sectitle.marbtm {
   margin-bottom: 5vh;
 }
+
 .inpbanimg::before {
   content: '';
   position: absolute;
@@ -442,12 +487,14 @@ footer .footbtm ul.footSmediaul li a:hover {
   opacity: 1;
   z-index: 0;
 }
+
 .inpbanimg img {
   position: relative;
   width: 100%;
   z-index: 1;
   mix-blend-mode: screen;
 }
+
 .inpbanimg::after {
   content: '';
   position: absolute;
@@ -459,9 +506,11 @@ footer .footbtm ul.footSmediaul li a:hover {
   opacity: 0.75;
   z-index: 2;
 }
+
 .inerpageban h1 {
   font-size: 3.1vw;
 }
+
 .inerpageban p {
   letter-spacing: 0.5px;
   font-weight: 400;
@@ -470,17 +519,20 @@ footer .footbtm ul.footSmediaul li a:hover {
 .servisec .container-fuild {
   padding-inline: 6.5vw;
 }
-.SerBoxsList {
-}
+
+.SerBoxsList {}
+
 .SerBoxsList .SerLists {
   width: calc(25% - 16px);
   margin: 8px;
   cursor: pointer;
 }
+
 .SerBoxsList .SerLists .SListImg {
   overflow: hidden;
   border-radius: 12px;
 }
+
 .SerBoxsList .SerLists .SListImg img {
   width: 100%;
   -webkit-transition: all 0.5s ease-in-out;
@@ -490,14 +542,17 @@ footer .footbtm ul.footSmediaul li a:hover {
   -ms-transform: scale(1);
   transform: scale(1);
 }
+
 .SerBoxsList .SerLists:hover .SListImg img {
   -webkit-transform: scale(1.1);
   -ms-transform: scale(1.1);
   transform: scale(1.1);
 }
+
 .SerBoxsList .SerLists .SListCont {
   padding: 15px 15px 40px;
 }
+
 .SerBoxsList .SerLists .SListCont h3 {
   font-size: 1.3vw;
   font-weight: 600;
@@ -506,9 +561,11 @@ footer .footbtm ul.footSmediaul li a:hover {
   line-height: 1;
   margin-bottom: 10px;
 }
+
 .SerBoxsList .SerLists:hover .SListCont h3 {
   color: #0056d2;
 }
+
 .SerBoxsList .SerLists .SListCont p {
   color: #000000;
   font-weight: 400;
@@ -522,6 +579,7 @@ footer .footbtm ul.footSmediaul li a:hover {
   border-radius: 1.5vw;
   overflow: hidden;
 }
+
 .popContainer::before {
   content: '';
   position: absolute;
@@ -533,11 +591,13 @@ footer .footbtm ul.footSmediaul li a:hover {
   border-top-right-radius: 500px;
   border-bottom-right-radius: 500px;
 }
+
 .PopContainBox {
   background: #ffffff;
   padding: 2.5vw;
   border-radius: 1.5vw;
 }
+
 .PopContainBox button.popclose {
   color: #000000;
   position: absolute;
@@ -548,6 +608,7 @@ footer .footbtm ul.footSmediaul li a:hover {
   font-size: 1.3vw;
   opacity: 0.6;
 }
+
 .PopContainBox h2 {
   color: #0056d2;
   font-size: 2.3vw;
@@ -555,21 +616,25 @@ footer .footbtm ul.footSmediaul li a:hover {
   line-height: 1;
   margin-bottom: 10px;
 }
+
 .PopContainBox p {
   color: #777777;
   line-height: 1.4;
   letter-spacing: 0;
 }
+
 .PopContainBox ul {
   list-style: disc;
   padding-left: 20px;
 }
+
 .PopContainBox ul li {
   color: #777777;
   line-height: 1.4;
   letter-spacing: 0;
   margin-bottom: 8px;
 }
+
 .PopContainBox ul li:last-child {
   margin-bottom: 0px;
 }
@@ -577,30 +642,37 @@ footer .footbtm ul.footSmediaul li a:hover {
 .contlistSec {
   padding-block: 8vh;
 }
+
 .contliBoxs {
   border-radius: 20px;
 }
+
 .contliItems {
   width: 33.333%;
   text-align: center;
   padding: 40px;
 }
+
 .contliItems:first-child {
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
 }
+
 .contliItems:last-child {
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
 }
+
 .contliItems p {
   letter-spacing: 0;
   font-size: 20px;
   letter-spacing: -0.5px;
 }
+
 .contliItems address {
   font-style: normal;
 }
+
 .contliItems:nth-child(2) {
   background: #f0f6ff;
   -webkit-transform: scale(1.1);
@@ -609,15 +681,19 @@ footer .footbtm ul.footSmediaul li a:hover {
   -webkit-box-shadow: 0 0 10px rgb(51 51 51 / 25%);
   box-shadow: 0 0 10px rgb(51 51 51 / 25%);
 }
+
 .contliItems:nth-child(2) p a {
   color: #000000;
 }
+
 .contliItems p a:hover {
   text-decoration: underline;
 }
+
 .contliItems:nth-child(2) p {
   color: #cccccc;
 }
+
 .contliIimg {
   width: 50px;
   aspect-ratio: 1;
@@ -626,39 +702,47 @@ footer .footbtm ul.footSmediaul li a:hover {
   background: #ffffff;
   border-radius: 8px;
 }
+
 .contliItems:nth-child(2) .contliIimg {
   background: #0056d1;
 }
+
 .contliItems h3 {
   font-size: 2.1vw;
 }
+
 .contliItems:nth-child(2) h3 {
   color: #0056d1;
 }
+
 .ifrmeSec {
   padding-bottom: 0vh;
 }
+
 .ifrmeSec iframe {
   width: 100%;
   aspect-ratio: 2/0.65;
 }
 
-.contforminrow {
-}
+.contforminrow {}
+
 .contforminrow .ColL {
   background: #f0f6ff;
   width: 60%;
   margin-block: 0px;
   padding: 4vw;
 }
+
 .contforminrow .ColR {
   width: 40%;
 }
+
 .FlagListSec {
   margin-bottom: 8vh;
 }
-.flagSlider {
-}
+
+.flagSlider {}
+
 .flagSlider button.slick-arrow {
   z-index: 99;
   width: 40px;
@@ -666,6 +750,7 @@ footer .footbtm ul.footSmediaul li a:hover {
   aspect-ratio: 1;
   border-radius: 50%;
 }
+
 .flagSlider button.slick-arrow::before {
   content: '';
   width: 100%;
@@ -673,28 +758,34 @@ footer .footbtm ul.footSmediaul li a:hover {
   height: 100%;
   opacity: 1;
 }
+
 .flagSlider button.slick-prev {
   left: -10px;
   transform: translate(-100%, -50%);
 }
+
 .flagSlider button.slick-next {
   right: -10px;
   transform: translate(100%, -50%);
 }
+
 .flagSlider button.slick-prev::before {
   background: url(/media/Slider-arrow-left-icon.png) no-repeat center center;
   background-size: 100%;
 }
+
 .flagSlider button.slick-next::before {
   background: url(/media/Slider-arrow-right-icon.png) no-repeat center center;
   background-size: 100%;
 }
-.countryitems {
-}
+
+.countryitems {}
+
 .countryitems img {
   border-radius: 50%;
   border: 1px solid #cccccc;
 }
+
 .countryitems h5 {
   color: #000000;
   text-transform: uppercase;
@@ -707,25 +798,30 @@ footer .footbtm ul.footSmediaul li a:hover {
 .ListFilerSec {
   color: #777777;
 }
-.FlistCol {
-}
+
+.FlistCol {}
+
 .FListInrow {
   border: 15px solid #f0f6ff;
   border-radius: 10px;
 }
+
 .FListInrow .ApplieBox {
   display: none;
 }
+
 .ItemBoxs {
   border-bottom: 15px solid #f0f6ff;
   padding: 15px;
 }
-.IboxTitles {
-}
+
+.IboxTitles {}
+
 .IboxTitles h3 {
   color: #0056d2;
   font-weight: bold;
 }
+
 .IboxTitles button {
   font-size: 0;
   width: 20px;
@@ -736,33 +832,38 @@ footer .footbtm ul.footSmediaul li a:hover {
 .IboxSearinput {
   margin-block: 10px 15px;
 }
+
 .IboxSearinput input {
   padding: 0 20px;
   background: #f0f6ff;
   line-height: 2vw;
   font-size: 14px;
 }
+
 .IboxSearinput input:focus,
 .IboxSearinput input:focus-visible {
   box-shadow: none;
   border-color: #0050c2;
   outline: none;
 }
-.itmlistul {
-}
+
+.itmlistul {}
+
 .itmlistulli {
   font-weight: 500;
 }
-.itmlistulli input {
-}
-.itmlistulli label {
-}
+
+.itmlistulli input {}
+
+.itmlistulli label {}
+
 .listshowtopbox {
   background: #f0f6ff;
   padding: 15px;
   border-radius: 15px;
   margin-bottom: 20px;
 }
+
 .listshowtopbox select {
   border-color: #dbeafe;
   font-size: 14px;
@@ -770,69 +871,81 @@ footer .footbtm ul.footSmediaul li a:hover {
   height: 30px;
   border-radius: 20px;
 }
+
 .listshowtopbox select:focus,
 .listshowtopbox select:focus-visible {
   outline: none;
 }
+
 h3.showtitle {
   font-size: 18px;
   font-weight: 600;
   color: #000000;
   text-transform: uppercase;
 }
-.clboxssview {
-}
+
+.clboxssview {}
+
 .coursListBox article {
   padding: 15px;
   border: 1px solid #cccccc;
   border-radius: 8px;
   margin-bottom: 15px;
 }
+
 .coursListBox .clboxssview .clboxItemview:last-child article {
   margin-bottom: 0;
 }
-.coursListBox article .Universitylogo {
-}
-.coursListBox article .Universitylogo img {
-}
-.descriptbox {
-}
+
+.coursListBox article .Universitylogo {}
+
+.coursListBox article .Universitylogo img {}
+
+.descriptbox {}
+
 .descriptbox p {
   font-weight: 500;
   color: #333333;
   letter-spacing: 0;
 }
-.coursListBox article .courseimgbox {
-}
-.coursListBox article .courseimgbox > div {
+
+.coursListBox article .courseimgbox {}
+
+.coursListBox article .courseimgbox>div {
   position: relative;
   height: 100%;
 }
-.coursListBox article .courseimgbox > div > picture {
+
+.coursListBox article .courseimgbox>div>picture {
   position: relative;
   height: 100%;
 }
+
 .coursListBox article .courseimgbox img {
   width: 100%;
   /* aspect-ratio: 1;     */
   height: 100%;
   object-fit: cover;
 }
+
 .coursListBox article .courseContbox {
   padding-block: 0;
   padding-inline: 35px;
 }
+
 .coursListBox article .courseContbox h5 {
   color: #000000;
   font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
 }
+
 .coursListBox article .courseContbox h3 {
   color: #0056d2;
   font-weight: 600;
   font-size: 1.1vw;
 }
+
 .coursListBox article .courseContbox .cousindetlcol {
   border-bottom: 1px solid #cccccc;
   padding-bottom: 10px;
@@ -850,6 +963,7 @@ h3.showtitle {
   display: block;
   font-weight: 600;
 }
+
 .coursListBox article .courseContbox a.expolrlink:hover {
   background: #0056d2;
   color: #ffffff;
@@ -866,12 +980,13 @@ h3.showtitle {
   text-decoration: unset;
   font-weight: 600;
 }
+
 .AppliedTitles {
   flex: 1;
 }
 
-.flitmsvBoxs {
-}
+.flitmsvBoxs {}
+
 .flitmsvBoxs .flitmsviews {
   font-weight: 500;
   background: #0056d1;
@@ -882,25 +997,29 @@ h3.showtitle {
   color: #fff;
   cursor: pointer;
 }
+
 .flitmsvBoxs .flitmsviews button {
   color: #fff;
 }
+
 .flitmsvBoxs .flitmsviews:hover {
   background: #f0f6ff;
   color: #0056d1;
 }
+
 .flitmsvBoxs .flitmsviews:hover button {
   color: #0056d1;
 }
 
-.coursPaginBox {
-}
-.coursPaginBox nav {
-}
+.coursPaginBox {}
+
+.coursPaginBox nav {}
+
 .coursPaginBox nav ul {
   position: relative;
   padding-inline: 20px;
 }
+
 .coursPaginBox nav ul::before {
   content: '';
   position: absolute;
@@ -911,6 +1030,7 @@ h3.showtitle {
   background: #cccccc;
   transform: translateX(-100%);
 }
+
 .coursPaginBox nav ul::after {
   content: '';
   position: absolute;
@@ -921,8 +1041,9 @@ h3.showtitle {
   background: #cccccc;
   transform: translateX(100%);
 }
-.coursPaginBox nav ul li {
-}
+
+.coursPaginBox nav ul li {}
+
 .coursPaginBox nav ul li button {
   border-radius: 50%;
   border: 1px solid #cccccc;
@@ -931,15 +1052,18 @@ h3.showtitle {
   width: 40px;
   aspect-ratio: 1;
 }
+
 .coursPaginBox nav ul li button:hover {
   border-color: #0056d1;
   background: #0056d1;
   color: #ffffff;
 }
+
 .coursPaginBox nav ul li button span {
   font-size: 0;
   display: none;
 }
+
 .coursPaginBox nav ul li button[aria-current='page'] {
   color: #0056d1;
   border-color: #0056d1;
@@ -996,7 +1120,7 @@ h3.showtitle {
   padding-bottom: 0;
 }
 
-.coursecontainer > div {
+.coursecontainer>div {
   max-width: 100%;
 }
 
@@ -1097,17 +1221,15 @@ h3.showtitle {
   column-gap: 0;
 }
 
-.why-choose-section .why-choose-veritas-left {
-}
+.why-choose-section .why-choose-veritas-left {}
 
-.why-choose-section .why-choose-veritas-left > .max-w-none {
+.why-choose-section .why-choose-veritas-left>.max-w-none {
   position: relative;
   overflow: hidden;
   height: 92vh;
 }
 
-.why-choose-section .why-choose-veritas-left picture {
-}
+.why-choose-section .why-choose-veritas-left picture {}
 
 .why-choose-section .why-choose-veritas-right {
   display: -webkit-box;
@@ -1121,7 +1243,7 @@ h3.showtitle {
   justify-content: center;
 }
 
-.why-choose-section .why-choose-veritas-right > .max-w-none {
+.why-choose-section .why-choose-veritas-right>.max-w-none {
   width: 80%;
 }
 
@@ -1383,7 +1505,7 @@ h3.showtitle {
   position: relative;
 }
 
-.other-courses-section .other-courses-right > .max-w-none {
+.other-courses-section .other-courses-right>.max-w-none {
   position: relative;
   height: 100%;
 }
@@ -1431,6 +1553,7 @@ h3.showtitle {
   background-color: #e5dbc0;
   padding-block: 10vh;
 }
+
 .what-you-can-section h3 {
   font-size: 34px;
 }

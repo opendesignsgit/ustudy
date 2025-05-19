@@ -73,10 +73,14 @@ export interface Config {
     categories: Category;
     users: User;
     courses: Course;
+    'intake-months': IntakeMonth;
+    'study-modes': StudyMode;
+    'study-years': StudyYear;
+    'study-areas': StudyArea;
+    departments: Department;
+    'degree-programs': DegreeProgram;
     universities: University;
     countries: Country;
-    'learning-lab': LearningLab;
-    events: Event;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -94,10 +98,14 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
+    'intake-months': IntakeMonthsSelect<false> | IntakeMonthsSelect<true>;
+    'study-modes': StudyModesSelect<false> | StudyModesSelect<true>;
+    'study-years': StudyYearsSelect<false> | StudyYearsSelect<true>;
+    'study-areas': StudyAreasSelect<false> | StudyAreasSelect<true>;
+    departments: DepartmentsSelect<false> | DepartmentsSelect<true>;
+    'degree-programs': DegreeProgramsSelect<false> | DegreeProgramsSelect<true>;
     universities: UniversitiesSelect<false> | UniversitiesSelect<true>;
     countries: CountriesSelect<false> | CountriesSelect<true>;
-    'learning-lab': LearningLabSelect<false> | LearningLabSelect<true>;
-    events: EventsSelect<false> | EventsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -758,6 +766,7 @@ export interface Form {
 export interface Course {
   id: number;
   title: string;
+  description?: string | null;
   heroImage?: (number | null) | Media;
   content: {
     root: {
@@ -774,7 +783,6 @@ export interface Course {
     };
     [k: string]: unknown;
   };
-  description?: string | null;
   university: number | University;
   degreeProgram?: string | null;
   department?: string | null;
@@ -826,104 +834,63 @@ export interface Country {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "learning-lab".
+ * via the `definition` "intake-months".
  */
-export interface LearningLab {
+export interface IntakeMonth {
   id: number;
-  title: string;
-  excerpt?: string | null;
-  heroImage?: (number | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  relatedPosts?: (number | Post)[] | null;
-  categories?: (number | Category)[] | null;
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
-  authors?: (number | User)[] | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
-  slug?: string | null;
-  slugLock?: boolean | null;
+  name: string;
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "events".
+ * via the `definition` "study-modes".
  */
-export interface Event {
+export interface StudyMode {
   id: number;
-  title: string;
-  heroImage?: (number | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  relatedPosts?: (number | Post)[] | null;
-  categories?: (number | Category)[] | null;
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
-  authors?: (number | User)[] | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
-  slug?: string | null;
-  slugLock?: boolean | null;
-  /**
-   * Add an external link to the post
-   */
-  externalLink?: string | null;
-  eventfrom?: string | null;
-  eventto?: string | null;
+  name: string;
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "study-years".
+ */
+export interface StudyYear {
+  id: number;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "study-areas".
+ */
+export interface StudyArea {
+  id: number;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "departments".
+ */
+export interface Department {
+  id: number;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "degree-programs".
+ */
+export interface DegreeProgram {
+  id: number;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1126,20 +1093,36 @@ export interface PayloadLockedDocument {
         value: number | Course;
       } | null)
     | ({
+        relationTo: 'intake-months';
+        value: number | IntakeMonth;
+      } | null)
+    | ({
+        relationTo: 'study-modes';
+        value: number | StudyMode;
+      } | null)
+    | ({
+        relationTo: 'study-years';
+        value: number | StudyYear;
+      } | null)
+    | ({
+        relationTo: 'study-areas';
+        value: number | StudyArea;
+      } | null)
+    | ({
+        relationTo: 'departments';
+        value: number | Department;
+      } | null)
+    | ({
+        relationTo: 'degree-programs';
+        value: number | DegreeProgram;
+      } | null)
+    | ({
         relationTo: 'universities';
         value: number | University;
       } | null)
     | ({
         relationTo: 'countries';
         value: number | Country;
-      } | null)
-    | ({
-        relationTo: 'learning-lab';
-        value: number | LearningLab;
-      } | null)
-    | ({
-        relationTo: 'events';
-        value: number | Event;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1512,9 +1495,9 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface CoursesSelect<T extends boolean = true> {
   title?: T;
+  description?: T;
   heroImage?: T;
   content?: T;
-  description?: T;
   university?: T;
   degreeProgram?: T;
   department?: T;
@@ -1539,6 +1522,60 @@ export interface CoursesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "intake-months_select".
+ */
+export interface IntakeMonthsSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "study-modes_select".
+ */
+export interface StudyModesSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "study-years_select".
+ */
+export interface StudyYearsSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "study-areas_select".
+ */
+export interface StudyAreasSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "departments_select".
+ */
+export interface DepartmentsSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "degree-programs_select".
+ */
+export interface DegreeProgramsSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "universities_select".
  */
 export interface UniversitiesSelect<T extends boolean = true> {
@@ -1560,72 +1597,6 @@ export interface CountriesSelect<T extends boolean = true> {
   logo?: T;
   updatedAt?: T;
   createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "learning-lab_select".
- */
-export interface LearningLabSelect<T extends boolean = true> {
-  title?: T;
-  excerpt?: T;
-  heroImage?: T;
-  content?: T;
-  relatedPosts?: T;
-  categories?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        image?: T;
-        description?: T;
-      };
-  publishedAt?: T;
-  authors?: T;
-  populatedAuthors?:
-    | T
-    | {
-        id?: T;
-        name?: T;
-      };
-  slug?: T;
-  slugLock?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "events_select".
- */
-export interface EventsSelect<T extends boolean = true> {
-  title?: T;
-  heroImage?: T;
-  content?: T;
-  relatedPosts?: T;
-  categories?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        image?: T;
-        description?: T;
-      };
-  publishedAt?: T;
-  authors?: T;
-  populatedAuthors?:
-    | T
-    | {
-        id?: T;
-        name?: T;
-      };
-  slug?: T;
-  slugLock?: T;
-  externalLink?: T;
-  eventfrom?: T;
-  eventto?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2021,14 +1992,6 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'courses';
           value: number | Course;
-        } | null)
-      | ({
-          relationTo: 'learning-lab';
-          value: number | LearningLab;
-        } | null)
-      | ({
-          relationTo: 'events';
-          value: number | Event;
         } | null);
     global?: string | null;
     user?: (number | null) | User;
