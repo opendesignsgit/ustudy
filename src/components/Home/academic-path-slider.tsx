@@ -13,9 +13,9 @@ const AcademicPathSlider: React.FC = () => {
     slidesToScroll: 1,
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 1025,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 3,
           slidesToScroll: 1,
         },
       },
@@ -70,7 +70,7 @@ const AcademicPathSlider: React.FC = () => {
               <div className="dyapitem">
                 <div className="dyapitemimg relative overflow-hidden rounded-[1.5vw]">
                   <img src={section.image} alt="" className="w-full" />
-                  <div className="itemtitle absolute bottom-0 left-0">
+                  <div className="itemtitle absolute top-0 left-0">
                     <h4>{section.title}</h4>
                   </div>
                 </div>
