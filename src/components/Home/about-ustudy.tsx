@@ -11,10 +11,11 @@ const AboutUstudy = () => {
         <div className="container relative h-full flex items-center">
           {/* Main Content */}
           <div className="relative z-10 introcont">
-            <h2 className="ffamilyTNR">About Ustudy</h2>
+            <h2 className="ffamilyTNR">About UStudy Global</h2>
             <p>
-              At UStudy Global, we are committed to transforming education through innovation and
-              accessibility. Our platform bridges academic learning with real-world skills,
+              At UStudy Global, we are committed to transforming <br />
+              education through innovation and accessibility. Our <br />
+              platform bridges academic learning with real-world skills, <br />
               empowering students and professionals worldwide.
             </p>
             <button className="text-blue-700 font-medium border-1 border-blue-700">
@@ -26,7 +27,7 @@ const AboutUstudy = () => {
 
       <div className="absolute usgtie pointer-events-none">
         <h2 className="ffamilyTNR">
-          <span>U</span>studyGlobal
+          <span>U</span>StudyGlobal
         </h2>
       </div>
     </section>

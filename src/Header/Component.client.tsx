@@ -32,17 +32,17 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setSticky(window.scrollY > 0);
-    };
-    window.addEventListener('scroll', handleScroll);
+      setSticky(window.scrollY > 0)
+    }
+    window.addEventListener('scroll', handleScroll)
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   return (
     <header
-      className={`relative z-20 ${sticky ? 'sticky top-0' : ''}`}
+      className={`relative ${sticky ? 'sticky top-0' : ''}`}
       style={{
         backgroundColor: sticky ? '#fff' : '#fff',
         boxShadow: sticky ? '0px 2px 4px rgba(0, 0, 0, 0.1)' : 'none',
@@ -51,9 +51,11 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     >
       <div className="container">
         <div className="py-8 flex justify-between">
-          <div className='headlogo'><Link href="/">
-            <Logo loading="eager" priority="high" className="" />
-          </Link></div>
+          <div className="headlogo">
+            <Link href="/">
+              <Logo loading="eager" priority="high" className="" />
+            </Link>
+          </div>
           <HeaderNav data={data} />
         </div>
       </div>

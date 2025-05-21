@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
+import Image from 'next/image'
 
 interface Course {
   id: string
@@ -37,7 +38,7 @@ const MedicalCoursesSlider = () => {
         departments: string[]
         studyYears: string[]
         studyModes: string[]
-      }
+      },
     ) => {
       setLoading(true)
       try {
@@ -67,7 +68,7 @@ const MedicalCoursesSlider = () => {
         setLoading(false)
       }
     },
-    []
+    [],
   )
 
   useEffect(() => {
@@ -87,8 +88,17 @@ const MedicalCoursesSlider = () => {
     arrows: courses.length > 1,
     infinite: false,
     speed: 500,
-    slidesToShow: 1,
+    slidesToShow: 2,
     slidesToScroll: 1,
+    centerMode: true,
+    responsive: [
+      {
+        breakpoint: 1300,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
   }
 
   if (loading) {
@@ -108,34 +118,40 @@ const MedicalCoursesSlider = () => {
   }
 
   return (
-    <section className="bg-gray-100 py-10">
-      <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-center text-3xl font-bold text-blue-800 mb-4">
-          Looking Beyond Other Fields? Medical Courses Await!
-        </h2>
-        <p className="text-center text-gray-600 mb-8">
-          If law, business, digital technology, or any other field isn't for
-          you, explore our medical programs and embark on your career in
-          healthcare.
-        </p>
-        <div className="relative bg-blue-800 rounded-lg py-6">
-          <Slider {...sliderSettings} className="flagSlider">
+    <section className="bg-[#F0F6FF] secpadblock MediCoursec">
+      <div className="container mx-auto px-4">
+        <div className="sectitle text-center marbtm">
+          <h2>
+            Looking Beyond Other Fields? <br />
+            Medical Courses Await!
+          </h2>
+          <p>
+            If law, business, digital technology, or any other field is not for you, explore our
+            medical programs and embark on your career in healthcare.
+          </p>
+        </div>
+        <div className="relative MediCourConWap">
+          <Slider {...sliderSettings} className="MediCourSlider">
             {courses.map((course) => (
-              <div key={course.id} className="px-6">
-                <div className="bg-white rounded-lg shadow-md overflow-hidden">
-<img
-                    src="/api/media/file/veritas_area_digitaltechnology_d-2560x1440.png"
-                    alt={course.title}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="p-4">
-                    <h3 className="text-lg font-bold text-blue-800">
-                      {course.title}
-                    </h3>
+              <div key={course.id}>
+                <div className="bg-white overflow-hidden flex MCslidItems">
+                  <div className="MediCourImgbox">
+                    <img
+                      src="/api/media/file/veritas_area_digitaltechnology_d-2560x1440.png"
+                      alt={course.title}
+                      className="w-full h-48 object-cover"
+                    />
+                  </div>
+                  <div className="MediCourContbox">
+                    <Image
+                      src="/media/medical-icon.png"
+                      alt={course.title}
+                      width="40"
+                      height="40"
+                    />
+                    <h3 className="text-lg font-bold text-[#0056d2]">{course.title}</h3>
                     <p className="text-gray-600 mt-2">{course.description}</p>
-                    <button className="mt-4 text-blue-800 font-semibold underline">
-                      Explore More
-                    </button>
+                    <button>Explore More</button>
                   </div>
                 </div>
               </div>
@@ -157,17 +173,19 @@ const MedicalCoursesSlider = () => {
           )}
         </div>
         <div className="text-center mt-6">
-          <button 
+          <button
             className="bg-blue-800 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-blue-700"
-            onClick={() => fetchCourses(currentPage + 1, 10, {
-              countries: [],
-              universities: [],
-              studyAreas: [],
-              degreePrograms: [],
-              departments: ['Medical'],
-              studyYears: [],
-              studyModes: [],
-            })}
+            onClick={() =>
+              fetchCourses(currentPage + 1, 10, {
+                countries: [],
+                universities: [],
+                studyAreas: [],
+                degreePrograms: [],
+                departments: ['Medical'],
+                studyYears: [],
+                studyModes: [],
+              })
+            }
           >
             VIEW ALL MEDICAL COURSES
           </button>
