@@ -36,12 +36,11 @@ import {
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from '@/fields/slug'
 
-
 const SimpleHiddenCollection = (slug: string): CollectionConfig => ({
   slug,
   admin: {
     hidden: true,
-    useAsTitle: 'name'
+    useAsTitle: 'name',
   },
   fields: [
     {
@@ -71,7 +70,7 @@ export const Courses: CollectionConfig<'courses'> = {
   defaultPopulate: {
     title: true,
     slug: true,
-      meta: {
+    meta: {
       image: true,
       description: true,
     },
@@ -107,7 +106,7 @@ export const Courses: CollectionConfig<'courses'> = {
     {
       name: 'description',
       type: 'textarea',
-    }, 
+    },
     {
       type: 'tabs',
       tabs: [
@@ -125,13 +124,25 @@ export const Courses: CollectionConfig<'courses'> = {
                 features: ({ rootFeatures }) => {
                   return [
                     ...rootFeatures,
-                    HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                    BlocksFeature({ blocks: [Banner, Code, MediaBlock, CallToAction, Content, Archive, FormBlock, SliderBlock, YearlyCourses] }),
+                    HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }),
+                    BlocksFeature({
+                      blocks: [
+                        Banner,
+                        Code,
+                        MediaBlock,
+                        CallToAction,
+                        Content,
+                        Archive,
+                        FormBlock,
+                        SliderBlock,
+                        YearlyCourses,
+                      ],
+                    }),
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),
                     HorizontalRuleFeature(),
                     OrderedListFeature(),
-                    UnorderedListFeature()
+                    UnorderedListFeature(),
                   ]
                 },
               }),
@@ -193,7 +204,7 @@ export const Courses: CollectionConfig<'courses'> = {
           ],
           label: 'Meta',
         },
-        
+
         {
           name: 'meta',
           label: 'SEO',
@@ -254,7 +265,7 @@ export const Courses: CollectionConfig<'courses'> = {
     afterChange: [revalidatePost],
     afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],
-    afterOperation: [addFilterOptions],    
+    afterOperation: [addFilterOptions],
   },
   versions: {
     drafts: {

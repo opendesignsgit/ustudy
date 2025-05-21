@@ -252,6 +252,7 @@ footer .footer-content ul li a {
 
 .TfootContCol p {
   font-weight: 400;
+  color: #ffffff;
 }
 
 .TfootFormCol {
@@ -392,6 +393,7 @@ footer .footbtm ul li:first-child {
 footer .footbtm ul li a {
   display: block;
   position: relative;
+  color: #ffffff;
 }
 footer .footbtm ul li a::before {
   content: '';
@@ -418,6 +420,7 @@ footer .footbtm ul.footSmediaul li a::before {
 .footcorightrow p {
   font-weight: 400;
   letter-spacing: 0;
+  color: #ffffff;
 }
 
 .footcorightrow p img {
@@ -483,6 +486,7 @@ footer .footbtm ul.footSmediaul li a:hover {
 }
 .contlink p a {
   position: relative;
+  color: #ffffff;
 }
 .contlink p a::before {
   content: '';
