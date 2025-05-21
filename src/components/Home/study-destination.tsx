@@ -40,7 +40,7 @@ const StudyDestinationCarousel: React.FC = () => {
   }
 
   return (
-    <section className="secpadblock hfpsdSec bg-white">
+    <section className="secpadblock hfpsdSec">
       <div className="container relative">
         <div className="sectitle marbtm textcenter">
           <h2>Find Your Perfect Study Destination</h2>

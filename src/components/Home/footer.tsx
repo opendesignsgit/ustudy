@@ -59,9 +59,12 @@ const Footer = () => {
             </address>
             <div className="mt-4 contlink">
               <p className="flex items-center gap-2 mailpara">
-                📧 <a href="mailto:info@ustudyglobal.in">info@ustudyglobal.in</a>
+                <a href="mailto:info@ustudyglobal.in">info@ustudyglobal.in</a>
               </p>
-              <p className="phonepara">📞 89 39 39 39 62 / 89 39 39 39 18</p>
+              <p className="flex items-center gap-2 phonepara">
+                <a href="tel:+918939393962">89 39 39 39 62</a> /
+                <a href="tel:+918939393918">89 39 39 39 18</a>
+              </p>
             </div>
           </div>
 

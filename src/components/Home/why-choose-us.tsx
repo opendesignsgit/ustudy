@@ -6,7 +6,7 @@ const StatCard = ({ number, label, description, shouldAnimate }) => {
   return (
     <div className="wchItemss">
       <h3>
-        {shouldAnimate ? <CountUp start={0} end={number} duration={2.5} /> : `${number}+`}{' '}
+        {shouldAnimate ? <CountUp start={0} end={number} duration={2.5} /> : `${number}`}{' '}
         <small>+</small>
       </h3>
       <h4>{label}</h4>
@@ -24,7 +24,7 @@ const WhyChooseUs = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setAnimate(true)
+            setAnimate(false)
           } else {
             setAnimate(false)
           }
@@ -70,14 +70,29 @@ const WhyChooseUs = () => {
         'Learn directly from industry professionals with hands-on experience. Get personalized support to help you succeed in your career.',
     },
   ]
+  const containerRef = useRef<HTMLDivElement>(null)
 
+  useEffect(() => {
+    if (containerRef.current) {
+      const newDiv = document.createElement('div')
+      newDiv.innerHTML = `
+        <div class="wcusdotslst">
+          <div class="wcusdots lione"></div>
+          <div class="wcusdots litwo"></div>
+          <div class="wcusdots lithree"></div>
+          <div class="wcusdots lifour"></div>
+        </div>
+      `
+      containerRef.current.appendChild(newDiv)
+    }
+  }, [])
   return (
     <section className="hwcusSec relative secpadblock bg-white" ref={sectionRef}>
       <div className="container">
         <div className="sectitle marbtm textcenter">
           <h2>Why Choose Us</h2>
         </div>
-        <div className="flex flex-wrap relative wchItmBox">
+        <div className="flex flex-wrap relative wchItmBox" id="wchItmBox" ref={containerRef}>
           {stats.map((stat, index) => (
             <StatCard
               key={index}
