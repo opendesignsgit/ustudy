@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { RelatedPosts } from '@/blocks/RelatedPosts/Component'
+// import { RelatedPosts } from '@/blocks/RelatedPosts/Component'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
@@ -10,7 +10,12 @@ import RichText from '@/components/RichText'
 
 import type { Post } from '@/payload-types'
 
-import { PostHero } from '@/heros/PostHero'
+import AcademicPathSlider from '@/components/Home/academic-path-slider'
+import Footer from '@/components/Home/footer'
+import FooterForm from '@/components/Home/footer-form'
+import { SecondaryHeader } from '../components/SecondaryHeader'
+
+import { CourseHero } from '@/heros/CourseHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
@@ -41,14 +46,52 @@ type Args = {
   }>
 }
 
+const queryCoursesByUniversityId = cache(async ({ universityId }: { universityId: number }) => {
+  const { isEnabled: draft } = await draftMode()
+  
+  const payload = await getPayload({ config: configPromise })
+
+  const result = await payload.find({
+    collection: 'courses',
+    draft,
+    limit: 1000, // or whatever limit you need
+    overrideAccess: draft,
+    pagination: false,
+    where: {
+  university: {
+    in: [universityId],
+  },
+}
+    
+  })
+  return result.docs || []
+})
+
+const studyAreas = [
+    { id: '1', name: 'Pre University', slug: 'pre-university' },
+    { id: '2', name: 'Law', slug: 'law' },
+    { id: '3', name: 'Business', slug: 'business' },
+    { id: '4', name: 'Digital & Creative Communications', slug: 'digital-creative-communications' },
+    { id: '5', name: 'Digital Technology', slug: 'digital-technology' },
+    { id: '6', name: 'Education', slug: 'education' },
+    { id: '7', name: 'Psychology', slug: 'psychology' },
+  ];
+
 export default async function Post({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
   const { slug = '' } = await paramsPromise
   const url = '/courses/' + slug
-  const post = await queryPostBySlug({ slug })
+  const course = await queryPostBySlug({ slug })
 
-  if (!post) return <PayloadRedirects url={url} />
-
+  if (!course) return <PayloadRedirects url={url} />
+console.log(course);
+// Get university ID from the course
+  const universityId = typeof course.university === 'object' ? course.university.id : null;
+  
+  // Query related courses from the same university
+  const universityCourses = universityId 
+    ? await queryCoursesByUniversityId({ universityId }) 
+    : [];
   return (
     <article className="pt-16 pb-16 single-course" data-attr="kr">
       <PageClient />
@@ -57,18 +100,22 @@ export default async function Post({ params: paramsPromise }: Args) {
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
-
-      <PostHero post={post} />
+      <SecondaryHeader studyAreas={ studyAreas } />
+      <CourseHero post={course} />
 
       <div className="coursecontainer">
-          <RichText className="max-w-[100rem] mx-auto" data={post.content} enableGutter={false} />
-          {post.relatedPosts && post.relatedPosts.length > 0 && (
+        <RichText className="max-w-[100rem] mx-auto" data={course.content} enableGutter={false} />
+        <AcademicPathSlider/>
+        
+          {/* {post.relatedPosts && post.relatedPosts.length > 0 && (
             <RelatedPosts
               className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
               docs={post.relatedPosts.filter((post) => typeof post === 'object')}
             />
-          )}
+          )} */}
       </div>
+      <FooterForm/>
+      <Footer/>
     </article>
   )
 }

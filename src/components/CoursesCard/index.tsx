@@ -3,6 +3,7 @@ import { cn } from '@/utilities/cn'
 import useClickableCard from '@/utilities/useClickableCard'
 import Link from 'next/link'
 import React, { Fragment } from 'react'
+import Image from 'next/image'
 
 import type { Course } from '@/payload-types'
 

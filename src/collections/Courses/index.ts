@@ -25,6 +25,7 @@ import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
 // import { withFiltersEndpoint } from '../endpoints/withFilters'
 import { addFilterOptions } from './hooks/afterOperation'
+import { YearlyCourses } from '@/blocks/CoursesComponents/YearsModule/config'
 
 import {
   MetaDescriptionField,
@@ -125,7 +126,7 @@ export const Courses: CollectionConfig<'courses'> = {
                   return [
                     ...rootFeatures,
                     HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                    BlocksFeature({ blocks: [Banner, Code, MediaBlock, CallToAction, Content, Archive, FormBlock, SliderBlock] }),
+                    BlocksFeature({ blocks: [Banner, Code, MediaBlock, CallToAction, Content, Archive, FormBlock, SliderBlock, YearlyCourses] }),
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),
                     HorizontalRuleFeature(),
@@ -175,6 +176,18 @@ export const Courses: CollectionConfig<'courses'> = {
             },
             {
               name: 'intakeMonths',
+              type: 'text',
+            },
+            {
+              name: 'programmeAccreditationCode',
+              type: 'text',
+            },
+            {
+              name: 'pathway',
+              type: 'text',
+            },
+            {
+              name: 'assessments',
               type: 'text',
             },
           ],

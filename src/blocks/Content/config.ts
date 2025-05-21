@@ -19,7 +19,8 @@ import {
   InlineCodeFeature,
   RelationshipFeature,
   BlocksFeature,
-  BlockFields
+  BlockFields,
+  LinkFeature
 } from '@payloadcms/richtext-lexical'
 
 
@@ -80,7 +81,21 @@ const columnFields: Field[] = [
           IndentFeature(),
           InlineCodeFeature(),
           RelationshipFeature(),
-          BlocksFeature({ blocks: [Banner, Code, MediaBlock, CallToAction, Archive, FormBlock] })
+          BlocksFeature({ blocks: [Banner, Code, MediaBlock, CallToAction, Archive, FormBlock] }),
+          LinkFeature({
+            fields: ({ defaultFields }) => [
+              ...defaultFields,
+              {
+                name: 'className',
+                type: 'text',
+                label: 'Class Name',
+                admin: {
+                  description: 'Add a CSS class to the link.',
+                },
+              },
+            ],
+          }),
+
           // TreeViewFeature()
         ]
       },

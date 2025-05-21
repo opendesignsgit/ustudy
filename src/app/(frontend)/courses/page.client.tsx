@@ -78,56 +78,48 @@ const PageClient = () => {
   }, [setHeaderTheme])
 
   const fetchCourses = useCallback(
-  async (
-    page: number,
-    limit: number,
-    filters: {
-      countries: string[]
-      universities: string[]
-      studyAreas: string[]
-      degreePrograms: string[]
-      departments: string[]
-      studyYears: string[]
-      studyModes: string[]
-    }
-  ) => {
-    setIsLoading(true)
-    try {
-      const response = await fetch('/api/get-courses', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          page,
-          limit,
-          filters,
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch courses')
+    async (
+      page: number,
+      limit: number,
+      filters: {
+        countries: string[]
+        universities: string[]
+        studyAreas: string[]
+        degreePrograms: string[]
+        departments: string[]
+        studyYears: string[]
+        studyModes: string[]
       }
+    ) => {
+      setIsLoading(true)
+      try {
+        const response = await fetch('/api/get-courses', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            page,
+            limit,
+            filters,
+          }),
+        })
 
-      const data: CoursesResponse = await response.json()
-      
-      // Filter out Medical department courses on the client side
-      const filteredData = {
-        ...data,
-        docs: data.docs.filter(course => course.department !== 'Medical'),
-        totalDocs: data.totalDocs - data.docs.filter(course => course.department === 'Medical').length
+        if (!response.ok) {
+          throw new Error('Failed to fetch courses')
+        }
+
+        const data: CoursesResponse = await response.json()
+        setCourses(data)
+        setCurrentPage(page)
+      } catch (error) {
+        console.error('Error fetching courses:', error)
+      } finally {
+        setIsLoading(false)
       }
-
-      setCourses(filteredData)
-      setCurrentPage(page)
-    } catch (error) {
-      console.error('Error fetching courses:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  },
-  []
-)
+    },
+    []
+  )
 
   const fetchAllCourses = useCallback(async () => {
     try {
@@ -297,11 +289,11 @@ const PageClient = () => {
                 </div>
               ) : (
                 <CollectionArchiveCourses
-  courses={courses.docs as CardPostData[]}
-  numberOfCol={4}
-  relationTo="courses"
-  key={`courses-${currentPage}-${limit}-${JSON.stringify(filters)}`}
-/>
+                  courses={courses.docs as CardPostData[]}
+                  numberOfCol={4}
+                  relationTo="courses"
+                  key={`courses-${currentPage}-${limit}-${JSON.stringify(filters)}`}
+                />
               )}
 
               <div className="coursPaginBox">

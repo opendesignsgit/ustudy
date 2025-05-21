@@ -77,7 +77,7 @@ const MedicalCoursesSlider = () => {
       universities: [],
       studyAreas: [],
       degreePrograms: [],
-      departments: ['Medical'], // Only fetch Medical department courses
+      departments: ['Medical'],
       studyYears: [],
       studyModes: [],
     })
