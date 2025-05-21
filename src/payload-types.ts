@@ -790,6 +790,9 @@ export interface Course {
   studyYears?: number | null;
   studyMode?: ('full-time' | 'part-time' | 'online') | null;
   intakeMonths?: string | null;
+  programmeAccreditationCode?: string | null;
+  pathway?: string | null;
+  assessments?: string | null;
   meta?: {
     title?: string | null;
     /**
@@ -1505,6 +1508,9 @@ export interface CoursesSelect<T extends boolean = true> {
   studyYears?: T;
   studyMode?: T;
   intakeMonths?: T;
+  programmeAccreditationCode?: T;
+  pathway?: T;
+  assessments?: T;
   meta?:
     | T
     | {
@@ -2033,6 +2039,51 @@ export interface CodeBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'code';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "YearlyCoursesBlock".
+ */
+export interface YearlyCoursesBlock {
+  years?:
+    | {
+        yearNumber: string;
+        leftColumn: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        rightColumn: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'yearlyCourses';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

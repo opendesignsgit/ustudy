@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-
+import Image from 'next/image'
 interface Course {
   id: string
   title: string
@@ -76,7 +76,7 @@ const MedicalCoursesSlider = () => {
       universities: [],
       studyAreas: [],
       degreePrograms: [],
-      departments: ['Medical'], // Only fetch Medical department courses
+      departments: ['Medical'],
       studyYears: [],
       studyModes: [],
     })

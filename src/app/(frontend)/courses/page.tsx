@@ -14,7 +14,7 @@ export default async function Page() {
       <div className="couresList">
         <section className="inerpageban servbansec relative">
           <div className="inpbanimg relative">
-            <img src="/media/innerbanimg.jpg" alt="Services" />
+            <Image src="/media/innerbanimg.jpg" alt="Services" width={100} height={100} />
           </div>
           <div className="inpbancont absolute top-0 left-0 w-full h-full z-10">
             <div className="container relative h-full flex flex-col items-center justify-center text-center">
