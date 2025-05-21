@@ -13,7 +13,11 @@ const UniversitySlider = () => {
       image: '/media/home/hstuwwImg.jpg',
     },
     {
-      name: 'Brickfields Asia College (BAC) - Malaysia',
+      name: 'Brickfields Asia College (BAC) - Singapore',
+      image: '/media/home/hstuwwImg.jpg',
+    },
+    {
+      name: 'Veritas University College - Malaysia',
       image: '/media/home/hstuwwImg.jpg',
     },
     {
@@ -21,7 +25,11 @@ const UniversitySlider = () => {
       image: '/media/home/hstuwwImg.jpg',
     },
     {
-      name: 'Brickfields Asia College (BAC) - Malaysia',
+      name: 'Brickfields Asia College (BAC) - Singapore',
+      image: '/media/home/hstuwwImg.jpg',
+    },
+    {
+      name: 'Veritas University College - Malaysia',
       image: '/media/home/hstuwwImg.jpg',
     },
   ]

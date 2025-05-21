@@ -53,9 +53,9 @@ const Footer = () => {
           <div className="footmcol">
             <h3 className="footTitle">CONTACT</h3>
             <address>
-              2nd Floor, Chettinad Chambers, 39,  <br />
-              Dr. Radha Krishnan Salai, 5th Street,<br />
-              Mylapore, Chennai - 600 004.
+              2nd Floor, Chettinad Chambers, 39, <br />
+              Dr. Radha Krishnan Salai, 5th Street, <br />
+              Mylapore, Chennai – 600 004.
             </address>
             <div className="mt-4 contlink">
               <p className="flex items-center gap-2 mailpara">
