@@ -20,9 +20,8 @@ import {
   RelationshipFeature,
   BlocksFeature,
   BlockFields,
-  LinkFeature
+  LinkFeature,
 } from '@payloadcms/richtext-lexical'
-
 
 import { link } from '@/fields/link'
 import { BlockContent } from 'node_modules/@payloadcms/richtext-lexical/dist/features/blocks/client/component/BlockContent'
@@ -66,15 +65,15 @@ const columnFields: Field[] = [
     editor: lexicalEditor({
       admin: {
         hideGutter: true,
-        placeholder: 'Type your content here...'
+        placeholder: 'Type your content here...',
       },
       features: ({ rootFeatures }) => {
         return [
           ...rootFeatures,
-          HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
+          HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4', 'h5', 'h6'] }),
           FixedToolbarFeature(),
           InlineToolbarFeature(),
-          UnorderedListFeature(), 
+          UnorderedListFeature(),
           UploadFeature(),
           EXPERIMENTAL_TableFeature(),
           AlignFeature(),
@@ -141,6 +140,6 @@ export const Content: Block = {
       name: 'backgroundimage',
       type: 'upload',
       relationTo: 'media',
-    }
+    },
   ],
 }

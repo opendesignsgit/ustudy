@@ -616,4 +616,43 @@
     width: 80%;
     margin-inline: auto;
   }
+  .introcont p {
+    font-size: 16px;
+  }
+}
+@media screen and (max-width: 1100px) {
+  .hbanersec h1 {
+    letter-spacing: 0px;
+    font-size: 35px;
+  }
+  .hbanersec p {
+    margin-top: 10px;
+  }
+  .uyllist ul li {
+    font-size: 17px;
+  }
+  .hbancol button {
+    font-size: 11px;
+    line-height: 30px;
+  }
+  .usgtie h2 {
+    font-size: 9vw;
+  }
+  .wchItmBox .wchItemss p,
+  .dyapitemcont p {
+    font-size: 14px;
+  }
+  .introcont button {
+    font-size: 12px;
+    line-height: 32px;
+  }
+  .introcont p {
+    font-size: 15px;
+  }
+  .introcont button {
+    margin-top: 20px;
+  }
+  .hstuwwItems .slidecontent h3 {
+    font-size: 16px;
+  }
 }
