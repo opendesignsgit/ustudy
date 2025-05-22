@@ -23,7 +23,6 @@
 }
 
 @layer base {
-
   h1,
   h2,
   h3,
@@ -127,16 +126,17 @@ html[data-theme='light'] {
 }
 
 body {
-  font-family: 'Arial';
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
-  font-weight: 400;
-  letter-spacing: -0.2px;
+  font-weight: 500;
+  letter-spacing: -0px;
   background: #ffffff;
 }
 
 header {
   padding-block: 10px;
   background: #ffffff;
+  z-index: 999;
 }
 
 header .py-8 {
@@ -173,7 +173,7 @@ body header nav a svg.text-primary {
   color: #333333;
 }
 
-body>footer {
+body > footer {
   display: none;
 }
 
@@ -181,7 +181,7 @@ footer {
   padding-block: 8vh;
 }
 
-footer>.container>.prose>p {
+footer > .container > .prose > p {
   margin: 0;
   line-height: 0%;
 }
@@ -268,6 +268,9 @@ footer .footer-content ul li a {
   padding-inline: 2vw;
 }
 
+.footformSec {
+  padding-top: 8vh;
+}
 .formboxs {
   margin-inline: -15px;
 }
@@ -321,8 +324,12 @@ footer .footer-content ul li a {
   line-height: 45px;
   border-radius: 30px;
   letter-spacing: 1px;
+  border: 1px solid #0056d2;
 }
-
+.formboxs button:hover {
+  background: #ffffff;
+  color: #0056d2;
+}
 .footbtm {
   padding-bottom: 5vh;
 }
@@ -355,8 +362,19 @@ footer .footer-content ul li a {
   font-style: normal;
   font-weight: 400;
   letter-spacing: 0.4px;
+  position: relative;
+  padding-left: 30px;
 }
-
+.footbtm address::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 0px;
+  width: 24px;
+  aspect-ratio: 1;
+  background: url(/media/foot-map-icon.png) no-repeat center center;
+  background-size: 100%;
+}
 footer .footbtm ul li {
   font-style: normal;
   font-weight: 400;
@@ -364,6 +382,7 @@ footer .footbtm ul li {
   margin-top: 0 !important;
   padding-block: 10px;
   font-weight: 500;
+  display: flex;
 }
 
 footer .footbtm ul li:first-child {
@@ -372,6 +391,24 @@ footer .footbtm ul li:first-child {
 
 footer .footbtm ul li a {
   display: block;
+  position: relative;
+}
+footer .footbtm ul li a::before {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 1px;
+  left: 0;
+  bottom: 0;
+  background: #ffffff;
+  transition: all 0.5s ease-in-out;
+}
+footer .footbtm ul li a:hover::before {
+  width: 100%;
+}
+footer .footbtm ul.footSmediaul li a::before {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .footcorightrow {
@@ -393,7 +430,8 @@ footer .footbtm ul li a {
   margin-top: 4vh;
 }
 
-footer .footbtm ul.footSmediaul {}
+footer .footbtm ul.footSmediaul {
+}
 
 footer .footbtm ul.footSmediaul li {
   padding: 0;
@@ -428,9 +466,52 @@ footer .footbtm ul.footSmediaul li a:hover {
   color: #ffffff;
 }
 
-.contlink p.mailpara {}
+.contlink p.mailpara {
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 15px;
+}
+.contlink p.mailpara::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 0px;
+  width: 24px;
+  aspect-ratio: 1;
+  background: url(/media/foot-mail-icon.png) no-repeat center center;
+  background-size: 100%;
+}
+.contlink p a {
+  position: relative;
+}
+.contlink p a::before {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 1px;
+  left: 0;
+  bottom: 0;
+  background: #ffffff;
+  transition: all 0.5s ease-in-out;
+}
+.contlink p a:hover::before {
+  width: 100%;
+}
 
-.contlink p.phonepara {}
+.contlink p.phonepara {
+  position: relative;
+  padding-left: 30px;
+}
+.contlink p.phonepara::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 0px;
+  width: 24px;
+  aspect-ratio: 1;
+  background: url(/media/foot-phone-icon.png) no-repeat center center;
+  background-size: 100%;
+}
 
 .secpadblock {
   padding-block: 12vh;
@@ -444,7 +525,8 @@ footer .footbtm ul.footSmediaul li a:hover {
   font-size: 18px;
 }
 
-.sectitle {}
+.sectitle {
+}
 
 .sectitle.textcenter {
   text-align: center;
@@ -516,11 +598,15 @@ footer .footbtm ul.footSmediaul li a:hover {
   font-weight: 400;
 }
 
+.servisec {
+  padding-bottom: 0;
+}
 .servisec .container-fuild {
   padding-inline: 6.5vw;
 }
 
-.SerBoxsList {}
+.SerBoxsList {
+}
 
 .SerBoxsList .SerLists {
   width: calc(25% - 16px);
@@ -724,7 +810,8 @@ footer .footbtm ul.footSmediaul li a:hover {
   aspect-ratio: 2/0.65;
 }
 
-.contforminrow {}
+.contforminrow {
+}
 
 .contforminrow .ColL {
   background: #f0f6ff;
@@ -741,7 +828,8 @@ footer .footbtm ul.footSmediaul li a:hover {
   margin-bottom: 8vh;
 }
 
-.flagSlider {}
+.flagSlider {
+}
 
 .flagSlider button.slick-arrow {
   z-index: 99;
@@ -779,7 +867,8 @@ footer .footbtm ul.footSmediaul li a:hover {
   background-size: 100%;
 }
 
-.countryitems {}
+.countryitems {
+}
 
 .countryitems img {
   border-radius: 50%;
@@ -799,7 +888,8 @@ footer .footbtm ul.footSmediaul li a:hover {
   color: #777777;
 }
 
-.FlistCol {}
+.FlistCol {
+}
 
 .FListInrow {
   border: 15px solid #f0f6ff;
@@ -815,18 +905,37 @@ footer .footbtm ul.footSmediaul li a:hover {
   padding: 15px;
 }
 
-.IboxTitles {}
+.IboxTitles {
+}
 
 .IboxTitles h3 {
   color: #0056d2;
   font-weight: bold;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  line-height: 1;
 }
-
+.IboxTitles h3::before {
+  content: '';
+  position: relative;
+  display: block;
+  width: 17px;
+  aspect-ratio: 1;
+  background: url(/media/coursesfiltIcon.png) no-repeat center center;
+  background-size: 100%;
+  margin-right: 10px;
+}
 .IboxTitles button {
   font-size: 0;
   width: 20px;
   height: 20px;
-  background: url(/media/expand-icon.png);
+  background: url(/media/expand-icon.png) no-repeat center center;
+  background-size: 100%;
 }
 
 .IboxSearinput {
@@ -847,15 +956,25 @@ footer .footbtm ul.footSmediaul li a:hover {
   outline: none;
 }
 
-.itmlistul {}
+.itmlistul {
+}
 
 .itmlistulli {
   font-weight: 500;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 
-.itmlistulli input {}
+.itmlistulli input {
+}
 
-.itmlistulli label {}
+.itmlistulli label {
+  font-size: 16px;
+}
 
 .listshowtopbox {
   background: #f0f6ff;
@@ -884,7 +1003,8 @@ h3.showtitle {
   text-transform: uppercase;
 }
 
-.clboxssview {}
+.clboxssview {
+}
 
 .coursListBox article {
   padding: 15px;
@@ -897,11 +1017,14 @@ h3.showtitle {
   margin-bottom: 0;
 }
 
-.coursListBox article .Universitylogo {}
+.coursListBox article .Universitylogo {
+}
 
-.coursListBox article .Universitylogo img {}
+.coursListBox article .Universitylogo img {
+}
 
-.descriptbox {}
+.descriptbox {
+}
 
 .descriptbox p {
   font-weight: 500;
@@ -909,14 +1032,15 @@ h3.showtitle {
   letter-spacing: 0;
 }
 
-.coursListBox article .courseimgbox {}
+.coursListBox article .courseimgbox {
+}
 
-.coursListBox article .courseimgbox>div {
+.coursListBox article .courseimgbox > div {
   position: relative;
   height: 100%;
 }
 
-.coursListBox article .courseimgbox>div>picture {
+.coursListBox article .courseimgbox > div > picture {
   position: relative;
   height: 100%;
 }
@@ -970,7 +1094,8 @@ h3.showtitle {
 }
 
 .ApplieBox h3 {
-  margin-bottom: 10px;
+  margin-bottom: 0px;
+  line-height: 1;
   color: #0056d2;
   font-weight: 600;
 }
@@ -983,9 +1108,17 @@ h3.showtitle {
 
 .AppliedTitles {
   flex: 1;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
 }
 
-.flitmsvBoxs {}
+.flitmsvBoxs {
+}
 
 .flitmsvBoxs .flitmsviews {
   font-weight: 500;
@@ -1011,9 +1144,11 @@ h3.showtitle {
   color: #0056d1;
 }
 
-.coursPaginBox {}
+.coursPaginBox {
+}
 
-.coursPaginBox nav {}
+.coursPaginBox nav {
+}
 
 .coursPaginBox nav ul {
   position: relative;
@@ -1042,7 +1177,8 @@ h3.showtitle {
   transform: translateX(100%);
 }
 
-.coursPaginBox nav ul li {}
+.coursPaginBox nav ul li {
+}
 
 .coursPaginBox nav ul li button {
   border-radius: 50%;
@@ -1120,7 +1256,7 @@ h3.showtitle {
   padding-bottom: 0;
 }
 
-.coursecontainer>div {
+.coursecontainer > div {
   max-width: 100%;
 }
 
@@ -1221,15 +1357,17 @@ h3.showtitle {
   column-gap: 0;
 }
 
-.why-choose-section .why-choose-veritas-left {}
+.why-choose-section .why-choose-veritas-left {
+}
 
-.why-choose-section .why-choose-veritas-left>.max-w-none {
+.why-choose-section .why-choose-veritas-left > .max-w-none {
   position: relative;
   overflow: hidden;
   height: 92vh;
 }
 
-.why-choose-section .why-choose-veritas-left picture {}
+.why-choose-section .why-choose-veritas-left picture {
+}
 
 .why-choose-section .why-choose-veritas-right {
   display: -webkit-box;
@@ -1243,7 +1381,7 @@ h3.showtitle {
   justify-content: center;
 }
 
-.why-choose-section .why-choose-veritas-right>.max-w-none {
+.why-choose-section .why-choose-veritas-right > .max-w-none {
   width: 80%;
 }
 
@@ -1505,7 +1643,7 @@ h3.showtitle {
   position: relative;
 }
 
-.other-courses-section .other-courses-right>.max-w-none {
+.other-courses-section .other-courses-right > .max-w-none {
   position: relative;
   height: 100%;
 }
@@ -1746,4 +1884,210 @@ header {
 
 .Pagesbanner img {
   height: auto !important;
+}
+
+.MediCourSlider {
+  border-radius: 20px;
+  padding: 2vw;
+  background: #0056d2;
+}
+.MediCourSlider .slick-slide > div {
+  line-height: 0;
+}
+.MCslidItems {
+  border-radius: 15px;
+  overflow: hidden;
+}
+.MediCourSlider {
+}
+.MediCourImgbox {
+  width: 40%;
+}
+.MediCourImgbox img {
+  width: 100%;
+  height: 100%;
+}
+.MediCourContbox {
+  line-height: 1.4;
+  padding: 20px;
+  width: 60%;
+}
+.MediCourContbox img {
+  margin-bottom: 10px;
+}
+.MediCourContbox h3 {
+  line-height: 1.1;
+}
+.MediCourContbox p {
+}
+.MediCourContbox button {
+  color: #0056d2;
+  padding-inline: 15px;
+  line-height: 35px;
+  text-transform: uppercase;
+  background: transparent;
+  border: 2px solid transparent;
+  border-bottom-color: #0056d2;
+  margin-top: 15px;
+  font-size: 14px;
+}
+.MediCourContbox button:hover {
+  background: #0056d2;
+  border-color: #0056d2;
+  color: #ffffff;
+}
+.footlogoimg {
+  width: 60%;
+}
+
+@media screen and (max-width: 1620px) {
+  body,
+  h3.showtitle,
+  .fonteighteen {
+    font-size: 16px;
+  }
+  .container {
+    max-width: 1200px;
+  }
+  .itmlistulli label {
+    font-size: 15px;
+  }
+  .coursListBox article .courseContbox .cousindetlcol {
+    margin-bottom: 10px;
+  }
+  .contliItems p {
+    font-size: 17px;
+  }
+}
+@media screen and (max-width: 1620px) {
+  body,
+  h3.showtitle,
+  .fonteighteen {
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 1520px) {
+  body,
+  h3.showtitle,
+  .fonteighteen {
+    font-size: 15px;
+  }
+  .itmlistulli label {
+    font-size: 14px;
+  }
+  body header nav a.text-primary {
+    font-size: 15px;
+  }
+  body header .headlogo a img {
+    max-width: 8vw;
+  }
+  footer .footbtm ul.footSmediaul li a {
+    width: 28px;
+  }
+  .formboxs button {
+    line-height: 34px;
+    border-radius: 20px;
+    font-size: 13px;
+    padding-inline: 2vw;
+  }
+}
+@media screen and (max-width: 1420px) {
+  .container {
+    max-width: 1080px;
+  }
+  body header nav a.text-primary {
+    font-size: 14px;
+  }
+  .sectitle h2 {
+    font-size: 3vw;
+  }
+  footer .footbtm ul li {
+    padding-block: 6px;
+  }
+  .countryitems img {
+    width: 50px;
+    height: auto;
+    aspect-ratio: 1;
+  }
+  .coursListBox article .courseContbox a.expolrlink {
+    font-size: 12px;
+    line-height: 30px;
+  }
+  .coursPaginBox nav ul::before,
+  .coursPaginBox nav ul::after {
+    width: 42%;
+  }
+  .FListInrow {
+    border: 8px solid #f0f6ff;
+  }
+  .ItemBoxs {
+    padding: 10px;
+  }
+  .IboxTitles h3 {
+    font-size: 13px;
+  }
+  .IboxTitles button {
+    width: 15px;
+    height: 15px;
+  }
+  .IboxTitles h3::before {
+    width: 14px;
+    margin-right: 6px;
+  }
+  .itmlistulli {
+    margin-top: 0;
+  }
+  .itmlistulli input {
+    width: 10px;
+  }
+  .itmlistulli label {
+    font-size: 13px;
+    line-height: 1;
+  }
+  .IboxSearinput input {
+    padding: 0 14px;
+    font-size: 14px;
+  }
+  .ApplieBox h3 {
+    font-size: 13px;
+  }
+  .flitmsvBoxs .flitmsviews {
+    font-size: 12px;
+  }
+  .ApplieBox {
+  }
+  .TfootContCol {
+    padding-inline: 3vw 5vw;
+  }
+  .contliItems p {
+    font-size: 15px;
+    letter-spacing: 0;
+  }
+  .listshowtopbox {
+    padding: 10px 15px;
+    border-radius: 5px;
+  }
+  .coursPaginBox nav ul li button {
+    width: 34px;
+    line-height: 1;
+    height: 34px;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .sectitle h2 {
+    font-size: 35px;
+  }
+  .secpadblock {
+    padding-block: 60px;
+  }
+  .formboxs input,
+  .formboxs textarea {
+    font-size: 14px;
+  }
+  body,
+  h3.showtitle,
+  .fonteighteen {
+    font-size: 14px;
+  }
 }

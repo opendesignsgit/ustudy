@@ -48,11 +48,19 @@
   color: #0056d2;
   font-weight: 600;
 }
+.hbancol button {
+  padding: 0 2vw;
+  line-height: 40px;
+  margin-top: 2vw;
+}
 .uyllist {
   width: 100%;
 }
 .uyllist ul {
   width: 75%;
+}
+.hbanimgcol {
+  width: 48%;
 }
 .colRight .uyllist ul {
   margin-left: auto;
@@ -69,6 +77,10 @@
   position: relative;
   font-size: 1.4vw;
   cursor: pointer;
+}
+.uyllist ul li img.imgIcons {
+  width: 30px;
+  aspect-ratio: 1;
 }
 .colRight .uyllist ul li {
   border-bottom: 1px solid rgb(0 0 0 / 20%);
@@ -141,7 +153,7 @@
   color: #34c3ec;
 }
 .introcont {
-  width: 41%;
+  width: 55%;
 }
 .introcont h2 {
   color: #0056d2;
@@ -207,6 +219,37 @@
   left: 0%;
   top: 50%;
   pointer-events: none;
+}
+
+.wchItmBox .wcusdotslst {
+}
+.wchItmBox .wcusdotslst .wcusdots {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #cccccc;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.wchItmBox .wcusdotslst .lione {
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+}
+.wchItmBox .wcusdotslst .litwo {
+  top: 50%;
+  left: 0%;
+  margin-top: -5px;
+}
+.wchItmBox .wcusdotslst .lithree {
+  top: 50%;
+  right: 0%;
+  margin-top: -5px;
+}
+.wchItmBox .wcusdotslst .lifour {
+  bottom: 0;
+  left: 50%;
+  margin-left: -5px;
 }
 .wchItmBox .wchItemss {
   width: 50%;
@@ -303,25 +346,23 @@
   background-size: 50%;
 }
 .itemtitle h4 {
-  background: #0056d2;
+  background: rgb(0 86 210 / 78%);
   padding-inline: 3vw;
   padding-block: 5px;
-  -webkit-transform: rotate(270deg) translateY(100%);
-  -ms-transform: rotate(270deg) translateY(100%);
-  transform: rotate(270deg) translateY(100%);
   -webkit-transform-origin: left bottom;
   -ms-transform-origin: left bottom;
   transform-origin: left bottom;
   border-bottom-right-radius: 30px;
   font-weight: 500;
   letter-spacing: 0.5px;
+  backdrop-filter: blur(2px);
 }
 .dyapitemcont {
   padding: 20px;
   padding-bottom: 0;
 }
 .dyapitemcont p {
-  font-size: 16px;
+  font-size: 18px;
   color: #333333;
   font-weight: 500;
 }
@@ -346,6 +387,7 @@
   padding-block: 15vh 6vh;
   color: #000000;
   border-radius: 20px;
+  background: url(/media/home/hseritembg.jpg);
 }
 .halinoneItems h3 {
   color: #0056d2;
@@ -355,16 +397,15 @@
   margin-bottom: 10px;
 }
 .halinoneItems p {
-  line-height: 1.3;
+  line-height: 1.4;
+  color: #333333;
 }
 .halinoneicon {
   top: 50px;
   right: 30px;
-  width: 50px;
+  width: 70px;
   height: auto;
   aspect-ratio: 1;
-  border: 1px solid #000000;
-  padding: 5px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
@@ -419,7 +460,8 @@
 }
 
 .hstuwwSec {
-  padding-bottom: 10vh;
+  padding-block: 10vh;
+  background: #f0f6ff;
 }
 .hstuwwItems {
   overflow: hidden;
@@ -495,4 +537,83 @@
 .hstuwwSec button.slicknext::before {
   background: url(/media/home/arrow-next-icon.svg) no-repeat center center;
   background-size: 50%;
+}
+
+@media screen and (max-width: 1620px) {
+  .hbanimgcol {
+    width: 40%;
+  }
+  .uyllist ul {
+    margin-top: 15px;
+  }
+  .wchItmBox .wchItemss p,
+  .dyapitemcont p,
+  .introcont button {
+    font-size: 16px;
+  }
+  .halinoneItems {
+    padding-inline: 25px;
+    padding-block: 17vh 4vh;
+  }
+  .halinoneicon {
+    top: 35px;
+  }
+}
+@media screen and (max-width: 1620px) {
+  .wchItmBox .wchItemss p,
+  .dyapitemcont p,
+  .introcont button {
+    font-size: 15px;
+  }
+  .introcont button {
+    line-height: 36px;
+    padding-inline: 20px;
+  }
+}
+
+@media screen and (max-width: 1520px) {
+  .wchItmBox .wchItemss p,
+  .dyapitemcont p,
+  .introcont button {
+    font-size: 15px;
+  }
+}
+@media screen and (max-width: 1420px) {
+  .uyllist ul li {
+    padding-block: 7px;
+  }
+  .hbancol button {
+    font-size: 13px;
+    line-height: 34px;
+  }
+  .wchItmBox .wchItemss {
+    padding: 2vw 3vw;
+  }
+  .popContainer {
+    width: 55%;
+  }
+}
+@media screen and (max-width: 1320px) {
+  .hbancol button {
+    font-size: 12px;
+    line-height: 30px;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .wchItmBox .wchItemss p,
+  .dyapitemcont p,
+  .introcont button {
+    font-size: 14px;
+  }
+  .halinoneBox {
+    width: 100%;
+    margin-left: 0;
+  }
+  .halinoneItems {
+    width: calc(25% - 16px);
+  }
+  .dyapSlider {
+    width: 80%;
+    margin-inline: auto;
+  }
 }

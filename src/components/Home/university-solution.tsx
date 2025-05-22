@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import React from 'react'
 
 // Array to hold card data
@@ -6,61 +7,61 @@ const sections = [
     title: 'COUNSELING AND GUIDANCE',
     description:
       'Ustudy provides personalized counseling and guidance to help you choose the right academic and career path.',
-    icon: '📄', // Replace with an actual icon or component
+    icon: '/media/home/hser-cg-icon.png', // Replace with an actual icon or component
   },
   {
     title: 'APPLICATION GUIDANCE',
     description:
       'Ustudy offers expert application guidance, ensuring your documents are accurate and submissions timely.',
-    icon: '📄', // Replace with an actual icon or component
+    icon: '/media/home/hser-ag-icon.png', // Replace with an actual icon or component
   },
   {
     title: 'VISA, FOREX',
     description:
       'Ustudy assists in obtaining the right student visa and ensures smooth foreign exchange transactions.',
-    icon: '💳', // Replace with an actual icon or component
+    icon: '/media/home/hser-vf-icon.png', // Replace with an actual icon or component
   },
   {
     title: 'TICKETING PROCESS',
     description:
       'Ustudy offers guidance in booking flights for students traveling abroad for their education.',
-    icon: '✈️', // Replace with an actual icon or component
+    icon: '/media/home/hser-tp-icon.png', // Replace with an actual icon or component
   },
   {
     title: 'PRE-DEPARTURE COUNSELING',
     description:
       'Pre-departure counseling prepares you for life abroad, covering academic, cultural, and logistical aspects.',
-    icon: '🗺️', // Replace with an actual icon or component
+    icon: '/media/home/hser-pdc-icon.png', // Replace with an actual icon or component
   },
   {
     title: "DOS AND DON'TS",
     description:
       'Ustudy’s Dos and Don’ts guide ensures you are well-prepared for cultural and academic life abroad.',
-    icon: '📖', // Replace with an actual icon or component
+    icon: '/media/home/hser-dd-icon.png', // Replace with an actual icon or component
   },
   {
     title: 'ACCOMMODATION AREA',
     description:
       'Ustudy assists in finding the right accommodation, whether on-campus or off-campus, for a comfortable living experience.',
-    icon: '🏠', // Replace with an actual icon or component
+    icon: '/media/home/hser-aa-icon.png', // Replace with an actual icon or component
   },
   {
     title: 'POST LANDING FORMALITIES',
     description:
       'Ustudy provides support for post-landing formalities, including immigration and orientation.',
-    icon: '📋', // Replace with an actual icon or component
+    icon: '/media/home/hser-plf-icon.png', // Replace with an actual icon or component
   },
   {
     title: 'FINANCIAL GUIDANCE',
     description:
       'Ustudy provides expert financial guidance to help manage your budget and find scholarships.',
-    icon: '💰', // Replace with an actual icon or component
+    icon: '/media/home/hser-fg-icon.png', // Replace with an actual icon or component
   },
   {
     title: 'GUIDED HANDS ON PROJECTS',
     description:
       'Ustudy offers guided hands-on projects that provide practical experience alongside your academic studies.',
-    icon: '💡', // Replace with an actual icon or component
+    icon: '/media/home/hser-ghp-icon.png', // Replace with an actual icon or component
   },
 ]
 
@@ -84,18 +85,10 @@ const UniversitySolutionSection = () => {
         {/* Top Row: Five Cards */}
         <div className="flex flex-wrap justify-center halinoneBox">
           {sections.slice(0, 10).map((section, index) => (
-            <div
-              key={index}
-              className="bg-white halinoneItems relative"
-              style={{
-                backgroundImage: `url("/path-to-pattern.svg")`, // Replace with your pattern image URL
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: 'cover',
-              }}
-            >
+            <div key={index} className="bg-white halinoneItems relative">
               {/* Icon in a Circle */}
               <div className="halinoneicon absolute rounded-full flex items-center justify-center">
-                <span className="text-2xl">{section.icon}</span>
+                <Image src={section.icon} alt={section.title} width="60" height="60" />
               </div>
               {/* Title */}
               <h3>{section.title}</h3>

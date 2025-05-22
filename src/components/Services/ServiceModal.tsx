@@ -64,7 +64,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ user, onClose }) => {
     <div
       ref={modalRef}
       onClick={closeModal}
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 ${
+      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 ${
         show ? 'opacity-100' : 'opacity-0'
       }`}
     >
