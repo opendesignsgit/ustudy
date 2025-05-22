@@ -20,8 +20,7 @@ interface FormData {
 const ModalForm: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState<FormData | null>(null);
-  const [formValues, setFormValues] = useState<{ [key: string]: string }>({});
-  const [submissionStatus, setSubmissionStatus] = useState<string | null>(null);
+  const [animationClass, setAnimationClass] = useState<string>("opacity-0 translate-y-4");
 
   const fetchFormData = async () => {
     try {
@@ -35,47 +34,15 @@ const ModalForm: React.FC = () => {
 
   const openModal = () => {
     setIsOpen(true);
+    setTimeout(() => setAnimationClass("opacity-100 translate-y-0"), 50); // Add animation class after a short delay
     if (!formData) {
       fetchFormData();
     }
   };
 
   const closeModal = () => {
-    setIsOpen(false);
-    setSubmissionStatus(null); // Reset submission status on close
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-
-    try {
-      const response = await fetch('http://localhost:3000/api/forms/8/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formValues),
-      });
-
-      if (response.ok) {
-        setSubmissionStatus('success');
-        alert('Form submitted successfully!');
-      } else {
-        setSubmissionStatus('error');
-        alert('Failed to submit the form!');
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      setSubmissionStatus('error');
-    }
+    setAnimationClass("opacity-0 translate-y-4"); // Revert animation class
+    setTimeout(() => setIsOpen(false), 300); // Close modal after animation completes
   };
 
   useEffect(() => {
@@ -108,7 +75,6 @@ const ModalForm: React.FC = () => {
               type={field.blockType}
               name={field.name}
               required={field.required}
-              onChange={handleInputChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
           </div>
@@ -122,7 +88,6 @@ const ModalForm: React.FC = () => {
             <select
               name={field.name}
               required={field.required}
-              onChange={handleInputChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             >
               {field.options?.map((option) => (
@@ -142,7 +107,6 @@ const ModalForm: React.FC = () => {
             <textarea
               name={field.name}
               required={field.required}
-              onChange={handleInputChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             ></textarea>
           </div>
@@ -155,12 +119,6 @@ const ModalForm: React.FC = () => {
                 type="checkbox"
                 name={field.name}
                 required={field.required}
-                onChange={(e) =>
-                  handleInputChange({
-                    ...e,
-                    target: { ...e.target, value: e.target.checked.toString() }, // Convert checkbox value to string
-                  } as React.ChangeEvent<HTMLInputElement>)
-                }
                 className="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
               />
               <span className="ml-2">{field.label}</span>
@@ -172,11 +130,18 @@ const ModalForm: React.FC = () => {
     }
   };
 
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    alert('Form submitted!');
+  };
+
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
+          <div
+            className={`bg-white rounded-lg shadow-lg p-6 w-full max-w-lg transform transition-all duration-300 ${animationClass}`}
+          >
             <button
               onClick={closeModal}
               className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
