@@ -589,9 +589,6 @@
   .wchItmBox .wchItemss {
     padding: 2vw 3vw;
   }
-  .popContainer {
-    width: 55%;
-  }
 }
 @media screen and (max-width: 1320px) {
   .hbancol button {
@@ -653,6 +650,144 @@
     margin-top: 20px;
   }
   .hstuwwItems .slidecontent h3 {
+    font-size: 16px;
+  }
+}
+@media screen and (max-width: 800px) {
+  .hbanersec {
+    height: auto;
+    background: #fff;
+  }
+  .hbanersec::after {
+    opacity: 0;
+  }
+  .hbanersec::before {
+    opacity: 0;
+  }
+  .hbanersec .h-full {
+    height: auto;
+  }
+  .hbanersec .container {
+    padding-inline: 0;
+  }
+  .hbanimgcol {
+    position: relative;
+    width: 100%;
+    left: 0;
+    transform: translateX(0);
+    background: url(/media/home/Herobannermobg.jpg) no-repeat center bottom;
+    background-size: cover;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    pointer-events: all;
+    padding-top: 40px;
+  }
+  .hbanersec h1,
+  .hbanersec p {
+    color: #000000;
+  }
+  .hbanersec h1 strong {
+    color: #0056d2;
+  }
+  .hbanimgcol h2 {
+    display: block;
+    font-size: 40px;
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    line-height: 1;
+  }
+  .hbanerinrowsec {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+  .hbancol.colLeft {
+    padding-inline: 20px;
+    padding-block: 35px;
+  }
+  .hbancol.colRight {
+    padding-inline: 20px;
+    padding-block: 35px;
+    background: #f8f8f8;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .uyllist {
+    padding: 0;
+  }
+  .uyllist ul {
+    width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
+  .uyllist ul li {
+    font-size: 20px;
+    width: 50%;
+  }
+  .uyllist ul li img.imgIcons {
+    width: 34px;
+  }
+  .colLeft .uyllist ul li span:not(.listicon) {
+    color: #333333;
+    opacity: 1;
+    font-weight: 400;
+  }
+  .hbancol button {
+    background: #0056d2;
+    color: #ffffff;
+    border-color: #0056d2;
+    font-size: 12px;
+    line-height: 35px;
+    padding-inline: 20px;
+  }
+  .hbancol button:hover {
+    background: #ffffff;
+    color: #0056d2;
+  }
+  .colRight .uyllist ul li {
+    border-bottom: 0px solid rgb(0 0 0 / 20%);
+  }
+  .uyllist ul li:hover::before {
+    opacity: 0;
+  }
+  .halinoneItems {
+    width: calc(50% - 16px);
+    padding-block: 11vh 4vh;
+  }
+  .hfpsdSlider {
+    width: 100%;
+  }
+  .tuswwslider {
+    height: 460px;
+  }
+  .hstuwwSec {
+    padding-block: 50px;
+  }
+  .sectitle h2 {
+    font-size: 38px;
+  }
+  .halinoneItems h3 {
+    font-size: 16px;
+  }
+  .halinoneicon {
+    top: 18px;
+  }
+  .formboxs .form-col {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  .hfpsdtitle {
     font-size: 16px;
   }
 }

@@ -91,7 +91,7 @@ const UniversitySlider = () => {
         <div className="relative w-full ">
           <div
             ref={carouselRef}
-            className="flex items-center justify-center gap-6 p-0 h-[70vh] w-full overflow-hidden'" // Set fixed height here
+            className="tuswwslider flex items-center justify-center gap-6 p-0 h-[70vh] w-full overflow-hidden'" // Set fixed height here
           >
             {getDisplayItems().map((item, index) => {
               const isActive = index === centerIndex

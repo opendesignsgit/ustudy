@@ -30,7 +30,22 @@ const EducationPromoSection = () => {
     <section className="relative w-full h-screen hbanersec  relative">
       {/* Left Section */}
       <div className="container relative h-full z-10">
-        <div className="flex flex-col md:flex-row relative  h-full">
+        <div className="flex flex-col md:flex-row relative md h-full hbanerinrowsec">
+          {/* Center Image */}
+          <div className="absolute bottom-0 left-[50%] -translate-x-[50%] flex justify-center items-end pointer-events-none hbancol hbanimgcol">
+            <h2 className="hidden">
+              Explore Top <br />
+              Universities Worldwide <br />
+              Start today!
+            </h2>
+            <div className="hbanmig">
+              <img
+                src="/media/home/hban-girl-img.png" // Replace with the actual path to the image
+                alt="Student"
+                className="w-full h-auto object-cover z-10"
+              />
+            </div>
+          </div>
           <div className="flex-1 text-white flex flex-col justify-center items-start relative  pr-[9vw] hbancol colLeft">
             <h1 className="leading-snug">
               Earn <span>While</span> <br />
@@ -59,15 +74,6 @@ const EducationPromoSection = () => {
                 View All Courses
               </button>
             </div>
-          </div>
-
-          {/* Center Image */}
-          <div className="absolute bottom-0 left-[50%] -translate-x-[50%] flex justify-center items-end pointer-events-none hbancol hbanimgcol">
-            <img
-              src="/media/home/hban-girl-img.png" // Replace with the actual path to the image
-              alt="Student"
-              className="w-full h-auto object-cover z-10"
-            />
           </div>
 
           {/* Right Section */}
