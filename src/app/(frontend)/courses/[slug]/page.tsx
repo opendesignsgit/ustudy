@@ -19,7 +19,10 @@ import { CourseHero } from '@/heros/CourseHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+
+import ModalPopup from '@/components/Courses/ModalForm'
 import './coursedetail.css'
+
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -112,8 +115,9 @@ export default async function Post({ params: paramsPromise }: Args) {
             />
           )} */}
       </div>
-      <FooterForm />
+      <FooterForm/>
       <Footer />
+      <ModalPopup />
     </article>
   )
 }

@@ -14,7 +14,7 @@ import {
   UploadFeature,
   EXPERIMENTAL_TableFeature,
   AlignFeature,
-  // TreeViewFeature,
+  TreeViewFeature,
   IndentFeature,
   InlineCodeFeature,
   RelationshipFeature,
@@ -22,6 +22,8 @@ import {
   BlockFields,
   LinkFeature,
 } from '@payloadcms/richtext-lexical'
+// import { MyFeature } from '@/app/(payload)/features/myFeature/feature.server'
+
 
 import { link } from '@/fields/link'
 import { BlockContent } from 'node_modules/@payloadcms/richtext-lexical/dist/features/blocks/client/component/BlockContent'
@@ -95,7 +97,7 @@ const columnFields: Field[] = [
             ],
           }),
 
-          // TreeViewFeature()
+          TreeViewFeature()
         ]
       },
     }),

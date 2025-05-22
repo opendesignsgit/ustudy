@@ -2,13 +2,13 @@
 
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 import React, { useEffect, useState, useCallback } from 'react'
-import { CollectionArchiveCourses } from '@/components/CollectionArchiveCourses'
+import { CollectionArchiveCourses } from '@/components/Courses/CollectionArchiveCourses'
 import { PageRange } from '@/components/PageRange'
-import { CoursesPagination } from '@/components/CoursesPagination'
+import { CoursesPagination } from '@/components/Courses/CoursesPagination'
 import FiltersClient from './components/FiltersClient'
 import CountryFlagSlider from './components/CountryFlagSlider'
 import AppliedFilters from './components/AppliedFilters'
-import { CoursesCard, CardPostData } from '@/components/CoursesCard'
+import { CoursesCard, CardPostData } from '@/components/Courses/CoursesCard'
 type Course = CardPostData & {
   id: string
   title: string
