@@ -359,6 +359,7 @@ ul li {
 }
 
 .dyapSec {
+  padding-bottom: 0;
 }
 .dyapSec::before {
   content: '';
@@ -463,6 +464,7 @@ ul li {
   margin: 0;
   position: relative;
   height: 100%;
+  object-fit: cover;
 }
 
 .cdtutionfeessec .grid .tution-fees-left .container {
@@ -531,4 +533,70 @@ ul li {
 .cdtutionfeessec .grid .tution-fees-right p a:hover {
   background: #ffffff;
   color: #0056d2;
+}
+
+.coursecontainer > .prose > p {
+  display: none;
+}
+
+@media screen and (max-width: 1520px) {
+  article header.sticky {
+    top: 56px;
+  }
+  .cdtutionfeessec .grid .tution-fees-right p a {
+    font-size: 13px;
+    line-height: 35px;
+  }
+  .cdtutionfeessec .grid .col-span-4:first-child {
+    margin-bottom: 30px;
+  }
+  .cdtutionfeessec .grid .tution-fees-left {
+    height: 32vh;
+  }
+  .cdtutionfeessec .grid .tution-fees-right .container {
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+  }
+  .year-group .left-column .container,
+  .year-group .right-column .container {
+    max-width: 92%;
+  }
+  .year-group h3 {
+    font-size: 17px;
+    margin-block: 30px 10px;
+  }
+  .year-group p {
+    margin-bottom: 0;
+    line-height: 1.5;
+  }
+}
+@media screen and (max-width: 1200px) {
+  article header.sticky {
+    top: 56px;
+  }
+  .dyapitemcont p {
+    font-size: 15px;
+  }
+}
+@media screen and (max-width: 1100px) {
+  .cmitemsimg {
+    flex: 0 0 40px;
+  }
+  .cmetsitems {
+    margin-inline: 8px;
+  }
+  .cmetsitemsbox {
+    padding: 15px 15px;
+  }
+  article header.sticky {
+    top: 46px;
+  }
+  article header.sticky > .container > .flex {
+    padding-block: 8px;
+  }
+  .dyapSlider {
+    width: 80%;
+    margin-inline: auto;
+  }
 }
