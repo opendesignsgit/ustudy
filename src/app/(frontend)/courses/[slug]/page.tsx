@@ -19,6 +19,7 @@ import { CourseHero } from '@/heros/CourseHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import ModalPopup from '@/components/Courses/ModalForm'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -93,7 +94,7 @@ console.log(course);
     ? await queryCoursesByUniversityId({ universityId }) 
     : [];
   return (
-    <article className="pt-16 pb-16 single-course" data-attr="kr">
+    <article className="single-course" data-attr="kr">
       <PageClient />
 
       {/* Allows redirects for valid pages too */}
@@ -115,7 +116,8 @@ console.log(course);
           )} */}
       </div>
       <FooterForm/>
-      <Footer/>
+      <Footer />
+      <ModalPopup />
     </article>
   )
 }
