@@ -57,6 +57,7 @@ const queryCoursesByUniversityId = cache(async ({ universityId }: { universityId
 
   const result = await payload.find({
     collection: 'courses',
+    depth: 3,
     draft,
     limit: 1000, // or whatever limit you need
     overrideAccess: draft,
@@ -67,7 +68,8 @@ const queryCoursesByUniversityId = cache(async ({ universityId }: { universityId
       },
     },
   })
-  return result.docs || []
+  
+  return result || []
 })
 
 const studyAreas = [
@@ -80,6 +82,7 @@ const studyAreas = [
   { id: '7', name: 'Psychology', slug: 'psychology' },
 ]
 
+
 export default async function Post({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
   const { slug = '' } = await paramsPromise
@@ -87,12 +90,17 @@ export default async function Post({ params: paramsPromise }: Args) {
   const course = await queryPostBySlug({ slug })
 
   if (!course) return <PayloadRedirects url={url} />
-  console.log(course)
   // Get university ID from the course
   const universityId = typeof course.university === 'object' ? course.university.id : null
 
   // Query related courses from the same university
   const universityCourses = universityId ? await queryCoursesByUniversityId({ universityId }) : []
+  console.log(universityCourses);
+  
+  // Get university logo - adjust this based on your data structure
+  const universityLogo = typeof course.university === 'object' 
+    ? course.university.logo?.url 
+    : null
   return (
     <article className="single-course" data-attr="kr">
       <PageClient />
@@ -101,7 +109,10 @@ export default async function Post({ params: paramsPromise }: Args) {
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
-      <SecondaryHeader studyAreas={studyAreas} />
+      <SecondaryHeader 
+        studyAreas={universityCourses.filterOptions?.studyAreas || []} 
+        logo={universityLogo}
+      />
       <CourseHero post={course} />
 
       <div className="coursecontainer">
