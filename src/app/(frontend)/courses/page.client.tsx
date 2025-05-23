@@ -227,7 +227,7 @@ const PageClient = () => {
       <CountryFlagSlider />
       <section className="ListFilerSec">
         <div className="container mx-auto">
-          <div className="flex gap-8">
+          <div className="ListFilerRow flex gap-8">
             <div className="FlistCol flColLeft w-1/4">
               <FiltersClient
                 filters={filters}
