@@ -33,6 +33,12 @@ const StudyDestinationCarousel: React.FC = () => {
       {
         breakpoint: 768,
         settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
           slidesToShow: 1,
         },
       },

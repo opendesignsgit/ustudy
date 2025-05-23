@@ -2000,6 +2000,9 @@ header {
   .container {
     max-width: 1080px;
   }
+  .popContainer {
+    width: 55%;
+  }
   body header nav a.text-primary {
     font-size: 14px;
   }
@@ -2079,6 +2082,11 @@ header {
   }
 }
 @media screen and (max-width: 1200px) {
+  body,
+  h3.showtitle,
+  .fonteighteen {
+    font-size: 15px;
+  }
   .sectitle h2 {
     font-size: 35px;
   }
@@ -2093,5 +2101,84 @@ header {
   h3.showtitle,
   .fonteighteen {
     font-size: 14px;
+  }
+}
+@media screen and (max-width: 800px) {
+  .container {
+    max-width: 1080px;
+  }
+  .sectitle.marbtm {
+    margin-bottom: 30px;
+  }
+  .popContainer {
+    width: 70%;
+  }
+  .TfootContCol {
+    padding-inline: 20px;
+  }
+  .secpadblock {
+    padding-block: 50px;
+  }
+  .footformSec {
+    padding-top: 40px;
+  }
+  footer {
+    padding-block: 40px;
+  }
+  .footlogoimg {
+    width: 165px;
+  }
+  .footbtm .footTitle {
+    margin-bottom: 15px;
+    letter-spacing: 0.5px;
+    font-size: 14px;
+  }
+  .footbtm {
+    flex-wrap: wrap;
+    padding-bottom: 30px;
+  }
+  .footbtm .footmcol:nth-child(1) {
+    width: 100%;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgb(255 255 255 / 10%);
+  }
+  .footbtm .footmcol:nth-child(1)::before,
+  .footbtm .footmcol:nth-child(4)::before {
+    opacity: 0;
+  }
+  .footbtm .footmcol {
+  }
+  .footbtm .footmcol {
+  }
+  .footbtm .footmcol {
+  }
+  .servisec {
+    padding-bottom: 0;
+  }
+  .servisec .container-fuild {
+    padding-inline: 20px;
+  }
+  .SerBoxsList .SerLists {
+    width: calc(50% - 16px);
+  }
+  footer .footbtm ul li {
+    padding-block: 4px;
+  }
+  .PopContainBox button.popclose {
+    width: 35px;
+  }
+  .contliItems {
+    padding: 20px;
+  }
+  .contliIimg {
+    width: 30px;
+    padding: 5px;
+  }
+  .contlistSec {
+    padding-block: 40px;
+  }
+  .contliItems:nth-child(2) {
+    transform: scale(1);
   }
 }

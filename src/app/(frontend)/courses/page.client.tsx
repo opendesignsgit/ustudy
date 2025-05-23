@@ -231,7 +231,7 @@ const PageClient = () => {
   ]
 
   return (
-    <div className="pt-24 pb-24">
+    <div className="pt-24 pb-24 couresLInBox">
       <CountryFlagSlider />
       <section className="ListFilerSec">
         <div className="container mx-auto">
