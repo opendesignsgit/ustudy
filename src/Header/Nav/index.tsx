@@ -1,125 +1,126 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
-import { SearchIcon, X } from 'lucide-react'
+import React, { useState } from 'react'
+import { SearchIcon, MenuIcon, XIcon } from 'lucide-react'
 import { CMSLink } from '@/components/Link'
 import type { Header as HeaderType } from '@/payload-types'
+import { SearchModal } from './SearchModal'
 
 export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
-  const searchInputRef = useRef<HTMLInputElement>(null)
-  const modalRef = useRef<HTMLDivElement>(null)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [selectedCountry, setSelectedCountry] = useState('Malaysia')
   const navItems = data?.navItems || []
-
-  // Toggle search modal
-  const toggleSearch = () => {
-    setIsSearchOpen(prev => !prev)
-  }
-
-  // Close modal when clicking outside or pressing Escape
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-        setIsSearchOpen(false)
-      }
-    }
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setIsSearchOpen(false)
-      }
-    }
-
-    if (isSearchOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-      document.addEventListener('keydown', handleEscape)
-      searchInputRef.current?.focus()
-      document.body.style.overflow = 'hidden'
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-      document.removeEventListener('keydown', handleEscape)
-      document.body.style.overflow = ''
-    }
-  }, [isSearchOpen])
 
   return (
     <>
-      {/* Original Navigation with Search Button */}
-      <nav className="flex gap-6 items-center relative z-30">
+      {/* Mobile controls - hamburger and search */}
+      <div className="md:hidden flex items-center space-x-4">
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="text-gray-600 hover:text-blue-600 transition-colors duration-300"
+          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+        >
+          {isMenuOpen ? (
+            <XIcon className="w-6 h-6 transition-transform duration-300 rotate-180" />
+          ) : (
+            <MenuIcon className="w-6 h-6 transition-transform duration-300" />
+          )}
+        </button>
+
+        <button
+          onClick={() => {
+            setIsSearchOpen(true)
+            setIsMenuOpen(false)
+          }}
+          className="text-gray-600 hover:text-blue-600 transition-colors duration-200"
+          aria-label="Search"
+        >
+          <SearchIcon className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* Desktop navigation */}
+      <nav className="hidden md:flex items-center space-x-6">
         {navItems.map(({ link }, i) => {
-          return <CMSLink key={i} {...link} appearance="link" />
+          return (
+            <CMSLink 
+              key={i} 
+              {...link} 
+              appearance="link" 
+              className="transition-colors duration-200 hover:text-blue-600"
+            />
+          )
         })}
         
         <button
-          onClick={toggleSearch}
-          className="flex items-center gap-1.5 text-gray-600 hover:text-blue-600 transition-colors duration-200"
-          aria-label="Search"
+          onClick={() => setIsSearchOpen(true)}
+          className="flex items-center space-x-1 text-gray-600 hover:text-blue-600 transition-colors duration-200"
         >
-          <SearchIcon className="w-5 h-5 flex-shrink-0" />
+          <SearchIcon className="w-5 h-5" />
           <span className="hidden md:inline text-sm font-medium">Search</span>
         </button>
       </nav>
 
-      {/* Enhanced Overlapping Modal */}
-      <div 
-        className={`fixed inset-0 z-40 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${isSearchOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-        style={{ top: 'var(--header-height, 64px)' }} // Use CSS variable for flexibility
-      >
-        {/* Sophisticated Backdrop */}
-        <div 
-          className={`absolute inset-0 bg-gradient-to-b from-black/40 to-black/20 backdrop-blur-md transition-opacity duration-500 ${isSearchOpen ? 'opacity-100' : 'opacity-0'}`}
-          onClick={() => setIsSearchOpen(false)}
-        />
-        
-        {/* Premium Modal Content */}
-        <div 
-          ref={modalRef}
-          className={`relative bg-white shadow-2xl w-full mx-auto transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isSearchOpen ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'}`}
-        >
-          <div className="px-6 py-5 border-b border-gray-100">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold text-gray-900">What do you want to learn today?</h2>
-              <button 
-                onClick={() => setIsSearchOpen(false)}
-                className="p-1.5 rounded-full hover:bg-gray-50 transition-colors duration-200"
-                aria-label="Close search"
-              >
-                <X className="w-5 h-5 text-gray-500 hover:text-gray-700" />
-              </button>
-            </div>
+      {/* Mobile menu */}
+      <div className={`
+        md:hidden fixed top-0 left-0 w-full h-full bg-white z-50
+        transition-all duration-300 ease-in-out
+        ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex justify-end mb-8">
+            <button
+              onClick={() => setIsMenuOpen(false)}
+              className="text-gray-600 hover:text-blue-600 transition-colors duration-200"
+            >
+              <XIcon className="w-8 h-8" />
+            </button>
           </div>
           
-          <div className="p-6">
-            <div className="relative">
-              <input
-                ref={searchInputRef}
-                type="text"
-                placeholder="Search courses, countries, universities..."
-                className="w-full p-4 pl-5 pr-32 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                autoFocus
-              />
-              <button 
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg transition-all duration-200 hover:shadow-md"
-                onClick={() => console.log('Searching for:', searchQuery)}
-              >
-                <span className="font-medium">Search Now</span>
-              </button>
-            </div>
+          <div className="flex flex-col space-y-6">
+            {navItems.map(({ link }, i) => {
+              return (
+                <CMSLink 
+                  key={i} 
+                  {...link} 
+                  appearance="link" 
+                  className="
+                    block py-3 px-4 text-xl
+                    hover:bg-gray-50 rounded-lg
+                    transition-all duration-200
+                    hover:pl-6 hover:text-blue-600
+                  "
+                  onClick={() => setIsMenuOpen(false)}
+                />
+              )
+            })}
+            <button
+              onClick={() => {
+                setIsSearchOpen(true)
+                setIsMenuOpen(false)
+              }}
+              className="
+                flex items-center space-x-3 
+                text-gray-600 hover:text-blue-600 
+                transition-colors duration-200
+                py-3 px-4 text-xl
+                hover:bg-gray-50 rounded-lg
+              "
+            >
+              <SearchIcon className="w-6 h-6" />
+              <span className="font-medium">Search</span>
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Add this to your global CSS or layout component */}
-      <style jsx global>{`
-        :root {
-          --header-height: 64px; /* Adjust to match your header height */
-        }
-      `}</style>
+      <SearchModal 
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        selectedCountry={selectedCountry}
+        setSelectedCountry={setSelectedCountry}
+      />
     </>
   )
 }
