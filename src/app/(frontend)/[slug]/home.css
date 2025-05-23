@@ -44,6 +44,9 @@
 .hbanersec h1 span {
   color: #000000;
 }
+.hbanersec .colLeft p {
+  color: #ffffff;
+}
 .hbanersec p span {
   color: #0056d2;
   font-weight: 600;

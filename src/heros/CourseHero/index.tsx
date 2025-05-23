@@ -30,33 +30,35 @@ export const CourseHero: React.FC<{
 
   return (
     <div className="relative cdpagebansec">
-      <div className="w-full h-full relative cdbanimgbox">
-        {heroImage && typeof heroImage !== 'string' && (
-          <Media fill priority imgClassName="-z-10 object-cover" resource={heroImage} />
-        )}
-      </div>
-      <div className="cdbanContBox absolute w-full h-full top-0 left-0">
-        <div className="container relative h-full flex items-center justify-center">
-          {/* Course Header */}
-          <div className="cdbaninCont text-center">
-            <h1>{title}</h1>
-            {programmeAccreditationCode && <h4>{programmeAccreditationCode}</h4>}
+      <div className="relative cdbaninrowbox">
+        <div className="w-full h-full relative cdbanimgbox">
+          {heroImage && typeof heroImage !== 'string' && (
+            <Media fill priority imgClassName="-z-10 object-cover" resource={heroImage} />
+          )}
+        </div>
+        <div className="cdbanContBox absolute w-full h-full top-0 left-0">
+          <div className="container relative h-full flex items-center justify-center">
+            {/* Course Header */}
+            <div className="cdbaninCont text-center">
+              <h1>{title}</h1>
+              {programmeAccreditationCode && <h4>{programmeAccreditationCode}</h4>}
 
-            {/* University */}
-            {university && (
-              <div className="collogos">
-                {universityLogo && typeof universityLogo !== 'string' && (
-                  <Media fill={false} priority imgClassName="mx-auto" resource={universityLogo} />
-                )}
-                <h5>{university.title}</h5>
-              </div>
-            )}
+              {/* University */}
+              {university && (
+                <div className="collogos">
+                  {universityLogo && typeof universityLogo !== 'string' && (
+                    <Media fill={false} priority imgClassName="mx-auto" resource={universityLogo} />
+                  )}
+                  <h5>{university.title}</h5>
+                </div>
+              )}
 
-            {/* Course Description */}
-            {description && <p className="description">{description}</p>}
+              {/* Course Description */}
+              {description && <p className="description">{description}</p>}
+            </div>
+
+            {/* Additional Meta Information */}
           </div>
-
-          {/* Additional Meta Information */}
         </div>
       </div>
       <div className="courmetadatabox relative">

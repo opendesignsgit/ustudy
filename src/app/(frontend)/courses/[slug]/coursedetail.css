@@ -1,13 +1,21 @@
 article header.sticky {
   background: #0056d2;
   top: 68px;
-  z-index: 999;
+  z-index: 9999;
   padding: 0;
 }
 article header.sticky nav ul li a {
   color: #ffffff;
 }
+
+article header .colgelogo {
+  background: #ffffff;
+  padding-inline: 10px;
+}
 .cdpagebansec {
+  height: auto;
+}
+.cdbaninrowbox {
   height: 65vh;
 }
 .cdbanimgbox::after {
@@ -437,6 +445,7 @@ ul li {
 }
 .cdtutionfeessec .grid .tution-fees-left {
   width: 50%;
+  height: 200px;
 }
 .cdtutionfeessec .grid .tution-fees-right {
   width: 50%;
@@ -500,7 +509,7 @@ ul li {
 }
 .cdtutionfeessec .grid .tution-fees-right h5 {
   color: #0056d2;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1;
   margin: 0;
 }
@@ -527,8 +536,9 @@ ul li {
   text-decoration: none;
   text-transform: uppercase;
   position: absolute;
-  bottom: 20px;
   right: 20px;
+  bottom: 50%;
+  transform: translateY(50%);
 }
 .cdtutionfeessec .grid .tution-fees-right p a:hover {
   background: #ffffff;
@@ -537,6 +547,32 @@ ul li {
 
 .coursecontainer > .prose > p {
   display: none;
+}
+
+.modalpupcenqry {
+  z-index: 99999;
+}
+.modalpupcenqry form h2 {
+  font-family: Times New Roman;
+  color: #0056d2;
+  font-size: 30px;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+.modalpupcenqry .Modalclosebtn {
+  width: 30px;
+  height: 30px;
+  background: #333;
+  color: #ffffff;
+  top: 0;
+  right: 0;
+  border-bottom-left-radius: 10px;
+}
+.modalpupcenqry form button[type='submit'] {
+  background: #0056d2;
+}
+.modalpupcenqry form button[type='submit']:hover {
+  background: #003581;
 }
 
 @media screen and (max-width: 1520px) {
@@ -598,5 +634,51 @@ ul li {
   .dyapSlider {
     width: 80%;
     margin-inline: auto;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .cdpagebansec {
+    height: auto;
+  }
+  .cdbaninrowbox {
+    height: 350px;
+  }
+  .courmetadatabox {
+    position: relative;
+    height: auto;
+  }
+  .cmetsitemsbox {
+    border-radius: 0;
+    transform: translateY(0%);
+    border: 0px solid #cccccc;
+    flex-wrap: wrap;
+  }
+  .cmetsitemsbox .cmetsitems {
+    width: 33.333%;
+    padding: 8px 0;
+  }
+  .cdwhychoosesec .grid {
+    padding: 30px;
+  }
+  .yearly-courses-container {
+    padding-block: 50px 0;
+  }
+  .cdtutionfeessec .grid .tution-fees-right p {
+    display: flex;
+    margin-top: 15px;
+  }
+  .cdtutionfeessec .grid .tution-fees-left {
+    height: auto;
+  }
+  .cdtutionfeessec .grid .tution-fees-right p a {
+    position: relative;
+    right: 0;
+    bottom: 0;
+    transform: translateY(0%);
+    display: block;
+  }
+  .cdtutionfeessec .grid .tution-fees-right h3 {
+    font-size: 20px;
   }
 }
