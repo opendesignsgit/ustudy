@@ -2119,6 +2119,9 @@ header {
   .sectitle.marbtm {
     margin-bottom: 30px;
   }
+  .sectitle h2 {
+    font-size: 38px;
+  }
   .popContainer {
     width: 70%;
   }
@@ -2216,5 +2219,177 @@ header {
   }
   .FlagListSec {
     margin-bottom: 30px;
+  }
+  .countryitems h5 {
+    font-size: 14px;
+  }
+}
+@media screen and (max-width: 600px) {
+  body header nav {
+    display: none !important;
+  }
+  .sectitle h2 {
+    font-size: 34px;
+  }
+  .sectitle h2 br {
+    display: none;
+  }
+  body header .headlogo a img {
+    max-width: 78px;
+  }
+  .sectitle.marbtm {
+    margin-bottom: 20px;
+  }
+  .sectitle p br {
+    display: none;
+  }
+  .footformboxs {
+    position: relative;
+    flex-direction: column;
+  }
+  .TfootContCol {
+    width: 100%;
+    padding-block: 40px;
+    padding-inline: 30px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .TfootFormCol {
+    width: 100%;
+    padding-inline: 20px;
+  }
+  .formboxs button {
+    padding-inline: 20px;
+  }
+  .TfootContCol h2 {
+    font-size: 34px;
+  }
+  .footbtm {
+    flex-direction: row;
+  }
+  .footbtm .footmcol::before {
+    opacity: 0;
+  }
+  .footbtm .footmcol:nth-child(2) {
+    width: 100%;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgb(255 255 255 / 10%);
+  }
+  .footbtm .footmcol:nth-child(3) {
+    width: 50%;
+  }
+  .footbtm .footmcol:nth-child(4) {
+    width: 50%;
+    padding-left: 20px;
+    border-left: 1px solid rgb(255 255 255 / 10%);
+  }
+  .inpbanimg img {
+    height: 250px;
+    object-fit: cover;
+  }
+  .inerpageban h1 {
+    font-size: 30px;
+    line-height: 1.1;
+  }
+  .inerpageban p br {
+    display: none;
+  }
+  .SerBoxsList .SerLists {
+    width: 100%;
+    margin: 0;
+    margin-bottom: 15px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .SerBoxsList .SerLists .SListCont {
+    padding: 20px 15px;
+  }
+  .SerBoxsList .SerLists .SListCont h3 {
+    font-size: 20px;
+  }
+  .SerBoxsList .SerLists .SListImg {
+    border-radius: 0;
+  }
+  .popContainer {
+    width: 96%;
+    padding: 20px;
+  }
+  .PopContainBox h2 {
+    font-size: 20px;
+  }
+  .PopContainBox button.popclose {
+    width: 35px;
+    font-size: 15px;
+    top: 0;
+    right: 0;
+  }
+  .contliBoxs {
+    flex-direction: column;
+  }
+  .contliItems {
+    width: 100%;
+  }
+  .contforminrow .ColL {
+    width: 100%;
+  }
+  .contforminrow .ColR {
+    width: 100%;
+  }
+  .ifrmeSec iframe {
+    width: 100%;
+    aspect-ratio: 1;
+  }
+  .formboxs .form-col {
+    width: 100%;
+  }
+  .MCslidItems {
+    flex-direction: column;
+  }
+  .MediCourImgbox {
+    width: 100%;
+  }
+  .MediCourContbox {
+    padding: 15px;
+    width: 100%;
+  }
+  .MediCourConWap .slick-track {
+    min-width: 100%;
+  }
+  .MediCourConWap .slick-track .slick-slide {
+    min-width: 100%;
+  }
+  .ListFilerRow {
+    flex-direction: column;
+  }
+  .flColLeft {
+    width: 100%;
+  }
+  .flColRight {
+    width: 100%;
+  }
+  .clboxItemview article > .flex {
+    flex-direction: column;
+  }
+  .coursListBox article .courseimgbox {
+    width: 100%;
+  }
+  .coursListBox article .courseContbox {
+    width: 100%;
+    padding: 15px 0 0;
+  }
+  h3.showtitle {
+    font-size: 12px;
+  }
+  .coursPaginBox nav ul::before,
+  .coursPaginBox nav ul::after {
+    width: 50px;
+  }
+  .coursPaginBox .my-12 {
+    margin-bottom: 0;
+  }
+  .IboxSearinput input {
+    line-height: 35px;
   }
 }

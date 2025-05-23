@@ -635,6 +635,60 @@ ul li {
     width: 80%;
     margin-inline: auto;
   }
+  .cdbaninrowbox {
+    height: 450px;
+  }
+  .cdbanContBox h1 {
+    font-size: 40px;
+  }
+  .cdbanContBox h4 {
+    font-size: 20px;
+  }
+  .cdenquire-now {
+    padding-bottom: 50px;
+    padding-top: 40px;
+  }
+  .cdhowdosec {
+    padding-block: 50px;
+  }
+  .yearly-courses-container {
+    padding-block: 50px 0;
+  }
+  .cdwhychoosesec .grid {
+    padding: 50px;
+  }
+  .cdhowdosec .grid h2,
+  .cdwhychoosesec h2,
+  .CourseModuleTitle h2,
+  .cdtutionfeessec h2 {
+    font-size: 38px;
+  }
+  .cdintro-section h3 {
+    font-size: 28px;
+  }
+  .cdwhychoosesec h4 {
+    font-size: 20px;
+  }
+  .cdtutionfeessec {
+    padding-block: 50px;
+  }
+  .cdtutionfeessec .grid .tution-fees-left {
+    height: auto;
+  }
+  .cdtutionfeessec .grid .tution-fees-right p {
+    display: flex;
+    margin-top: 20px;
+  }
+  .cdtutionfeessec .grid .tution-fees-right p a {
+    position: relative;
+    right: 0;
+    bottom: 0;
+    transform: translateY(0%);
+    display: block;
+  }
+  .cdtutionfeessec .grid .tution-fees-right .container {
+    justify-content: center;
+  }
 }
 
 @media screen and (max-width: 800px) {
@@ -679,6 +733,127 @@ ul li {
     display: block;
   }
   .cdtutionfeessec .grid .tution-fees-right h3 {
+    font-size: 20px;
+  }
+  .cmetsitemsbox .cmetsitems {
+    width: calc(50% - 16px);
+    padding: 8px 0;
+  }
+}
+@media screen and (max-width: 800px) {
+  .cdintro-section > .container::before {
+    opacity: 0;
+  }
+  .courmetadatabox {
+    padding-block: 40px;
+    background: #f0f0f0;
+  }
+  .cmitemscont h5 {
+    font-size: 15px;
+  }
+  .cmetsitemsbox {
+    padding: 0;
+    background: transparent;
+  }
+  .cdwhychoosesec .grid {
+    width: 100%;
+  }
+  .cdhowdosec .grid h2,
+  .cdwhychoosesec h2,
+  .CourseModuleTitle h2,
+  .cdtutionfeessec h2 {
+    font-size: 30px;
+  }
+  .cdintro-section h3 {
+    font-size: 22px;
+  }
+  .cdwhychoosesec h4 {
+    font-size: 16px;
+  }
+  .cdwhychoosesec p {
+    font-size: 14px;
+  }
+  .cmetsitemsbox .cmetsitems {
+    width: calc(100% - 0px);
+    padding: 12px 0;
+    border-bottom: 1px solid #cccccc;
+  }
+  .cmitemsimg {
+    flex: 0 0 60px;
+  }
+  .cdhowdosec .grid {
+    flex-direction: column;
+  }
+  .cdhowdosec .grid .col-span-4 {
+    width: 100%;
+  }
+  .how-do-right ul {
+    margin-top: 20px;
+    padding: 20px 20px 20px 40px;
+  }
+  .year-group > .flex {
+    flex-direction: column;
+  }
+  article header .colgelogo {
+    width: 100px;
+  }
+  .cdbanContBox .collogos {
+    width: 100px;
+    padding: 10px;
+  }
+  .year-group .left-column,
+  .year-group .right-column {
+    width: 100%;
+    padding-inline: 20px;
+  }
+  .year-group .right-column {
+    margin-top: 15px;
+  }
+  .year-group .left-column .container,
+  .year-group .right-column .container {
+    max-width: 100%;
+  }
+  .yearModulebox .year-group {
+    padding-block: 30px;
+  }
+  .yearModulebox .year-group:last-child {
+    padding-bottom: 40px;
+  }
+  .cdtutionfeessec .grid .tution-fees-left {
+    margin-bottom: 20px;
+  }
+  .cdtutionfeessec .grid .tution-fees-left,
+  .cdtutionfeessec .grid .tution-fees-right {
+    width: 100%;
+  }
+  .cdtutionfeessec .grid .tution-fees-left .container {
+    padding: 0;
+  }
+  .cdtutionfeessec .grid .col-span-4:first-child {
+    margin-bottom: 10px;
+  }
+  .dyapSec {
+    overflow: hidden;
+  }
+  .dyapSlider {
+    width: 100%;
+    padding-bottom: 35px;
+  }
+  .dyapSlider .slick-list {
+    width: 150%;
+  }
+  .dyapSlider button.slick-prev {
+    left: 40%;
+  }
+  .dyapSlider button.slick-next {
+    right: 40%;
+  }
+  .dyapSlider button.slick-arrow {
+    top: auto;
+    bottom: 0;
+    width: 30px;
+  }
+  .cmitemscont h5 {
     font-size: 20px;
   }
 }
