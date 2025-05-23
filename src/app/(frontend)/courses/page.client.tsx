@@ -47,8 +47,6 @@ type CoursesResponse = {
   page: number
 }
 
-
-
 const PageClient = () => {
   const { setHeaderTheme } = useHeaderTheme()
   const [courses, setCourses] = useState<CoursesResponse>({
@@ -70,7 +68,6 @@ const PageClient = () => {
     studyModes: [] as string[],
   })
 
-  
   const [allCourses, setAllCourses] = useState<Course[]>([])
 
   useEffect(() => {
@@ -89,7 +86,7 @@ const PageClient = () => {
         departments: string[]
         studyYears: string[]
         studyModes: string[]
-      }
+      },
     ) => {
       setIsLoading(true)
       try {
@@ -118,7 +115,7 @@ const PageClient = () => {
         setIsLoading(false)
       }
     },
-    []
+    [],
   )
 
   const fetchAllCourses = useCallback(async () => {
@@ -149,10 +146,7 @@ const PageClient = () => {
     const fetchInitialData = async () => {
       setIsLoading(true)
       try {
-        await Promise.all([
-          fetchCourses(1, limit, filters),
-          fetchAllCourses()
-        ])
+        await Promise.all([fetchCourses(1, limit, filters), fetchAllCourses()])
       } catch (error) {
         console.error('Error fetching initial data:', error)
       } finally {
@@ -187,9 +181,8 @@ const PageClient = () => {
     }) => {
       setFilters(newFilters)
     },
-    []
+    [],
   )
-
 
   const handleRemoveFilter = useCallback(
     (filter: string) => {
@@ -204,7 +197,7 @@ const PageClient = () => {
       }
       setFilters(updatedFilters)
     },
-    [filters]
+    [filters],
   )
 
   const clearFilters = useCallback(() => {
@@ -219,7 +212,6 @@ const PageClient = () => {
     })
   }, [])
 
-
   const appliedFilters = [
     ...filters.countries.map((c) => `Country: ${c}`),
     ...filters.universities.map((u) => `University: ${u}`),
@@ -231,18 +223,18 @@ const PageClient = () => {
   ]
 
   return (
-    <div className="pt-24 pb-24">
+    <div className="pt-24 pb-24 couresLInBox">
       <CountryFlagSlider />
       <section className="ListFilerSec">
         <div className="container mx-auto">
           <div className="flex gap-8">
             <div className="FlistCol flColLeft w-1/4">
               <FiltersClient
-        filters={filters}
-        setFilters={setFilters}
-        courses={allCourses}
-        clearFilters={clearFilters}
-      />
+                filters={filters}
+                setFilters={setFilters}
+                courses={allCourses}
+                clearFilters={clearFilters}
+              />
             </div>
 
             <div className="FlistCol flColRight w-3/4">

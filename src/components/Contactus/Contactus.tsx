@@ -39,7 +39,8 @@ const Contactus = () => {
               <div className="contliICont relative">
                 <h3>Call Us</h3>
                 <p>
-                  <Link href="tel:+918939393962">+91 89 39 39 39 62</Link> |{' '}
+                  <Link href="tel:+918939393962">+91 89 39 39 39 62</Link>
+                  <span>|</span>
                   <Link href="tel:+918939393918">+91 89 39 39 39 18</Link>
                 </p>
               </div>
