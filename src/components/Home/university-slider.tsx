@@ -91,7 +91,7 @@ const UniversitySlider = () => {
         <div className="relative w-full ">
           <div
             ref={carouselRef}
-            className="tuswwslider flex items-center justify-center gap-6 p-0 h-[70vh] w-full overflow-hidden'" // Set fixed height here
+            className="tuswwslider flex items-center justify-center sm:gap-6 p-0 h-[70vh] w-full overflow-hidden'" // Set fixed height here
           >
             {getDisplayItems().map((item, index) => {
               const isActive = index === centerIndex
@@ -103,7 +103,7 @@ const UniversitySlider = () => {
                   key={`${itemIndex}-${item.name}`}
                   className={`
                 hstuwwItems relative transition-all duration-500 ease-in-out
-                ${isActive ? 'w-[68%]' : 'w-[8%]'}
+                ${isActive ? 'w-full sm:w-[68%]' : 'w-0 sm:w-[8%]'}
                 ${isActive ? 'active' : ''}
                 h-full All items take full height of 
                 rounded-[1.5vw] overflow-hidden

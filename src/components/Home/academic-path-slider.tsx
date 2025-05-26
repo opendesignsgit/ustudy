@@ -29,7 +29,7 @@ const AcademicPathSlider: React.FC = () => {
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 1.5,
+          slidesToShow: 2,
           slidesToScroll: 1,
         },
       },

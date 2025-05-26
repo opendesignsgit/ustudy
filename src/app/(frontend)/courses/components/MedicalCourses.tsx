@@ -98,6 +98,12 @@ const MedicalCoursesSlider = () => {
           slidesToShow: 1,
         },
       },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
     ],
   }
 

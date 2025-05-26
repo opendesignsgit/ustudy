@@ -9,6 +9,7 @@ import FiltersClient from './components/FiltersClient'
 import CountryFlagSlider from './components/CountryFlagSlider'
 import AppliedFilters from './components/AppliedFilters'
 import { CoursesCard, CardPostData } from '@/components/Courses/CoursesCard'
+
 type Course = CardPostData & {
   id: string
   title: string
@@ -67,12 +68,13 @@ const PageClient = () => {
     studyYears: [] as string[],
     studyModes: [] as string[],
   })
-
   const [allCourses, setAllCourses] = useState<Course[]>([])
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false) // State for mobile filters
 
   useEffect(() => {
     setHeaderTheme('light')
   }, [setHeaderTheme])
+
 
   const fetchCourses = useCallback(
     async (
@@ -227,8 +229,51 @@ const PageClient = () => {
       <CountryFlagSlider />
       <section className="ListFilerSec">
         <div className="container mx-auto">
-          <div className="flex gap-8">
-            <div className="FlistCol flColLeft w-1/4">
+          {/* Mobile Filter Button - only visible on small screens */}
+          <button
+            onClick={() => setIsMobileFiltersOpen(true)}
+            className="md:hidden flex items-center gap-2 mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
+          >
+            
+            Filters
+          </button>
+
+          <div className="ListFilerRow flex gap-8">
+            {/* Mobile Filters Overlay */}
+            <div
+              className={`fixed inset-0 z-50 bg-black bg-opacity-50 transition-opacity duration-300 ${
+                isMobileFiltersOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              } md:hidden`}
+              onClick={() => setIsMobileFiltersOpen(false)}
+            >
+              <div
+                className={`absolute left-0 top-0 h-full w-4/5 max-w-sm bg-white shadow-lg transform transition-transform duration-300 ${
+                  isMobileFiltersOpen ? 'translate-x-0' : '-translate-x-full'
+                }`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="p-4 overflow-y-auto h-full">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-bold">Filters</h3>
+                    <button
+                      onClick={() => setIsMobileFiltersOpen(false)}
+                      className="text-gray-500 hover:text-gray-700"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  <FiltersClient
+                    filters={filters}
+                    setFilters={setFilters}
+                    courses={allCourses}
+                    clearFilters={clearFilters}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop Filters - hidden on mobile */}
+            <div className="FlistCol flColLeft w-1/4 hidden md:block">
               <FiltersClient
                 filters={filters}
                 setFilters={setFilters}
@@ -237,7 +282,7 @@ const PageClient = () => {
               />
             </div>
 
-            <div className="FlistCol flColRight w-3/4">
+            <div className="FlistCol flColRight w-full md:w-3/4">
               <div className="listshowtopbox">
                 <div className="flex justify-between items-center">
                   <PageRange
@@ -306,4 +351,5 @@ const PageClient = () => {
 }
 
 export default PageClient
+
 //final
