@@ -75,7 +75,6 @@ const PageClient = () => {
     setHeaderTheme('light')
   }, [setHeaderTheme])
 
-
   const fetchCourses = useCallback(
     async (
       page: number,
@@ -230,18 +229,20 @@ const PageClient = () => {
       <section className="ListFilerSec">
         <div className="container mx-auto">
           {/* Mobile Filter Button - only visible on small screens */}
-          <button
-            onClick={() => setIsMobileFiltersOpen(true)}
-            className="md:hidden flex items-center gap-2 mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
-          >
-            
-            Filters
-          </button>
 
           <div className="ListFilerRow flex gap-8">
+            <div className="mobfilterbtn md:hidden ">
+              <button
+                onClick={() => setIsMobileFiltersOpen(true)}
+                className="flex px-4 py-2 bg-blue-500 text-white rounded-lg"
+              >
+                Filters
+              </button>
+            </div>
+
             {/* Mobile Filters Overlay */}
             <div
-              className={`fixed inset-0 z-50 bg-black bg-opacity-50 transition-opacity duration-300 ${
+              className={`mobfitflColLeft fixed inset-0 z-50 bg-black bg-opacity-50 transition-opacity duration-300 ${
                 isMobileFiltersOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
               } md:hidden`}
               onClick={() => setIsMobileFiltersOpen(false)}
