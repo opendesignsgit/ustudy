@@ -29,7 +29,7 @@ export type CardPostData = Pick<
   | 'degreeProgram'
   | 'department'
   | 'studyArea'
-  | 'studyYears'
+  | 'studyYear'
   | 'studyMode'
   | 'intakeMonths'
   | 'meta'
@@ -41,6 +41,18 @@ export type CardPostData = Pick<
   logo?: string
   collegeName?: string
   University?: University
+}
+
+// Helper to safely extract a display label from a relationship field
+// Helper to safely extract a display label from a relationship field
+export function getRelationshipLabel<T extends { title?: string | null; name?: string | null }>(
+  value: T | string | number | undefined | null
+): string | undefined {
+  if (!value) return undefined;
+  if (typeof value === 'string' || typeof value === 'number') return String(value);
+  if ('title' in value && typeof value.title === 'string' && value.title.trim()) return value.title;
+  if ('name' in value && typeof value.name === 'string' && value.name.trim()) return value.name;
+  return undefined;
 }
 
 export const CoursesCard: React.FC<{
@@ -66,7 +78,7 @@ export const CoursesCard: React.FC<{
     degreeProgram,
     department,
     studyArea,
-    studyYears,
+    studyYear,
     studyMode,
     intakeMonths,
     description,
@@ -82,7 +94,7 @@ export const CoursesCard: React.FC<{
   const universityTitle = (university as any)?.title
   const countryName = (university as any)?.country?.name || 'Malaysia'
 
-  // Map degree program codes to full names
+  // Map degree program codes to full names (if needed; remove if using relationship)
   const degreeProgramMap: Record<string, string> = {
     UG: 'Under Graduate',
     PG: 'Post Graduate',
@@ -91,9 +103,25 @@ export const CoursesCard: React.FC<{
   }
 
   // Format study years display
+  // Handles both number and relationship object
+  const studyYearsValue = typeof studyYear === 'number'
+    ? studyYear
+    : Number(getRelationshipLabel(studyYear));
   const formatStudyYears = (years: number) => {
     return years === 1 ? `${years} Year` : `${years} Years`
   }
+  const studyYearsDisplay = studyYearsValue ? formatStudyYears(studyYearsValue) : undefined;
+
+  // Relationship display values
+  const degreeProgramLabel = getRelationshipLabel(degreeProgram);
+  const departmentLabel = getRelationshipLabel(department);
+  const studyAreaLabel = getRelationshipLabel(studyArea);
+  const studyModeLabel = getRelationshipLabel(studyMode);
+
+  // Intake months (hasMany)
+  const intakeMonthsLabels = Array.isArray(intakeMonths)
+    ? intakeMonths.map(getRelationshipLabel).filter(Boolean)
+    : [getRelationshipLabel(intakeMonths)].filter(Boolean);
 
   return (
     <article
@@ -180,44 +208,44 @@ export const CoursesCard: React.FC<{
               <img src="/media/coursesicons/courses-map-pin.svg" alt="" />
               <span>{countryName}</span>
             </div>
-            {degreeProgram && (
+            {degreeProgramLabel && (
               <div className="flex items-center gap-1">
                 <img src="/media/coursesicons/courses-graduation-cap.svg" alt="" />
-                <span>{degreeProgram}</span>
+                <span>{degreeProgramLabel}</span>
               </div>
             )}
-            {studyYears && (
+            {studyYearsDisplay && (
               <div className="flex items-center gap-1">
                 <img src="/media/coursesicons/courses-clock-time.svg" alt="" />
-                <span>{formatStudyYears(studyYears)}</span>
+                <span>{studyYearsDisplay}</span>
               </div>
             )}
-            {studyMode && (
+            {studyModeLabel && (
               <div className="flex items-center gap-1">
                 <img src="/media/coursesicons/courses-on-off-line.svg" alt="" />
-                <span>{studyMode === 'part-time' ? 'Part Time' : 'Full Time'}</span>
+                <span>{studyModeLabel}</span>
               </div>
             )}
-            {intakeMonths && (
+            {intakeMonthsLabels.length > 0 && (
               <div className="flex items-center gap-1">
                 <img src="/media/coursesicons/courses-date.svg" alt="" />
-                <span>{intakeMonths}</span>
+                <span>{intakeMonthsLabels.join(', ')}</span>
               </div>
             )}
           </div>
 
           {/* Department and Study Area */}
-          {/* {(department || studyArea) && (
+          {(departmentLabel || studyAreaLabel) && (
             <div className="text-sm text-gray-700 mb-2">
-              {department && <span className="font-medium">{department}</span>}
-              {department && studyArea && <span> - </span>}
-              {studyArea && <span>{studyArea}</span>}
+              {departmentLabel && <span className="font-medium">{departmentLabel}</span>}
+              {departmentLabel && studyAreaLabel && <span> - </span>}
+              {studyAreaLabel && <span>{studyAreaLabel}</span>}
             </div>
-          )} */}
+          )}
 
           {/* Description or Excerpt */}
           <div className="descriptbox">
-            {(description || excerpt) && (
+            {(description || sanitizedExcerpt) && (
               <p className="text-sm mb-4">{description || sanitizedExcerpt}</p>
             )}
           </div>
@@ -233,3 +261,4 @@ export const CoursesCard: React.FC<{
     </article>
   )
 }
+//Final

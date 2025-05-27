@@ -6,6 +6,18 @@ import type { Course } from '@/payload-types'
 import { Media } from '@/components/Media'
 import Image from 'next/image'
 
+// Helper to safely extract a display label from a relationship field
+// Helper to safely extract a display label from a relationship field
+export function getRelationshipLabel<T extends { title?: string | null; name?: string | null }>(
+  value: T | string | number | undefined | null
+): string | undefined {
+  if (!value) return undefined;
+  if (typeof value === 'string' || typeof value === 'number') return String(value);
+  if ('title' in value && typeof value.title === 'string' && value.title.trim()) return value.title;
+  if ('name' in value && typeof value.name === 'string' && value.name.trim()) return value.name;
+  return undefined;
+}
+
 export const CourseHero: React.FC<{
   post: Course
 }> = ({ post }) => {
@@ -17,7 +29,7 @@ export const CourseHero: React.FC<{
     degreeProgram,
     department,
     studyArea,
-    studyYears,
+    studyYear,
     studyMode,
     intakeMonths,
     programmeAccreditationCode,
@@ -26,7 +38,26 @@ export const CourseHero: React.FC<{
     description,
   } = post
 
-  const universityLogo = university?.logo
+  // University logo and title safe extraction
+  const universityLogo =
+    university && typeof university === 'object' && 'logo' in university && university.logo && typeof university.logo !== 'string'
+      ? university.logo
+      : undefined
+  const universityTitle = university ? getRelationshipLabel(university) : undefined
+
+  // Study year
+  const studyYearValue = typeof studyYear === 'number'
+    ? studyYear
+    : Number(getRelationshipLabel(studyYear))
+  const studyYearDisplay = studyYearValue ? `${studyYearValue} year${studyYearValue > 1 ? 's' : ''}` : undefined
+
+  // Study mode
+  const studyModeLabel = getRelationshipLabel(studyMode)
+
+  // Intake months (hasMany)
+  const intakeMonthsLabels = Array.isArray(intakeMonths)
+    ? intakeMonths.map(getRelationshipLabel).filter(Boolean)
+    : [getRelationshipLabel(intakeMonths)].filter(Boolean)
 
   return (
     <div className="relative cdpagebansec">
@@ -44,12 +75,12 @@ export const CourseHero: React.FC<{
               {programmeAccreditationCode && <h4>{programmeAccreditationCode}</h4>}
 
               {/* University */}
-              {university && (
+              {universityTitle && (
                 <div className="collogos">
-                  {universityLogo && typeof universityLogo !== 'string' && (
+                  {universityLogo && (
                     <Media fill={false} priority imgClassName="mx-auto" resource={universityLogo} />
                   )}
-                  <h5>{university.title}</h5>
+                  <h5>{universityTitle}</h5>
                 </div>
               )}
 
@@ -65,35 +96,35 @@ export const CourseHero: React.FC<{
         <div className="container">
           <div className="flex items-center justify-center">
             <div className="cmetsitemsbox flex items-center justify-center">
-              {university && (
+              {universityTitle && (
                 <div className="cmetsitems flex items-center">
                   <div className="cmitemsimg">
                     <Image
                       src="/media/coursedetails/cd-icon-awardby.png"
                       alt="Awarded"
-                      width="60"
-                      height="60"
+                      width={60}
+                      height={60}
                     />
                   </div>
                   <div className="cmitemscont">
                     <h5>Awarded by</h5>
-                    <p>{university.title}</p>
+                    <p>{universityTitle}</p>
                   </div>
                 </div>
               )}
-              {studyYears && (
+              {studyYearDisplay && (
                 <div className="cmetsitems flex items-center">
                   <div className="cmitemsimg">
                     <Image
                       src="/media/coursedetails/cd-icon-duration.png"
                       alt="Duration"
-                      width="60"
-                      height="60"
+                      width={60}
+                      height={60}
                     />
                   </div>
                   <div className="cmitemscont">
                     <h5>Duration</h5>
-                    <p>{studyYears} years</p>
+                    <p>{studyYearDisplay}</p>
                   </div>
                 </div>
               )}
@@ -103,8 +134,8 @@ export const CourseHero: React.FC<{
                     <Image
                       src="/media/coursedetails/cd-icon-pathway.png"
                       alt="Pathway"
-                      width="60"
-                      height="60"
+                      width={60}
+                      height={60}
                     />
                   </div>
                   <div className="cmitemscont">
@@ -113,35 +144,35 @@ export const CourseHero: React.FC<{
                   </div>
                 </div>
               )}
-              {studyMode && (
+              {studyModeLabel && (
                 <div className="cmetsitems flex items-center">
                   <div className="cmitemsimg">
                     <Image
                       src="/media/coursedetails/cd-icon-studymode.png"
                       alt="Study Mode"
-                      width="60"
-                      height="60"
+                      width={60}
+                      height={60}
                     />
                   </div>
                   <div className="cmitemscont">
                     <h5>Study Mode</h5>
-                    <p>{studyMode}</p>
+                    <p>{studyModeLabel}</p>
                   </div>
                 </div>
               )}
-              {intakeMonths && (
+              {intakeMonthsLabels.length > 0 && (
                 <div className="cmetsitems flex items-center">
                   <div className="cmitemsimg">
                     <Image
                       src="/media/coursedetails/cd-icon-intakes.png"
                       alt="Intakes"
-                      width="60"
-                      height="60"
+                      width={60}
+                      height={60}
                     />
                   </div>
                   <div className="cmitemscont">
                     <h5>Intakes</h5>
-                    <p>{intakeMonths}</p>
+                    <p>{intakeMonthsLabels.join(', ')}</p>
                   </div>
                 </div>
               )}
@@ -151,8 +182,8 @@ export const CourseHero: React.FC<{
                     <Image
                       src="/media/coursedetails/cd-icon-assessments.png"
                       alt="Assessments"
-                      width="60"
-                      height="60"
+                      width={60}
+                      height={60}
                     />
                   </div>
                   <div className="cmitemscont">
@@ -177,3 +208,4 @@ export const CourseHero: React.FC<{
     </div>
   )
 }
+//Final

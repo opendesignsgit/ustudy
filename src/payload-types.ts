@@ -784,12 +784,12 @@ export interface Course {
     [k: string]: unknown;
   };
   university: number | University;
-  degreeProgram?: string | null;
-  department?: string | null;
-  studyArea?: string | null;
-  studyYears?: number | null;
-  studyMode?: ('full-time' | 'part-time' | 'online') | null;
-  intakeMonths?: string | null;
+  degreeProgram?: (number | null) | DegreeProgram;
+  department?: (number | null) | Department;
+  studyArea?: (number | null) | StudyArea;
+  studyYear?: (number | null) | StudyYear;
+  studyMode?: (number | null) | StudyMode;
+  intakeMonths?: (number | IntakeMonth)[] | null;
   programmeAccreditationCode?: string | null;
   pathway?: string | null;
   assessments?: string | null;
@@ -837,41 +837,14 @@ export interface Country {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "intake-months".
+ * via the `definition` "degree-programs".
  */
-export interface IntakeMonth {
+export interface DegreeProgram {
   id: number;
   name: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "study-modes".
- */
-export interface StudyMode {
-  id: number;
-  name: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "study-years".
- */
-export interface StudyYear {
-  id: number;
-  name: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "study-areas".
- */
-export interface StudyArea {
-  id: number;
-  name: string;
+  title?: string | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -882,16 +855,61 @@ export interface StudyArea {
 export interface Department {
   id: number;
   name: string;
+  title?: string | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "degree-programs".
+ * via the `definition` "study-areas".
  */
-export interface DegreeProgram {
+export interface StudyArea {
   id: number;
   name: string;
+  title?: string | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "study-years".
+ */
+export interface StudyYear {
+  id: number;
+  name: string;
+  title?: string | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "study-modes".
+ */
+export interface StudyMode {
+  id: number;
+  name: string;
+  title?: string | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "intake-months".
+ */
+export interface IntakeMonth {
+  id: number;
+  name: string;
+  title?: string | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1505,7 +1523,7 @@ export interface CoursesSelect<T extends boolean = true> {
   degreeProgram?: T;
   department?: T;
   studyArea?: T;
-  studyYears?: T;
+  studyYear?: T;
   studyMode?: T;
   intakeMonths?: T;
   programmeAccreditationCode?: T;
@@ -1532,6 +1550,9 @@ export interface CoursesSelect<T extends boolean = true> {
  */
 export interface IntakeMonthsSelect<T extends boolean = true> {
   name?: T;
+  title?: T;
+  slug?: T;
+  slugLock?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1541,6 +1562,9 @@ export interface IntakeMonthsSelect<T extends boolean = true> {
  */
 export interface StudyModesSelect<T extends boolean = true> {
   name?: T;
+  title?: T;
+  slug?: T;
+  slugLock?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1550,6 +1574,9 @@ export interface StudyModesSelect<T extends boolean = true> {
  */
 export interface StudyYearsSelect<T extends boolean = true> {
   name?: T;
+  title?: T;
+  slug?: T;
+  slugLock?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1559,6 +1586,9 @@ export interface StudyYearsSelect<T extends boolean = true> {
  */
 export interface StudyAreasSelect<T extends boolean = true> {
   name?: T;
+  title?: T;
+  slug?: T;
+  slugLock?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1568,6 +1598,9 @@ export interface StudyAreasSelect<T extends boolean = true> {
  */
 export interface DepartmentsSelect<T extends boolean = true> {
   name?: T;
+  title?: T;
+  slug?: T;
+  slugLock?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1577,6 +1610,9 @@ export interface DepartmentsSelect<T extends boolean = true> {
  */
 export interface DegreeProgramsSelect<T extends boolean = true> {
   name?: T;
+  title?: T;
+  slug?: T;
+  slugLock?: T;
   updatedAt?: T;
   createdAt?: T;
 }

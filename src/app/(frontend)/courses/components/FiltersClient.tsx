@@ -1,8 +1,19 @@
-// FiltersClient.tsx
 'use client'
-
+  
 import React, { useState, useEffect } from 'react'
 import AppliedFilters from './AppliedFilters'
+
+// Helper to safely extract a display label from a relationship field
+function getRelationshipLabel<T extends { title?: string; name?: string; id?: string | number }>(
+  value: T | string | number | undefined | null
+): string | undefined {
+  if (!value) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return String(value)
+  if ('title' in value && typeof value.title === 'string' && value.title.trim()) return value.title
+  if ('name' in value && typeof value.name === 'string' && value.name.trim()) return value.name
+  if ('id' in value && (typeof value.id === 'string' || typeof value.id === 'number')) return String(value.id)
+  return undefined
+}
 
 type FilterState = {
   countries: string[]
@@ -45,8 +56,6 @@ const FiltersClient = ({
   courses: any[]
   clearFilters: () => void
 }) => {
-
-
   // Generate all possible filter options from courses data
   const generateFilterOptions = () => {
     const options = {
@@ -61,17 +70,81 @@ const FiltersClient = ({
 
     courses.forEach((course) => {
       // Handle country (nested under university.country)
-      if (course.university?.country?.name) {
-        options.countries.add(course.university.country.name)
+      if (course.university?.country) {
+        const name = getRelationshipLabel(course.university.country)
+        if (name) options.countries.add(name)
       }
 
-      // Handle other fields
-      if (course.university?.title) options.universities.add(course.university.title)
-      if (course.degreeProgram) options.degreePrograms.add(course.degreeProgram)
-      if (course.department) options.departments.add(course.department)
-      if (course.studyArea) options.studyAreas.add(course.studyArea)
-      if (course.studyYears) options.studyYears.add(course.studyYears.toString())
-      if (course.studyMode) options.studyModes.add(course.studyMode)
+      // Universities
+      if (course.university) {
+        const uniTitle = getRelationshipLabel(course.university)
+        if (uniTitle) options.universities.add(uniTitle)
+      }
+
+      // Degree Programs
+      if (course.degreeProgram) {
+        if (Array.isArray(course.degreeProgram)) {
+          course.degreeProgram.forEach((dp: any) => {
+            const dpLabel = getRelationshipLabel(dp)
+            if (dpLabel) options.degreePrograms.add(dpLabel)
+          })
+        } else {
+          const dpLabel = getRelationshipLabel(course.degreeProgram)
+          if (dpLabel) options.degreePrograms.add(dpLabel)
+        }
+      }
+
+      // Departments
+      if (course.department) {
+        if (Array.isArray(course.department)) {
+          course.department.forEach((dep: any) => {
+            const depLabel = getRelationshipLabel(dep)
+            if (depLabel) options.departments.add(depLabel)
+          })
+        } else {
+          const depLabel = getRelationshipLabel(course.department)
+          if (depLabel) options.departments.add(depLabel)
+        }
+      }
+
+      // Study Areas
+      if (course.studyArea) {
+        if (Array.isArray(course.studyArea)) {
+          course.studyArea.forEach((sa: any) => {
+            const saLabel = getRelationshipLabel(sa)
+            if (saLabel) options.studyAreas.add(saLabel)
+          })
+        } else {
+          const saLabel = getRelationshipLabel(course.studyArea)
+          if (saLabel) options.studyAreas.add(saLabel)
+        }
+      }
+
+      // Study Years (may be number or relationship or array)
+      if (course.studyYears !== undefined && course.studyYears !== null) {
+        if (Array.isArray(course.studyYears)) {
+          course.studyYears.forEach((sy: any) => {
+            const label = getRelationshipLabel(sy)
+            if (label) options.studyYears.add(label)
+          })
+        } else {
+          const syLabel = getRelationshipLabel(course.studyYears)
+          if (syLabel) options.studyYears.add(syLabel)
+        }
+      }
+
+      // Study Modes (may be relationship or array)
+      if (course.studyMode) {
+        if (Array.isArray(course.studyMode)) {
+          course.studyMode.forEach((sm: any) => {
+            const label = getRelationshipLabel(sm)
+            if (label) options.studyModes.add(label)
+          })
+        } else {
+          const smLabel = getRelationshipLabel(course.studyMode)
+          if (smLabel) options.studyModes.add(smLabel)
+        }
+      }
     })
 
     return {
@@ -109,6 +182,7 @@ const FiltersClient = ({
   // Update filter options when courses change
   useEffect(() => {
     setFilterOptions(generateFilterOptions())
+    // eslint-disable-next-line
   }, [courses])
 
   // Handle filter selection changes
@@ -123,32 +197,25 @@ const FiltersClient = ({
   }
 
   const handleRemoveFilter = (type: string, value: string) => {
-  console.log('handleRemoveFilter called with type:', type);
-  console.log('handleRemoveFilter called with value:', value);
-
-  const categoryMap: Record<string, keyof FilterState> = {
-    Country: 'countries',
-    University: 'universities',
-    Program: 'degreePrograms',
-    Department: 'departments',
-    Area: 'studyAreas',
-    Years: 'studyYears',
-    Mode: 'studyModes',
-  };
-
-  const category = categoryMap[type];
-  if (category) {
-    const newFilters = {
-      ...filters,
-      [category]: filters[category].filter((item) => item !== value)
+    const categoryMap: Record<string, keyof FilterState> = {
+      Country: 'countries',
+      University: 'universities',
+      Program: 'degreePrograms',
+      Department: 'departments',
+      Area: 'studyAreas',
+      Years: 'studyYears',
+      Mode: 'studyModes',
     }
-    console.log('newFilters:', newFilters);
-    setFilters(newFilters)
+
+    const category = categoryMap[type]
+    if (category) {
+      const newFilters = {
+        ...filters,
+        [category]: filters[category].filter((item) => item !== value),
+      }
+      setFilters(newFilters)
+    }
   }
-}
-
-
-
 
   // Handle search term changes
   const handleSearchChange = (category: keyof SearchTermsState, value: string) => {
@@ -186,17 +253,16 @@ const FiltersClient = ({
     <div className="FListInrow">
       {/* Applied Filters */}
       {appliedFilters.length > 0 && (
-<AppliedFilters
-        appliedFilters={appliedFilters}
-        onRemove={handleRemoveFilter}
-        onClear={clearFilters}
-      />
-
+        <AppliedFilters
+          appliedFilters={appliedFilters}
+          onRemove={handleRemoveFilter}
+          onClear={clearFilters}
+        />
       )}
 
       {/* Filter Sections */}
       {filterSections.map(({ key, label }) => {
-        const filterKey = key as keyof typeof filterOptions;
+        const filterKey = key as keyof typeof filterOptions
         return filterOptions[filterKey].length > 0 ? (
           <div key={`${key}-${filters[filterKey].join(',')}`} className="ItemBoxs">
             <div
