@@ -40,7 +40,7 @@ const SimpleHiddenCollection = (slug: string): CollectionConfig => ({
   slug,
   admin: {
     hidden: true,
-    useAsTitle: 'name',
+    useAsTitle: 'name', // or 'title' depending on your preference
   },
   fields: [
     {
@@ -48,6 +48,15 @@ const SimpleHiddenCollection = (slug: string): CollectionConfig => ({
       type: 'text',
       required: true,
     },
+    {
+      name: 'title',
+      type: 'text',
+      required: false,
+      admin: {
+        hidden: true, // Hide since we're using name as title
+      },
+    },
+    ...slugField(),
   ],
 })
 
@@ -162,32 +171,46 @@ export const Courses: CollectionConfig<'courses'> = {
             },
             {
               name: 'degreeProgram',
-              type: 'text',
+              label: 'Degree Program',
+              type: 'relationship',
+              relationTo: 'degree-programs',
+              required: false,
             },
             {
               name: 'department',
-              type: 'text',
+              label: 'Department',
+              type: 'relationship',
+              relationTo: 'departments',
+              required: false,
             },
             {
               name: 'studyArea',
-              type: 'text',
+              label: 'Study Area',
+              type: 'relationship',
+              relationTo: 'study-areas',
+              required: false,
             },
             {
-              name: 'studyYears',
-              type: 'number',
+              name: 'studyYear',
+              label: 'Study Year',
+              type: 'relationship',
+              relationTo: 'study-years',
+              required: false,
             },
             {
               name: 'studyMode',
-              type: 'select',
-              options: [
-                { label: 'Full-time', value: 'full-time' },
-                { label: 'Part-time', value: 'part-time' },
-                { label: 'Online', value: 'online' },
-              ],
+              label: 'Study Mode',
+              type: 'relationship',
+              relationTo: 'study-modes',
+              required: false,
             },
             {
               name: 'intakeMonths',
-              type: 'text',
+              label: 'Intake Months',
+              type: 'relationship',
+              relationTo: 'intake-months',
+              hasMany: true,
+              required: false,
             },
             {
               name: 'programmeAccreditationCode',

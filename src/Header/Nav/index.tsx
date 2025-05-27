@@ -97,18 +97,11 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
             <ul>
               {navItems.map(({ link }, i) => {
                 return (
-                  <li key={i}>
+                  <li key={i} onClick={() => setIsMenuOpen(false)}>
                     <CMSLink
-                      key={i}
                       {...link}
                       appearance="link"
-                      className="
-                    block py-3 px-4 text-xl
-                    hover:bg-gray-50 rounded-lg
-                    transition-all duration-200
-                    hover:pl-6 hover:text-blue-600
-                  "
-                      onClick={() => setIsMenuOpen(false)}
+                      className="block py-3 px-4 text-xl hover:bg-gray-50 rounded-lg transition-all duration-200 hover:pl-6 hover:text-blue-600"
                     />
                   </li>
                 )

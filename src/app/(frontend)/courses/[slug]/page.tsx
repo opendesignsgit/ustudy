@@ -8,18 +8,19 @@ import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import RichText from '@/components/RichText'
 
-import type { Post } from '@/payload-types'
+import type { Course } from '@/payload-types'
+import type { PaginatedDocs } from 'payload'
 
-import AcademicPathSlider from '@/components/Home/academic-path-slider'
 import Footer from '@/components/Home/footer'
 import FooterForm from '@/components/Home/footer-form'
-import { SecondaryHeader } from '../components/SecondaryHeader'
 
-import { CourseHero } from '@/heros/CourseHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
+import AcademicPathSlider from '@/components/Home/academic-path-slider'
+import { SecondaryHeader } from '../components/SecondaryHeader'
+import { CourseHero } from '@/heros/CourseHero'
 import ModalPopup from '@/components/Courses/ModalForm'
 import './coursedetail.css'
 
@@ -49,8 +50,16 @@ type Args = {
     slug?: string
   }>
 }
+interface UniversityCoursesResponse extends PaginatedDocs<Course> {
+  filterOptions?: {
+    studyAreas: string[]
+  }
+}
 
-const queryCoursesByUniversityId = cache(async ({ universityId }: { universityId: number }) => {
+
+const queryCoursesByUniversityId = cache(async ({ universityId }: { universityId: number }): Promise<UniversityCoursesResponse> => {
+
+
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
@@ -59,28 +68,19 @@ const queryCoursesByUniversityId = cache(async ({ universityId }: { universityId
     collection: 'courses',
     depth: 3,
     draft,
-    limit: 1000, // or whatever limit you need
+    limit: 1000,
     overrideAccess: draft,
-    pagination: false,
+    pagination: true,
     where: {
       university: {
         in: [universityId],
       },
     },
   })
-  
-  return result || []
+
+  return result
 })
 
-const studyAreas = [
-  { id: '1', name: 'Pre University', slug: 'pre-university' },
-  { id: '2', name: 'Law', slug: 'law' },
-  { id: '3', name: 'Business', slug: 'business' },
-  { id: '4', name: 'Digital & Creative Communications', slug: 'digital-creative-communications' },
-  { id: '5', name: 'Digital Technology', slug: 'digital-technology' },
-  { id: '6', name: 'Education', slug: 'education' },
-  { id: '7', name: 'Psychology', slug: 'psychology' },
-]
 
 
 export default async function Post({ params: paramsPromise }: Args) {
@@ -90,17 +90,28 @@ export default async function Post({ params: paramsPromise }: Args) {
   const course = await queryPostBySlug({ slug })
 
   if (!course) return <PayloadRedirects url={url} />
-  // Get university ID from the course
-  const universityId = typeof course.university === 'object' ? course.university.id : null
 
-  // Query related courses from the same university
+  const universityId = typeof course.university === 'object' ? course.university.id : course.university;
   const universityCourses = universityId ? await queryCoursesByUniversityId({ universityId }) : []
   console.log(universityCourses);
-  
-  // Get university logo - adjust this based on your data structure
-  const universityLogo = typeof course.university === 'object' 
-    ? course.university.logo?.url 
-    : null
+
+  const universityLogo = typeof course.university === 'object' &&
+    course.university.logo &&
+    typeof course.university.logo === 'object'
+    ? course.university.logo.url
+    : null;
+
+  const getStudyAreaNameById = (id: string | number): string => {
+    // Implement your actual mapping logic here
+    // This is just an example - you might want to fetch these from your CMS
+    const studyAreasMap: Record<string, string> = {
+      '1': 'Business',
+      '2': 'Management',
+      // Add more mappings as needed
+    }
+    return studyAreasMap[id.toString()] || id.toString()
+  }
+
   return (
     <article className="single-course" data-attr="kr">
       <PageClient />
@@ -109,10 +120,18 @@ export default async function Post({ params: paramsPromise }: Args) {
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
-      <SecondaryHeader 
-        studyAreas={universityCourses.filterOptions?.studyAreas || []} 
+      <SecondaryHeader
+        studyAreas={
+          Array.isArray(universityCourses)
+            ? []
+            : universityCourses.filterOptions?.studyAreas?.map(id => {
+              // Convert ID to display name
+              return getStudyAreaNameById(id) || id.toString()
+            }) || []
+        }
         logo={universityLogo}
       />
+
       <CourseHero post={course} />
 
       <div className="coursecontainer">
@@ -126,7 +145,7 @@ export default async function Post({ params: paramsPromise }: Args) {
             />
           )} */}
       </div>
-      <FooterForm/>
+      <FooterForm />
       <Footer />
       <ModalPopup />
     </article>
@@ -137,16 +156,24 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const { slug = '' } = await paramsPromise
   const post = await queryPostBySlug({ slug })
 
+  if (!post) {
+    return {
+      title: 'Not found',
+      description: 'Course not found',
+    }
+  }
+
   return generateMeta({ doc: post })
 }
 
-const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
+const queryPostBySlug = cache(async ({ slug }: { slug: string }): Promise<Course | null> => {
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
 
   const result = await payload.find({
     collection: 'courses',
+    depth: 3,
     draft,
     limit: 1,
     overrideAccess: draft,

@@ -3,7 +3,6 @@ import PageClient from './page.client'
 import Image from 'next/image'
 import FooterForm from '@/components/Home/footer-form'
 import Footer from '@/components/Home/footer'
-import MedicalCoursesSlider from './components/MedicalCourses'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -29,7 +28,6 @@ export default async function Page() {
         </section>
         <PageClient />
       </div>
-      <MedicalCoursesSlider/>
       <FooterForm />
       <Footer/>
     </div>

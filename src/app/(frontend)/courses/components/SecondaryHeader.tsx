@@ -2,7 +2,13 @@
 import Link from 'next/link'
 import Image from 'next/image'
 
-export const SecondaryHeader = ({ studyAreas, logo }: { studyAreas: string[]; logo?: string }) => {
+export const SecondaryHeader = ({
+  studyAreas,
+  logo
+}: {
+  studyAreas: string[];
+  logo?: string | null; // Allow null
+}) => {
   // Helper function to convert name to URL-friendly slug
   const createSlug = (name: string) => {
     return name

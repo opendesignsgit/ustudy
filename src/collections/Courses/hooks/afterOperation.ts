@@ -22,27 +22,65 @@ export const addFilterOptions: AfterOperationHook<'courses'> = async ({
 
     for (const course of courses) {
       try {
-        // University processing
-        if (course.university) {
-          if (typeof course.university === 'object' && course.university !== null) {
-            if ('title' in course.university && course.university.title) {
-              universities.add(course.university.title)
+        // Helper function to get display value from relationships
+        const getDisplayValue = (field: any): string | undefined => {
+          if (typeof field === 'object' && field !== null) {
+            // Handle direct relationship with title/name
+            if ('title' in field && typeof field.title === 'string') {
+              return field.title.trim()
             }
-            if ('country' in course.university && 
-                typeof course.university.country === 'object' && 
-                course.university.country !== null && 
-                'name' in course.university.country) {
-              countries.add(course.university.country.name)
+            if ('name' in field && typeof field.name === 'string') {
+              return field.name.trim()
+            }
+            // Handle nested relationships (e.g., studyArea -> name)
+            if ('studyArea' in field && typeof field.studyArea === 'object') {
+              return getDisplayValue(field.studyArea)
             }
           }
+          return undefined
         }
 
-        // Other fields
-        if (course.degreeProgram) degreePrograms.add(course.degreeProgram)
-        if (course.department) departments.add(course.department)
-        if (course.studyArea) studyAreas.add(course.studyArea)
-        if (course.studyYears) studyYears.add(course.studyYears)
-        if (course.studyMode) studyModes.add(course.studyMode)
+        // Process university
+        if (course.university) {
+          const uniName = getDisplayValue(course.university)
+          if (uniName) universities.add(uniName)
+        }
+
+        // Process country
+        if (course.university && typeof course.university === 'object' && course.university.country) {
+          const countryName = getDisplayValue(course.university.country)
+          if (countryName) countries.add(countryName)
+        }
+
+        // Process department
+        if (course.department) {
+          const deptName = getDisplayValue(course.department)
+          if (deptName) departments.add(deptName)
+        }
+
+        // Process study area
+        if (course.studyArea) {
+          const areaName = getDisplayValue(course.studyArea)
+          if (areaName) studyAreas.add(areaName)
+        }
+
+        // Process study mode
+        if (course.studyMode) {
+          const modeName = getDisplayValue(course.studyMode)
+          if (modeName) studyModes.add(modeName)
+        }
+
+        // Process degree program
+        if (course.degreeProgram) {
+          const programName = getDisplayValue(course.degreeProgram)
+          if (programName) degreePrograms.add(programName)
+        }
+
+        // Process study year (numeric value)
+        if (typeof course.studyYear === 'number') {
+          studyYears.add(course.studyYear)
+        }
+
       } catch (err) {
         console.error(`Error processing course ${course.id}:`, err)
         continue
@@ -63,8 +101,6 @@ export const addFilterOptions: AfterOperationHook<'courses'> = async ({
     }
   } catch (error) {
     console.error('Error in addFilterOptions hook:', error)
-    // Return the original result if processing fails
     return result
   }
 }
-//final
