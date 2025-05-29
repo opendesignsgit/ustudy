@@ -13,7 +13,7 @@ const service = () => {
     {
       id: 1,
       imgs: '/media/services/service-img1.jpg',
-      title: 'Application guidance',
+      title: 'Application Guidance',
       para: 'Ustudy offers expert application guidance, ensuring your documents are accurate and...',
     },
     {
@@ -31,13 +31,13 @@ const service = () => {
     {
       id: 4,
       imgs: '/media/services/service-img4.jpg',
-      title: 'Pre-departure counseling',
+      title: 'Pre-departure Counseling',
       para: 'Pre-departure counseling prepares you for life abroad, covering academic, cultural, a...',
     },
     {
       id: 5,
       imgs: '/media/services/service-img5.jpg',
-      title: 'Dos and don’ts',
+      title: 'Dos and Don’ts',
       para: 'Ustudy’s Dos and Don’ts guide ensures you are well-prepared for cultural and academi...',
     },
     {
@@ -49,19 +49,19 @@ const service = () => {
     {
       id: 7,
       imgs: '/media/services/service-img7.jpg',
-      title: 'Post landing formalities',
+      title: 'Post Landing Formalities',
       para: 'We ensure you complete all required formalities smoothly after you arrive in you...',
     },
     {
       id: 8,
       imgs: '/media/services/service-img8.jpg',
-      title: 'Financial guidance, scholarships',
+      title: 'Financial Guidance, Scholarships',
       para: 'Ustudy provides expert financial guidance to help manage your budget and find scholar...',
     },
     {
       id: 9,
       imgs: '/media/services/service-img9.jpg',
-      title: 'Guided hands-on projects',
+      title: 'Guided Hands-on Projects',
       para: 'Ustudy offers guided hands-on projects that provide practical experience alongside your...',
     },
   ]

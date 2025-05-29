@@ -18,6 +18,16 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
       {/* Mobile controls - hamburger and search */}
       <div className="md:hidden flex items-center space-x-4">
         <button
+          onClick={() => {
+            setIsSearchOpen(true)
+            setIsMenuOpen(false)
+          }}
+          className="text-gray-600 hover:text-blue-600 transition-colors duration-200"
+          aria-label="Search"
+        >
+          <SearchIcon className="w-5 h-5" />
+        </button>
+        <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="text-gray-600 hover:text-blue-600 transition-colors duration-300"
           aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
@@ -29,16 +39,6 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
           )}
         </button>
 
-        <button
-          onClick={() => {
-            setIsSearchOpen(true)
-            setIsMenuOpen(false)
-          }}
-          className="text-gray-600 hover:text-blue-600 transition-colors duration-200"
-          aria-label="Search"
-        >
-          <SearchIcon className="w-5 h-5" />
-        </button>
       </div>
 
       {/* Desktop navigation */}

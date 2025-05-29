@@ -46,7 +46,7 @@ const WhyChooseUs = () => {
 
   const stats = [
     {
-      number: 70,
+      number: 175,
       label: 'Courses',
       description:
         'Explore a wide range of industry-ready courses from beginner to expert level. Each program is designed to build your knowledge and real-world skills.',

@@ -29,13 +29,13 @@ export default async function Page() {
         <PageClient />
       </div>
       <FooterForm />
-      <Footer/>
+      <Footer />
     </div>
   )
 }
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Ustudy Academy - All Courses Page`,
+    title: `UStudy Global - All Courses Page`,
   }
 }
