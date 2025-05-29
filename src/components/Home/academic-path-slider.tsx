@@ -58,6 +58,46 @@ const AcademicPathSlider: React.FC = () => {
       description: 'Pursue excellence in healthcare with in-depth medical education, hands-on...',
       image: '/media/home/dyapImg4.jpg',
     },
+    {
+      title: 'Digital Technology',
+      description: 'Learn branding, SEO, content, and social media strategy.',
+      image: '/media/home/dyapImg4.jpg',
+    },
+    {
+      title: 'Digital Marketing',
+      description: 'Master SEO, branding, content, and social media strategy.',
+      image: '/media/home/dyapImg4.jpg',
+    },
+    {
+      title: 'Hospital Management',
+      description: 'Learn hospital operations, administration, and patient care systems.',
+      image: '/media/home/dyapImg4.jpg',
+    },
+    {
+      title: 'Computer Science & Engineering',
+      description: 'Study programming, AI, software, and cybersecurity fundamentals.',
+      image: '/media/home/dyapImg4.jpg',
+    },
+    {
+      title: 'Hospitality & Tourism',
+      description: 'Train in hotels, tourism, and global guest experiences.',
+      image: '/media/home/dyapImg4.jpg',
+    },
+    {
+      title: 'Psychology',
+      description: 'Explore behavior, cognition, and mental health science.',
+      image: '/media/home/dyapImg4.jpg',
+    },
+    {
+      title: 'Early Childhood & Education',
+      description: 'Understand child growth, learning, and teaching strategies.',
+      image: '/media/home/dyapImg4.jpg',
+    },
+    {
+      title: 'Media & Communications',
+      description: 'Learn journalism, PR, and digital storytelling techniques.',
+      image: '/media/home/dyapImg4.jpg',
+    },
   ]
 
   return (

@@ -127,14 +127,18 @@ html[data-theme='light'] {
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 18px;
+  font-size: 21px;
   font-weight: 500;
   letter-spacing: -0px;
   background: #ffffff;
 }
 
+.displaynone {
+  display: none !important;
+}
+
 header {
-  padding-block: 10px;
+  padding-block: 15px;
   background: #ffffff;
   z-index: 999;
 }
@@ -144,13 +148,24 @@ header .py-8 {
 }
 
 header nav button {
-  padding: 8px 40px 8px 20px;
+  padding: 8px 45px 8px 15px;
   border: 1px solid #0056d2;
   border-radius: 40px;
   color: #0056d2 !important;
+  position: relative;
+}
+header nav button:after {
+  content: '';
+  position: absolute;
+  width: 11px;
+  height: 100%;
+  top: 0;
+  right: 20px;
+  background: url(/media/microphone-icon.svg) no-repeat center center;
+  background-size: 100%;
 }
 header nav button svg {
-  width: 15px;
+  width: 15px !important;
   margin-right: 5px;
 }
 
@@ -166,6 +181,7 @@ body header .headlogo a {
 
 body header .headlogo a img {
   width: 100%;
+  max-width: 100%;
   display: block;
   height: auto;
 }
@@ -434,6 +450,14 @@ footer .footbtm ul.footSmediaul li a::before {
   color: #ffffff;
 }
 
+.footcorightrow p a {
+  display: flex;
+  margin-left: 5px;
+  align-items: center;
+}
+.footcorightrow p a:hover {
+  text-decoration: underline;
+}
 .footcorightrow p img {
   width: 25px;
   height: 25px;
@@ -607,6 +631,7 @@ footer .footbtm ul.footSmediaul li a:hover {
 
 .inerpageban h1 {
   font-size: 3.1vw;
+  color: #ffffff;
 }
 
 .inerpageban p {
@@ -634,6 +659,19 @@ footer .footbtm ul.footSmediaul li a:hover {
 .SerBoxsList .SerLists .SListImg {
   overflow: hidden;
   border-radius: 12px;
+  position: relative;
+}
+
+.SerBoxsList .SerLists .SListImg::before {
+  content: '';
+  position: absolute;
+  width: 2.6vw;
+  aspect-ratio: 1;
+  top: 20px;
+  right: 20px;
+  background: url(/media/services/serLinkarrow-icon.png) no-repeat center center;
+  background-size: 100%;
+  z-index: 9;
 }
 
 .SerBoxsList .SerLists .SListImg img {
@@ -787,6 +825,9 @@ footer .footbtm ul.footSmediaul li a:hover {
   box-shadow: 0 0 10px rgb(51 51 51 / 25%);
 }
 
+.contliItems:nth-child(2) p span {
+  margin-inline: 8px -2px;
+}
 .contliItems:nth-child(2) p a {
   color: #000000;
 }
@@ -2273,6 +2314,15 @@ p.sboxvcontrytxt {
   }
 }
 @media screen and (max-width: 800px) {
+  .humnavLists ul li a {
+    color: #ffffff;
+  }
+  body header .headlogo a img {
+    max-width: 100%;
+  }
+  body header .headlogo {
+    width: 130px;
+  }
   .container {
     max-width: 1080px;
   }
@@ -2281,6 +2331,16 @@ p.sboxvcontrytxt {
   }
   .sectitle h2 {
     font-size: 38px;
+  }
+  .inerpageban h1 {
+    font-size: 28px;
+    line-height: 1;
+  }
+  .inerpageban p br {
+    display: none;
+  }
+  .SerBoxsList .SerLists .SListCont h3 {
+    font-size: 18px;
   }
   .popContainer {
     width: 70%;
@@ -2384,6 +2444,25 @@ p.sboxvcontrytxt {
     font-size: 14px;
   }
 }
+@media screen and (max-width: 700px) {
+  .sboxvdivone .sboxvdivtwo {
+    flex-direction: column;
+    position: relative;
+  }
+  .sboxvdivleft,
+  .sboxvdivmid {
+    width: 100%;
+  }
+  .sboxvdivright {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 99;
+    transform: translate(50%, -50%);
+  }
+  .sboxvdivright button {
+  }
+}
 @media screen and (max-width: 600px) {
   body header nav {
     display: none !important;
@@ -2395,7 +2474,7 @@ p.sboxvcontrytxt {
     display: none;
   }
   body header .headlogo a img {
-    max-width: 78px;
+    max-width: 100%;
   }
   .sectitle.marbtm {
     margin-bottom: 20px;
@@ -2552,5 +2631,22 @@ p.sboxvcontrytxt {
   }
   .IboxSearinput input {
     line-height: 35px;
+  }
+  .contliItems h3 {
+    font-size: 16px;
+  }
+  .contliItems p,
+  .contliItems address {
+    font-size: 20px;
+    letter-spacing: 0;
+  }
+}
+@media screen and (max-width: 550px) {
+  .sboxvdivleft {
+    flex-direction: column;
+  }
+  .sboxvdivcontry {
+    margin-right: 0;
+    margin-bottom: 15px;
   }
 }

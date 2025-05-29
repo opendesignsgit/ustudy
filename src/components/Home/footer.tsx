@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import React from 'react'
 import {
-  faFacebookF,
-  faTwitter,
+  faYoutube,
+  faXTwitter,
   faInstagram,
   faLinkedinIn,
 } from '@fortawesome/free-brands-svg-icons'
@@ -26,23 +26,23 @@ const Footer = () => {
             <div className="footSmedialist">
               <ul className="footSmediaul flex items-center ">
                 <li>
-                  <a href="#" className="hover:text-gray-300 transition">
-                    <FontAwesomeIcon icon={faFacebookF} />
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-gray-300 transition">
+                  <a href="https://www.instagram.com/ustudy_global/" target='_blank' className="hover:text-gray-300 transition">
                     <FontAwesomeIcon icon={faInstagram} />
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-gray-300 transition">
-                    <FontAwesomeIcon icon={faTwitter} />
+                  <a href="https://x.com/ustudy_global" target='_blank' className="hover:text-gray-300 transition">
+                    <FontAwesomeIcon icon={faXTwitter} />
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-gray-300 transition">
+                  <a href="https://www.linkedin.com/in/ustudy-global-456651354/" target='_blank' className="hover:text-gray-300 transition">
                     <FontAwesomeIcon icon={faLinkedinIn} />
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.youtube.com/channel/UCOAPhVbote6lIYHk6OJiFcg" target='_blank' className="hover:text-gray-300 transition">
+                    <FontAwesomeIcon icon={faYoutube} />
                   </a>
                 </li>
               </ul>
@@ -105,7 +105,7 @@ const Footer = () => {
         </div>
         <div className="footcorightrow text-center py-[15px] flex justify-center">
           <p className="flex justify-center">
-            Copyright © 2025. Ustudy / Designed By <img src="/media/openlogo.png" alt="" />
+            Copyright © 2025. Ustudy / <a href="https://opendesignsin.com/" target='_blank'>Designed By <img src="/media/openlogo.png" alt="" /></a>
           </p>
         </div>
       </div>
