@@ -28,11 +28,11 @@ type Course = CardPostData & {
     updatedAt: string
     createdAt: string
   }
-  degreeProgram: string
-  department: string
-  studyArea: string
-  studyYears: number
-  studyMode: string
+  degreeProgram: { id: string | number; name?: string; title?: string } | null
+  department: { id: string | number; name?: string; title?: string } | null
+  studyArea: { id: string | number; name?: string; title?: string } | null
+  studyYears: { id: string | number; name?: string; title?: string } | null
+  studyMode: { id: string | number; name?: string; title?: string } | null
   intakeMonths?: string
   meta?: {
     image?: any
@@ -74,7 +74,6 @@ const PageClient = () => {
   useEffect(() => {
     setHeaderTheme('light')
   }, [setHeaderTheme])
-
 
   const fetchCourses = useCallback(
     async (
@@ -223,6 +222,7 @@ const PageClient = () => {
     ...filters.studyYears.map((y) => `Years: ${y}`),
     ...filters.studyModes.map((m) => `Mode: ${m}`),
   ]
+  console.log(allCourses);
 
   return (
     <div className="pt-24 pb-24 couresLInBox">
@@ -230,26 +230,26 @@ const PageClient = () => {
       <section className="ListFilerSec">
         <div className="container mx-auto">
           {/* Mobile Filter Button - only visible on small screens */}
-          <button
-            onClick={() => setIsMobileFiltersOpen(true)}
-            className="md:hidden flex items-center gap-2 mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
-          >
-            
-            Filters
-          </button>
 
           <div className="ListFilerRow flex gap-8">
+            <div className="mobfilterbtn md:hidden ">
+              <button
+                onClick={() => setIsMobileFiltersOpen(true)}
+                className="flex px-4 py-2 bg-blue-500 text-white rounded-lg"
+              >
+                Filters
+              </button>
+            </div>
+
             {/* Mobile Filters Overlay */}
             <div
-              className={`fixed inset-0 z-50 bg-black bg-opacity-50 transition-opacity duration-300 ${
-                isMobileFiltersOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-              } md:hidden`}
+              className={`mobfitflColLeft fixed inset-0 z-50 bg-black bg-opacity-50 transition-opacity duration-300 ${isMobileFiltersOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                } md:hidden`}
               onClick={() => setIsMobileFiltersOpen(false)}
             >
               <div
-                className={`absolute left-0 top-0 h-full w-4/5 max-w-sm bg-white shadow-lg transform transition-transform duration-300 ${
-                  isMobileFiltersOpen ? 'translate-x-0' : '-translate-x-full'
-                }`}
+                className={`absolute left-0 top-0 h-full w-4/5 max-w-sm bg-white shadow-lg transform transition-transform duration-300 ${isMobileFiltersOpen ? 'translate-x-0' : '-translate-x-full'
+                  }`}
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="p-4 overflow-y-auto h-full">
@@ -271,6 +271,7 @@ const PageClient = () => {
                 </div>
               </div>
             </div>
+
 
             {/* Desktop Filters - hidden on mobile */}
             <div className="FlistCol flColLeft w-1/4 hidden md:block">

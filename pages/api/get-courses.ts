@@ -15,11 +15,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       filters: {
         countries: filters.countries,
         universities: filters.universities,
-        degreePrograms: filters.degreePrograms?.map((dp: any) => dp.value || dp),
-        departments: filters.departments?.map((d: any) => d.value || d),
-        studyAreas: filters.studyAreas?.map((sa: any) => sa.value || sa),
-        studyYears: filters.studyYears?.map((sy: any) => sy.value || sy),
-        studyModes: filters.studyModes?.map((sm: any) => sm.value || sm),
+        degreePrograms: filters.degreePrograms,
+        departments: filters.departments,
+        studyAreas: filters.studyAreas,
+        studyYears: filters.studyYears,
+        studyModes: filters.studyModes,
       }
     })
     res.status(200).json(courses)

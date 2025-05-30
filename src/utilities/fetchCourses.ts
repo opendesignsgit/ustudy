@@ -33,28 +33,28 @@ export async function getCourses({
   }
 
   if (filters.degreePrograms?.length) {
-    where['degreeProgram'] = { in: filters.degreePrograms }
+    where['degreeProgram.title'] = { in: filters.degreePrograms }
   }
 
   if (filters.departments?.length) {
-    where['department'] = { in: filters.departments }
+    where['department.title'] = { in: filters.departments }
   }
 
   if (filters.studyAreas?.length) {
-    where['studyArea'] = { in: filters.studyAreas }
+    where['studyArea.title'] = { in: filters.studyAreas }
   }
 
   if (filters.studyYears?.length) {
-    where['studyYears'] = { in: filters.studyYears }
+    where['studyYear.title'] = { in: filters.studyYears }
   }
 
   if (filters.studyModes?.length) {
-    where['studyMode'] = { in: filters.studyModes }
+    where['studyMode.title'] = { in: filters.studyModes }
   }
 
   const result = await payload.find({
     collection: 'courses',
-    depth: 3,
+    depth: 4, // Ensure relationships are properly populated
     limit,
     page,
     where,
@@ -74,11 +74,10 @@ export async function getAllCoursesForFilters() {
   
   const result = await payload.find({
     collection: 'courses',
-    depth: 3,
-    limit: 1000, // Adjust based on your expected maximum courses
+    depth: 3, // Ensure relationships are properly populated
+    limit: 1000,
     overrideAccess: false,
   })
 
   return result.docs || []
 }
-//final

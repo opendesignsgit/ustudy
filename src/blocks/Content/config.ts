@@ -14,7 +14,6 @@ import {
   UploadFeature,
   EXPERIMENTAL_TableFeature,
   AlignFeature,
-  TreeViewFeature,
   IndentFeature,
   InlineCodeFeature,
   RelationshipFeature,
@@ -97,7 +96,6 @@ const columnFields: Field[] = [
             ],
           }),
 
-          TreeViewFeature()
         ]
       },
     }),
