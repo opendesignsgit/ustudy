@@ -15,7 +15,7 @@ const Services = () => {
     {
       id: 1,
       imgs: '/media/services/service-img0.jpg',
-      title: 'Counseling and guidance',
+      title: 'Counseling and Guidance',
       para: 'Ustudy provides personalized counseling and guidance to help you choose the right academic and career path.',
       paralong:
         '<ul> <li>Ustudy’s counseling and guidance service goes beyond just choosing a course—it’s about understanding your aspirations, skills, and future career prospects.</li> <li>We take the time to explore your interests in-depth, offering a tailored approach that ensures you make informed decisions for a successful academic journey.</li> <li>Our experienced counselors help you navigate through various academic systems, providing clarity on admission processes, eligibility, and country-specific requirements.</li> <li>With Ustudy, you receive continuous support, preparing you for every step of the way to a successful international education experience.</li>  </ul>',
@@ -23,7 +23,7 @@ const Services = () => {
     {
       id: 2,
       imgs: '/media/services/service-img1.jpg',
-      title: 'Application guidance',
+      title: 'Application Guidance',
       para: 'Ustudy offers expert application guidance, ensuring your documents are accurate and submissions timely.',
       paralong:
         '<ul> <li>Application guidance at Ustudy ensures that your entire submission process is error-free and professionally presented.</li> <li>Our team assists with everything, from selecting the right documents to writing compelling personal statements and securing letters of recommendation.</li> <li>We focus on making sure your application stands out, aligning your profile with the requirements of top colleges and universities.</li> <li>Ustudy also helps with ensuring that you meet deadlines, preparing you for entrance exams, and keeping track of important timelines for success.</li>  </ul>',
@@ -47,7 +47,7 @@ const Services = () => {
     {
       id: 5,
       imgs: '/media/services/service-img4.jpg',
-      title: 'Pre-departure counseling',
+      title: 'Pre-departure Counseling',
       para: 'Pre-departure counseling prepares you for life abroad, covering academic, cultural, and logistical aspects.',
       paralong:
         '<ul> <li>Pre-departure counseling at Ustudy ensures you are well-equipped to adjust to life in a new country.</li> <li>We provide in-depth sessions on cultural integration, local customs, academic expectations, and emergency procedures, making your transition seamless.</li> <li>Our counseling also focuses on practical matters like currency exchange, local transportation, and adapting to new surroundings.</li> <li>With Ustudy’s pre-departure counseling, you are prepared to embrace both the academic and personal challenges of studying abroad with confidence.</li>  </ul>',
@@ -55,7 +55,7 @@ const Services = () => {
     {
       id: 6,
       imgs: '/media/services/service-img5.jpg',
-      title: 'Dos and don’ts',
+      title: 'Dos and Don’ts',
       para: 'Ustudy’s Dos and Don’ts guide ensures you are well-prepared for cultural and academic life abroad.',
       paralong:
         '<ul> <li>Ustudy’s Dos and Don’ts guide offers you valuable insights into adapting to a new environment.</li> <li>Our guide covers essential aspects like cultural norms, communication etiquette, and how to maintain a balanced lifestyle while studying abroad.</li> <li>We also highlight common mistakes to avoid, ensuring you don’t face unnecessary challenges in your new environment.</li> <li>By following our Dos and Don’ts, you’ll easily navigate through academic life, personal relationships, and cultural adjustments, ensuring a smooth transition.</li>  </ul>',
@@ -71,7 +71,7 @@ const Services = () => {
     {
       id: 8,
       imgs: '/media/services/service-img7.jpg',
-      title: 'Post landing formalities',
+      title: 'Post Landing Formalities',
       para: 'Ustudy provides support for post-landing formalities, including immigration and orientation.',
       paralong:
         '<ul> <li>Post-landing formalities are crucial in your transition to studying abroad, and Ustudy ensures you’re fully supported.</li> <li>We assist with immigration checks, registration at your educational institution, and understanding local laws and regulations.</li> <li>Additionally, we help you with setting up a bank account, getting a local SIM card, and any other necessary tasks for settling in.</li> <li>Ustudy makes sure you have everything covered, allowing you to adjust to your new environment without stress.</li>  </ul>',
@@ -79,7 +79,7 @@ const Services = () => {
     {
       id: 9,
       imgs: '/media/services/service-img8.jpg',
-      title: 'Financial guidance, scholarships',
+      title: 'Financial Guidance, Scholarships',
       para: 'Ustudy provides expert financial guidance to help manage your budget and find scholarships.',
       paralong:
         '<ul> <li>Financial guidance and scholarship assistance are key to reducing the burden of studying abroad, and Ustudy is here to help.</li> <li>We work closely with you to create a comprehensive budget plan that covers tuition, living expenses, and other costs.</li> <li>Our team also provides information on scholarships, grants, and funding options specific to your course, country, and institution.</li> <li>With Ustudy’s financial guidance, you can focus on your academic success while minimizing financial stress.</li>  </ul>',
@@ -87,7 +87,7 @@ const Services = () => {
     {
       id: 10,
       imgs: '/media/services/service-img9.jpg',
-      title: 'Guided hands-on projects',
+      title: 'Guided Hands-on Projects',
       para: 'Ustudy offers guided hands-on projects that provide practical experience alongside your academic studies.',
       paralong:
         '<ul> <li>Guided hands-on projects at Ustudy give you the opportunity to apply your learning in real-world situations.</li> <li>These projects span various fields and industries, providing practical experience that enhances your academic journey.</li> <li>Our experts work closely with you to ensure you develop skills that are directly applicable to your chosen career.</li> <li>Ustudy’s hands-on approach bridges the gap between theory and practice, making you more employable and prepared for future opportunities.</li>  </ul>',

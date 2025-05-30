@@ -9,7 +9,8 @@ import {
   faArrowRight,
 } from '@fortawesome/free-solid-svg-icons'
 import { faGlobe } from '@fortawesome/free-solid-svg-icons'
-import Image from 'next/image'
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const EducationPromoSection = () => {
   const leftMenuItems = [
@@ -25,7 +26,11 @@ const EducationPromoSection = () => {
     { name: 'Kyrgyzstan', image: '/media/home/flag-kyrgyzstan-icon.png' },
     { name: 'Tajikistan', image: '/media/home/flag-tajikistan-icon.png' },
   ]
+  const router = useRouter();
 
+  const handleClick = () => {
+    router.push('/courses'); // change to your desired route
+  };
   return (
     <section className="relative w-full h-screen hbanersec  relative">
       {/* Left Section */}
@@ -34,9 +39,7 @@ const EducationPromoSection = () => {
           {/* Center Image */}
           <div className="absolute bottom-0 left-[50%] -translate-x-[50%] flex justify-center items-end pointer-events-none hbancol hbanimgcol">
             <h2 className="hidden">
-              Explore Top <br />
-              Universities Worldwide <br />
-              Start today!
+              Your Global Education Journey Begins Here
             </h2>
             <div className="hbanmig">
               <img
@@ -53,7 +56,7 @@ const EducationPromoSection = () => {
             </h1>
             <p className="mt-6  font-medium">
               Learn anytime, anywhere with a perfect mix of online flexibility and on-campus
-              experience — 2 years online, 1 year on campus.
+              experience — 2 years online, 1 year on campus to get certified.
             </p>
             <div className="uyllist">
               <ul className="mt-8 space-y-4">
@@ -70,7 +73,7 @@ const EducationPromoSection = () => {
                   </li>
                 ))}
               </ul>
-              <button className="border border-[#ffffff] bg-white text-[#0056d2] font-semibold rounded-full uppercase hover:bg-[#0056d2] hover:text-[#ffffff]">
+              <button onClick={handleClick} className="border border-[#ffffff] bg-white text-[#0056d2] font-semibold rounded-full uppercase hover:bg-[#0056d2] hover:text-[#ffffff]">
                 View All Courses
               </button>
             </div>
@@ -101,7 +104,7 @@ const EducationPromoSection = () => {
                   </li>
                 ))}
               </ul>
-              <button className="border border-[#0056d2] bg-[#0056d2] text-white font-semibold rounded-full uppercase hover:text-[#0056d2] hover:bg-white">
+              <button onClick={handleClick} className="border border-[#0056d2] bg-[#0056d2] text-white font-semibold rounded-full uppercase hover:text-[#0056d2] hover:bg-white">
                 View All Medical Courses
               </button>
             </div>

@@ -7,6 +7,7 @@
     rgba(255, 255, 255, 1) 50%,
     rgba(255, 255, 255, 1) 100%
   );
+  margin-top: -7vh;
 }
 .hbanersec::before {
   content: '';
@@ -52,9 +53,11 @@
   font-weight: 600;
 }
 .hbancol button {
-  padding: 0 2vw;
+  padding: 0 1.6vw;
   line-height: 40px;
   margin-top: 2vw;
+  font-size: 14px;
+  letter-spacing: 0.5px;
 }
 .uyllist {
   width: 100%;
@@ -292,6 +295,7 @@
 .wchItmBox .wchItemss h3 small {
   color: #000000;
   font-size: 2.5vw;
+  margin-left: 10px;
 }
 .wchItmBox .wchItemss h4 {
   color: #000000;
@@ -303,7 +307,6 @@
 }
 .wchItmBox .wchItemss p {
   color: #333333;
-  font-size: 18px;
 }
 
 .dyapSec {
@@ -350,13 +353,14 @@
 }
 .itemtitle h4 {
   background: rgb(0 86 210 / 78%);
-  padding-inline: 3vw;
+  padding-inline: 2vw;
   padding-block: 5px;
   -webkit-transform-origin: left bottom;
   -ms-transform-origin: left bottom;
   transform-origin: left bottom;
   border-bottom-right-radius: 30px;
   font-weight: 500;
+  line-height: 1;
   letter-spacing: 0.5px;
   backdrop-filter: blur(2px);
 }
@@ -664,6 +668,10 @@
   .hbanersec {
     height: auto;
     background: #fff;
+    margin-top: 0;
+  }
+  .hbanersec .colLeft p {
+    color: #000000;
   }
   .hbanersec::after {
     opacity: 0;
@@ -701,12 +709,19 @@
   .hbanersec h1 strong {
     color: #0056d2;
   }
+  .hbanersec h1 span {
+    color: #0056d2;
+  }
   .hbanimgcol h2 {
     display: block;
     font-size: 40px;
     text-align: center;
     font-family: 'Times New Roman', Times, serif;
     line-height: 1;
+    color: #ffffff;
+  }
+  .wchItmBox .wchItemss h3 small {
+    font-size: 25px;
   }
   .hbanerinrowsec {
     -webkit-box-orient: vertical;
@@ -797,8 +812,28 @@
   .hfpsdtitle {
     font-size: 16px;
   }
+  .hstuwwItems .slidecontent h3 {
+    font-size: 14px;
+  }
+}
+@media screen and (max-width: 700px) {
+  .footbtm .footmcol:nth-child(2) {
+    width: 100%;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgb(255 255 255 / 10%);
+  }
+  .footbtm .footmcol:nth-child(2)::before {
+    opacity: 0;
+  }
+  .footbtm {
+    flex-direction: row;
+  }
 }
 @media screen and (max-width: 600px) {
+  .hstuwwItems .slidecontent h3 {
+    font-size: 14px;
+  }
   .hAbotintrosec {
     display: -webkit-box;
     display: -ms-flexbox;

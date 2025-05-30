@@ -19,13 +19,13 @@ const FooterForm = () => {
           <div className="rounded-xl p-6 TfootFormCol">
             <form className="formboxs flex flex-wrap">
               <div className="form-col">
-                <input type="text" placeholder="Enter Your Full Name" />
+                <input type="text" placeholder="Enter Your Full Name *" />
               </div>
               <div className="form-col">
-                <input type="text" placeholder="+91 Enter Your Mobile Number" />
+                <input type="text" placeholder="+91 Enter Your Mobile Number *" />
               </div>
               <div className="form-col">
-                <input type="email" placeholder="Enter Your Email" />
+                <input type="email" placeholder="Enter Your Email *" />
               </div>
               <div className="form-col">
                 <input type="text" placeholder="Enter Your Location" />

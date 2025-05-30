@@ -18,7 +18,7 @@ const AboutUstudy = () => {
               platform bridges academic learning with real-world skills, <br />
               empowering students and professionals worldwide.
             </p>
-            <button className="text-blue-700 font-medium border-1 border-blue-700">
+            <button className="text-blue-700 font-medium border-1 border-blue-700 displaynone">
               READ MORE
             </button>
           </div>
