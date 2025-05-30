@@ -32,8 +32,8 @@ export const YearlyCourses: Block = {
   slug: 'yearlyCourses',
   interfaceName: 'YearlyCoursesBlock',
   labels: {
-    singular: 'Yearly Course Module',
-    plural: 'Yearly Course Modules',
+    singular: 'Course Module',
+    plural: 'Course Modules',
   },
   fields: [
     {
