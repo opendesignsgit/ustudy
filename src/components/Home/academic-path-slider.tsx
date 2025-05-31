@@ -61,42 +61,42 @@ const AcademicPathSlider: React.FC = () => {
     {
       title: 'Digital Technology',
       description: 'Learn branding, SEO, content, and social media strategy.',
-      image: '/media/home/dyapImg4.jpg',
+      image: '/media/home/HDigitalTechnology-Img.jpg',
     },
     {
       title: 'Digital Marketing',
       description: 'Master SEO, branding, content, and social media strategy.',
-      image: '/media/home/dyapImg4.jpg',
+      image: '/media/home/HDigitalMarketing-img.jpg',
     },
     {
       title: 'Hospital Management',
       description: 'Learn hospital operations, administration, and patient care systems.',
-      image: '/media/home/dyapImg4.jpg',
+      image: '/media/home/HHospitalManagement-img.jpg',
     },
     {
       title: 'Computer Science & Engineering',
       description: 'Study programming, AI, software, and cybersecurity fundamentals.',
-      image: '/media/home/dyapImg4.jpg',
+      image: '/media/home/HComputerScienceEngineering-img.jpg',
     },
     {
       title: 'Hospitality & Tourism',
       description: 'Train in hotels, tourism, and global guest experiences.',
-      image: '/media/home/dyapImg4.jpg',
+      image: '/media/home/HHospitalityTourism-img.jpg',
     },
     {
       title: 'Psychology',
       description: 'Explore behavior, cognition, and mental health science.',
-      image: '/media/home/dyapImg4.jpg',
+      image: '/media/home/HPsychology-img.jpg',
     },
     {
       title: 'Early Childhood & Education',
       description: 'Understand child growth, learning, and teaching strategies.',
-      image: '/media/home/dyapImg4.jpg',
+      image: '/media/home/HEarlyChildhoodEducation-img.jpg',
     },
     {
       title: 'Media & Communications',
       description: 'Learn journalism, PR, and digital storytelling techniques.',
-      image: '/media/home/dyapImg4.jpg',
+      image: '/media/home/HMediaCommunication-img.jpg',
     },
   ]
 
