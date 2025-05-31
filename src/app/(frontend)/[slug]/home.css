@@ -363,6 +363,7 @@
   line-height: 1;
   letter-spacing: 0.5px;
   backdrop-filter: blur(2px);
+  color: #ffffff;
 }
 .dyapitemcont {
   padding: 20px;
