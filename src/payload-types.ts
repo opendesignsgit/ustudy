@@ -81,6 +81,7 @@ export interface Config {
     'degree-programs': DegreeProgram;
     universities: University;
     countries: Country;
+    bookings: Booking;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -106,6 +107,7 @@ export interface Config {
     'degree-programs': DegreeProgramsSelect<false> | DegreeProgramsSelect<true>;
     universities: UniversitiesSelect<false> | UniversitiesSelect<true>;
     countries: CountriesSelect<false> | CountriesSelect<true>;
+    bookings: BookingsSelect<false> | BookingsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -842,7 +844,6 @@ export interface Country {
 export interface DegreeProgram {
   id: number;
   name: string;
-  title?: string | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -855,7 +856,6 @@ export interface DegreeProgram {
 export interface Department {
   id: number;
   name: string;
-  title?: string | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -868,7 +868,6 @@ export interface Department {
 export interface StudyArea {
   id: number;
   name: string;
-  title?: string | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -881,7 +880,6 @@ export interface StudyArea {
 export interface StudyYear {
   id: number;
   name: string;
-  title?: string | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -894,7 +892,6 @@ export interface StudyYear {
 export interface StudyMode {
   id: number;
   name: string;
-  title?: string | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -907,11 +904,27 @@ export interface StudyMode {
 export interface IntakeMonth {
   id: number;
   name: string;
-  title?: string | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings".
+ */
+export interface Booking {
+  id: number;
+  courseName: string;
+  courseID?: string | null;
+  book?: string | null;
+  customerName: string;
+  customerID?: string | null;
+  orderDate: string;
+  razorpayResponse: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1144,6 +1157,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'countries';
         value: number | Country;
+      } | null)
+    | ({
+        relationTo: 'bookings';
+        value: number | Booking;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1550,7 +1567,6 @@ export interface CoursesSelect<T extends boolean = true> {
  */
 export interface IntakeMonthsSelect<T extends boolean = true> {
   name?: T;
-  title?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
@@ -1562,7 +1578,6 @@ export interface IntakeMonthsSelect<T extends boolean = true> {
  */
 export interface StudyModesSelect<T extends boolean = true> {
   name?: T;
-  title?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
@@ -1574,7 +1589,6 @@ export interface StudyModesSelect<T extends boolean = true> {
  */
 export interface StudyYearsSelect<T extends boolean = true> {
   name?: T;
-  title?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
@@ -1586,7 +1600,6 @@ export interface StudyYearsSelect<T extends boolean = true> {
  */
 export interface StudyAreasSelect<T extends boolean = true> {
   name?: T;
-  title?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
@@ -1598,7 +1611,6 @@ export interface StudyAreasSelect<T extends boolean = true> {
  */
 export interface DepartmentsSelect<T extends boolean = true> {
   name?: T;
-  title?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
@@ -1610,7 +1622,6 @@ export interface DepartmentsSelect<T extends boolean = true> {
  */
 export interface DegreeProgramsSelect<T extends boolean = true> {
   name?: T;
-  title?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
@@ -1639,6 +1650,22 @@ export interface CountriesSelect<T extends boolean = true> {
   logo?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings_select".
+ */
+export interface BookingsSelect<T extends boolean = true> {
+  courseName?: T;
+  courseID?: T;
+  book?: T;
+  customerName?: T;
+  customerID?: T;
+  orderDate?: T;
+  razorpayResponse?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2034,6 +2061,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'courses';
           value: number | Course;
+        } | null)
+      | ({
+          relationTo: 'bookings';
+          value: number | Booking;
         } | null);
     global?: string | null;
     user?: (number | null) | User;

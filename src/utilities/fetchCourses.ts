@@ -2,6 +2,7 @@
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 
+// Update your fetch-courses.ts
 export async function getCourses({
   limit = 5,
   page = 1,
@@ -21,8 +22,15 @@ export async function getCourses({
 }) {
   const payload = await getPayload({ config: configPromise })
 
-  // Build the where query from filters
   const where: any = {}
+
+  // Handle array relationships properly
+  const buildWhereForRelationship = (path: string, values: string[]) => {
+    if (values.length === 1) {
+      return { [path]: { equals: values[0] } }
+    }
+    return { [path]: { in: values } }
+  }
 
   if (filters.countries?.length) {
     where['university.country.name'] = { in: filters.countries }
@@ -33,32 +41,32 @@ export async function getCourses({
   }
 
   if (filters.degreePrograms?.length) {
-    where['degreeProgram.title'] = { in: filters.degreePrograms }
+    where['degreeProgram.title'] = buildWhereForRelationship('degreeProgram.title', filters.degreePrograms)
   }
 
   if (filters.departments?.length) {
-    where['department.title'] = { in: filters.departments }
+    where['department.title'] = buildWhereForRelationship('department.title', filters.departments)
   }
 
   if (filters.studyAreas?.length) {
-    where['studyArea.title'] = { in: filters.studyAreas }
+    where['studyArea.title'] = buildWhereForRelationship('studyArea.title', filters.studyAreas)
   }
 
   if (filters.studyYears?.length) {
-    where['studyYear.title'] = { in: filters.studyYears }
+    where['studyYear.title'] = buildWhereForRelationship('studyYear.title', filters.studyYears)
   }
 
   if (filters.studyModes?.length) {
-    where['studyMode.title'] = { in: filters.studyModes }
+    where['studyMode.title'] = buildWhereForRelationship('studyMode.title', filters.studyModes)
   }
 
   const result = await payload.find({
     collection: 'courses',
-    depth: 4, // Ensure relationships are properly populated
+    depth: 3,
     limit,
     page,
     where,
-    overrideAccess: false,
+    overrideAccess: true,
   })
 
   return {
@@ -76,8 +84,9 @@ export async function getAllCoursesForFilters() {
     collection: 'courses',
     depth: 3, // Ensure relationships are properly populated
     limit: 1000,
-    overrideAccess: false,
+    overrideAccess: true,
   })
 
   return result.docs || []
 }
+//Final

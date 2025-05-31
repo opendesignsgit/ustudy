@@ -48,14 +48,6 @@ const SimpleHiddenCollection = (slug: string): CollectionConfig => ({
       type: 'text',
       required: true,
     },
-    {
-      name: 'title',
-      type: 'text',
-      required: false,
-      admin: {
-        hidden: true, // Hide since we're using name as title
-      },
-    },
     ...slugField(),
   ],
 })

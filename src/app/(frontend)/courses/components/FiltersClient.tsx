@@ -1,9 +1,8 @@
 'use client'
-  
+
 import React, { useState, useEffect } from 'react'
 import AppliedFilters from './AppliedFilters'
 
-// Helper to safely extract a display label from a relationship field
 function getRelationshipLabel<T extends { title?: string; name?: string; id?: string | number }>(
   value: T | string | number | undefined | null
 ): string | undefined {
@@ -15,49 +14,22 @@ function getRelationshipLabel<T extends { title?: string; name?: string; id?: st
   return undefined
 }
 
-type FilterState = {
-  countries: string[]
-  universities: string[]
-  degreePrograms: string[]
-  departments: string[]
-  studyAreas: string[]
-  studyYears: string[]
-  studyModes: string[]
-}
-
-type SearchTermsState = {
-  countries: string
-  universities: string
-  degreePrograms: string
-  departments: string
-  studyAreas: string
-  studyYears: string
-  studyModes: string
-}
-
-type CollapsedSectionsState = {
-  countries: boolean
-  universities: boolean
-  degreePrograms: boolean
-  departments: boolean
-  studyAreas: boolean
-  studyYears: boolean
-  studyModes: boolean
-}
-
 const FiltersClient = ({
   filters,
   setFilters,
   courses,
   clearFilters,
 }: {
-  filters: FilterState
-  setFilters: (filters: FilterState) => void
+  filters: any
+  setFilters: (filters: any) => void
   courses: any[]
   clearFilters: () => void
 }) => {
-  // Generate all possible filter options from courses data
-  const generateFilterOptions = () => {
+  const [filterOptions, setFilterOptions] = useState<any>({})
+  const [searchTerms, setSearchTerms] = useState<any>({})
+  const [collapsedSections, setCollapsedSections] = useState<any>({})
+
+  useEffect(() => {
     const options = {
       countries: new Set<string>(),
       universities: new Set<string>(),
@@ -69,85 +41,35 @@ const FiltersClient = ({
     }
 
     courses.forEach((course) => {
-      // Handle country (nested under university.country)
-      if (course.university?.country) {
-        const name = getRelationshipLabel(course.university.country)
-        if (name) options.countries.add(name)
-      }
-
-      // Universities
+      // Handle university and country
       if (course.university) {
-        const uniTitle = getRelationshipLabel(course.university)
-        if (uniTitle) options.universities.add(uniTitle)
-      }
+        const uniName = getRelationshipLabel(course.university)
+        if (uniName) options.universities.add(uniName)
 
-      // Degree Programs
-      if (course.degreeProgram) {
-        if (Array.isArray(course.degreeProgram)) {
-          course.degreeProgram.forEach((dp: any) => {
-            const dpLabel = getRelationshipLabel(dp)
-            if (dpLabel) options.degreePrograms.add(dpLabel)
-          })
-        } else {
-          const dpLabel = getRelationshipLabel(course.degreeProgram)
-          if (dpLabel) options.degreePrograms.add(dpLabel)
+        if (course.university.country) {
+          const countryName = getRelationshipLabel(course.university.country)
+          if (countryName) options.countries.add(countryName)
         }
       }
 
-      // Departments
-      if (course.department) {
-        if (Array.isArray(course.department)) {
-          course.department.forEach((dep: any) => {
-            const depLabel = getRelationshipLabel(dep)
-            if (depLabel) options.departments.add(depLabel)
-          })
-        } else {
-          const depLabel = getRelationshipLabel(course.department)
-          if (depLabel) options.departments.add(depLabel)
-        }
+      // Handle other relationships
+      const processField = (field: any, set: Set<string>) => {
+        if (!field) return
+        const items = Array.isArray(field) ? field : [field]
+        items.forEach(item => {
+          const label = getRelationshipLabel(item)
+          if (label) set.add(label)
+        })
       }
 
-      // Study Areas
-      if (course.studyArea) {
-        if (Array.isArray(course.studyArea)) {
-          course.studyArea.forEach((sa: any) => {
-            const saLabel = getRelationshipLabel(sa)
-            if (saLabel) options.studyAreas.add(saLabel)
-          })
-        } else {
-          const saLabel = getRelationshipLabel(course.studyArea)
-          if (saLabel) options.studyAreas.add(saLabel)
-        }
-      }
-
-      // Study Years (may be number or relationship or array)
-      if (course.studyYears !== undefined && course.studyYears !== null) {
-        if (Array.isArray(course.studyYears)) {
-          course.studyYears.forEach((sy: any) => {
-            const label = getRelationshipLabel(sy)
-            if (label) options.studyYears.add(label)
-          })
-        } else {
-          const syLabel = getRelationshipLabel(course.studyYears)
-          if (syLabel) options.studyYears.add(syLabel)
-        }
-      }
-
-      // Study Modes (may be relationship or array)
-      if (course.studyMode) {
-        if (Array.isArray(course.studyMode)) {
-          course.studyMode.forEach((sm: any) => {
-            const label = getRelationshipLabel(sm)
-            if (label) options.studyModes.add(label)
-          })
-        } else {
-          const smLabel = getRelationshipLabel(course.studyMode)
-          if (smLabel) options.studyModes.add(smLabel)
-        }
-      }
+      processField(course.degreeProgram, options.degreePrograms)
+      processField(course.department, options.departments)
+      processField(course.studyArea, options.studyAreas)
+      processField(course.studyYear, options.studyYears)
+      processField(course.studyMode, options.studyModes)
     })
 
-    return {
+    setFilterOptions({
       countries: Array.from(options.countries).sort(),
       universities: Array.from(options.universities).sort(),
       degreePrograms: Array.from(options.degreePrograms).sort(),
@@ -155,90 +77,67 @@ const FiltersClient = ({
       studyAreas: Array.from(options.studyAreas).sort(),
       studyYears: Array.from(options.studyYears).sort(),
       studyModes: Array.from(options.studyModes).sort(),
-    }
-  }
+    })
 
-  // State management
-  const [filterOptions, setFilterOptions] = useState(generateFilterOptions())
-  const [searchTerms, setSearchTerms] = useState<SearchTermsState>({
-    countries: '',
-    universities: '',
-    degreePrograms: '',
-    departments: '',
-    studyAreas: '',
-    studyYears: '',
-    studyModes: '',
-  })
-  const [collapsedSections, setCollapsedSections] = useState<CollapsedSectionsState>({
-    countries: false,
-    universities: false,
-    degreePrograms: false,
-    departments: false,
-    studyAreas: false,
-    studyYears: false,
-    studyModes: false,
-  })
-
-  // Update filter options when courses change
-  useEffect(() => {
-    setFilterOptions(generateFilterOptions())
-    // eslint-disable-next-line
+    // Initialize collapsed sections
+    setCollapsedSections({
+      countries: false,
+      universities: false,
+      degreePrograms: false,
+      departments: false,
+      studyAreas: false,
+      studyYears: false,
+      studyModes: false,
+    })
   }, [courses])
 
-  // Handle filter selection changes
-  const handleFilterChange = (category: keyof FilterState, value: string) => {
-    const newFilters = {
-      ...filters,
-      [category]: filters[category].includes(value)
-        ? filters[category].filter((item) => item !== value)
-        : [...filters[category], value],
-    }
-    setFilters(newFilters)
+  const handleFilterChange = (category: string, value: string) => {
+    setFilters((prev: any) => ({
+      ...prev,
+      [category]: prev[category].includes(value)
+        ? prev[category].filter((item: string) => item !== value)
+        : [...prev[category], value],
+    }))
   }
 
   const handleRemoveFilter = (type: string, value: string) => {
-    const categoryMap: Record<string, keyof FilterState> = {
-      Country: 'countries',
-      University: 'universities',
-      Program: 'degreePrograms',
-      Department: 'departments',
-      Area: 'studyAreas',
-      Years: 'studyYears',
-      Mode: 'studyModes',
+    const categoryMap: Record<string, string> = {
+      'Country': 'countries',
+      'University': 'universities',
+      'Program': 'degreePrograms',
+      'Department': 'departments',
+      'Area': 'studyAreas',
+      'Years': 'studyYears',
+      'Mode': 'studyModes',
     }
 
     const category = categoryMap[type]
     if (category) {
-      const newFilters = {
-        ...filters,
-        [category]: filters[category].filter((item) => item !== value),
-      }
-      setFilters(newFilters)
+      setFilters((prev: any) => ({
+        ...prev,
+        [category]: prev[category].filter((item: string) => item !== value),
+      }))
     }
   }
 
-  // Handle search term changes
-  const handleSearchChange = (category: keyof SearchTermsState, value: string) => {
-    setSearchTerms((prev) => ({ ...prev, [category]: value }))
+  const handleSearchChange = (category: string, value: string) => {
+    setSearchTerms((prev: any) => ({ ...prev, [category]: value }))
   }
 
-  // Toggle filter section collapse
-  const toggleCollapse = (category: keyof CollapsedSectionsState) => {
-    setCollapsedSections((prev) => ({ ...prev, [category]: !prev[category] }))
+  const toggleCollapse = (category: string) => {
+    setCollapsedSections((prev: any) => ({ ...prev, [category]: !prev[category] }))
   }
 
-  // Generate applied filters with labels
   const appliedFilters = [
-    ...filters.countries.map((c) => `Country: ${c}`),
-    ...filters.universities.map((u) => `University: ${u}`),
-    ...filters.degreePrograms.map((d) => `Program: ${d}`),
-    ...filters.departments.map((d) => `Department: ${d}`),
-    ...filters.studyAreas.map((s) => `Area: ${s}`),
-    ...filters.studyYears.map((y) => `Years: ${y}`),
-    ...filters.studyModes.map((m) => `Mode: ${m}`),
+    ...filters.countries.map((c: string) => `Country: ${c}`),
+    ...filters.universities.map((u: string) => `University: ${u}`),
+    ...filters.degreePrograms.map((d: string) => `Program: ${d}`),
+    ...filters.departments.map((d: string) => `Department: ${d}`),
+    ...filters.studyAreas.map((s: string) => `Area: ${s}`),
+    ...filters.studyYears.map((y: string) => `Years: ${y}`),
+    ...filters.studyModes.map((m: string) => `Mode: ${m}`),
   ]
 
-  // Filter sections configuration
   const filterSections = [
     { key: 'countries', label: 'Countries' },
     { key: 'universities', label: 'Universities' },
@@ -251,7 +150,6 @@ const FiltersClient = ({
 
   return (
     <div className="FListInrow">
-      {/* Applied Filters */}
       {appliedFilters.length > 0 && (
         <AppliedFilters
           appliedFilters={appliedFilters}
@@ -260,55 +158,50 @@ const FiltersClient = ({
         />
       )}
 
-      {/* Filter Sections */}
       {filterSections.map(({ key, label }) => {
-        const filterKey = key as keyof typeof filterOptions
-        return filterOptions[filterKey].length > 0 ? (
-          <div key={`${key}-${filters[filterKey].join(',')}`} className="ItemBoxs">
+        return filterOptions[key]?.length > 0 ? (
+          <div key={`${key}-${filters[key]?.join(',')}`} className="ItemBoxs">
             <div
               className="IboxTitles flex justify-between items-center cursor-pointer"
-              onClick={() => toggleCollapse(key as keyof CollapsedSectionsState)}
+              onClick={() => toggleCollapse(key)}
             >
               <h3>{label}</h3>
               <button>
-                {collapsedSections[key as keyof CollapsedSectionsState] ? 'Expand' : 'Collapse'}
+                {collapsedSections[key] ? 'Expand' : 'Collapse'}
               </button>
             </div>
 
-            {!collapsedSections[key as keyof CollapsedSectionsState] && (
+            {!collapsedSections[key] && (
               <div className="IboxSearchlist">
                 <div className="IboxSearinput">
                   <input
                     type="text"
                     className="w-full p-2 border border-gray-300 rounded-[30px]"
                     placeholder={`Search ${label.toLowerCase()}`}
-                    value={searchTerms[key as keyof SearchTermsState]}
-                    onChange={(e) =>
-                      handleSearchChange(key as keyof SearchTermsState, e.target.value)
-                    }
+                    value={searchTerms[key] || ''}
+                    onChange={(e) => handleSearchChange(key, e.target.value)}
                   />
                 </div>
                 <div className="itmlistul space-y-2 max-h-40 overflow-y-auto">
-                  {filterOptions[filterKey]
-                    .filter((option) =>
+                  {filterOptions[key]
+                    .filter((option: string) =>
                       option
                         .toLowerCase()
-                        .includes(searchTerms[key as keyof SearchTermsState].toLowerCase()),
+                        .includes((searchTerms[key] || '').toLowerCase()),
                     )
-                    .map((option) => (
+                    .map((option: string) => (
                       <div
                         key={`${key}-${option}`}
-                        className={`itmlistulli cursor-pointer transition-colors ${
-                          filters[filterKey].includes(option)
-                            ? 'bg-blue-100 text-blue-700 font-semibold'
-                            : 'hover:bg-gray-100'
-                        }`}
+                        className={`itmlistulli cursor-pointer transition-colors ${filters[key]?.includes(option)
+                          ? 'bg-blue-100 text-blue-700 font-semibold'
+                          : 'hover:bg-gray-100'
+                          }`}
                       >
                         <input
                           type="checkbox"
                           id={`${key}-${option}`}
-                          checked={filters[filterKey].includes(option)}
-                          onChange={() => handleFilterChange(filterKey, option)}
+                          checked={filters[key]?.includes(option)}
+                          onChange={() => handleFilterChange(key, option)}
                           className="mr-2 accent-blue-500"
                         />
                         <label htmlFor={`${key}-${option}`} className="">

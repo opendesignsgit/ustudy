@@ -15,8 +15,15 @@ interface Country {
   }
 }
 
-const CountryFlagSlider = () => {
-  const [selectedCountries, setSelectedCountries] = useState<string[]>([])
+interface CountryFlagSliderProps {
+  selectedCountries: string[]
+  onCountryToggle: (countryName: string) => void
+}
+
+const CountryFlagSlider: React.FC<CountryFlagSliderProps> = ({
+  selectedCountries,
+  onCountryToggle
+}) => {
   const [countries, setCountries] = useState<Country[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -35,12 +42,6 @@ const CountryFlagSlider = () => {
 
     fetchCountries()
   }, [])
-
-  const toggleCountry = (countryName: string) => {
-    setSelectedCountries((prev) =>
-      prev.includes(countryName) ? prev.filter((c) => c !== countryName) : [...prev, countryName],
-    )
-  }
 
   const settings = {
     dots: false,
@@ -71,12 +72,13 @@ const CountryFlagSlider = () => {
     ],
   }
 
-  if (loading)
+  if (loading) {
     return (
       <div className="flex justify-center w-full">
         <div className="w-96"></div>
       </div>
     )
+  }
 
   return (
     <section className="flex justify-center w-full FlagListSec ">
@@ -85,12 +87,11 @@ const CountryFlagSlider = () => {
           {countries.map((country) => (
             <div key={country.id} className="px-4">
               <div
-                className={`countryitems flex flex-col items-center cursor-pointer ${
-                  selectedCountries.includes(country.name)
-                    ? 'text-blue-500 font-bold'
-                    : 'text-gray-800'
-                }`}
-                onClick={() => toggleCountry(country.name)}
+                className={`countryitems flex flex-col items-center cursor-pointer ${selectedCountries.includes(country.name)
+                  ? 'text-blue-500 font-bold'
+                  : 'text-gray-800'
+                  }`}
+                onClick={() => onCountryToggle(country.name)}
               >
                 {country.logo?.url ? (
                   <img
@@ -111,7 +112,6 @@ const CountryFlagSlider = () => {
   )
 }
 
-// Helper function to get flag emoji from country code
 function getFlagEmoji(countryCode: string) {
   const codePoints = countryCode
     .toUpperCase()
@@ -121,4 +121,3 @@ function getFlagEmoji(countryCode: string) {
 }
 
 export default CountryFlagSlider
-//final

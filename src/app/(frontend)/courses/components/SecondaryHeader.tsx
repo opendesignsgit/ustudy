@@ -2,22 +2,30 @@
 import Link from 'next/link'
 import Image from 'next/image'
 
+type StudyArea = {
+  id: string | number;
+  name: string;
+  slug?: string;
+}
+
 export const SecondaryHeader = ({
   studyAreas,
   logo
 }: {
-  studyAreas: string[];
-  logo?: string | null; // Allow null
+  studyAreas: StudyArea[]; // Now accepts an array of StudyArea objects
+  logo?: string | null;
 }) => {
   // Helper function to convert name to URL-friendly slug
   const createSlug = (name: string) => {
     return name
       .toLowerCase()
-      .replace(/&/g, 'and') // Replace '&' with 'and'
-      .replace(/[^\w\s-]/g, '') // Remove special characters
-      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/&/g, 'and')
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-')
       .trim()
   }
+  console.log(logo);
+
 
   return (
     <header className="sticky top-0 z-10 bg-white shadow-sm">
@@ -32,9 +40,10 @@ export const SecondaryHeader = ({
                 width={120}
                 height={40}
                 className="h-10 object-contain"
+                priority
               />
             ) : (
-              'VERITAS'
+              <span className="text-xl font-bold">VERITAS</span>
             )}
           </div>
 
@@ -42,14 +51,14 @@ export const SecondaryHeader = ({
           <nav>
             <ul className="flex space-x-6">
               {studyAreas.map((area) => {
-                const slug = createSlug(area)
+                const slug = area.slug || createSlug(area.name)
                 return (
-                  <li key={slug}>
+                  <li key={area.id}>
                     <Link
-                      href={`/courses?${slug}`}
-                      className="text-gray-700 hover:text-blue-600 transition-colors"
+                      href={`/courses?studyArea=${slug}`}
+                      className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
                     >
-                      {area}
+                      {area.name}
                     </Link>
                   </li>
                 )
