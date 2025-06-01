@@ -1,22 +1,22 @@
 'use client'
 
-import React from 'react'
-
-const AppliedFilters: React.FC<{
+interface AppliedFiltersProps {
   appliedFilters: string[]
-  onRemove: (type: string, value: string) => void
+  onRemove: (type: string, value: string) => void // Update to expect two arguments
   onClear: () => void
-}> = ({ appliedFilters = [], onRemove, onClear }) => {
+}
+
+const AppliedFilters: React.FC<AppliedFiltersProps> = ({
+  appliedFilters = [],
+  onRemove,
+  onClear
+}) => {
   if (appliedFilters.length === 0) {
     return null
   }
 
   const handleRemove = (filter: string) => {
-    const separatorIndex = filter.indexOf(': ')
-    if (separatorIndex === -1) return
-
-    const type = filter.substring(0, separatorIndex)
-    const value = filter.substring(separatorIndex + 2)
+    const [type, value] = filter.split(': ')
     onRemove(type, value)
   }
 

@@ -26,6 +26,7 @@ import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
 // import { withFiltersEndpoint } from '../endpoints/withFilters'
 import { addFilterOptions } from './hooks/afterOperation'
 import { YearlyCourses } from '@/blocks/CoursesComponents/YearsModule/config'
+import { RegisterFormBlock } from '@/blocks/RegisterForm/config'
 
 import {
   MetaDescriptionField,
@@ -137,6 +138,7 @@ export const Courses: CollectionConfig<'courses'> = {
                         FormBlock,
                         SliderBlock,
                         YearlyCourses,
+                        RegisterFormBlock,
                       ],
                     }),
                     FixedToolbarFeature(),

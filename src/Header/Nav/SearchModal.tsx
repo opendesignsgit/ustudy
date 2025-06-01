@@ -5,6 +5,10 @@ import { X, Mic, ChevronDown, ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
+// Minimal typings for SpeechRecognition API
+type SpeechRecognition = any
+type SpeechRecognitionEvent = any
+
 interface SearchModalProps {
   isOpen: boolean
   onClose: () => void
@@ -14,8 +18,8 @@ interface SearchModalProps {
 
 interface CourseSuggestion {
   id: string
-  slug: string
   title: string
+  slug: string
   university?: { title: string }
   degreeProgram?: { name: string }
   department?: { name: string }
@@ -25,8 +29,9 @@ interface CourseSuggestion {
 }
 
 const countries = [
+  'Select Country',
   'Malaysia',
-  'Singapore'
+  'Singapore',
 ]
 
 export const SearchModal = ({
@@ -39,10 +44,45 @@ export const SearchModal = ({
   const [showCountriesDropdown, setShowCountriesDropdown] = useState(false)
   const [suggestions, setSuggestions] = useState<CourseSuggestion[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [isListening, setIsListening] = useState(false)
   const searchInputRef = useRef<HTMLInputElement>(null)
   const modalRef = useRef<HTMLDivElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const recognitionRef = useRef<SpeechRecognition | null>(null)
   const router = useRouter()
+
+  // Setup SpeechRecognition
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+      if (SpeechRecognition && !recognitionRef.current) {
+        recognitionRef.current = new SpeechRecognition()
+        recognitionRef.current.continuous = false
+        recognitionRef.current.interimResults = false
+        recognitionRef.current.lang = 'en-US'
+
+        recognitionRef.current.onresult = (event: any) => {
+          const transcript = event.results[0][0].transcript.trim()
+          setSearchQuery(transcript)
+          setIsListening(false)
+        }
+        recognitionRef.current.onerror = () => setIsListening(false)
+        recognitionRef.current.onend = () => setIsListening(false)
+      }
+    }
+  }, [])
+
+  const handleMicClick = () => {
+    if (recognitionRef.current) {
+      if (isListening) {
+        recognitionRef.current.stop()
+        setIsListening(false)
+      } else {
+        recognitionRef.current.start()
+        setIsListening(true)
+      }
+    }
+  }
 
   const fetchSuggestions = useCallback(async (query: string) => {
     if (!query) {
@@ -58,7 +98,7 @@ export const SearchModal = ({
         body: JSON.stringify({
           page: 1,
           limit: 5,
-          searchQuery: query
+          searchQuery: query.trim(),
         }),
       })
 
@@ -73,17 +113,14 @@ export const SearchModal = ({
     }
   }, [])
 
-  const handleSearchSubmit = () => {
-    if (!searchQuery) return
-
+  // Helper to build courses URL with filters and selected country
+  const buildCoursesUrl = (filters: Record<string, string>) => {
     const params = new URLSearchParams()
-    params.append('searchQuery', searchQuery)
-    if (selectedCountry) {
-      params.append('countries', selectedCountry)
-    }
-
-    router.push(`/courses?${params.toString()}`)
-    onClose()
+    if (selectedCountry) params.append('countries', selectedCountry)
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) params.append(key, value)
+    })
+    return `/courses?${params.toString()}`
   }
 
   useEffect(() => {
@@ -95,20 +132,16 @@ export const SearchModal = ({
 
   useEffect(() => {
     if (!isOpen) return
-
     const handleClickOutside = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         onClose()
       }
     }
-
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
     }
-
     document.addEventListener('mousedown', handleClickOutside)
     document.addEventListener('keydown', handleEsc)
-
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
       document.removeEventListener('keydown', handleEsc)
@@ -118,23 +151,30 @@ export const SearchModal = ({
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 pt-16">
+    <div className="fixed inset-0 z-50 pt-16 searchcontbox">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black/30 backdrop-blur-sm searchcontbdrop"
+        onClick={onClose}
+      />
 
       {/* Modal Content */}
-      <div ref={modalRef} className="relative bg-white mx-auto rounded-b-lg shadow-xl max-w-4xl">
+      <div
+        ref={modalRef}
+        className="relative bg-white mx-auto rounded-b-lg shadow-xl searchboxview"
+      >
         {/* Header Section */}
-        <div className="p-6">
-          <div className="flex items-center justify-between gap-4">
+        <div className="p-6 sboxvdivone">
+          <div className="flex items-center justify-between gap-4 sboxvdivtwo">
             {/* Country Dropdown */}
-            <div className="relative flex items-center" ref={dropdownRef}>
-              <div className="flex items-center gap-2">
+            <div className="sboxvdivleft relative flex items-center" ref={dropdownRef}>
+              <div className="sboxvdivcontry flex items-center gap-2">
                 <button
                   onClick={() => setShowCountriesDropdown(!showCountriesDropdown)}
-                  className="flex items-center space-x-1 text-lg font-bold text-gray-900 hover:text-blue-600 min-w-0"
+                  className="flex items-center space-x-1 text-2xl font-bold text-gray-900 hover:text-blue-600 min-w-0"
+                  type="button"
                 >
-                  <span className="truncate max-w-[120px]">{selectedCountry}</span>
+                  <span className="truncate">{selectedCountry}</span>
                   <ChevronDown className="w-5 h-5 flex-shrink-0" />
                 </button>
 
@@ -147,8 +187,8 @@ export const SearchModal = ({
                           setSelectedCountry(country)
                           setShowCountriesDropdown(false)
                         }}
-                        className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${country === selectedCountry ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
-                          }`}
+                        className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${country === selectedCountry ? 'bg-blue-50 text-blue-600' : 'text-gray-700'}`}
+                        type="button"
                       >
                         {country}
                       </button>
@@ -159,7 +199,7 @@ export const SearchModal = ({
             </div>
 
             {/* Expanded Search Bar */}
-            <div className="flex-1 relative min-w-0 ml-4">
+            <div className="sboxvdivmid flex-1 relative min-w-0 ml-4">
               <input
                 ref={searchInputRef}
                 type="text"
@@ -167,26 +207,32 @@ export const SearchModal = ({
                 className="w-full p-3 pl-4 pr-28 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleSearchSubmit()
-                  }
-                }}
                 autoFocus
               />
-              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
+              <div className="sboxvdivmigsech absolute items-center space-x-2">
                 <button
-                  className="p-1 text-gray-500 hover:text-blue-600"
-                  onMouseDown={(e) => e.preventDefault()}
+                  className={`bthicon p-1 ${isListening ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600`}
+                  type="button"
+                  onClick={handleMicClick}
+                  aria-label={isListening ? "Stop voice input" : "Start voice input"}
                 >
-                  <Mic className="w-5 h-5" />
+                  <Mic className={`w-5 h-5 ${isListening ? 'animate-pulse' : ''}`} />
                 </button>
+                {isListening && (
+                  <span className="text-xs text-blue-600 ml-2">Listening...</span>
+                )}
                 <button
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-md text-sm font-medium"
-                  onClick={handleSearchSubmit}
-                  disabled={!searchQuery}
+                  className="btnsnow bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-md text-sm font-medium"
+                  onClick={() => {
+                    const params = new URLSearchParams()
+                    if (searchQuery.trim()) params.append('searchQuery', searchQuery.trim())
+                    if (selectedCountry) params.append('countries', selectedCountry)
+                    router.push(`/courses?${params.toString()}`)
+                    onClose()
+                  }}
+                  type="button"
                 >
-                  Search
+                  Search Now
                 </button>
               </div>
 
@@ -205,14 +251,9 @@ export const SearchModal = ({
                             onClose()
                           }}
                           className="font-medium text-gray-900 truncate text-left flex items-center gap-2 w-full"
+                          type="button"
                         >
-                          <Image
-                            src="/media/book-icon.svg"
-                            alt=""
-                            width={20}
-                            height={20}
-                            className="flex-shrink-0"
-                          />
+                          <Image src="/media/book-icon.svg" alt="" width={20} height={20} className="flex-shrink-0" />
                           {course.title}
                           <ArrowRight className="w-4 h-4 text-gray-400 flex-shrink-0 ml-auto" />
                         </button>
@@ -225,9 +266,10 @@ export const SearchModal = ({
                               className="bg-gray-100 px-2 py-1 rounded text-xs hover:bg-blue-100"
                               onClick={(e) => {
                                 e.stopPropagation()
-                                router.push(`/courses?universities=${encodeURIComponent(course.university!.title)}${selectedCountry ? `&countries=${encodeURIComponent(selectedCountry)}` : ''}`)
+                                router.push(buildCoursesUrl({ universities: course.university!.title }))
                                 onClose()
                               }}
+                              type="button"
                             >
                               {course.university.title}
                             </button>
@@ -239,16 +281,74 @@ export const SearchModal = ({
                               className="bg-gray-100 px-2 py-1 rounded text-xs hover:bg-blue-100"
                               onClick={(e) => {
                                 e.stopPropagation()
-                                router.push(`/courses?degreePrograms=${encodeURIComponent(course.degreeProgram!.name)}${selectedCountry ? `&countries=${encodeURIComponent(selectedCountry)}` : ''}`)
+                                router.push(buildCoursesUrl({ degreePrograms: course.degreeProgram!.name }))
                                 onClose()
                               }}
+                              type="button"
                             >
                               {course.degreeProgram.name}
                             </button>
                           )}
 
-                          {/* Other filter pills */}
-                          {/* ... */}
+                          {/* Department */}
+                          {course.department?.name && (
+                            <button
+                              className="bg-gray-100 px-2 py-1 rounded text-xs hover:bg-blue-100"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                router.push(buildCoursesUrl({ departments: course.department!.name }))
+                                onClose()
+                              }}
+                              type="button"
+                            >
+                              {course.department.name}
+                            </button>
+                          )}
+
+                          {/* Study Area */}
+                          {course.studyArea?.name && (
+                            <button
+                              className="bg-gray-100 px-2 py-1 rounded text-xs hover:bg-blue-100"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                router.push(buildCoursesUrl({ studyAreas: course.studyArea!.name }))
+                                onClose()
+                              }}
+                              type="button"
+                            >
+                              {course.studyArea.name}
+                            </button>
+                          )}
+
+                          {/* Study Year */}
+                          {course.studyYear?.name && (
+                            <button
+                              className="bg-gray-100 px-2 py-1 rounded text-xs hover:bg-blue-100"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                router.push(buildCoursesUrl({ studyYears: course.studyYear!.name }))
+                                onClose()
+                              }}
+                              type="button"
+                            >
+                              {course.studyYear.name}
+                            </button>
+                          )}
+
+                          {/* Study Mode */}
+                          {course.studyMode?.name && (
+                            <button
+                              className="bg-gray-100 px-2 py-1 rounded text-xs hover:bg-blue-100"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                router.push(buildCoursesUrl({ studyModes: course.studyMode!.name }))
+                                onClose()
+                              }}
+                              type="button"
+                            >
+                              {course.studyMode.name}
+                            </button>
+                          )}
                         </div>
                       </div>
                     ))
@@ -262,10 +362,11 @@ export const SearchModal = ({
             </div>
 
             {/* Close Button */}
-            <div>
+            <div className="sboxvdivright">
               <button
                 onClick={onClose}
                 className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100 ml-2 flex-shrink-0"
+                type="button"
               >
                 <X className="w-5 h-5" />
               </button>

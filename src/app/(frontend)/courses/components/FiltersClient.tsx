@@ -19,15 +19,18 @@ const FiltersClient = ({
   setFilters,
   courses,
   clearFilters,
+  isLoading = false,
 }: {
   filters: any
   setFilters: (filters: any) => void
   courses: any[]
   clearFilters: () => void
+  isLoading?: boolean
 }) => {
   const [filterOptions, setFilterOptions] = useState<any>({})
   const [searchTerms, setSearchTerms] = useState<any>({})
   const [collapsedSections, setCollapsedSections] = useState<any>({})
+  const showLoading = isLoading && courses.length === 0;
 
   useEffect(() => {
     const options = {
@@ -100,7 +103,13 @@ const FiltersClient = ({
     }))
   }
 
-  const handleRemoveFilter = (type: string, value: string) => {
+  const handleRemoveFilter = (filter: string) => {
+    const separatorIndex = filter.indexOf(': ');
+    if (separatorIndex === -1) return;
+
+    const type = filter.substring(0, separatorIndex);
+    const value = filter.substring(separatorIndex + 2);
+
     const categoryMap: Record<string, string> = {
       'Country': 'countries',
       'University': 'universities',
@@ -109,16 +118,16 @@ const FiltersClient = ({
       'Area': 'studyAreas',
       'Years': 'studyYears',
       'Mode': 'studyModes',
-    }
+    };
 
-    const category = categoryMap[type]
+    const category = categoryMap[type];
     if (category) {
       setFilters((prev: any) => ({
         ...prev,
         [category]: prev[category].filter((item: string) => item !== value),
-      }))
+      }));
     }
-  }
+  };
 
   const handleSearchChange = (category: string, value: string) => {
     setSearchTerms((prev: any) => ({ ...prev, [category]: value }))
@@ -150,73 +159,100 @@ const FiltersClient = ({
 
   return (
     <div className="FListInrow">
-      {appliedFilters.length > 0 && (
-        <AppliedFilters
-          appliedFilters={appliedFilters}
-          onRemove={handleRemoveFilter}
-          onClear={clearFilters}
-        />
-      )}
-
-      {filterSections.map(({ key, label }) => {
-        return filterOptions[key]?.length > 0 ? (
-          <div key={`${key}-${filters[key]?.join(',')}`} className="ItemBoxs">
-            <div
-              className="IboxTitles flex justify-between items-center cursor-pointer"
-              onClick={() => toggleCollapse(key)}
-            >
-              <h3>{label}</h3>
-              <button>
-                {collapsedSections[key] ? 'Expand' : 'Collapse'}
-              </button>
-            </div>
-
-            {!collapsedSections[key] && (
-              <div className="IboxSearchlist">
+      {showLoading ? (
+        <div className="space-y-4">
+          {[...Array(7)].map((_, i) => (
+            <div key={i} className="ItemBoxs">
+              <div className="IboxTitles flex justify-between items-center">
+                <div className="h-6 w-32 bg-gray-200 rounded animate-pulse"></div>
+                <div className="h-6 w-20 bg-gray-200 rounded animate-pulse"></div>
+              </div>
+              <div className="IboxSearchlist mt-2">
                 <div className="IboxSearinput">
-                  <input
-                    type="text"
-                    className="w-full p-2 border border-gray-300 rounded-[30px]"
-                    placeholder={`Search ${label.toLowerCase()}`}
-                    value={searchTerms[key] || ''}
-                    onChange={(e) => handleSearchChange(key, e.target.value)}
-                  />
+                  <div className="h-10 w-full bg-gray-200 rounded-[30px] animate-pulse"></div>
                 </div>
-                <div className="itmlistul space-y-2 max-h-40 overflow-y-auto">
-                  {filterOptions[key]
-                    .filter((option: string) =>
-                      option
-                        .toLowerCase()
-                        .includes((searchTerms[key] || '').toLowerCase()),
-                    )
-                    .map((option: string) => (
-                      <div
-                        key={`${key}-${option}`}
-                        className={`itmlistulli cursor-pointer transition-colors ${filters[key]?.includes(option)
-                          ? 'bg-blue-100 text-blue-700 font-semibold'
-                          : 'hover:bg-gray-100'
-                          }`}
-                      >
-                        <input
-                          type="checkbox"
-                          id={`${key}-${option}`}
-                          checked={filters[key]?.includes(option)}
-                          onChange={() => handleFilterChange(key, option)}
-                          className="mr-2 accent-blue-500"
-                        />
-                        <label htmlFor={`${key}-${option}`} className="">
-                          {option}
-                        </label>
-                      </div>
-                    ))}
+                <div className="itmlistul space-y-2 mt-2">
+                  {[...Array(5)].map((_, j) => (
+                    <div key={j} className="h-6 w-full bg-gray-200 rounded animate-pulse"></div>
+                  ))}
                 </div>
               </div>
-            )}
-          </div>
-        ) : null
-      })}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <>
+          {appliedFilters.length > 0 && (
+            <AppliedFilters
+              appliedFilters={appliedFilters}
+              onRemove={handleRemoveFilter}
+              onClear={clearFilters}
+            />
+          )}
+
+          {filterSections.map(({ key, label }) => {
+            return filterOptions[key]?.length > 0 ? (
+              <div key={`${key}-${filters[key]?.join(',')}`} className="ItemBoxs">
+                <div
+                  className="IboxTitles flex justify-between items-center cursor-pointer"
+                  onClick={() => toggleCollapse(key)}
+                >
+                  <h3>{label}</h3>
+                  <button>
+                    {collapsedSections[key] ? 'Expand' : 'Collapse'}
+                  </button>
+                </div>
+
+                {!collapsedSections[key] && (
+                  <div className="IboxSearchlist">
+                    <div className="IboxSearinput">
+                      <input
+                        type="text"
+                        className="w-full p-2 border border-gray-300 rounded-[30px]"
+                        placeholder={`Search ${label.toLowerCase()}`}
+                        value={searchTerms[key] || ''}
+                        onChange={(e) => handleSearchChange(key, e.target.value)}
+                      />
+                    </div>
+                    <div className="itmlistul space-y-2 max-h-40 overflow-y-auto">
+                      {filterOptions[key]
+                        .filter((option: string) =>
+                          option
+                            .toLowerCase()
+                            .includes((searchTerms[key] || '').toLowerCase()),
+                        )
+                        .map((option: string) => (
+                          <div
+                            key={`${key}-${option}`}
+                            className={`itmlistulli cursor-pointer transition-colors ${filters[key]?.includes(option)
+                              ? 'bg-blue-100 text-blue-700 font-semibold'
+                              : 'hover:bg-gray-100'
+                              }`}
+                          >
+                            <input
+                              type="checkbox"
+                              id={`${key}-${option}`}
+                              checked={filters[key]?.includes(option)}
+                              onChange={() => handleFilterChange(key, option)}
+                              className="mr-2 accent-blue-500"
+                            />
+                            <label htmlFor={`${key}-${option}`} className="">
+                              {option}
+                            </label>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
+
+              </div>
+            ) : null
+          })}
+        </>
+      )}
     </div>
   )
 }
 
 export default FiltersClient
+//Final
