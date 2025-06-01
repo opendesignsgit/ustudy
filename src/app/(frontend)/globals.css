@@ -2098,7 +2098,7 @@ p.sboxvcontrytxt {
 }
 
 .sboxvdivmigsech button.bthicon {
-  display: none;
+  /* display: none; */
 }
 .sboxvdivmigsech button.btnsnow {
   border-radius: 30px;

@@ -10,7 +10,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'http',
-        hostname: '62.72.43.168',
+        hostname: '35.154.57.8',
       },
       {
         protocol: 'http',
@@ -18,7 +18,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'ktec.ustudy.academy',
+        hostname: 'ustudyglobal.co',
       }
     ],
   },

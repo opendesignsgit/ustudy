@@ -1,7 +1,8 @@
 'use client'
 
 import { useHeaderTheme } from '@/providers/HeaderTheme'
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { CollectionArchiveCourses } from '@/components/Courses/CollectionArchiveCourses'
 import { PageRange } from '@/components/PageRange'
 import { CoursesPagination } from '@/components/Courses/CoursesPagination'
@@ -41,6 +42,22 @@ type Course = CardPostData & {
   categories?: Array<{ title?: string }>
 }
 
+interface FetchCoursesParams {
+  page?: number
+  limit?: number
+  filters?: {
+    countries?: string[]
+    universities?: string[]
+    studyAreas?: string[]
+    degreePrograms?: string[]
+    departments?: string[]
+    studyYears?: string[]
+    studyModes?: string[]
+    searchQuery?: string
+  }
+  getAll?: boolean
+}
+
 type CoursesResponse = {
   docs: Course[]
   totalDocs: number
@@ -48,15 +65,17 @@ type CoursesResponse = {
   page: number
 }
 
-const PageClient = () => {
+export default function PageClient() {
   const { setHeaderTheme } = useHeaderTheme()
+  const searchParams = useSearchParams() ?? new URLSearchParams()
+  const listingSectionRef = useRef<HTMLElement | null>(null)
   const [courses, setCourses] = useState<CoursesResponse>({
     docs: [],
     totalDocs: 0,
     totalPages: 1,
     page: 1,
   })
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const [limit, setLimit] = useState(5)
   const [filters, setFilters] = useState({
@@ -67,27 +86,63 @@ const PageClient = () => {
     departments: [] as string[],
     studyYears: [] as string[],
     studyModes: [] as string[],
+    searchQuery: '',
   })
   const [allCourses, setAllCourses] = useState<Course[]>([])
-  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false) // State for mobile filters
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false)
 
   useEffect(() => {
     setHeaderTheme('light')
   }, [setHeaderTheme])
+
+  // Initialize filters from URL params, including searchQuery
+  useEffect(() => {
+    const initialFilters = {
+      countries: searchParams.getAll('countries'),
+      universities: searchParams.getAll('universities'),
+      studyAreas: searchParams.getAll('studyAreas'),
+      degreePrograms: searchParams.getAll('degreePrograms'),
+      departments: searchParams.getAll('departments'),
+      studyYears: searchParams.getAll('studyYears'),
+      studyModes: searchParams.getAll('studyModes'),
+      searchQuery: searchParams.get('searchQuery') || '',
+    }
+    setFilters(initialFilters)
+  }, [searchParams])
+
+  // Update URL when filters change, include searchQuery
+  useEffect(() => {
+    const params = new URLSearchParams()
+    Object.entries(filters).forEach(([key, values]) => {
+      if (key === 'searchQuery') {
+        if (values) {
+          params.append(key, values as string)
+        }
+      } else if (Array.isArray(values) && values.length > 0) {
+        values.forEach(value => params.append(key, value))
+      }
+    })
+    const newUrl = `${window.location.pathname}?${params.toString()}`
+    if (newUrl !== window.location.href) {
+      window.history.pushState(null, '', newUrl)
+    }
+  }, [filters])
 
   const fetchCourses = useCallback(
     async (
       page: number,
       limit: number,
       filters: {
-        countries: string[]
-        universities: string[]
-        studyAreas: string[]
-        degreePrograms: string[]
-        departments: string[]
-        studyYears: string[]
-        studyModes: string[]
+        countries?: string[]
+        universities?: string[]
+        studyAreas?: string[]
+        degreePrograms?: string[]
+        departments?: string[]
+        studyYears?: string[]
+        studyModes?: string[]
+        searchQuery?: string
       },
+      getAll: boolean = false
     ) => {
       setIsLoading(true)
       try {
@@ -99,7 +154,15 @@ const PageClient = () => {
           body: JSON.stringify({
             page,
             limit,
-            filters,
+            countries: filters.countries || [],
+            universities: filters.universities || [],
+            degreePrograms: filters.degreePrograms || [],
+            departments: filters.departments || [],
+            studyAreas: filters.studyAreas || [],
+            studyYears: filters.studyYears || [],
+            studyModes: filters.studyModes || [],
+            searchQuery: filters.searchQuery || '',
+            getAll
           }),
         })
 
@@ -107,9 +170,14 @@ const PageClient = () => {
           throw new Error('Failed to fetch courses')
         }
 
-        const data: CoursesResponse = await response.json()
-        setCourses(data)
-        setCurrentPage(page)
+        const data = await response.json()
+
+        if (getAll) {
+          setAllCourses(data.docs)
+        } else {
+          setCourses(data)
+          setCurrentPage(page)
+        }
       } catch (error) {
         console.error('Error fetching courses:', error)
       } finally {
@@ -119,52 +187,42 @@ const PageClient = () => {
     [],
   )
 
-  const fetchAllCourses = useCallback(async () => {
-    try {
-      const response = await fetch('/api/get-courses', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          limit: 5, // Adjust based on your expected maximum courses
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch all courses')
-      }
-
-      const data: CoursesResponse = await response.json()
-      setAllCourses(data.docs)
-    } catch (error) {
-      console.error('Error fetching all courses:', error)
-    }
-  }, [])
-
   // Fetch initial data
   useEffect(() => {
     const fetchInitialData = async () => {
       setIsLoading(true)
       try {
-        await Promise.all([fetchCourses(1, limit, filters), fetchAllCourses()])
+        await fetchCourses(1, 1000, filters, true)
+        await fetchCourses(1, limit, filters)
       } catch (error) {
         console.error('Error fetching initial data:', error)
       } finally {
         setIsLoading(false)
       }
     }
-
     fetchInitialData()
-  }, [limit, fetchCourses, fetchAllCourses])
+  }, [limit, fetchCourses])
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      fetchCourses(1, limit, filters)
+      fetchCourses(currentPage, limit, filters)
     }, 300)
 
     return () => clearTimeout(timer)
-  }, [filters, limit, fetchCourses])
+  }, [filters, limit, currentPage, fetchCourses])
+
+  // Scroll to listing section if searchQuery is present and changes
+  useEffect(() => {
+    if (
+      filters.searchQuery &&
+      typeof window !== 'undefined' &&
+      listingSectionRef.current
+    ) {
+      setTimeout(() => {
+        listingSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 200)
+    }
+  }, [filters.searchQuery])
 
   const handleLimitChange = useCallback((newLimit: number) => {
     setLimit(newLimit)
@@ -179,27 +237,43 @@ const PageClient = () => {
       departments: string[]
       studyYears: string[]
       studyModes: string[]
+      searchQuery?: string
     }) => {
-      setFilters(newFilters)
+      setFilters(prev => ({
+        ...prev,
+        ...newFilters,
+      }))
     },
     [],
   )
 
   const handleRemoveFilter = useCallback(
-    (filter: string) => {
-      const updatedFilters = {
-        countries: filters.countries.filter((item) => item !== filter),
-        universities: filters.universities.filter((item) => item !== filter),
-        studyAreas: filters.studyAreas.filter((item) => item !== filter),
-        degreePrograms: filters.degreePrograms.filter((item) => item !== filter),
-        departments: filters.departments.filter((item) => item !== filter),
-        studyYears: filters.studyYears.filter((item) => item !== filter),
-        studyModes: filters.studyModes.filter((item) => item !== filter),
+    (type: string, value: string) => {
+      const categoryMap: Record<string, keyof typeof filters> = {
+        'Country': 'countries',
+        'University': 'universities',
+        'Program': 'degreePrograms',
+        'Department': 'departments',
+        'Area': 'studyAreas',
+        'Years': 'studyYears',
+        'Mode': 'studyModes',
+        'Search': 'searchQuery'
+      };
+
+      const category = categoryMap[type];
+      if (!category) return;
+
+      if (category === 'searchQuery') {
+        setFilters(prev => ({ ...prev, searchQuery: '' }));
+      } else {
+        setFilters(prev => ({
+          ...prev,
+          [category]: prev[category].filter(item => item !== value)
+        }));
       }
-      setFilters(updatedFilters)
     },
-    [filters],
-  )
+    [],
+  );
 
   const clearFilters = useCallback(() => {
     setFilters({
@@ -210,7 +284,17 @@ const PageClient = () => {
       departments: [],
       studyYears: [],
       studyModes: [],
+      searchQuery: '',
     })
+  }, [])
+
+  const handleCountryToggle = useCallback((countryName: string) => {
+    setFilters(prev => ({
+      ...prev,
+      countries: prev.countries.includes(countryName)
+        ? prev.countries.filter(c => c !== countryName)
+        : [...prev.countries, countryName]
+    }))
   }, [])
 
   const appliedFilters = [
@@ -221,16 +305,17 @@ const PageClient = () => {
     ...filters.studyAreas.map((s) => `Area: ${s}`),
     ...filters.studyYears.map((y) => `Years: ${y}`),
     ...filters.studyModes.map((m) => `Mode: ${m}`),
+    ...(filters.searchQuery ? [`Search: ${filters.searchQuery}`] : []),
   ]
-  console.log(allCourses);
 
   return (
     <div className="pt-24 pb-24 couresLInBox">
-      <CountryFlagSlider />
-      <section className="ListFilerSec">
+      <CountryFlagSlider
+        selectedCountries={filters.countries}
+        onCountryToggle={handleCountryToggle}
+      />
+      <section className="ListFilerSec" ref={listingSectionRef}>
         <div className="container mx-auto">
-          {/* Mobile Filter Button - only visible on small screens */}
-
           <div className="ListFilerRow flex gap-8">
             <div className="mobfilterbtn md:hidden ">
               <button
@@ -241,7 +326,6 @@ const PageClient = () => {
               </button>
             </div>
 
-            {/* Mobile Filters Overlay */}
             <div
               className={`mobfitflColLeft fixed inset-0 z-50 bg-black bg-opacity-50 transition-opacity duration-300 ${isMobileFiltersOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
                 } md:hidden`}
@@ -267,61 +351,70 @@ const PageClient = () => {
                     setFilters={setFilters}
                     courses={allCourses}
                     clearFilters={clearFilters}
+                    isLoading={isLoading}
                   />
                 </div>
               </div>
             </div>
 
-
-            {/* Desktop Filters - hidden on mobile */}
             <div className="FlistCol flColLeft w-1/4 hidden md:block">
               <FiltersClient
                 filters={filters}
                 setFilters={setFilters}
                 courses={allCourses}
                 clearFilters={clearFilters}
+                isLoading={isLoading}
               />
             </div>
 
             <div className="FlistCol flColRight w-full md:w-3/4">
               <div className="listshowtopbox">
-                <div className="flex justify-between items-center">
-                  <PageRange
-                    collection="courses"
-                    currentPage={courses.page}
-                    limit={limit}
-                    totalDocs={courses.totalDocs}
-                  />
-
-                  <select
-                    value={limit}
-                    onChange={(e) => handleLimitChange(Number(e.target.value))}
-                    className="px-3 py-1 border rounded"
-                  >
-                    <option value="5">5 per page</option>
-                    <option value="12">12 per page</option>
-                    <option value="24">24 per page</option>
-                    <option value="48">48 per page</option>
-                  </select>
-                </div>
-
-                {appliedFilters.length > 0 && (
-                  <div className="">
-                    <AppliedFilters
-                      appliedFilters={appliedFilters}
-                      onRemove={handleRemoveFilter}
-                      onClear={clearFilters}
-                    />
-                  </div>
+                {isLoading ? (
+                  <>
+                    <div className="flex justify-between items-center">
+                      <div className="h-6 w-48 bg-gray-200 rounded animate-pulse"></div>
+                      <div className="h-8 w-24 bg-gray-200 rounded animate-pulse"></div>
+                    </div>
+                    <div className="mt-4 h-16 bg-gray-200 rounded-lg animate-pulse"></div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex justify-between items-center">
+                      <PageRange
+                        collection="courses"
+                        currentPage={courses.page}
+                        limit={limit}
+                        totalDocs={courses.totalDocs}
+                      />
+                      <select
+                        value={limit}
+                        onChange={(e) => handleLimitChange(Number(e.target.value))}
+                        className="px-3 py-1 border rounded"
+                      >
+                        <option value="5">5 per page</option>
+                        <option value="12">12 per page</option>
+                        <option value="24">24 per page</option>
+                        <option value="48">48 per page</option>
+                      </select>
+                    </div>
+                    {appliedFilters.length > 0 && (
+                      <AppliedFilters
+                        appliedFilters={appliedFilters}
+                        onRemove={handleRemoveFilter}
+                        onClear={clearFilters}
+                      />
+                    )}
+                  </>
                 )}
               </div>
 
               {isLoading ? (
-                <div className="coursListBox">
+                <div className="coursListBox grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4">
                   {[...Array(limit)].map((_, i) => (
                     <div
                       key={i}
-                      className="col-span-12 h-30 bg-gray-200 animate-pulse rounded"
+                      className="h-64 bg-gray-200 animate-pulse rounded-lg"
+                      style={{ animationDelay: `${i * 0.1}s` }}
                     ></div>
                   ))}
                 </div>
@@ -330,7 +423,6 @@ const PageClient = () => {
                   courses={courses.docs as CardPostData[]}
                   numberOfCol={4}
                   relationTo="courses"
-                  key={`courses-${currentPage}-${limit}-${JSON.stringify(filters)}`}
                 />
               )}
 
@@ -350,7 +442,4 @@ const PageClient = () => {
     </div>
   )
 }
-
-export default PageClient
-
-//final
+//Final

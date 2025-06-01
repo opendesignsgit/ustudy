@@ -39,3 +39,4 @@ export function generateMetadata(): Metadata {
     title: `UStudy Global - All Courses Page`,
   }
 }
+//Final

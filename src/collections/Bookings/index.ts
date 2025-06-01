@@ -33,8 +33,8 @@ import {
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from '@/fields/slug'
 
-export const Orders: CollectionConfig<'orders'> = {
-  slug: 'orders',
+export const Bookings: CollectionConfig<'bookings'> = {
+  slug: 'bookings',
   access: {
     create: authenticated,
     delete: authenticated,
@@ -49,13 +49,13 @@ export const Orders: CollectionConfig<'orders'> = {
   },
   admin: {
     
-    group: 'Courses',
+    group: 'Universities',
     defaultColumns: ['customerName'],
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({
           slug: typeof data?.slug === 'string' ? data.slug : '',
-          collection: 'orders',
+          collection: 'bookings',
           req,
         })
 
@@ -65,7 +65,7 @@ export const Orders: CollectionConfig<'orders'> = {
     preview: (data, { req }) =>
       generatePreviewPath({
         slug: typeof data?.slug === 'string' ? data.slug : '',
-        collection: 'orders',
+        collection: 'bookings',
         req,
       }),
     useAsTitle: 'customerName',

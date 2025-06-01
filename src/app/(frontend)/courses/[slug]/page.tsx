@@ -52,16 +52,13 @@ type Args = {
 }
 interface UniversityCoursesResponse extends PaginatedDocs<Course> {
   filterOptions?: {
-    studyAreas: string[]
+    studyAreas: Array<{ id: string | number; name?: string; title?: string }>
   }
 }
 
-
+// Then modify the queryCoursesByUniversityId function to include study areas
 const queryCoursesByUniversityId = cache(async ({ universityId }: { universityId: number }): Promise<UniversityCoursesResponse> => {
-
-
   const { isEnabled: draft } = await draftMode()
-
   const payload = await getPayload({ config: configPromise })
 
   const result = await payload.find({
@@ -78,8 +75,32 @@ const queryCoursesByUniversityId = cache(async ({ universityId }: { universityId
     },
   })
 
-  return result
+  // Extract unique study areas from the courses
+  const studyAreas = new Map<string | number, { id: string | number; name?: string; title?: string }>()
+
+  result.docs.forEach(course => {
+    if (course.studyArea) {
+      const studyAreasToProcess = Array.isArray(course.studyArea) ? course.studyArea : [course.studyArea]
+
+      studyAreasToProcess.forEach(area => {
+        if (area && typeof area === 'object') {
+          studyAreas.set(area.id, {
+            id: area.id,
+            name: area.name || area.title || String(area.id)
+          })
+        }
+      })
+    }
+  })
+
+  return {
+    ...result,
+    filterOptions: {
+      studyAreas: Array.from(studyAreas.values())
+    }
+  }
 })
+
 
 
 
@@ -101,16 +122,6 @@ export default async function Post({ params: paramsPromise }: Args) {
     ? course.university.logo.url
     : null;
 
-  const getStudyAreaNameById = (id: string | number): string => {
-    // Implement your actual mapping logic here
-    // This is just an example - you might want to fetch these from your CMS
-    const studyAreasMap: Record<string, string> = {
-      '1': 'Business',
-      '2': 'Management',
-      // Add more mappings as needed
-    }
-    return studyAreasMap[id.toString()] || id.toString()
-  }
 
   return (
     <article className="single-course" data-attr="kr">
@@ -124,10 +135,10 @@ export default async function Post({ params: paramsPromise }: Args) {
         studyAreas={
           Array.isArray(universityCourses)
             ? []
-            : universityCourses.filterOptions?.studyAreas?.map(id => {
-              // Convert ID to display name
-              return getStudyAreaNameById(id) || id.toString()
-            }) || []
+            : universityCourses.filterOptions?.studyAreas?.map(area => ({
+              id: area.id,
+              name: area.name || area.title || String(area.id)
+            })) || []
         }
         logo={universityLogo}
       />

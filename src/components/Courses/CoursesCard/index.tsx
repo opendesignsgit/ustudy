@@ -94,14 +94,6 @@ export const CoursesCard: React.FC<{
   const universityTitle = (university as any)?.title
   const countryName = (university as any)?.country?.name || 'Malaysia'
 
-  // Map degree program codes to full names (if needed; remove if using relationship)
-  const degreeProgramMap: Record<string, string> = {
-    UG: 'Under Graduate',
-    PG: 'Post Graduate',
-    DP: 'Diploma',
-    PHD: 'PhD',
-  }
-
   // Format study years display
   // Handles both number and relationship object
   const studyYearsValue = typeof studyYear === 'number'
@@ -122,6 +114,8 @@ export const CoursesCard: React.FC<{
   const intakeMonthsLabels = Array.isArray(intakeMonths)
     ? intakeMonths.map(getRelationshipLabel).filter(Boolean)
     : [getRelationshipLabel(intakeMonths)].filter(Boolean);
+
+  console.log(metaImage);
 
   return (
     <article
