@@ -20,16 +20,15 @@ export default async function handler(req, res) {
         const orderDate = new Date().toISOString();
         const status = 'completed';
 
-        // Create the order document in the orders collection
+        // Create the order document in the bookings collection
         const order = await payload.create({
-            collection: 'orders',
+            collection: 'bookings',
             data: {
                 courseName,
                 courseID,
                 customerName,
                 customerID,
                 orderDate,
-                status,
                 // You may want to store the full response as a JSON string
                 razorpayResponse: JSON.stringify(razorpayResponse),
             },

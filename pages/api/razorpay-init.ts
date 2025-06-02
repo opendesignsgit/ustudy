@@ -9,8 +9,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        const { amount, currency, receipt } = req.body;
-
+        const { currency, receipt } = req.body;
+        const amount = 100
         // Ensure that the amount is provided (and other validations if needed)
         if (!amount) {
             return res.status(400).json({ error: 'Amount is required' });
