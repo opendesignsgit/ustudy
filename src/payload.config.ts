@@ -21,6 +21,7 @@ import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import { Universities } from './collections/Universities'
 import { Countries } from './collections/Countries'
+import { Currencies } from './collections/Courses/currencies'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -68,7 +69,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Courses, IntakeMonths, StudyModes, StudyYears, StudyAreas, Departments, DegreePrograms, Universities, Countries, Bookings, Students],
+  collections: [Pages, Posts, Media, Categories, Users, Courses, IntakeMonths, StudyModes, StudyYears, StudyAreas, Departments, DegreePrograms, Universities, Countries, Bookings, Students, Currencies],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

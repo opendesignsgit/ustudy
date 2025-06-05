@@ -23,7 +23,8 @@ import { SecondaryHeader } from '../components/SecondaryHeader'
 import { CourseHero } from '@/heros/CourseHero'
 import ModalPopup from '@/components/Courses/ModalForm'
 import './coursedetail.css'
-
+import { RegisterFlow } from '../components/Register/RegisterFlow'
+import { RazorpayScriptLoader } from '../components/Register/RazorpayScriptLoader'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -124,42 +125,46 @@ export default async function Post({ params: paramsPromise }: Args) {
 
 
   return (
-    <article className="single-course" data-attr="kr">
-      <PageClient />
+    <RazorpayScriptLoader>
 
-      {/* Allows redirects for valid pages too */}
-      <PayloadRedirects disableNotFound url={url} />
+      <article className="single-course" data-attr="kr">
+        <PageClient />
 
-      {draft && <LivePreviewListener />}
-      <SecondaryHeader
-        studyAreas={
-          Array.isArray(universityCourses)
-            ? []
-            : universityCourses.filterOptions?.studyAreas?.map(area => ({
-              id: area.id,
-              name: area.name || area.title || String(area.id)
-            })) || []
-        }
-        logo={universityLogo}
-      />
+        {/* Allows redirects for valid pages too */}
+        <PayloadRedirects disableNotFound url={url} />
 
-      <CourseHero post={course} />
+        {draft && <LivePreviewListener />}
+        <SecondaryHeader
+          studyAreas={
+            Array.isArray(universityCourses)
+              ? []
+              : universityCourses.filterOptions?.studyAreas?.map(area => ({
+                id: area.id,
+                name: area.name || area.title || String(area.id)
+              })) || []
+          }
+          logo={universityLogo}
+        />
 
-      <div className="coursecontainer">
-        <RichText className="max-w-[100rem] mx-auto" data={course.content} enableGutter={false} />
-        <AcademicPathSlider />
+        <CourseHero post={course} />
 
-        {/* {post.relatedPosts && post.relatedPosts.length > 0 && (
+        <div className="coursecontainer">
+          <RichText className="max-w-[100rem] mx-auto" data={course.content} enableGutter={false} />
+          <AcademicPathSlider />
+
+          {/* {post.relatedPosts && post.relatedPosts.length > 0 && (
             <RelatedPosts
               className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
               docs={post.relatedPosts.filter((post) => typeof post === 'object')}
             />
           )} */}
-      </div>
-      <FooterForm />
-      <Footer />
-      <ModalPopup />
-    </article>
+        </div>
+        <FooterForm />
+        <Footer />
+        <ModalPopup />
+        <RegisterFlow pageId={123} />
+      </article>
+    </RazorpayScriptLoader >
   )
 }
 

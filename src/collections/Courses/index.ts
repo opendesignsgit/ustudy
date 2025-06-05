@@ -218,6 +218,32 @@ export const Courses: CollectionConfig<'courses'> = {
               name: 'assessments',
               type: 'text',
             },
+            {
+              name: 'fees',
+              type: 'array',
+              label: 'Fees',
+              fields: [
+                {
+                  name: 'feeName',
+                  type: 'text',
+                  label: 'Fee Name',
+                  required: true,
+                },
+                {
+                  name: 'feeAmount',
+                  type: 'number',
+                  label: 'Fee Amount',
+                  required: true,
+                },
+                {
+                  name: 'feeCurrency',
+                  type: 'relationship',
+                  relationTo: 'currencies',
+                  label: 'Fee Currency',
+                  required: true,
+                },
+              ],
+            },
           ],
           label: 'Meta',
         },

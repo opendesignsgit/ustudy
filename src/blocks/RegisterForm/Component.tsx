@@ -141,7 +141,7 @@ export const RegisterFormBlock: React.FC<Props> = ({
       setIsEmailVerified(true);
     }
 
-    // Check if user is logged in using the /api/students/me and /api/users/me endpoints
+    // Check if user is logged in using the /api/students/me and /api/students/me endpoints
     // const checkLoggedInStatus = async () => {
     //   try {
     //     const response1 = await fetch('/api/students/me', {
@@ -156,11 +156,11 @@ export const RegisterFormBlock: React.FC<Props> = ({
 
     //       if (result1.loggedIn) {
     //         setIsLoggedIn(true);
-    //         return; 
+    //         return;
     //       }
     //     }
 
-    //     // const response2 = await fetch('/api/users/me', {
+    //     // const response2 = await fetch('/api/students/me', {
     //     //   method: 'GET',
     //     //   headers: {
     //     //     'Content-Type': 'application/json',

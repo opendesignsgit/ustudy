@@ -30,6 +30,19 @@ export const Universities: CollectionConfig = {
       label: 'University Logo',
     },
     {
+      name: 'secondaryLogo',
+      type: 'upload',
+      relationTo: 'media',
+      required: false,
+      label: 'Secondary Logo',
+    },
+    {
+      name: 'email',
+      type: 'email',
+      required: false,
+      label: 'Contact Email',
+    },
+    {
       name: 'country',
       type: 'relationship',
       relationTo: 'countries', // Link to countries collection
