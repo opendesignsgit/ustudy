@@ -35,5 +35,12 @@ export const Countries: CollectionConfig = {
         mimeType: { contains: 'image' }, // Only allow image files
       },
     },
+    {
+      name: 'feeCurrency',
+      type: 'relationship',
+      relationTo: 'currencies',
+      label: 'Fee Currency',
+      required: true,
+    },
   ],
 }

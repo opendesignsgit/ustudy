@@ -31,7 +31,6 @@ type Course = CardPostData & {
   }
   degreeProgram: { id: string | number; name?: string; title?: string } | null
   department: { id: string | number; name?: string; title?: string } | null
-  studyArea: { id: string | number; name?: string; title?: string } | null
   studyYears: { id: string | number; name?: string; title?: string } | null
   studyMode: { id: string | number; name?: string; title?: string } | null
   intakeMonths?: string
@@ -48,7 +47,6 @@ interface FetchCoursesParams {
   filters?: {
     countries?: string[]
     universities?: string[]
-    studyAreas?: string[]
     degreePrograms?: string[]
     departments?: string[]
     studyYears?: string[]
@@ -81,7 +79,6 @@ export default function PageClient() {
   const [filters, setFilters] = useState({
     countries: [] as string[],
     universities: [] as string[],
-    studyAreas: [] as string[],
     degreePrograms: [] as string[],
     departments: [] as string[],
     studyYears: [] as string[],
@@ -100,7 +97,6 @@ export default function PageClient() {
     const initialFilters = {
       countries: searchParams.getAll('countries'),
       universities: searchParams.getAll('universities'),
-      studyAreas: searchParams.getAll('studyAreas'),
       degreePrograms: searchParams.getAll('degreePrograms'),
       departments: searchParams.getAll('departments'),
       studyYears: searchParams.getAll('studyYears'),
@@ -135,7 +131,6 @@ export default function PageClient() {
       filters: {
         countries?: string[]
         universities?: string[]
-        studyAreas?: string[]
         degreePrograms?: string[]
         departments?: string[]
         studyYears?: string[]
@@ -158,7 +153,6 @@ export default function PageClient() {
             universities: filters.universities || [],
             degreePrograms: filters.degreePrograms || [],
             departments: filters.departments || [],
-            studyAreas: filters.studyAreas || [],
             studyYears: filters.studyYears || [],
             studyModes: filters.studyModes || [],
             searchQuery: filters.searchQuery || '',
@@ -232,7 +226,6 @@ export default function PageClient() {
     (newFilters: {
       countries: string[]
       universities: string[]
-      studyAreas: string[]
       degreePrograms: string[]
       departments: string[]
       studyYears: string[]
@@ -254,7 +247,6 @@ export default function PageClient() {
         'University': 'universities',
         'Program': 'degreePrograms',
         'Department': 'departments',
-        'Area': 'studyAreas',
         'Years': 'studyYears',
         'Mode': 'studyModes',
         'Search': 'searchQuery'
@@ -279,7 +271,6 @@ export default function PageClient() {
     setFilters({
       countries: [],
       universities: [],
-      studyAreas: [],
       degreePrograms: [],
       departments: [],
       studyYears: [],
@@ -302,7 +293,6 @@ export default function PageClient() {
     ...filters.universities.map((u) => `University: ${u}`),
     ...filters.degreePrograms.map((d) => `Program: ${d}`),
     ...filters.departments.map((d) => `Department: ${d}`),
-    ...filters.studyAreas.map((s) => `Area: ${s}`),
     ...filters.studyYears.map((y) => `Years: ${y}`),
     ...filters.studyModes.map((m) => `Mode: ${m}`),
     ...(filters.searchQuery ? [`Search: ${filters.searchQuery}`] : []),
@@ -442,4 +432,3 @@ export default function PageClient() {
     </div>
   )
 }
-//Final

@@ -38,7 +38,6 @@ const FiltersClient = ({
       universities: new Set<string>(),
       degreePrograms: new Set<string>(),
       departments: new Set<string>(),
-      studyAreas: new Set<string>(),
       studyYears: new Set<string>(),
       studyModes: new Set<string>(),
     }
@@ -67,7 +66,6 @@ const FiltersClient = ({
 
       processField(course.degreeProgram, options.degreePrograms)
       processField(course.department, options.departments)
-      processField(course.studyArea, options.studyAreas)
       processField(course.studyYear, options.studyYears)
       processField(course.studyMode, options.studyModes)
     })
@@ -77,7 +75,6 @@ const FiltersClient = ({
       universities: Array.from(options.universities).sort(),
       degreePrograms: Array.from(options.degreePrograms).sort(),
       departments: Array.from(options.departments).sort(),
-      studyAreas: Array.from(options.studyAreas).sort(),
       studyYears: Array.from(options.studyYears).sort(),
       studyModes: Array.from(options.studyModes).sort(),
     })
@@ -88,7 +85,6 @@ const FiltersClient = ({
       universities: false,
       degreePrograms: false,
       departments: false,
-      studyAreas: false,
       studyYears: false,
       studyModes: false,
     })
@@ -115,7 +111,6 @@ const FiltersClient = ({
       'University': 'universities',
       'Program': 'degreePrograms',
       'Department': 'departments',
-      'Area': 'studyAreas',
       'Years': 'studyYears',
       'Mode': 'studyModes',
     };
@@ -142,7 +137,6 @@ const FiltersClient = ({
     ...filters.universities.map((u: string) => `University: ${u}`),
     ...filters.degreePrograms.map((d: string) => `Program: ${d}`),
     ...filters.departments.map((d: string) => `Department: ${d}`),
-    ...filters.studyAreas.map((s: string) => `Area: ${s}`),
     ...filters.studyYears.map((y: string) => `Years: ${y}`),
     ...filters.studyModes.map((m: string) => `Mode: ${m}`),
   ]
@@ -152,7 +146,6 @@ const FiltersClient = ({
     { key: 'universities', label: 'Universities' },
     { key: 'degreePrograms', label: 'Degree Programs' },
     { key: 'departments', label: 'Departments' },
-    { key: 'studyAreas', label: 'Study Areas' },
     { key: 'studyYears', label: 'Study Years' },
     { key: 'studyModes', label: 'Study Modes' },
   ]
@@ -161,7 +154,7 @@ const FiltersClient = ({
     <div className="FListInrow">
       {showLoading ? (
         <div className="space-y-4">
-          {[...Array(7)].map((_, i) => (
+          {[...Array(6)].map((_, i) => (
             <div key={i} className="ItemBoxs">
               <div className="IboxTitles flex justify-between items-center">
                 <div className="h-6 w-32 bg-gray-200 rounded animate-pulse"></div>
@@ -255,4 +248,3 @@ const FiltersClient = ({
 }
 
 export default FiltersClient
-//Final
