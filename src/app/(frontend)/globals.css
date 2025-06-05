@@ -137,10 +137,10 @@ body {
   display: none !important;
 }
 
-header {
+body header {
   padding-block: 15px;
   background: #ffffff;
-  z-index: 999;
+  z-index: 99999;
 }
 
 header .py-8 {
@@ -1082,10 +1082,15 @@ h3.showtitle {
   margin-bottom: 0;
 }
 
-.coursListBox article .Universitylogo {
+.clboxItemview .Universitylogo {
+  top: 0;
+  right: 0;
 }
 
-.coursListBox article .Universitylogo img {
+.clboxItemview .Universitylogo img {
+  width: auto;
+  height: 25px;
+  padding: 0;
 }
 
 .descriptbox {
@@ -2095,6 +2100,7 @@ p.sboxvcontrytxt {
   top: 0;
   height: 100%;
   right: 0;
+  display: flex;
 }
 
 .sboxvdivmigsech button.bthicon {
@@ -2130,6 +2136,10 @@ p.sboxvcontrytxt {
   padding: 3px;
   margin-right: 10px;
 }
+.serchresultbox .subbtnlistd button {
+  background: #555;
+}
+
 .ListFilerRow {
   position: relative;
 }
@@ -2154,6 +2164,59 @@ p.sboxvcontrytxt {
 .ListFilerRow .mobfitflColLeft {
   z-index: 99999;
 }
+
+.searchcontbox {
+  z-index: 9999999;
+}
+.PaymenyPop {
+  z-index: 9999999;
+}
+.PaymenyPop h2 {
+  color: #0056d2;
+  font-size: 22px;
+  line-height: 1;
+  margin-bottom: 0px;
+}
+.PaymenyPop button {
+}
+.PaymenyPop button[type='submit'] {
+}
+.PaymenyPop form {
+}
+.PaymenyPop form label {
+  font-size: 14px;
+  font-weight: 500;
+}
+.PaymenyPop form input {
+  padding: 0;
+  line-height: 40px;
+  font-size: 15px;
+}
+.PaymenyPop form .allow-dropdown {
+  width: 100%;
+}
+.PaymenyPop form .allow-dropdown input {
+}
+.PaymenyPop form .allow-dropdown .flag-container {
+}
+html body .PaymenyPop form .allow-dropdown .selected-flag {
+  display: flex !important;
+  color: #333;
+  font-size: 16px;
+}
+html body .PaymenyPop form .allow-dropdown .selected-flag .selected-dial-code {
+  padding-left: 10px;
+}
+
+.enrollbtn {
+}
+.enrollbtn button {
+}
+.enrollbtn button:hover {
+  color: #1f9714;
+  border-color: #1f9714;
+}
+
 @media screen and (max-width: 1620px) {
   body,
   h3.showtitle,
@@ -2313,6 +2376,19 @@ p.sboxvcontrytxt {
     font-size: 14px;
   }
 }
+@media screen and (max-width: 1000px) {
+  .SerBoxsList .SerLists .SListCont {
+    padding: 12px 10px 40px;
+  }
+  .SerBoxsList .SerLists .SListCont h3 {
+    font-size: 18px;
+  }
+}
+@media screen and (max-width: 900px) {
+  .formboxs .form-col {
+    width: 100%;
+  }
+}
 @media screen and (max-width: 800px) {
   .humnavLists ul li a {
     color: #ffffff;
@@ -2443,6 +2519,18 @@ p.sboxvcontrytxt {
   .countryitems h5 {
     font-size: 14px;
   }
+  .sboxvdivone {
+    padding: 15px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .ListFilerRow {
+    flex-direction: column;
+  }
+  .FlagListSec {
+    padding-top: 0;
+    margin-bottom: 0;
+  }
 }
 @media screen and (max-width: 700px) {
   .sboxvdivone .sboxvdivtwo {
@@ -2452,6 +2540,8 @@ p.sboxvcontrytxt {
   .sboxvdivleft,
   .sboxvdivmid {
     width: 100%;
+    margin: 0;
+    justify-content: center;
   }
   .sboxvdivright {
     position: absolute;
@@ -2460,7 +2550,21 @@ p.sboxvcontrytxt {
     z-index: 99;
     transform: translate(50%, -50%);
   }
+
   .sboxvdivright button {
+    margin-right: 15px;
+  }
+  .sboxvdivmigsech {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+  }
+  .sboxvdivmigsech button.bthicon {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    transform: translateY(-120%);
   }
 }
 @media screen and (max-width: 600px) {
@@ -2639,6 +2743,17 @@ p.sboxvcontrytxt {
   .contliItems address {
     font-size: 20px;
     letter-spacing: 0;
+  }
+  .contlink p.phonepara::before {
+    top: -1px;
+    width: 20px;
+  }
+  .contlink p.mailpara::before {
+    top: -1px;
+    width: 20px;
+  }
+  .SerBoxsList .SerLists .SListImg::before {
+    width: 35px;
   }
 }
 @media screen and (max-width: 550px) {

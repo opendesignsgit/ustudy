@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { SearchIcon, MenuIcon, XIcon } from 'lucide-react'
 import { CMSLink } from '@/components/Link'
 import type { Header as HeaderType } from '@/payload-types'
@@ -12,7 +12,17 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [selectedCountry, setSelectedCountry] = useState('Malaysia')
   const navItems = data?.navItems || []
+  useEffect(() => {
+    if (isSearchOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
 
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isSearchOpen])
   return (
     <>
       {/* Mobile controls - hamburger and search */}

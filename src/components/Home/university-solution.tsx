@@ -5,6 +5,7 @@ import React from 'react'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
+import Link from 'next/link'
 
 const UniversitySolutionSection = () => {
   const [isMobile, setIsMobile] = useState(false)
@@ -90,16 +91,18 @@ const UniversitySolutionSection = () => {
 
   const content = sections.slice(0, 10).map((section, index) => (
     <div key={index} className="halinmainBox">
-      <div className="bg-white halinoneItems relative">
-        {/* Icon in a Circle */}
-        <div className="halinoneicon absolute rounded-full flex items-center justify-center">
-          <Image src={section.icon} alt={section.title} width="60" height="60" />
+      <Link href='/services'>
+        <div className="bg-white halinoneItems relative">
+          {/* Icon in a Circle */}
+          <div className="halinoneicon absolute rounded-full flex items-center justify-center">
+            <Image src={section.icon} alt={section.title} width="60" height="60" />
+          </div>
+          {/* Title */}
+          <h3>{section.title}</h3>
+          {/* Description */}
+          <p>{section.description}</p>
         </div>
-        {/* Title */}
-        <h3>{section.title}</h3>
-        {/* Description */}
-        <p>{section.description}</p>
-      </div>
+      </Link>
     </div>
   ))
 

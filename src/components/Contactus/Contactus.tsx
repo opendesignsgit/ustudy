@@ -52,19 +52,18 @@ const Contactus = () => {
               <div className="contliICont relative">
                 <h3>Address</h3>
                 <address>
-                  2nd floor, Chettinad Chambers, 39, Dr Radha Krishnan Salai, 5th Street, Mylapore,
-                  Chennai- 600 004.
+                  2nd Floor, Chettinad Chambers, 39, <br />Dr. Radha Krishnan Salai, 5th Street, <br />Mylapore, Chennai- 600 004.
                 </address>
               </div>
             </div>
           </div>
         </div>
       </section>
-      <section className="contformSec">
+      <section className="contformSec" id="contformSec">
         <div className="contformtitlerow">
           <div className="container">
             <div className="sectitle marbtm textcenter">
-              <h2>Let’s talk !</h2>
+              <h2>Let’s talk!</h2>
               <p>Get in touch with us using the enquiry form or contact details below.</p>
             </div>
           </div>

@@ -84,7 +84,6 @@ export interface Config {
     countries: Country;
     bookings: Booking;
     students: Student;
-    currencies: Currency;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -112,7 +111,6 @@ export interface Config {
     countries: CountriesSelect<false> | CountriesSelect<true>;
     bookings: BookingsSelect<false> | BookingsSelect<true>;
     students: StudentsSelect<false> | StudentsSelect<true>;
-    currencies: CurrenciesSelect<false> | CurrenciesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -822,14 +820,6 @@ export interface Course {
   programmeAccreditationCode?: string | null;
   pathway?: string | null;
   assessments?: string | null;
-  fees?:
-    | {
-        feeName: string;
-        feeAmount: number;
-        feeCurrency: number | Currency;
-        id?: string | null;
-      }[]
-    | null;
   meta?: {
     title?: string | null;
     /**
@@ -854,8 +844,6 @@ export interface University {
   id: number;
   title: string;
   logo: number | Media;
-  secondaryLogo?: (number | null) | Media;
-  email?: string | null;
   country: number | Country;
   slug?: string | null;
   slugLock?: boolean | null;
@@ -871,20 +859,6 @@ export interface Country {
   name: string;
   code: string;
   logo?: (number | null) | Media;
-  feeCurrency: number | Currency;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "currencies".
- */
-export interface Currency {
-  id: number;
-  currencyName: string;
-  currencyCode: string;
-  currencyValue: number;
-  isActive?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1246,10 +1220,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'students';
         value: number | Student;
-      } | null)
-    | ({
-        relationTo: 'currencies';
-        value: number | Currency;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1645,14 +1615,6 @@ export interface CoursesSelect<T extends boolean = true> {
   programmeAccreditationCode?: T;
   pathway?: T;
   assessments?: T;
-  fees?:
-    | T
-    | {
-        feeName?: T;
-        feeAmount?: T;
-        feeCurrency?: T;
-        id?: T;
-      };
   meta?:
     | T
     | {
@@ -1741,8 +1703,6 @@ export interface DegreeProgramsSelect<T extends boolean = true> {
 export interface UniversitiesSelect<T extends boolean = true> {
   title?: T;
   logo?: T;
-  secondaryLogo?: T;
-  email?: T;
   country?: T;
   slug?: T;
   slugLock?: T;
@@ -1757,7 +1717,6 @@ export interface CountriesSelect<T extends boolean = true> {
   name?: T;
   code?: T;
   logo?: T;
-  feeCurrency?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1804,18 +1763,6 @@ export interface StudentsSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "currencies_select".
- */
-export interface CurrenciesSelect<T extends boolean = true> {
-  currencyName?: T;
-  currencyCode?: T;
-  currencyValue?: T;
-  isActive?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

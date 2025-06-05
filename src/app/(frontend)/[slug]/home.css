@@ -82,8 +82,9 @@
   border-bottom: 1px solid rgb(255 255 255 / 20%);
   position: relative;
   font-size: 1.4vw;
-  cursor: pointer;
+  color: #333333;
 }
+
 .uyllist ul li img.imgIcons {
   width: 30px;
   aspect-ratio: 1;
@@ -123,6 +124,11 @@
   padding: 6px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+}
+.uyllist ul li a {
+  padding-left: 20px;
+  font-weight: 100;
+  color: #ffffff;
 }
 .uyllist ul li span:not(.listicon) {
   padding-left: 20px;
@@ -351,6 +357,13 @@
   background: url(/media/home/arrow-next-icon.svg) no-repeat center center;
   background-size: 50%;
 }
+.dyapitem .dyapitemimg img {
+  transition: all 0.5s ease-in-out;
+  transform: scale(1);
+}
+.dyapitem:hover .dyapitemimg img {
+  transform: scale(1.1);
+}
 .itemtitle h4 {
   background: rgb(0 86 210 / 78%);
   padding-inline: 2vw;
@@ -460,6 +473,13 @@
 }
 .hfpsdSItems {
   border-radius: 30px;
+}
+.hfpsdSItems img {
+  transition: all 0.5s ease-in-out;
+  transform: scale(1);
+}
+.hfpsdSItems:hover img {
+  transform: scale(1.1);
 }
 .hfpsdtitle {
   padding-block: 5px;
@@ -760,6 +780,7 @@
   }
   .uyllist ul li img.imgIcons {
     width: 34px;
+    flex: 0 0 34px;
   }
   .colLeft .uyllist ul li span:not(.listicon) {
     color: #333333;
@@ -815,6 +836,13 @@
   }
   .hstuwwItems .slidecontent h3 {
     font-size: 14px;
+  }
+  .uyllist ul li a {
+    color: #333333;
+    font-weight: 600;
+  }
+  .uyllist ul li span:not(.listicon) {
+    font-weight: 600;
   }
 }
 @media screen and (max-width: 700px) {

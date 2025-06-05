@@ -1,6 +1,6 @@
 article header.sticky {
   background: #0056d2;
-  top: 68px;
+  top: 96px;
   z-index: 9999;
   padding: 0;
 }
@@ -143,6 +143,14 @@ ul li {
   background: #014ebe;
   opacity: 0.52;
 }
+.cdintro-section h2 {
+  font-family: 'Times New Roman', Times, serif;
+  color: #0056d2;
+  font-size: 2vw;
+  line-height: 1;
+  margin-bottom: 20px;
+  text-align: left !important;
+}
 .cdintro-section h3 {
   font-family: 'Times New Roman', Times, serif;
   color: #0056d2;
@@ -150,13 +158,26 @@ ul li {
   line-height: 1;
   margin-bottom: 20px;
 }
+.cdintro-section h4 {
+  color: #333333;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.cdintro-section p {
+  color: #333333;
+}
+.cdintro-section p strong {
+  color: #333333;
+}
 .cdintro-section ul.list-bullet {
-  list-style: none;
+  list-style: disc;
   padding: 0;
+  padding-left: 15px;
 }
 .cdintro-section ul.list-bullet li {
   margin: 0;
   padding: 0;
+  margin-bottom: 10px;
 }
 .cdenquire-now {
   padding-bottom: 10vh;
@@ -194,16 +215,36 @@ ul li {
   font-size: 3vw;
   line-height: 1;
   margin-bottom: 20px;
+  text-align: left !important;
 }
 .cdwhychoosesec h4 {
   font-family: 'Times New Roman', Times, serif;
   font-size: 2vw;
   line-height: 1;
   margin-bottom: 10px;
+  text-align: left !important;
 }
 .cdwhychoosesec p {
   color: #ffffff;
   font-size: 1vw;
+  text-align: left !important;
+}
+.cdwhychoosesec ul {
+  padding-left: 0;
+}
+.cdwhychoosesec ul li {
+  color: #ffffff;
+  margin: 0;
+  list-style: none;
+  position: relative;
+  display: flex;
+  padding: 0;
+}
+.cdwhychoosesec ul li::before {
+  content: '-';
+  position: relative;
+  display: block;
+  margin-right: 10px;
 }
 .cdwhychoosesec .container {
   max-width: 100%;
@@ -246,7 +287,7 @@ ul li {
   max-width: 100%;
 }
 .how-do-right ul {
-  padding: 3vw;
+  padding: 2vw 3vw;
   border: 1px solid #cccccc;
   border-radius: 2vw;
 }
@@ -254,12 +295,14 @@ ul li {
   padding: 0vw;
   margin: 0 0 5px;
 }
-.cdhowdosec .grid h2 {
+.cdhowdosec .grid h2,
+.cdhowdosec .grid h3 {
   font-family: 'Times New Roman', Times, serif;
   font-size: 3vw;
   line-height: 1;
   margin-bottom: 20px;
   color: #0056d2;
+  text-align: left !important;
 }
 .cdhowdosec .grid p {
   margin-bottom: 0;
@@ -286,9 +329,15 @@ ul li {
   text-align: center;
 }
 
+.year-group h2 {
+  color: #0056d2;
+}
 .year-group h3 {
   color: #0056d2;
   text-decoration: underline;
+}
+.year-group p strong {
+  color: #0056d2;
 }
 
 .yearModulebox {
@@ -335,6 +384,7 @@ ul li {
 }
 .yearintitle h4 {
   margin: 0 2vw;
+  color: #ffffff;
 }
 
 .year-group .left-column {
@@ -544,6 +594,15 @@ ul li {
   background: #ffffff;
   color: #0056d2;
 }
+.cdtutionfeessec table {
+  margin: 0;
+}
+.cdtutionfeessec table tbody {
+}
+.cdtutionfeessec table tbody p {
+  margin: 0;
+  text-align: left !important;
+}
 
 .coursecontainer > .prose > p {
   display: none;
@@ -660,7 +719,8 @@ ul li {
   .cdhowdosec .grid h2,
   .cdwhychoosesec h2,
   .CourseModuleTitle h2,
-  .cdtutionfeessec h2 {
+  .cdtutionfeessec h2,
+  .cdhowdosec .grid h3 {
     font-size: 38px;
   }
   .cdintro-section h3 {
@@ -761,7 +821,8 @@ ul li {
   .cdhowdosec .grid h2,
   .cdwhychoosesec h2,
   .CourseModuleTitle h2,
-  .cdtutionfeessec h2 {
+  .cdtutionfeessec h2,
+  .cdhowdosec .grid h3 {
     font-size: 30px;
   }
   .cdintro-section h3 {
@@ -855,5 +916,16 @@ ul li {
   }
   .cmitemscont h5 {
     font-size: 20px;
+  }
+  .cdintro-section h2 {
+    font-size: 25px;
+  }
+}
+@media screen and (max-width: 500px) {
+  .yearintitle::before {
+    width: 20%;
+  }
+  .yearintitle::after {
+    width: 20%;
   }
 }

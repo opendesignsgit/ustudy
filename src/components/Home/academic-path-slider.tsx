@@ -41,62 +41,74 @@ const AcademicPathSlider: React.FC = () => {
       title: 'MEDIA',
       description: 'Gain cutting-edge media skills and hands-on experience to innovate and...',
       image: '/media/home/dyapImg1.jpg',
+      link: '/courses?studyAreas=Media+%26+Communication',
     },
     {
       title: 'LAW',
       description: 'Studying law equips you with critical thinking, problem-solving, and advoca...',
       image: '/media/home/dyapImg2.jpg',
+      link: '/courses?studyAreas=Law',
     },
     {
       title: 'BUSINESS',
       description:
         'Master the art of leadership, strategy, and innovation with business program...',
       image: '/media/home/dyapImg3.jpg',
+      link: '/courses?studyAreas=Business',
     },
     {
       title: 'MEDICAL',
       description: 'Pursue excellence in healthcare with in-depth medical education, hands-on...',
       image: '/media/home/dyapImg4.jpg',
+      link: '/contact-us',
     },
     {
       title: 'Digital Technology',
       description: 'Learn branding, SEO, content, and social media strategy.',
       image: '/media/home/HDigitalTechnology-Img.jpg',
+      link: '/courses?studyAreas=Digital+Technology',
     },
     {
       title: 'Digital Marketing',
       description: 'Master SEO, branding, content, and social media strategy.',
       image: '/media/home/HDigitalMarketing-img.jpg',
+      link: '/courses?studyAreas=Digital+Marketing',
     },
     {
       title: 'Hospital Management',
       description: 'Learn hospital operations, administration, and patient care systems.',
       image: '/media/home/HHospitalManagement-img.jpg',
+      link: '/courses?studyAreas=Hospitality+Management',
     },
     {
       title: 'Computer Science & Engineering',
       description: 'Study programming, AI, software, and cybersecurity fundamentals.',
       image: '/media/home/HComputerScienceEngineering-img.jpg',
+      link: '/courses?studyAreas=Computer+science+and+engineering',
     },
     {
       title: 'Hospitality & Tourism',
       description: 'Train in hotels, tourism, and global guest experiences.',
       image: '/media/home/HHospitalityTourism-img.jpg',
+      link: '/contact-us',
     },
     {
       title: 'Psychology',
       description: 'Explore behavior, cognition, and mental health science.',
       image: '/media/home/HPsychology-img.jpg',
+      link: '/courses?studyAreas=Psychology',
     },
     {
       title: 'Early Childhood & Education',
       description: 'Understand child growth, learning, and teaching strategies.',
       image: '/media/home/HEarlyChildhoodEducation-img.jpg',
+      link: '/courses?studyAreas=Education',
     },
     {
       title: 'Media & Communications',
       description: 'Learn journalism, PR, and digital storytelling techniques.',
       image: '/media/home/HMediaCommunication-img.jpg',
+      link: '/courses?studyAreas=Media+%26+Communication',
     },
   ]
 
@@ -115,15 +127,16 @@ const AcademicPathSlider: React.FC = () => {
           {sections.map((section, index) => (
             <div key={index} className="dyapitemsss px-[10px]">
               <div className="dyapitem">
-                <div className="dyapitemimg relative overflow-hidden rounded-[1.5vw]">
-                  <img src={section.image} alt="" className="w-full" />
-                  <div className="itemtitle absolute top-0 left-0">
-                    <h4>{section.title}</h4>
+                <a href={section.link}>
+                  <div className="dyapitemimg relative overflow-hidden rounded-[1.5vw]">
+                    <img src={section.image} alt="" className="w-full" />
+                    <div className="itemtitle absolute top-0 left-0">
+                      <h4>{section.title}</h4>
+                    </div>
                   </div>
-                </div>
-                <div className="dyapitemcont">
-                  <p>{section.description}</p>
-                </div>
+                  <div className="dyapitemcont">
+                    <p>{section.description}</p>
+                  </div></a>
               </div>
             </div>
           ))}
