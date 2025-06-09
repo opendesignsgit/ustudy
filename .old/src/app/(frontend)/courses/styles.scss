@@ -1,0 +1,209 @@
+ 
+    .couresListBanner {display: flex
+     ;
+         justify-content: flex-end;
+         align-items: center;
+         height: 500px;
+         background-size: cover;
+         text-align: right;}
+
+        .couresListBanner .hero-content {    color: #fff;
+          font-size: 40px;
+          margin: 0 auto;
+           }
+
+         .couresList  .bg-card {
+            background-color: hsl(149.45deg 100% 32.35%);
+            color: #fff;
+            transition: all 0.5s ease;
+        }
+        .couresList .bg-card:hover {
+          background-color: hsl(150, 97%, 14%);
+          color: #fff;
+          transition: all 0.5s ease;
+      }
+
+.coursecontainer .intro-section .intro-left h2{padding: 0; margin: 0 0 10px; color: #00a551; font-size: 30px;}
+
+.coursecontainer .intl-tel-input {
+ width: 100%;
+}
+.intro-section .intro-left {
+  overflow-y: hidden;
+  height: auto;
+  scrollbar-width: none;
+  padding: 40px 0 0 80px;
+}
+ 
+.coursecontainer .text-green-500 {
+ color: rgb(0 0 0);
+  margin: 18px 0 0;
+}
+.coursecontainer .text-red-500 {
+  margin: 22px 0 0;
+  background: #fff;
+}
+ 
+.intro-rigth .mx-auto.prose{position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  padding: 0;
+  margin: 0;
+  top: 40px; /* Adjust as needed */
+  height: 100vh; /* Makes it full height */
+  overflow-y: auto; /* Enables scrolling if content is too long */}
+
+  .intro-rigth .mx-auto.prose .max-w-lg{background: #00a551;
+  padding: 35px;}
+  .intro-rigth .mx-auto.prose .max-w-lg  h2{color: #fff;    padding: 0;  margin: 0 0 15px;}
+  .intro-rigth .mx-auto.prose .max-w-lg label{color: #fff;}
+  .intro-rigth .mx-auto.prose .max-w-lg .bg-gray-200 {
+     background-color: #fff;
+}
+
+.intro-rigth .intl-tel-input.allow-dropdown.separate-dial-code.iti-sdc-3 .selected-flag {
+  width: 78px;
+  padding: 5px;
+}
+.coursecontainer .intro-section .intro-left  .container p {margin-bottom: 25px;
+margin-top: 0;}
+
+.coursecontainer .intro-section .intro-left  .container p strong {  font-size: 18px; color: #000; }
+
+.coursecontainer .intro-section  .intro-rigth .mx-auto.prose .max-w-lg .items-center{
+display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    padding: 12px 12px 0;
+}
+
+.coursecontainer .intro-section  .intro-rigth .mx-auto.prose .max-w-lg .bg-\[\#00a44f\] {
+  background: #01160b;
+   cursor: pointer;
+}
+
+.coursecontainer .intro-section  .intro-rigth .mx-auto.prose .max-w-lg .bg-\[\#00a44f\]:hover {
+  background: #fff;
+  color: #000;
+  cursor: pointer;
+}
+
+.coursecontainer .intro-section  .intro-rigth .phoneOut{position: relative;}
+.coursecontainer .intro-section  .intro-rigth .verifyPhone {
+  position: absolute;
+  position: absolute;
+  right: 10px;
+  top: 30px;
+  }
+  .coursecontainer .intro-section  .intro-rigth .verifyPhone button{
+padding: 1px 5px;
+font-size: 12px;
+background: #17251e;
+}
+
+.coursecontainer .intro-section  .intro-rigth .emailOut{position: relative;}
+.coursecontainer .intro-section  .intro-rigth .container:nth-child(1) {
+  padding: 0;   max-width: 100%;
+}
+.coursecontainer .intro-section  .intro-rigth .verifyEmail {
+  position: absolute;
+  position: absolute;
+  right: 10px;
+  top: 30px;
+  }
+  .coursecontainer .intro-section  .intro-rigth .verifyEmail button{
+padding: 1px 5px;
+font-size: 12px;
+background: #17251e;
+}
+
+.coursecontainer .intro-section {background: #ebebeb; padding: 80px 0; margin-top: -40px;}
+
+.coursecontainer .enquire-now .enquire-now-button.col-span-4 {
+  margin-top: 0;
+}
+
+.coursecontainer .enquire-now {
+  padding-bottom: 0;
+  padding:40px 0;
+}
+
+.coursecontainer .enquire-now .enquire-now-button a {
+  border-radius: 35px;
+  border: solid 1px #00a551;
+  background: #00a551;
+}
+
+.coursecontainer .enquire-now .enquire-now-button a:hover {
+  background: #fff;
+  border: solid 1px #00a551;
+  color: #00a551;
+}
+
+ 
+      
+@media screen and (max-width: 1500px) {
+
+  .coursecontainer .intro-rigth .mx-auto.prose .max-w-lg {  padding: 20px;}
+
+.coursecontainer .intro-section .intro-left {
+   padding: 40px 0 0;
+}
+
+}
+
+
+@media screen and (max-width: 900px) {
+  .coursecontainer .intro-rigth .mx-auto.prose .max-w-lg h2 {
+    font-size: 28px;
+}
+  .coursecontainer .intro-section {
+     padding: 40px 0;}
+  .coursecontainer .intro-section .intro-rigth .container:nth-child(1) {
+    padding: 0;
+    max-width: 100%;
+    margin: 0;
+}
+  .coursecontainer .intro-section p {
+    font-size: 14px;}
+
+    .coursecontainer .intro-section p strong {
+      font-size: 14px;}
+  .coursecontainer .intro-rigth .mx-auto.prose {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    top: 40px;
+    height: auto;
+    overflow-y: auto;
+}
+
+.coursecontainer .iti-mobile .intl-tel-input .country-list {
+  height: 380px;
+}
+
+.coursecontainer .intro-rigth .intl-tel-input {
+  width: 100%;
+}
+  .coursecontainer .intro-section .intro-left {
+    padding: 0;
+    width: 100%;
+    grid-column: span 4 / span 4;
+    order: 2;
+}
+.coursecontainer .intro-rigth .mx-auto.prose .max-w-lg {
+  padding: 20px;
+  width: 100%;
+  max-width: 100%;
+  order: 1;
+}
+
+.coursecontainer .intro-rigth.md\:col-span-2 {
+  grid-column: span 4 / span 4;
+}
+
+.coursecontainer .intro-section .intro-left h2 {
+  font-size: 20px;
+}
+
+
+}

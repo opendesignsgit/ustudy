@@ -37,6 +37,13 @@ export const Universities: CollectionConfig = {
       label: 'Secondary Logo',
     },
     {
+      name: 'universityImage',
+      type: 'upload',
+      relationTo: 'media',
+      required: false,
+      label: 'University Image',
+    },
+    {
       name: 'email',
       type: 'email',
       required: false,

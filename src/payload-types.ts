@@ -84,7 +84,6 @@ export interface Config {
     countries: Country;
     bookings: Booking;
     students: Student;
-    currencies: Currency;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -112,7 +111,6 @@ export interface Config {
     countries: CountriesSelect<false> | CountriesSelect<true>;
     bookings: BookingsSelect<false> | BookingsSelect<true>;
     students: StudentsSelect<false> | StudentsSelect<true>;
-    currencies: CurrenciesSelect<false> | CurrenciesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -813,6 +811,7 @@ export interface Course {
     [k: string]: unknown;
   };
   university: number | University;
+  subUniversity?: (number | null) | University;
   degreeProgram?: (number | null) | DegreeProgram;
   department?: (number | null) | Department;
   studyArea?: (number | null) | StudyArea;
@@ -826,7 +825,6 @@ export interface Course {
     | {
         feeName: string;
         feeAmount: number;
-        feeCurrency: number | Currency;
         id?: string | null;
       }[]
     | null;
@@ -855,6 +853,7 @@ export interface University {
   title: string;
   logo: number | Media;
   secondaryLogo?: (number | null) | Media;
+  universityImage?: (number | null) | Media;
   email?: string | null;
   country: number | Country;
   slug?: string | null;
@@ -871,20 +870,10 @@ export interface Country {
   name: string;
   code: string;
   logo?: (number | null) | Media;
-  feeCurrency: number | Currency;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "currencies".
- */
-export interface Currency {
-  id: number;
+  countryImage?: (number | null) | Media;
   currencyName: string;
   currencyCode: string;
   currencyValue: number;
-  isActive?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -895,6 +884,7 @@ export interface Currency {
 export interface DegreeProgram {
   id: number;
   name: string;
+  image?: (number | null) | Media;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -907,6 +897,7 @@ export interface DegreeProgram {
 export interface Department {
   id: number;
   name: string;
+  image?: (number | null) | Media;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -919,6 +910,7 @@ export interface Department {
 export interface StudyArea {
   id: number;
   name: string;
+  image?: (number | null) | Media;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -931,6 +923,7 @@ export interface StudyArea {
 export interface StudyYear {
   id: number;
   name: string;
+  image?: (number | null) | Media;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -943,6 +936,7 @@ export interface StudyYear {
 export interface StudyMode {
   id: number;
   name: string;
+  image?: (number | null) | Media;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -955,6 +949,7 @@ export interface StudyMode {
 export interface IntakeMonth {
   id: number;
   name: string;
+  image?: (number | null) | Media;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -966,12 +961,12 @@ export interface IntakeMonth {
  */
 export interface Booking {
   id: number;
-  courseName: string;
-  courseID?: string | null;
-  book?: string | null;
-  customerName: string;
-  customerID?: string | null;
+  course: number | Course;
+  student: number | Student;
   orderDate: string;
+  originalAmount?: number | null;
+  convertedAmount?: number | null;
+  currencyRate?: number | null;
   razorpayResponse: string;
   updatedAt: string;
   createdAt: string;
@@ -996,6 +991,7 @@ export interface Student {
         id?: string | null;
       }[]
     | null;
+  isActive?: boolean | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -1246,10 +1242,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'students';
         value: number | Student;
-      } | null)
-    | ({
-        relationTo: 'currencies';
-        value: number | Currency;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1636,6 +1628,7 @@ export interface CoursesSelect<T extends boolean = true> {
   heroImage?: T;
   content?: T;
   university?: T;
+  subUniversity?: T;
   degreeProgram?: T;
   department?: T;
   studyArea?: T;
@@ -1650,7 +1643,6 @@ export interface CoursesSelect<T extends boolean = true> {
     | {
         feeName?: T;
         feeAmount?: T;
-        feeCurrency?: T;
         id?: T;
       };
   meta?:
@@ -1674,6 +1666,7 @@ export interface CoursesSelect<T extends boolean = true> {
  */
 export interface IntakeMonthsSelect<T extends boolean = true> {
   name?: T;
+  image?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
@@ -1685,6 +1678,7 @@ export interface IntakeMonthsSelect<T extends boolean = true> {
  */
 export interface StudyModesSelect<T extends boolean = true> {
   name?: T;
+  image?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
@@ -1696,6 +1690,7 @@ export interface StudyModesSelect<T extends boolean = true> {
  */
 export interface StudyYearsSelect<T extends boolean = true> {
   name?: T;
+  image?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
@@ -1707,6 +1702,7 @@ export interface StudyYearsSelect<T extends boolean = true> {
  */
 export interface StudyAreasSelect<T extends boolean = true> {
   name?: T;
+  image?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
@@ -1718,6 +1714,7 @@ export interface StudyAreasSelect<T extends boolean = true> {
  */
 export interface DepartmentsSelect<T extends boolean = true> {
   name?: T;
+  image?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
@@ -1729,6 +1726,7 @@ export interface DepartmentsSelect<T extends boolean = true> {
  */
 export interface DegreeProgramsSelect<T extends boolean = true> {
   name?: T;
+  image?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
@@ -1742,6 +1740,7 @@ export interface UniversitiesSelect<T extends boolean = true> {
   title?: T;
   logo?: T;
   secondaryLogo?: T;
+  universityImage?: T;
   email?: T;
   country?: T;
   slug?: T;
@@ -1757,7 +1756,10 @@ export interface CountriesSelect<T extends boolean = true> {
   name?: T;
   code?: T;
   logo?: T;
-  feeCurrency?: T;
+  countryImage?: T;
+  currencyName?: T;
+  currencyCode?: T;
+  currencyValue?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1766,12 +1768,12 @@ export interface CountriesSelect<T extends boolean = true> {
  * via the `definition` "bookings_select".
  */
 export interface BookingsSelect<T extends boolean = true> {
-  courseName?: T;
-  courseID?: T;
-  book?: T;
-  customerName?: T;
-  customerID?: T;
+  course?: T;
+  student?: T;
   orderDate?: T;
+  originalAmount?: T;
+  convertedAmount?: T;
+  currencyRate?: T;
   razorpayResponse?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1795,6 +1797,7 @@ export interface StudentsSelect<T extends boolean = true> {
         bookId?: T;
         id?: T;
       };
+  isActive?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -1804,18 +1807,6 @@ export interface StudentsSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "currencies_select".
- */
-export interface CurrenciesSelect<T extends boolean = true> {
-  currencyName?: T;
-  currencyCode?: T;
-  currencyValue?: T;
-  isActive?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

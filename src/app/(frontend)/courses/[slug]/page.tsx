@@ -92,6 +92,7 @@ const queryCoursesByUniversityId = cache(async ({ universityId }: { universityId
         }
       })
     }
+
   })
 
   return {
@@ -144,6 +145,16 @@ export default async function Post({ params: paramsPromise }: Args) {
               })) || []
           }
           logo={universityLogo}
+          university={
+            typeof course.university === 'object'
+              ? {
+                title: course.university.title,
+                name: course.university.title,
+                slug: course.university.slug || '',  // fallback to empty string
+              }
+              : undefined
+          }
+
         />
 
         <CourseHero post={course} />
@@ -162,7 +173,7 @@ export default async function Post({ params: paramsPromise }: Args) {
         <FooterForm />
         <Footer />
         <ModalPopup />
-        <RegisterFlow pageId={123} />
+        <RegisterFlow pageId={course.id} />
       </article>
     </RazorpayScriptLoader >
   )

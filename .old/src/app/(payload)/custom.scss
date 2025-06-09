@@ -1,0 +1,38 @@
+.login__brand{
+    display: none;
+}
+.nav-group__label {
+  color: white;
+  font-weight: bold;
+}
+
+aside.nav {
+  background: #21475d;
+  color: white;
+}
+
+div.table {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.nav nav a.active {
+  color: #00e5dc;
+}
+
+.nav nav a {
+  padding-left: 15px;
+}
+
+.nav__link-indicator {
+    position: absolute;
+    z-index: -1;
+    display: block;
+    inset-inline-start: -1.5384615385rem;
+    width: 130%;
+    height: 20px;
+    border-start-end-radius: 2px;
+    border-end-end-radius: 2px;
+    background: rgb(225 0 0 / 56%);
+}
+

@@ -129,7 +129,7 @@ export const RegisterFormBlock: React.FC<Props> = ({
     }
   }, [pageId]);
 
-  console.log(pageId);
+  // console.log(pageId);
 
   useEffect(() => {
     const phoneVerified = localStorage.getItem('is_phone_verified') === '1';
@@ -485,7 +485,7 @@ export const RegisterFormBlock: React.FC<Props> = ({
 
       if (res.ok) {
         const json = await res.json();
-        console.log('Login successful:', json);
+        // console.log('Login successful:', json);
 
         setIsLoginModalOpen(false);
         setSuccessMessage('Login successful');
@@ -525,7 +525,7 @@ export const RegisterFormBlock: React.FC<Props> = ({
       if (response.ok) {
         const result = await response.json();
         setSuccessMessage('Order created successfully');
-        console.log('Order stored successfully:', result);
+        // console.log('Order stored successfully:', result);
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.error || 'Failed to create order');
@@ -564,7 +564,7 @@ export const RegisterFormBlock: React.FC<Props> = ({
         description: 'Test Transaction',
         order_id: orderData.id, // pass the order id returned by your API
         handler: function (response: any) {
-          console.log('Payment response', response);
+          // console.log('Payment response', response);
           handleRazorpaySuccess(response);
         },
         prefill: {

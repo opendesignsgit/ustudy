@@ -34,7 +34,6 @@ export type CardPostData = Pick<
   | 'intakeMonths'
   | 'meta'
 > & {
-  // Additional fields that might be populated from relations
   categories?: Array<{ title?: string }>
   externalLink?: string
   excerpt?: string
@@ -43,7 +42,6 @@ export type CardPostData = Pick<
   University?: University
 }
 
-// Helper to safely extract a display label from a relationship field
 // Helper to safely extract a display label from a relationship field
 export function getRelationshipLabel<T extends { title?: string | null; name?: string | null }>(
   value: T | string | number | undefined | null
@@ -94,16 +92,6 @@ export const CoursesCard: React.FC<{
   const universityTitle = (university as any)?.title
   const countryName = (university as any)?.country?.name || 'Malaysia'
 
-  // Format study years display
-  // Handles both number and relationship object
-  const studyYearsValue = typeof studyYear === 'number'
-    ? studyYear
-    : Number(getRelationshipLabel(studyYear));
-  const formatStudyYears = (years: number) => {
-    return years === 1 ? `${years} Year` : `${years} Years`
-  }
-  const studyYearsDisplay = studyYearsValue ? formatStudyYears(studyYearsValue) : undefined;
-
   // Relationship display values
   const degreeProgramLabel = getRelationshipLabel(degreeProgram);
   const departmentLabel = getRelationshipLabel(department);
@@ -115,7 +103,8 @@ export const CoursesCard: React.FC<{
     ? intakeMonths.map(getRelationshipLabel).filter(Boolean)
     : [getRelationshipLabel(intakeMonths)].filter(Boolean);
 
-  console.log(metaImage);
+  // Study Year display (show raw value/label directly)
+  const studyYearsDisplay = getRelationshipLabel(studyYear);
 
   return (
     <article
@@ -228,15 +217,6 @@ export const CoursesCard: React.FC<{
             )}
           </div>
 
-          {/* Department and Study Area */}
-          {(departmentLabel || studyAreaLabel) && (
-            <div className="text-sm text-gray-700 mb-2">
-              {departmentLabel && <span className="font-medium">{departmentLabel}</span>}
-              {departmentLabel && studyAreaLabel && <span> - </span>}
-              {studyAreaLabel && <span>{studyAreaLabel}</span>}
-            </div>
-          )}
-
           {/* Description or Excerpt */}
           <div className="descriptbox">
             {(description || sanitizedExcerpt) && (
@@ -255,4 +235,4 @@ export const CoursesCard: React.FC<{
     </article>
   )
 }
-//Final
+// Final

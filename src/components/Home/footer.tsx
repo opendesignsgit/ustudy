@@ -105,7 +105,7 @@ const Footer = () => {
         </div>
         <div className="footcorightrow text-center py-[15px] flex justify-center">
           <p className="flex justify-center">
-            Copyright © 2025. Ustudy / <a href="https://opendesignsin.com/" target='_blank'>Designed By <img src="/media/openlogo.png" alt="" /></a>
+            Copyright © 2025. UStudy Global / <a href="https://opendesignsin.com/" target='_blank'>Designed By <img src="/media/openlogo.png" alt="" /></a>
           </p>
         </div>
       </div>

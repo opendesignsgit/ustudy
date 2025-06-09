@@ -82,6 +82,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             const password = generatePassword();
             const userDataWithPassword = { ...userData, password };
 
+            // Register the user
             const response = await fetch('/api/students/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -89,13 +90,35 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             });
 
             if (!response.ok) {
-                throw new Error('Registration failed');
+                const errData = await response.json();
+                throw new Error(errData.message || 'Registration failed');
             }
 
             const data = await response.json();
+
             // Add the generated password to the returned data
             const userWithPassword = { ...data.user, password };
             setUser(userWithPassword);
+            localStorage.setItem('user', JSON.stringify(userWithPassword));
+            if (data.token) {
+                localStorage.setItem('token', data.token);
+            }
+
+            // Send welcome email after successful registration
+            await fetch('/api/sendWelcomeEmail', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: userData.email,
+                    name: userData.name,
+                    phone: userData.phone,
+                    college: userData.college,
+                    dept: userData.dept,
+                    username: userData.email,
+                    password: password,
+                }),
+            });
+
             return userWithPassword;
         } catch (error) {
             console.error('Registration error:', error);

@@ -6,6 +6,7 @@ export const Students: CollectionConfig = {
   slug: 'students',
   access: {
     create: () => true,
+    read: () => true,
   },
   admin: {
     group: 'Universities',
@@ -23,6 +24,7 @@ export const Students: CollectionConfig = {
       name: 'phone',
       type: 'text',
       required: true,
+      unique: true,
     },
     {
       name: 'email',
@@ -72,6 +74,22 @@ export const Students: CollectionConfig = {
         },
       ],
     },
+    {
+      name: 'isActive',
+      type: 'checkbox',
+      label: 'Active',
+      defaultValue: true,
+    }    
   ],
+  hooks: {
+    beforeLogin: [
+      async ({ req, user }) => {
+        if (user && user.isActive === false) {
+          throw new Error('Your account is inactive. Please contact support.');
+        }
+        return user;
+      },
+    ],
+  },
   timestamps: true,
 };

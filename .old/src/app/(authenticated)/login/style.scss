@@ -1,0 +1,85 @@
+
+.min-h-screen {
+    min-height: 70vh;
+}
+.login-register {
+    padding: 50px;
+    background: #00a551;
+    max-width: 40rem;
+    width: 100%;
+    margin: 0 0 70px;
+}
+
+.login-register h2{font-size: 35px;}
+
+.login-register form button {
+    --tw-bg-opacity: 1;
+    background-color: #032815;
+    max-width: max-content;
+    padding: 10px 30px !important;
+    cursor: pointer;
+}
+
+.login-register form button:hover { background-color: #000;}
+
+
+.login-register .text-center {
+    text-align: left;
+}
+
+.login-register .text-blue-500 {
+     color: rgb(254 254 255);
+}
+
+.login-register .bg-gray-200 {
+    background-color: #fff;
+}
+
+.login-register .intl-tel-input.allow-dropdown.separate-dial-code .selected-dial-code {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 7px;
+}
+
+.login-register .intl-tel-input.allow-dropdown.separate-dial-code.iti-sdc-3 .selected-flag {
+    width: 78px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.login-register .intl-tel-input {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.login-register .phoneOut{position: relative;}
+.login-register .verifyPhone {
+  position: absolute;
+  position: absolute;
+  right: 10px;
+  top: 30px;
+  }
+  .login-register .verifyPhone button{
+    padding: 1px 5px;
+    font-size: 12px;
+    background: #17251e;
+    }
+    
+    .login-register .emailOut{position: relative;}
+ 
+    .login-register .verifyEmail {
+      position: absolute;
+      position: absolute;
+      right: 10px;
+      top: 30px;
+      }
+      .login-register .verifyEmail button{
+    padding: 1px 5px;
+    font-size: 12px;
+    background: #17251e;
+    }
+
+   
