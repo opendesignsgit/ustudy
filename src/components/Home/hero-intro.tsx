@@ -14,10 +14,10 @@ import { useRouter } from 'next/navigation';
 
 const EducationPromoSection = () => {
   const leftMenuItems = [
-    { name: 'Business', image: '/media/home/hbusiness-icon.png' },
-    { name: 'Law', image: '/media/home/hlaw-icon.png' },
-    { name: 'Media', image: '/media/home/hmedia-icon.png' },
-    { name: 'Digital Technology', image: '/media/home/hdigitaltech-icon.png' },
+    { name: 'Business', image: '/media/home/hbusiness-icon.png', link: '/courses?studyAreas=Business' },
+    { name: 'Law', image: '/media/home/hlaw-icon.png', link: '/courses?studyAreas=Law' },
+    { name: 'Media', image: '/media/home/hmedia-icon.png', link: '/courses?studyAreas=Media+%26+Communication' },
+    { name: 'Digital Technology', image: '/media/home/hdigitaltech-icon.png', link: '/courses?studyAreas=Digital+Technology' },
   ]
 
   const rightMenuItems = [
@@ -30,6 +30,9 @@ const EducationPromoSection = () => {
 
   const handleClick = () => {
     router.push('/courses'); // change to your desired route
+  };
+  const ContactClick = () => {
+    router.push('/contact-us#contformSec'); // change to your desired route
   };
   return (
     <section className="relative w-full h-screen hbanersec  relative">
@@ -69,7 +72,7 @@ const EducationPromoSection = () => {
                       width="30"
                       height="30"
                     />
-                    <span>{item.name}</span>
+                    <a href={item.link}>{item.name}</a>
                   </li>
                 ))}
               </ul>
@@ -104,7 +107,7 @@ const EducationPromoSection = () => {
                   </li>
                 ))}
               </ul>
-              <button onClick={handleClick} className="border border-[#0056d2] bg-[#0056d2] text-white font-semibold rounded-full uppercase hover:text-[#0056d2] hover:bg-white">
+              <button onClick={ContactClick} className="border border-[#0056d2] bg-[#0056d2] text-white font-semibold rounded-full uppercase hover:text-[#0056d2] hover:bg-white">
                 View All Medical Courses
               </button>
             </div>

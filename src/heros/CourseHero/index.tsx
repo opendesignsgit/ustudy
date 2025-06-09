@@ -7,7 +7,6 @@ import { Media } from '@/components/Media'
 import Image from 'next/image'
 
 // Helper to safely extract a display label from a relationship field
-// Helper to safely extract a display label from a relationship field
 export function getRelationshipLabel<T extends { title?: string | null; name?: string | null }>(
   value: T | string | number | undefined | null
 ): string | undefined {
@@ -26,6 +25,7 @@ export const CourseHero: React.FC<{
     publishedAt,
     title,
     university,
+    subUniversity,
     degreeProgram,
     department,
     studyArea,
@@ -38,25 +38,26 @@ export const CourseHero: React.FC<{
     description,
   } = post
 
-  // University logo and title safe extraction
+  // If subUniversity is present, use its logo and title, otherwise fallback to university
+  const uniObj = subUniversity ?? university;
   const universityLogo =
-    university && typeof university === 'object' && 'logo' in university && university.logo && typeof university.logo !== 'string'
-      ? university.logo
-      : undefined
-  const universityTitle = university ? getRelationshipLabel(university) : undefined
+    uniObj && typeof uniObj === 'object' && 'logo' in uniObj && uniObj.logo && typeof uniObj.logo !== 'string'
+      ? uniObj.logo
+      : undefined;
+  const universityTitle = uniObj ? getRelationshipLabel(uniObj) : undefined;
 
-  // Study year
-  const studyYearValue = typeof studyYear === 'number'
-    ? studyYear
-    : Number(getRelationshipLabel(studyYear))
-  const studyYearDisplay = studyYearValue ? `${studyYearValue} year${studyYearValue > 1 ? 's' : ''}` : undefined
+  // Study year label (show raw value/label as requested)
+  const studyYearDisplay = getRelationshipLabel(studyYear);
 
   // Study mode
-  const studyModeLabel = getRelationshipLabel(studyMode)
+  const studyModeLabel = studyMode ? getRelationshipLabel(studyMode) : undefined
 
   // Intake months (hasMany)
   const intakeMonthsLabels = Array.isArray(intakeMonths)
-    ? intakeMonths.map(getRelationshipLabel).filter(Boolean)
+    ? intakeMonths.map(item => {
+      const label = getRelationshipLabel(item)
+      return label || (typeof item === 'object' ? item.name || item.name : String(item))
+    }).filter(Boolean)
     : [getRelationshipLabel(intakeMonths)].filter(Boolean)
 
   return (
@@ -85,10 +86,8 @@ export const CourseHero: React.FC<{
               )}
 
               {/* Course Description */}
-              {description && <p className="description">{description}</p>}
+              {/* {description && <p className="description">{description}</p>} */}
             </div>
-
-            {/* Additional Meta Information */}
           </div>
         </div>
       </div>
@@ -203,9 +202,6 @@ export const CourseHero: React.FC<{
           </div>
         </div>
       </div>
-
-      {/* Hero Image */}
     </div>
   )
 }
-//Final

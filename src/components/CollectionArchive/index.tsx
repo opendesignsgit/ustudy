@@ -14,7 +14,7 @@ export type Props = {
 
 export const CollectionArchive: React.FC<Props> = (props) => {
   const { posts, relationTo = 'posts', customClass, numberOfCol } = props
-console.log(numberOfCol);
+  // console.log(numberOfCol);
 
   return (
     <div className={cn('container', customClass)}>

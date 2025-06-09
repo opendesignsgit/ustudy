@@ -3,15 +3,18 @@ import React from 'react'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
+import Link from 'next/link'
 
 const destinations = [
   {
     name: 'Malaysia',
     image: '/media/home/fpsdImg1.jpg', // Replace with actual image URL
+    link: '/courses?countries=Malaysia ',
   },
   {
     name: 'Singapore',
     image: '/media/home/fpsdImg2.jpg', // Replace with actual image URL
+    link: '/courses?countries=Singapore',
   },
 ]
 
@@ -59,10 +62,12 @@ const StudyDestinationCarousel: React.FC = () => {
           {destinations.map((destination, index) => (
             <div key={index} className="px-2">
               <div className="hfpsdSItems overflow-hidden relative">
-                <img className="w-full" src={destination.image} alt={destination.name} />
-                <h4 className="hfpsdtitle absolute top-0 left-0 bg-blue-700 text-white">
-                  {destination.name}
-                </h4>
+                <Link href={destination.link}>
+                  <img className="w-full" src={destination.image} alt={destination.name} />
+                  <h4 className="hfpsdtitle absolute top-0 left-0 bg-blue-700 text-white">
+                    {destination.name}
+                  </h4>
+                </Link>
               </div>
             </div>
           ))}

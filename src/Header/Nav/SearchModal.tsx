@@ -238,9 +238,9 @@ export const SearchModal = ({
 
               {/* Search Suggestions Dropdown */}
               {searchQuery && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto">
+                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto serchresultbox">
                   {isLoading ? (
-                    <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
+                    <div className="px-4 py-2 text-sm text-gray-500 serchresultitem">Loading...</div>
                   ) : suggestions.length > 0 ? (
                     suggestions.map((course) => (
                       <div key={course.id} className="px-4 py-3 hover:bg-gray-50 flex flex-col border-b border-gray-100 last:border-b-0">
@@ -250,7 +250,7 @@ export const SearchModal = ({
                             router.push(`/courses/${course.slug}`)
                             onClose()
                           }}
-                          className="font-medium text-gray-900 truncate text-left flex items-center gap-2 w-full"
+                          className="font-medium text-gray-900 truncate text-left flex items-center gap-2 w-full mainbtnserch"
                           type="button"
                         >
                           <Image src="/media/book-icon.svg" alt="" width={20} height={20} className="flex-shrink-0" />
@@ -259,7 +259,7 @@ export const SearchModal = ({
                         </button>
 
                         {/* Pills for filters */}
-                        <div className="flex flex-wrap gap-2 mt-2">
+                        <div className="flex flex-wrap gap-2 mt-2 subbtnlistd">
                           {/* University */}
                           {course.university?.title && (
                             <button

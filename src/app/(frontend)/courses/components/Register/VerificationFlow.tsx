@@ -1,4 +1,3 @@
-// VerificationFlow.tsx
 "use client";
 
 import React, { useState } from 'react';
@@ -7,19 +6,32 @@ import { PhoneVerification } from './PhoneVerification';
 import { EmailVerification } from './EmailVerification';
 import { useAuth } from '@/providers/Auth';
 
-
 type VerificationFlowProps = {
     onSuccess: (data: any) => void;
     onClose: () => void;
+    onToggleToLogin: () => void;
+    onLoginSuccess?: (loginData: any) => void; // <-- Added for login support
 };
-export const VerificationFlow = ({ onSuccess, onClose }: VerificationFlowProps) => {
+
+export const VerificationFlow = ({
+    onSuccess,
+    onClose,
+    onToggleToLogin,
+    onLoginSuccess
+}: VerificationFlowProps) => {
     const [step, setStep] = useState<'personal' | 'phone' | 'email'>('personal');
     const [formData, setFormData] = useState<any>({});
     const { register } = useAuth();
 
+    // Called after registration form submit (could be register or login)
     const handlePersonalInfoSubmit = (data: any) => {
-        setFormData(data);
-        setStep('phone');
+        // If login was successful, data will likely have a user or token
+        if (data && data.token && onLoginSuccess) {
+            onLoginSuccess(data); // Skip verification, go to payment in modal
+        } else {
+            setFormData(data);
+            setStep('phone');
+        }
     };
 
     const handlePhoneVerified = () => {

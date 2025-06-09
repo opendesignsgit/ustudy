@@ -1,6 +1,6 @@
 article header.sticky {
   background: #0056d2;
-  top: 68px;
+  top: 96px;
   z-index: 9999;
   padding: 0;
 }
@@ -11,6 +11,40 @@ article header.sticky nav ul li a {
 article header .colgelogo {
   background: #ffffff;
   padding-inline: 10px;
+}
+article header nav {}
+
+article header nav button {
+  position: relative;
+}
+
+article header nav button:before {
+  content: '';
+  position: relative;
+  width: 30px;
+  aspect-ratio: 1;
+  display: block;
+  -webkit-filter: brightness(0) invert(1);
+  filter: brightness(0) invert(1);
+}
+
+article header nav button:after {
+  opacity: 0;
+  visibility: hidden;
+}
+
+article header nav button svg {
+  display: none;
+}
+
+article header nav button[aria-label="Previous"]:before {
+  background: url(/media/home/arrow-left-icon.svg) no-repeat 50%;
+  background-size: 50%;
+}
+
+article header nav button[aria-label="Next"]:before {
+  background: url(/media/home/arrow-right-icon.svg) no-repeat 50%;
+  background-size: 50%;
 }
 .cdpagebansec {
   height: auto;
@@ -46,18 +80,22 @@ article header .colgelogo {
 }
 .cdbaninCont img {
   margin-bottom: 0;
+  width: auto;
+    height: 55px;
 }
 .cdbanContBox h1 {
   font-family: 'Times New Roman', Times, serif;
   font-size: 2.1vw;
   line-height: 1;
   margin-bottom: 10px;
+  color: #ffffff;
 }
 .cdbanContBox h4 {
   font-size: 1.2vw;
   line-height: 1;
   margin-bottom: 10px;
   letter-spacing: 1px;
+  color: #ffffff;
 }
 .cdbanContBox .collogos {
   background: #ffffff;
@@ -143,6 +181,14 @@ ul li {
   background: #014ebe;
   opacity: 0.52;
 }
+.cdintro-section h2 {
+  font-family: 'Times New Roman', Times, serif;
+  color: #0056d2;
+  font-size: 2vw;
+  line-height: 1;
+  margin-bottom: 20px;
+  text-align: left !important;
+}
 .cdintro-section h3 {
   font-family: 'Times New Roman', Times, serif;
   color: #0056d2;
@@ -150,13 +196,26 @@ ul li {
   line-height: 1;
   margin-bottom: 20px;
 }
+.cdintro-section h4 {
+  color: #333333;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.cdintro-section p {
+  color: #333333;
+}
+.cdintro-section p strong {
+  color: #333333;
+}
 .cdintro-section ul.list-bullet {
-  list-style: none;
+  list-style: disc;
   padding: 0;
+  padding-left: 15px;
 }
 .cdintro-section ul.list-bullet li {
   margin: 0;
   padding: 0;
+  margin-bottom: 10px;
 }
 .cdenquire-now {
   padding-bottom: 10vh;
@@ -194,16 +253,41 @@ ul li {
   font-size: 3vw;
   line-height: 1;
   margin-bottom: 20px;
+  text-align: left !important;
+  color: #ffffff;
 }
 .cdwhychoosesec h4 {
   font-family: 'Times New Roman', Times, serif;
   font-size: 2vw;
   line-height: 1;
   margin-bottom: 10px;
+  text-align: left !important;
+  color: #ffffff;
 }
 .cdwhychoosesec p {
   color: #ffffff;
   font-size: 1vw;
+  text-align: left !important;
+}
+.cdwhychoosesec ul {
+  padding-left: 0;
+}
+.cdwhychoosesec ul li {
+  color: #ffffff;
+  margin: 0;
+  margin-bottom: 10px;
+  list-style: none;
+  position: relative;
+  padding: 0;
+  padding-left: 20px;
+}
+.cdwhychoosesec ul li::before {
+  content: '-';
+  position: absolute;
+  display: block;
+  margin-right: 10px;
+  left: 0;
+    top: 0;
 }
 .cdwhychoosesec .container {
   max-width: 100%;
@@ -246,20 +330,27 @@ ul li {
   max-width: 100%;
 }
 .how-do-right ul {
-  padding: 3vw;
+  padding: 2vw 3vw;
   border: 1px solid #cccccc;
   border-radius: 2vw;
 }
 .how-do-right ul li {
   padding: 0vw;
   margin: 0 0 5px;
+  color: #333333;
+  }
+  
+  .how-do-right ul li strong {
+    color: #333333;
 }
-.cdhowdosec .grid h2 {
+.cdhowdosec .grid h2,
+.cdhowdosec .grid h3 {
   font-family: 'Times New Roman', Times, serif;
   font-size: 3vw;
   line-height: 1;
   margin-bottom: 20px;
   color: #0056d2;
+  text-align: left !important;
 }
 .cdhowdosec .grid p {
   margin-bottom: 0;
@@ -286,9 +377,22 @@ ul li {
   text-align: center;
 }
 
+.year-group h2 {
+  color: #0056d2;
+}
 .year-group h3 {
   color: #0056d2;
-  text-decoration: underline;
+  margin-block: 10px;
+}
+.year-group p strong {
+  color: #0056d2;
+}
+.year-group ul {
+  margin: 0;
+}
+
+.year-group ul li strong {
+  color: #333333;
 }
 
 .yearModulebox {
@@ -335,6 +439,7 @@ ul li {
 }
 .yearintitle h4 {
   margin: 0 2vw;
+  color: #ffffff;
 }
 
 .year-group .left-column {
@@ -462,6 +567,7 @@ ul li {
 .cdtutionfeessec h2 a {
   color: #0056d2;
   text-decoration: none;
+  pointer-events: none;
 }
 .cdtutionfeessec picture {
   margin: 0;
@@ -526,6 +632,9 @@ ul li {
   line-height: 1;
   margin: 0;
 }
+.cdtutionfeessec .grid .tution-fees-right p {
+  display: flex;
+}
 .cdtutionfeessec .grid .tution-fees-right p a {
   background: #0056d2;
   padding: 0 20px;
@@ -535,14 +644,37 @@ ul li {
   border-radius: 30px;
   text-decoration: none;
   text-transform: uppercase;
-  position: absolute;
-  right: 20px;
-  bottom: 50%;
-  transform: translateY(50%);
+  position: relative;
+    display: block;
+    right: 0;
 }
 .cdtutionfeessec .grid .tution-fees-right p a:hover {
   background: #ffffff;
   color: #0056d2;
+}
+.cdtutionfeessec table {
+  margin: 0;
+}
+.cdtutionfeessec table h2,
+.cdtutionfeessec table h3,
+.cdtutionfeessec table h4,
+.cdtutionfeessec table h5 {
+  margin: 0;
+}
+.cdtutionfeessec table tbody {
+}
+.cdtutionfeessec table tbody p {
+  margin: 0;
+  text-align: left !important;
+  color: #333333;
+  }
+  
+  .cdtutionfeessec table tbody strong {
+    color: #333333;
+  }
+  
+  .cdtutionfeessec table tbody p strong {
+    color: #333333;
 }
 
 .coursecontainer > .prose > p {
@@ -577,7 +709,15 @@ ul li {
 
 @media screen and (max-width: 1520px) {
   article header.sticky {
-    top: 56px;
+    top: 54px;
+    }
+    
+    article header.sticky>.container>.flex {
+      padding-block: 8px;
+    }
+    
+    article header .colgelogo img {
+      width: 80px;
   }
   .cdtutionfeessec .grid .tution-fees-right p a {
     font-size: 13px;
@@ -600,11 +740,29 @@ ul li {
   }
   .year-group h3 {
     font-size: 17px;
-    margin-block: 30px 10px;
   }
   .year-group p {
     margin-bottom: 0;
     line-height: 1.5;
+  }
+}
+@media screen and (max-width: 1420px) {
+  body {
+    line-height: 1.4;
+  }
+
+  body,
+  h3.showtitle,
+  .fonteighteen {
+    font-size: 14px;
+  }
+
+  .how-do-right ul li {
+    line-height: 1.4;
+  }
+
+  .cdbaninCont img {
+    width: 55px;
   }
 }
 @media screen and (max-width: 1200px) {
@@ -660,7 +818,8 @@ ul li {
   .cdhowdosec .grid h2,
   .cdwhychoosesec h2,
   .CourseModuleTitle h2,
-  .cdtutionfeessec h2 {
+  .cdtutionfeessec h2,
+  .cdhowdosec .grid h3 {
     font-size: 38px;
   }
   .cdintro-section h3 {
@@ -761,7 +920,8 @@ ul li {
   .cdhowdosec .grid h2,
   .cdwhychoosesec h2,
   .CourseModuleTitle h2,
-  .cdtutionfeessec h2 {
+  .cdtutionfeessec h2,
+  .cdhowdosec .grid h3 {
     font-size: 30px;
   }
   .cdintro-section h3 {
@@ -855,5 +1015,16 @@ ul li {
   }
   .cmitemscont h5 {
     font-size: 20px;
+  }
+  .cdintro-section h2 {
+    font-size: 25px;
+  }
+}
+@media screen and (max-width: 500px) {
+  .yearintitle::before {
+    width: 20%;
+  }
+  .yearintitle::after {
+    width: 20%;
   }
 }

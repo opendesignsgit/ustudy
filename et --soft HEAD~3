@@ -1,0 +1,514 @@
+[33mcommit 3642031b6234bdd75069a932400e087bda08a7b8[m[33m ([m[1;31morigin/course-detail-page[m[33m)[m
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Thu Jun 5 10:41:08 2025 +0530
+
+    final changes
+
+[33mcommit d3a6bc513cc5cc849451805cb200e36cf5bac402[m
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Mon Jun 2 12:12:39 2025 +0530
+
+    public files
+
+[33mcommit 30e3ea956504f948912dafe6e453e2f1f919b884[m
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Mon Jun 2 12:09:22 2025 +0530
+
+    voice search
+
+[33mcommit 531316f47e88a4e7df42985ee489da091e1fd9e0[m
+Merge: 24516ab 37c903e
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Sun Jun 1 17:30:04 2025 +0530
+
+    missing changes bug fixed
+
+[33mcommit 24516aba5bccbac4c4a6cd343614eee9f12498f2[m
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Sat May 31 17:09:14 2025 +0530
+
+    search listing bugs
+
+[33mcommit 37c903eea70e4c66ef1662775366f07897620929[m
+Merge: 9535b29 31901d7
+Author: opendesignsgit <wordpress.odi@gmail.com>
+Date:   Sat May 31 16:39:55 2025 +0530
+
+    Merge pull request #26 from opendesignsgit/Siva
+    
+    Academic Path Image update
+
+[33mcommit 31901d78ab17db5126b34ae4cf550959396a6990[m[33m ([m[1;31morigin/Siva[m[33m)[m
+Author: RJSivaODI <sivashanmugam@opendesignsin.com>
+Date:   Sat May 31 16:39:02 2025 +0530
+
+    Academic Path Image update
+
+[33mcommit 9535b2985100c3ab78361cbbf2a87642a7d49c9f[m
+Merge: 54c2a24 b790c76
+Author: kavirajan452 <75207740+kavirajan452@users.noreply.github.com>
+Date:   Fri May 30 10:11:33 2025 +0530
+
+    Merge pull request #25 from opendesignsgit/course-detail-page
+    
+    Course detail page
+
+[33mcommit b790c7660bec21cb4b6bd6ff961679dee6129a12[m
+Merge: 8a084fc 54c2a24
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Fri May 30 10:10:46 2025 +0530
+
+    module changes
+
+[33mcommit 8a084fc15c85567f378078b0f4de00ae1e3de043[m
+Merge: a413b29 ec5ac89
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Fri May 30 10:09:27 2025 +0530
+
+    modules change
+
+[33mcommit 54c2a248bf4710550c70b9f0054865e6efdb65c3[m
+Merge: 40e83ce 664b0ad
+Author: opendesignsgit <wordpress.odi@gmail.com>
+Date:   Thu May 29 19:12:25 2025 +0530
+
+    Merge pull request #24 from opendesignsgit/Siva
+    
+    bug fixing v1
+
+[33mcommit 664b0ad652f8b442fbe34f7648d3d12f507c907d[m
+Author: RJSivaODI <sivashanmugam@opendesignsin.com>
+Date:   Thu May 29 19:11:41 2025 +0530
+
+    bug fixing v1
+
+[33mcommit 40e83cef79131df908c097a7363e53fa02baf9cb[m
+Merge: ec5ac89 a413b29
+Author: kavirajan452 <75207740+kavirajan452@users.noreply.github.com>
+Date:   Tue May 27 17:34:06 2025 +0530
+
+    Merge pull request #23 from opendesignsgit/course-detail-page
+    
+    build error fix and schema changes
+
+[33mcommit a413b290a0f7788e290b31384a0e55a183261154[m
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Tue May 27 17:31:11 2025 +0530
+
+    build error fix and schema changes
+
+[33mcommit ec5ac896cfd044c7f664dd57d5cb7d53a4cc8d2b[m
+Merge: dadf27a 8d1a79f
+Author: opendesignsgit <wordpress.odi@gmail.com>
+Date:   Mon May 26 12:13:42 2025 +0530
+
+    Merge pull request #22 from opendesignsgit/Siva
+    
+    courses mobile filter style work
+
+[33mcommit 8d1a79fff625cbc5ca9972f3e00f67a695d22541[m
+Author: RJSivaODI <sivashanmugam@opendesignsin.com>
+Date:   Mon May 26 12:12:47 2025 +0530
+
+    courses mobile filter style work
+
+[33mcommit dadf27ad1a8abc85b9a9f07c414dccf3092ef2f2[m
+Merge: a4f5299 642fd56
+Author: opendesignsgit <wordpress.odi@gmail.com>
+Date:   Mon May 26 10:09:10 2025 +0530
+
+    Merge pull request #21 from opendesignsgit/Siva
+    
+    search bar work
+
+[33mcommit a4f529942fe8b796df7209544452678a1edb08d4[m
+Merge: c421e3f 6b69051
+Author: kavirajan452 <75207740+kavirajan452@users.noreply.github.com>
+Date:   Mon May 26 09:52:04 2025 +0530
+
+    Merge pull request #20 from opendesignsgit/course-detail-page
+    
+    filter page changes responsive
+
+[33mcommit 6b690510c04861c96a17b897bebbfc785a5cf74d[m
+Merge: e40d65c 614d2fe
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Mon May 26 09:41:04 2025 +0530
+
+    filter page changes responsive
+
+[33mcommit 642fd56c65e1bb63dc317e90061f1fa0c86ea7f7[m
+Author: RJSivaODI <sivashanmugam@opendesignsin.com>
+Date:   Fri May 23 18:50:38 2025 +0530
+
+    search bar work
+
+[33mcommit c421e3faf3790217aa0d85a881afa11156976175[m
+Merge: 614d2fe e40d65c
+Author: kavirajan452 <75207740+kavirajan452@users.noreply.github.com>
+Date:   Fri May 23 16:00:01 2025 +0530
+
+    Merge pull request #19 from opendesignsgit/course-detail-page
+    
+    Course detail page - nav bar hamburger menu
+
+[33mcommit e40d65c22af12779fce351e457575039ac52b490[m
+Merge: e9bc1ab 1d9fb7a
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Fri May 23 15:53:55 2025 +0530
+
+    nav hamburger
+
+[33mcommit 614d2fea801b294fc6aa7c0eeda0b208d1b10f96[m
+Merge: 1d9fb7a b58c876
+Author: opendesignsgit <wordpress.odi@gmail.com>
+Date:   Fri May 23 15:53:22 2025 +0530
+
+    Merge pull request #18 from opendesignsgit/Siva
+    
+    Mobile Responsive V-I
+
+[33mcommit b58c876cd92e972a28bcd20d74975cd7cc42c194[m
+Author: RJSivaODI <sivashanmugam@opendesignsin.com>
+Date:   Fri May 23 15:52:37 2025 +0530
+
+    Mobile Responsive V-I
+
+[33mcommit e9bc1abcdd00f06bed3291501b6ea99051a90526[m
+Merge: 0e5ee1a 35fbae6
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Fri May 23 09:52:50 2025 +0530
+
+    header changes
+
+[33mcommit 1d9fb7ac3d66ffc33697ab4364e9ef801ddc6ceb[m
+Merge: eadacfa e577d50
+Author: opendesignsgit <wordpress.odi@gmail.com>
+Date:   Fri May 23 09:51:47 2025 +0530
+
+    Merge pull request #17 from opendesignsgit/Siva
+    
+    tab responsive work v2
+
+[33mcommit e577d508ef95f3787e42efa10bdf11c3e319baec[m
+Author: RJSivaODI <sivashanmugam@opendesignsin.com>
+Date:   Fri May 23 09:51:04 2025 +0530
+
+    tab responsive work v2
+
+[33mcommit eadacfadc74a19ab3a46950597d409b2e28b3929[m
+Merge: 35fbae6 0e5ee1a
+Author: kavirajan452 <75207740+kavirajan452@users.noreply.github.com>
+Date:   Thu May 22 16:50:54 2025 +0530
+
+    Merge pull request #16 from opendesignsgit/course-detail-page
+    
+    secondary header and modal form
+
+[33mcommit 0e5ee1a521ef6a7c9589d778169e7341f91e8e66[m
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Thu May 22 16:48:54 2025 +0530
+
+    secondary header and modal form
+
+[33mcommit 35fbae679cfe703c0c80dada601867806c52501f[m
+Merge: a2f2de2 1e1f1ee
+Author: opendesignsgit <wordpress.odi@gmail.com>
+Date:   Thu May 22 16:43:25 2025 +0530
+
+    Merge pull request #15 from opendesignsgit/Siva
+    
+    Responsive Work V2
+
+[33mcommit 1e1f1ee86ee8ae5461bb6ecefedca377896698bd[m
+Author: RJSivaODI <sivashanmugam@opendesignsin.com>
+Date:   Thu May 22 16:42:12 2025 +0530
+
+    Responsive Work V2
+
+[33mcommit a2f2de2a1fcf85a72c1e415080bd667a44c2368d[m
+Merge: 575e2b2 eb242b8
+Author: kavirajan452 <75207740+kavirajan452@users.noreply.github.com>
+Date:   Thu May 22 11:42:34 2025 +0530
+
+    Merge pull request #14 from opendesignsgit/course-detail-page
+    
+    Course detail page  - modal form
+
+[33mcommit eb242b8ffc8f35b5bbb6254cab82e0721fa5c7d1[m
+Merge: 0ec25b4 575e2b2
+Author: kavirajan452 <75207740+kavirajan452@users.noreply.github.com>
+Date:   Thu May 22 11:41:48 2025 +0530
+
+    Merge branch 'main' into course-detail-page
+
+[33mcommit 0ec25b44c235ca603f49d4da6b7b379381b8b7da[m
+Merge: e697bb5 a32445b
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Thu May 22 11:37:33 2025 +0530
+
+    modal form in detail page
+
+[33mcommit e697bb5342f4bf5d020199a0b1c144f8e47dfc7b[m
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Thu May 22 11:36:04 2025 +0530
+
+    detail page modal form
+
+[33mcommit 575e2b25696eeb3dfdae2f29ff096aa6c7d53bc0[m
+Merge: ca953ab a89c57e
+Author: opendesignsgit <wordpress.odi@gmail.com>
+Date:   Wed May 21 19:11:20 2025 +0530
+
+    Merge pull request #13 from opendesignsgit/Siva
+    
+    Course Detail page Style work
+
+[33mcommit a89c57e504f6ecac1357826b1171240bab7a5e85[m
+Author: RJSivaODI <sivashanmugam@opendesignsin.com>
+Date:   Wed May 21 19:10:34 2025 +0530
+
+    Course Detail page Style work
+
+[33mcommit ca953ab872a041791514b1dd42edf84efb08e45b[m
+Merge: 77317d5 a32445b
+Author: kavirajan452 <75207740+kavirajan452@users.noreply.github.com>
+Date:   Wed May 21 10:33:02 2025 +0530
+
+    Merge pull request #12 from opendesignsgit/course-detail-page
+    
+    Course detail page All
+
+[33mcommit a32445bbd844b405723e4310b1377e1025185899[m
+Merge: dc77283 77317d5
+Author: kavirajan452 <75207740+kavirajan452@users.noreply.github.com>
+Date:   Wed May 21 10:32:34 2025 +0530
+
+    Merge branch 'main' into course-detail-page
+
+[33mcommit dc77283e1bd1fe6873c81504822735d562457f28[m
+Merge: 760ad18 2908e65
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Wed May 21 10:31:31 2025 +0530
+
+    course details page
+
+[33mcommit 760ad187c62ab17c02b76151fdd696b594dbdc0f[m
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Wed May 21 10:05:48 2025 +0530
+
+    courses detail page
+
+[33mcommit 77317d5ded8a089c6763cac66f8435c9a7e66dc5[m
+Merge: 82d589e 36f07d7
+Author: opendesignsgit <wordpress.odi@gmail.com>
+Date:   Wed May 21 10:00:09 2025 +0530
+
+    Merge pull request #11 from opendesignsgit/Siva
+    
+    4page desktop responsive work
+
+[33mcommit 36f07d77e02dcaccfc232a14e1c3ebdd1daf5fe9[m
+Author: RJSivaODI <sivashanmugam@opendesignsin.com>
+Date:   Wed May 21 09:59:10 2025 +0530
+
+    4page desktop responsive work
+
+[33mcommit 2908e65424610e148e88df459806560b2105a53c[m
+Merge: e34b984 82d589e
+Author: kavirajan452 <75207740+kavirajan452@users.noreply.github.com>
+Date:   Wed May 21 08:47:31 2025 +0530
+
+    Merge pull request #10 from opendesignsgit/main
+    
+    Course details page
+
+[33mcommit 82d589e25205ab0b67dfec2bdca88e2593abe0b0[m
+Merge: 41374df b75fbf9
+Author: opendesignsgit <wordpress.odi@gmail.com>
+Date:   Mon May 19 10:59:53 2025 +0530
+
+    Merge pull request #9 from opendesignsgit/filter-bugs
+    
+    Filter bugs
+
+[33mcommit b75fbf91b7d428e2a046a9a85f686ce2c85fd94f[m[33m ([m[1;31morigin/filter-bugs[m[33m)[m
+Merge: e34b984 41374df
+Author: opendesignsgit <wordpress.odi@gmail.com>
+Date:   Mon May 19 10:59:39 2025 +0530
+
+    Merge branch 'main' into filter-bugs
+
+[33mcommit 41374dfd6f7759f2378b331b60ad994bd9e87456[m
+Merge: 2fd71d8 94cfb01
+Author: opendesignsgit <wordpress.odi@gmail.com>
+Date:   Mon May 19 10:00:29 2025 +0530
+
+    Merge pull request #8 from opendesignsgit/Siva
+    
+    Some Style Work
+
+[33mcommit 94cfb0113df7623284a99e5e08dc90229534a5f9[m
+Author: RJSivaODI <sivashanmugam@opendesignsin.com>
+Date:   Mon May 19 09:59:18 2025 +0530
+
+    Some Style Work
+
+[33mcommit e34b98446baabf0cea9759706a55053daeaba527[m[33m ([m[1;32mfilter-bugs[m[33m)[m
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Sun May 18 19:36:32 2025 +0530
+
+    with no errors
+
+[33mcommit 5c0189852571b349bb6ff6e72436fa1f152f26c8[m[33m ([m[1;32mfilter-new[m[33m)[m
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Fri May 16 17:05:08 2025 +0530
+
+    recent changes
+
+[33mcommit 2fd71d8a5da9e044d90e9754a18a53642957e1e9[m
+Merge: b41d7ce 477b991
+Author: kavirajan452 <75207740+kavirajan452@users.noreply.github.com>
+Date:   Wed May 14 16:18:42 2025 +0530
+
+    Merge pull request #7 from opendesignsgit/filter-new
+    
+    filter changes -v3
+
+[33mcommit 477b99124ef85028b1d0ebdcbbcb4c8c79de4e16[m[33m ([m[1;31morigin/filter-new[m[33m)[m
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Wed May 14 16:10:45 2025 +0530
+
+    filter changes -v3
+
+[33mcommit b41d7ceb2519293888ddc963990182b5ae405394[m
+Merge: de6aa1c 86442e8
+Author: opendesignsgit <wordpress.odi@gmail.com>
+Date:   Tue May 13 15:02:34 2025 +0530
+
+    Merge pull request #6 from opendesignsgit/Siva
+    
+    filter style v4
+
+[33mcommit 86442e89029a678eb3c24ecd5445354932ea7d18[m
+Author: RJSivaODI <sivashanmugam@opendesignsin.com>
+Date:   Tue May 13 15:01:57 2025 +0530
+
+    filter style v4
+
+[33mcommit de6aa1c4872ba5937daba53e2226d7c9fdfe7b75[m
+Merge: 9460050 3a8081a
+Author: opendesignsgit <wordpress.odi@gmail.com>
+Date:   Tue May 13 14:50:07 2025 +0530
+
+    Merge pull request #5 from opendesignsgit/Siva
+    
+    Siva
+
+[33mcommit 3a8081a06045997753a4b75d3a66b0550d1f6a4a[m
+Author: RJSivaODI <sivashanmugam@opendesignsin.com>
+Date:   Tue May 13 14:44:21 2025 +0530
+
+    no message
+
+[33mcommit f21ec91615363cc768dea9b03916dfe742479043[m
+Author: RJSivaODI <sivashanmugam@opendesignsin.com>
+Date:   Tue May 13 14:40:39 2025 +0530
+
+    filter style v3
+
+[33mcommit 45762349b2069e65f6a233377870029ca87514b1[m
+Author: RJSivaODI <sivashanmugam@opendesignsin.com>
+Date:   Tue May 13 12:10:58 2025 +0530
+
+    Filter page v2
+
+[33mcommit 9460050dc43cbdedb1dda8208529a7a7c95ee278[m
+Merge: cb44120 d4d74d5
+Author: opendesignsgit <wordpress.odi@gmail.com>
+Date:   Mon May 12 18:54:20 2025 +0530
+
+    Merge pull request #4 from opendesignsgit/Siva
+    
+    Coures Listing page style work
+
+[33mcommit d4d74d5928e52e7caccd6a8983eabd303768b925[m
+Author: RJSivaODI <sivashanmugam@opendesignsin.com>
+Date:   Mon May 12 18:49:58 2025 +0530
+
+    Coures Listing page style work
+
+[33mcommit cb44120c64729cae06cb5070ad0c44a895a95747[m
+Merge: d8c40b3 bc7f0cc
+Author: opendesignsgit <wordpress.odi@gmail.com>
+Date:   Mon May 12 10:01:07 2025 +0530
+
+    Merge pull request #3 from opendesignsgit/Siva
+    
+    Service and Contact Us Page
+
+[33mcommit bc7f0ccf62a6d24d76250382ccb57bedba2fb167[m
+Author: RJSivaODI <sivashanmugam@opendesignsin.com>
+Date:   Mon May 12 09:58:49 2025 +0530
+
+    Service and Contact Us Page
+
+[33mcommit d8c40b3cbc2b0c7ee16c30f0a87057a3058a74a1[m
+Merge: 36ee264 d072427
+Author: kavirajan452 <75207740+kavirajan452@users.noreply.github.com>
+Date:   Mon May 12 08:01:54 2025 +0530
+
+    Merge pull request #2 from opendesignsgit/filter-new
+    
+    Filter new - All changes
+
+[33mcommit d072427a1eed126ce9f6ea2c51360a5acd5ed1aa[m
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Mon May 12 08:00:45 2025 +0530
+
+    Filter changes all
+
+[33mcommit 9e18e0437b23c2779396656191747b72d864c0b9[m[33m ([m[1;32mfilterpage[m[33m)[m
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Sun May 11 14:40:43 2025 +0530
+
+    changes in filter
+
+[33mcommit 36ee264422ed57571776dd9f8ba53b5e6b4ef66c[m[33m ([m[1;32mhome[m[33m)[m
+Author: RJSivaODI <sivashanmugam@opendesignsin.com>
+Date:   Thu May 8 10:09:57 2025 +0530
+
+    Home Page Style Update
+
+[33mcommit c52f5cef72ff9536e84d534ff338266eca2817cd[m
+Merge: 9899fb4 e073d15
+Author: opendesignsgit <wordpress.odi@gmail.com>
+Date:   Mon May 5 11:48:43 2025 +0530
+
+    Merge pull request #1 from opendesignsgit/filterpage
+    
+    filter page changes
+
+[33mcommit e073d15bc9cbbd8c2ef730b6e696112cfff317ee[m[33m ([m[1;31morigin/filterpage[m[33m)[m
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Mon May 5 11:46:20 2025 +0530
+
+    filter page changes
+
+[33mcommit 9899fb41e0cc63df11557dff3190d996ff376bee[m[33m ([m[1;32mmain[m[33m)[m
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Fri May 2 12:17:41 2025 +0530
+
+    first commit
+
+[33mcommit 8790992de365e0253f55be0e74632c3ec099ad22[m
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Mon Jan 27 13:25:10 2025 +0530
+
+    first commit
+
+[33mcommit 7873642dfef0072e40f5181cb1c9b861e95d81be[m
+Author: Kavi Rajan <kavirajan452@gmail.com>
+Date:   Fri Jan 10 15:50:42 2025 +0530
+
+    feat: initial commit

@@ -1,0 +1,13 @@
+.univSLider .slick-slide {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: scale(0.5);
+    opacity: 0.5;
+    
+}
+
+.univSLider .slick-center {
+    transform: scale(1);
+    opacity: 1;
+    z-index: 10;
+    width: 400px !important;
+}

@@ -14,13 +14,13 @@ const service = () => {
       id: 1,
       imgs: '/media/services/service-img1.jpg',
       title: 'Application Guidance',
-      para: 'Ustudy offers expert application guidance, ensuring your documents are accurate and...',
+      para: 'UStudy Global offers expert application guidance, ensuring your documents are accurate and...',
     },
     {
       id: 2,
       imgs: '/media/services/service-img2.jpg',
       title: 'Visa, Forex',
-      para: 'Ustudy assists in obtaining the right student visa and ensures smooth foreign exchange...',
+      para: 'UStudy Global assists in obtaining the right student visa and ensures smooth foreign exchange...',
     },
     {
       id: 3,
@@ -38,7 +38,7 @@ const service = () => {
       id: 5,
       imgs: '/media/services/service-img5.jpg',
       title: 'Dos and Don’ts',
-      para: 'Ustudy’s Dos and Don’ts guide ensures you are well-prepared for cultural and academi...',
+      para: 'UStudy Global’s Dos and Don’ts guide ensures you are well-prepared for cultural and academi...',
     },
     {
       id: 6,
@@ -56,13 +56,13 @@ const service = () => {
       id: 8,
       imgs: '/media/services/service-img8.jpg',
       title: 'Financial Guidance, Scholarships',
-      para: 'Ustudy provides expert financial guidance to help manage your budget and find scholar...',
+      para: 'UStudy Global provides expert financial guidance to help manage your budget and find scholar...',
     },
     {
       id: 9,
       imgs: '/media/services/service-img9.jpg',
       title: 'Guided Hands-on Projects',
-      para: 'Ustudy offers guided hands-on projects that provide practical experience alongside your...',
+      para: 'UStudy Global offers guided hands-on projects that provide practical experience alongside your...',
     },
   ]
   return (

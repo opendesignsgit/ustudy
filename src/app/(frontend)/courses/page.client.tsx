@@ -31,6 +31,7 @@ type Course = CardPostData & {
   }
   degreeProgram: { id: string | number; name?: string; title?: string } | null
   department: { id: string | number; name?: string; title?: string } | null
+  studyArea: { id: string | number; name?: string; title?: string } | null
   studyYears: { id: string | number; name?: string; title?: string } | null
   studyMode: { id: string | number; name?: string; title?: string } | null
   intakeMonths?: string
@@ -41,21 +42,6 @@ type Course = CardPostData & {
   categories?: Array<{ title?: string }>
 }
 
-interface FetchCoursesParams {
-  page?: number
-  limit?: number
-  filters?: {
-    countries?: string[]
-    universities?: string[]
-    degreePrograms?: string[]
-    departments?: string[]
-    studyYears?: string[]
-    studyModes?: string[]
-    searchQuery?: string
-  }
-  getAll?: boolean
-}
-
 type CoursesResponse = {
   docs: Course[]
   totalDocs: number
@@ -63,10 +49,26 @@ type CoursesResponse = {
   page: number
 }
 
+type Suggestion = {
+  label: string
+  filters: typeof initialFilters
+}
+
+const initialFilters = {
+  countries: [] as string[],
+  universities: [] as string[],
+  studyAreas: [] as string[],
+  degreePrograms: [] as string[],
+  studyYears: [] as string[],
+  studyModes: [] as string[],
+  searchQuery: '',
+}
+
 export default function PageClient() {
   const { setHeaderTheme } = useHeaderTheme()
   const searchParams = useSearchParams() ?? new URLSearchParams()
-  const listingSectionRef = useRef<HTMLElement | null>(null)
+  const couresLInBoxRef = useRef<HTMLDivElement | null>(null)
+  const [filtersInitialized, setFiltersInitialized] = useState(false)
   const [courses, setCourses] = useState<CoursesResponse>({
     docs: [],
     totalDocs: 0,
@@ -76,17 +78,10 @@ export default function PageClient() {
   const [isLoading, setIsLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const [limit, setLimit] = useState(5)
-  const [filters, setFilters] = useState({
-    countries: [] as string[],
-    universities: [] as string[],
-    degreePrograms: [] as string[],
-    departments: [] as string[],
-    studyYears: [] as string[],
-    studyModes: [] as string[],
-    searchQuery: '',
-  })
+  const [filters, setFilters] = useState(initialFilters)
   const [allCourses, setAllCourses] = useState<Course[]>([])
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false)
+  const [suggestedFilters, setSuggestedFilters] = useState<Suggestion[] | null>(null)
 
   useEffect(() => {
     setHeaderTheme('light')
@@ -97,13 +92,14 @@ export default function PageClient() {
     const initialFilters = {
       countries: searchParams.getAll('countries'),
       universities: searchParams.getAll('universities'),
+      studyAreas: searchParams.getAll('studyAreas'),
       degreePrograms: searchParams.getAll('degreePrograms'),
-      departments: searchParams.getAll('departments'),
       studyYears: searchParams.getAll('studyYears'),
       studyModes: searchParams.getAll('studyModes'),
       searchQuery: searchParams.get('searchQuery') || '',
     }
     setFilters(initialFilters)
+    setFiltersInitialized(true)
   }, [searchParams])
 
   // Update URL when filters change, include searchQuery
@@ -118,26 +114,52 @@ export default function PageClient() {
         values.forEach(value => params.append(key, value))
       }
     })
-    const newUrl = `${window.location.pathname}?${params.toString()}`
+    const paramsString = params.toString()
+    const newUrl = paramsString
+      ? `${window.location.pathname}?${paramsString}`
+      : window.location.pathname
     if (newUrl !== window.location.href) {
       window.history.pushState(null, '', newUrl)
     }
   }, [filters])
 
+  // Fetch all courses only once, unfiltered, for filter options
+  useEffect(() => {
+    const fetchAllCourses = async () => {
+      try {
+        const response = await fetch('/api/get-courses', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            page: 1,
+            limit: 1000,
+            countries: [],
+            universities: [],
+            degreePrograms: [],
+            studyAreas: [],
+            studyYears: [],
+            studyModes: [],
+            searchQuery: '',
+            getAll: true,
+          }),
+        })
+        if (!response.ok) throw new Error('Failed to fetch all courses')
+        const data = await response.json()
+        setAllCourses(data.docs)
+      } catch (e) {
+        setAllCourses([])
+      }
+    }
+    fetchAllCourses()
+  }, [])
+
   const fetchCourses = useCallback(
     async (
       page: number,
       limit: number,
-      filters: {
-        countries?: string[]
-        universities?: string[]
-        degreePrograms?: string[]
-        departments?: string[]
-        studyYears?: string[]
-        studyModes?: string[]
-        searchQuery?: string
-      },
-      getAll: boolean = false
+      filters: typeof initialFilters
     ) => {
       setIsLoading(true)
       try {
@@ -152,11 +174,11 @@ export default function PageClient() {
             countries: filters.countries || [],
             universities: filters.universities || [],
             degreePrograms: filters.degreePrograms || [],
-            departments: filters.departments || [],
+            studyAreas: filters.studyAreas || [],
             studyYears: filters.studyYears || [],
             studyModes: filters.studyModes || [],
             searchQuery: filters.searchQuery || '',
-            getAll
+            getAll: false
           }),
         })
 
@@ -165,13 +187,7 @@ export default function PageClient() {
         }
 
         const data = await response.json()
-
-        if (getAll) {
-          setAllCourses(data.docs)
-        } else {
-          setCourses(data)
-          setCurrentPage(page)
-        }
+        setCourses(data)
       } catch (error) {
         console.error('Error fetching courses:', error)
       } finally {
@@ -181,61 +197,63 @@ export default function PageClient() {
     [],
   )
 
-  // Fetch initial data
+  // Fetch paginated, filtered courses: only after filters are initialized
   useEffect(() => {
-    const fetchInitialData = async () => {
-      setIsLoading(true)
-      try {
-        await fetchCourses(1, 1000, filters, true)
-        await fetchCourses(1, limit, filters)
-      } catch (error) {
-        console.error('Error fetching initial data:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    fetchInitialData()
-  }, [limit, fetchCourses])
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchCourses(currentPage, limit, filters)
+    if (!filtersInitialized) return;
+    let active = true
+    setIsLoading(true)
+    const timer = setTimeout(async () => {
+      if (active) await fetchCourses(currentPage, limit, filters)
+      setIsLoading(false)
     }, 300)
+    return () => {
+      active = false
+      clearTimeout(timer)
+    }
+  }, [filters, limit, currentPage, fetchCourses, filtersInitialized])
 
-    return () => clearTimeout(timer)
-  }, [filters, limit, currentPage, fetchCourses])
+  // Scroll to couresLInBox after filters are set from query params
+  useEffect(() => {
+    if (
+      filtersInitialized &&
+      typeof window !== 'undefined' &&
+      couresLInBoxRef.current &&
+      (
+        Object.values(filters).some(v => Array.isArray(v) ? v.length > 0 : v)
+      )
+    ) {
+      setTimeout(() => {
+        couresLInBoxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
+    }
+  }, [filtersInitialized, filters])
 
-  // Scroll to listing section if searchQuery is present and changes
+  // Scroll to couresLInBox if searchQuery is present and changes
   useEffect(() => {
     if (
       filters.searchQuery &&
       typeof window !== 'undefined' &&
-      listingSectionRef.current
+      couresLInBoxRef.current
     ) {
       setTimeout(() => {
-        listingSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        couresLInBoxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }, 200)
     }
   }, [filters.searchQuery])
 
   const handleLimitChange = useCallback((newLimit: number) => {
     setLimit(newLimit)
+    setCurrentPage(1)
   }, [])
 
   const handleFilterChange = useCallback(
-    (newFilters: {
-      countries: string[]
-      universities: string[]
-      degreePrograms: string[]
-      departments: string[]
-      studyYears: string[]
-      studyModes: string[]
-      searchQuery?: string
-    }) => {
+    (newFilters: typeof initialFilters) => {
       setFilters(prev => ({
         ...prev,
         ...newFilters,
       }))
+      setCurrentPage(1)
+      setSuggestedFilters(null)
     },
     [],
   )
@@ -246,7 +264,7 @@ export default function PageClient() {
         'Country': 'countries',
         'University': 'universities',
         'Program': 'degreePrograms',
-        'Department': 'departments',
+        'Area': 'studyAreas',
         'Years': 'studyYears',
         'Mode': 'studyModes',
         'Search': 'searchQuery'
@@ -263,20 +281,16 @@ export default function PageClient() {
           [category]: prev[category].filter(item => item !== value)
         }));
       }
+      setCurrentPage(1)
+      setSuggestedFilters(null)
     },
     [],
   );
 
   const clearFilters = useCallback(() => {
-    setFilters({
-      countries: [],
-      universities: [],
-      degreePrograms: [],
-      departments: [],
-      studyYears: [],
-      studyModes: [],
-      searchQuery: '',
-    })
+    setFilters(initialFilters)
+    setCurrentPage(1)
+    setSuggestedFilters(null)
   }, [])
 
   const handleCountryToggle = useCallback((countryName: string) => {
@@ -286,25 +300,100 @@ export default function PageClient() {
         ? prev.countries.filter(c => c !== countryName)
         : [...prev.countries, countryName]
     }))
+    setCurrentPage(1)
+    setSuggestedFilters(null)
   }, [])
 
   const appliedFilters = [
     ...filters.countries.map((c) => `Country: ${c}`),
     ...filters.universities.map((u) => `University: ${u}`),
     ...filters.degreePrograms.map((d) => `Program: ${d}`),
-    ...filters.departments.map((d) => `Department: ${d}`),
+    ...filters.studyAreas.map((s) => `Area: ${s}`),
     ...filters.studyYears.map((y) => `Years: ${y}`),
     ...filters.studyModes.map((m) => `Mode: ${m}`),
     ...(filters.searchQuery ? [`Search: ${filters.searchQuery}`] : []),
   ]
 
+  // Pagination handler: only set page, let useEffect do fetching!
+  const handlePageChange = useCallback(
+    (page: number) => {
+      setCurrentPage(page)
+      setSuggestedFilters(null)
+    },
+    []
+  )
+
+  // Suggestion logic: suggest filters by loosening one at a time
+  const handleShowSuggestions = () => {
+    const suggestions: Suggestion[] = []
+    // Remove searchQuery
+    if (filters.searchQuery) {
+      const f = { ...filters, searchQuery: '' }
+      const result = filterCoursesPreview(allCourses, f)
+      if (result.length) {
+        suggestions.push({ label: 'Remove search query', filters: f })
+      }
+    }
+    // Remove each array filter one at a time
+    for (const key of ['countries', 'universities', 'degreePrograms', 'studyAreas', 'studyYears', 'studyModes'] as const) {
+      if (filters[key] && filters[key].length > 0) {
+        const f = { ...filters, [key]: [] }
+        const result = filterCoursesPreview(allCourses, f)
+        if (result.length) {
+          suggestions.push({ label: `Remove ${key.replace(/[A-Z]/g, m => ' ' + m).replace(/^./, s => s.toUpperCase())}`, filters: f })
+        }
+      }
+    }
+    // Remove all filters
+    if (suggestions.length === 0) {
+      suggestions.push({ label: "Clear all filters", filters: initialFilters })
+    }
+    setSuggestedFilters(suggestions)
+  }
+
+  // Preview filter logic for suggestions (must match backend logic for get-courses)
+  function filterCoursesPreview(courses: Course[], f: typeof initialFilters): Course[] {
+    return courses.filter(course => {
+      if (f.countries.length && (!course.university || !f.countries.includes(course.university.country?.name))) return false
+      if (f.universities.length && (!course.university || !f.universities.includes(course.university.title))) return false
+      if (f.degreePrograms.length) {
+        const deg = course.degreeProgram?.title || course.degreeProgram?.name
+        if (!deg || !f.degreePrograms.includes(deg)) return false
+      }
+      if (f.studyAreas.length) {
+        const area = course.studyArea?.title || course.studyArea?.name
+        if (!area || !f.studyAreas.includes(area)) return false
+      }
+      if (f.studyYears.length) {
+        const years = course.studyYears?.title || course.studyYears?.name
+        if (!years || !f.studyYears.includes(years)) return false
+      }
+      if (f.studyModes.length) {
+        const mode = course.studyMode?.title || course.studyMode?.name
+        if (!mode || !f.studyModes.includes(mode)) return false
+      }
+      if (f.searchQuery && !(
+        course.title?.toLowerCase().includes(f.searchQuery.toLowerCase()) ||
+        course.description?.toLowerCase().includes(f.searchQuery.toLowerCase())
+      )) return false
+      return true
+    })
+  }
+
+  // Apply suggestion
+  const applySuggestedFilters = (newFilters: typeof initialFilters) => {
+    setFilters(newFilters)
+    setCurrentPage(1)
+    setSuggestedFilters(null)
+  }
+
   return (
-    <div className="pt-24 pb-24 couresLInBox">
+    <div className="pt-24 pb-24 couresLInBox" ref={couresLInBoxRef}>
       <CountryFlagSlider
         selectedCountries={filters.countries}
         onCountryToggle={handleCountryToggle}
       />
-      <section className="ListFilerSec" ref={listingSectionRef}>
+      <section className="ListFilerSec">
         <div className="container mx-auto">
           <div className="ListFilerRow flex gap-8">
             <div className="mobfilterbtn md:hidden ">
@@ -408,6 +497,32 @@ export default function PageClient() {
                     ></div>
                   ))}
                 </div>
+              ) : courses.docs.length === 0 ? (
+                <div className="text-center py-16 text-gray-500 text-lg font-medium">
+                  Search produced no results.
+                  <div className="mt-4">
+                    <button
+                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                      onClick={handleShowSuggestions}
+                    >
+                      Show Suggestions
+                    </button>
+                  </div>
+                  {suggestedFilters && (
+                    <div className="mt-6">
+                      <h4 className="text-base font-semibold mb-2">Try these filters:</h4>
+                      {suggestedFilters.map((suggestion, idx) => (
+                        <button
+                          key={idx}
+                          className="block w-full text-left px-3 py-2 mb-2 border rounded hover:bg-gray-100"
+                          onClick={() => applySuggestedFilters(suggestion.filters)}
+                        >
+                          {suggestion.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ) : (
                 <CollectionArchiveCourses
                   courses={courses.docs as CardPostData[]}
@@ -421,7 +536,7 @@ export default function PageClient() {
                   <CoursesPagination
                     page={currentPage}
                     totalPages={courses.totalPages}
-                    onPageChange={(page) => fetchCourses(page, limit, filters)}
+                    onPageChange={handlePageChange}
                   />
                 )}
               </div>

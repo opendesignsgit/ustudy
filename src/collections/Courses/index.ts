@@ -12,7 +12,7 @@ import {
 
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
-import { Banner } from '../../blocks/Banner/config'
+import { Banner } from '@/blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
@@ -39,6 +39,9 @@ import { slugField } from '@/fields/slug'
 
 const SimpleHiddenCollection = (slug: string): CollectionConfig => ({
   slug,
+  access: {
+    read: () => true,
+  },
   admin: {
     hidden: true,
     useAsTitle: 'name', // or 'title' depending on your preference
@@ -48,6 +51,13 @@ const SimpleHiddenCollection = (slug: string): CollectionConfig => ({
       name: 'name',
       type: 'text',
       required: true,
+    },
+    {
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media',
+      required: false,
+      label: 'Image',
     },
     ...slugField(),
   ],
@@ -164,6 +174,13 @@ export const Courses: CollectionConfig<'courses'> = {
               required: true,
             },
             {
+              name: 'subUniversity',
+              type: 'relationship',
+              relationTo: 'universities',
+              required: false,
+              label: 'Sub University',
+            },
+            {
               name: 'degreeProgram',
               label: 'Degree Program',
               type: 'relationship',
@@ -186,7 +203,7 @@ export const Courses: CollectionConfig<'courses'> = {
             },
             {
               name: 'studyYear',
-              label: 'Study Year',
+              label: 'Study Duration',
               type: 'relationship',
               relationTo: 'study-years',
               required: false,
@@ -235,15 +252,9 @@ export const Courses: CollectionConfig<'courses'> = {
                   label: 'Fee Amount',
                   required: true,
                 },
-                {
-                  name: 'feeCurrency',
-                  type: 'relationship',
-                  relationTo: 'currencies',
-                  label: 'Fee Currency',
-                  required: true,
-                },
               ],
             },
+            
           ],
           label: 'Meta',
         },

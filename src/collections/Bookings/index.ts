@@ -1,39 +1,12 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from 'payload';
 
-import {
-  BlocksFeature,
-  FixedToolbarFeature,
-  HeadingFeature,
-  HorizontalRuleFeature,
-  InlineToolbarFeature,
-  lexicalEditor,
-  OrderedListFeature,
-  UnorderedListFeature,
-} from '@payloadcms/richtext-lexical'
+import { authenticated } from '../../access/authenticated';
+import { authenticatedOrPublished } from '../../access/authenticatedOrPublished';
+import { generatePreviewPath } from '../../utilities/generatePreviewPath';
+import { populateAuthors } from './hooks/populateAuthors';
+import { revalidateDelete, revalidatePost } from './hooks/revalidatePost';
 
-import { authenticated } from '../../access/authenticated'
-import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
-import { Banner } from '../../blocks/Banner/config'
-import { Code } from '../../blocks/Code/config'
-import { Archive } from '../../blocks/ArchiveBlock/config'
-import { CallToAction } from '../../blocks/CallToAction/config'
-import { Content } from '../../blocks/Content/config'
-import { FormBlock } from '../../blocks/Form/config'
-import { MediaBlock } from '../../blocks/MediaBlock/config'
-import { generatePreviewPath } from '../../utilities/generatePreviewPath'
-import { populateAuthors } from './hooks/populateAuthors'
-import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
-
-import {
-  MetaDescriptionField,
-  MetaImageField,
-  MetaTitleField,
-  OverviewField,
-  PreviewField,
-} from '@payloadcms/plugin-seo/fields'
-import { slugField } from '@/fields/slug'
-
-export const Bookings: CollectionConfig<'bookings'> = {
+export const Bookings: CollectionConfig = {
   slug: 'bookings',
   access: {
     create: authenticated,
@@ -41,25 +14,21 @@ export const Bookings: CollectionConfig<'bookings'> = {
     read: authenticatedOrPublished,
     update: authenticated,
   },
-  // This config controls what's populated by default when a post is referenced
-  // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
-  // Type safe if the collection slug generic is passed to `CollectionConfig` - `CollectionConfig<'courses'>
   defaultPopulate: {
-    customerName: true,
+    course: true,
+    customer: true,
   },
   admin: {
-    
     group: 'Universities',
-    defaultColumns: ['customerName'],
+    defaultColumns: ['customer', 'course'],
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({
           slug: typeof data?.slug === 'string' ? data.slug : '',
           collection: 'bookings',
           req,
-        })
-
-        return path
+        });
+        return path;
       },
     },
     preview: (data, { req }) =>
@@ -68,42 +37,22 @@ export const Bookings: CollectionConfig<'bookings'> = {
         collection: 'bookings',
         req,
       }),
-    useAsTitle: 'customerName',
+    useAsTitle: 'student',
   },
   fields: [
     {
-      name: 'courseName',
-      type: 'text',
+      name: 'course',
+      type: 'relationship',
+      relationTo: 'courses',
       required: true,
-      label: 'Course Name',
+      label: 'Course Booked',
     },
     {
-      name: 'courseID',
-      type: 'text',
-      admin: {
-        hidden: true,
-      },
-    },
-    {
-      name: 'book',
-      type: 'text',
-      admin: {
-        hidden: true,
-      },
-    },
-    {
-      name: 'customerName',
-      type: 'text',
+      name: 'student',
+      type: 'relationship',
+      relationTo: 'students', 
       required: true,
-      label: 'Customer Name',
-    },
-    {
-      name: 'customerID',
-      type: 'text',
-      label: 'Customer Name',
-      admin: {
-        hidden: true,
-      },
+      label: 'Student',
     },
     {
       name: 'orderDate',
@@ -115,6 +64,21 @@ export const Bookings: CollectionConfig<'bookings'> = {
           pickerAppearance: 'dayOnly',
         },
       },
+    },
+    {
+      name: 'originalAmount',
+      type: 'number',
+      label: 'Original Amount',
+    },
+    {
+      name: 'convertedAmount',
+      type: 'number',
+      label: 'Amount Paid',
+    },
+    {
+      name: 'currencyRate',
+      type: 'number',
+      label: 'Currency Rate',
     },
     {
       name: 'razorpayResponse',
@@ -134,10 +98,10 @@ export const Bookings: CollectionConfig<'bookings'> = {
   versions: {
     drafts: {
       autosave: {
-        interval: 100, // We set this interval for optimal live preview
+        interval: 100,
       },
       schedulePublish: true,
     },
     maxPerDoc: 50,
   },
-}
+};
