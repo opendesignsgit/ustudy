@@ -7,6 +7,8 @@ node_modules
 .vercel
 .Backups
 .vscode
+.old
 
 public/robots.txt
 public/sitemap*.xml
+echo "*.zip" >> .gitignore
