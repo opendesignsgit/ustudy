@@ -14,13 +14,14 @@ import {
   UploadFeature,
   EXPERIMENTAL_TableFeature,
   AlignFeature,
-  // TreeViewFeature,
   IndentFeature,
   InlineCodeFeature,
   RelationshipFeature,
   BlocksFeature,
-  BlockFields
+  BlockFields,
+  LinkFeature,
 } from '@payloadcms/richtext-lexical'
+// import { MyFeature } from '@/app/(payload)/features/myFeature/feature.server'
 
 
 import { link } from '@/fields/link'
@@ -65,23 +66,36 @@ const columnFields: Field[] = [
     editor: lexicalEditor({
       admin: {
         hideGutter: true,
-        placeholder: 'Type your content here...'
+        placeholder: 'Type your content here...',
       },
       features: ({ rootFeatures }) => {
         return [
           ...rootFeatures,
-          HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
+          HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4', 'h5', 'h6'] }),
           FixedToolbarFeature(),
           InlineToolbarFeature(),
-          UnorderedListFeature(), 
+          UnorderedListFeature(),
           UploadFeature(),
           EXPERIMENTAL_TableFeature(),
           AlignFeature(),
           IndentFeature(),
           InlineCodeFeature(),
           RelationshipFeature(),
-          BlocksFeature({ blocks: [Banner, Code, MediaBlock, CallToAction, Archive, FormBlock] })
-          // TreeViewFeature()
+          BlocksFeature({ blocks: [Banner, Code, MediaBlock, CallToAction, Archive, FormBlock] }),
+          LinkFeature({
+            fields: ({ defaultFields }) => [
+              ...defaultFields,
+              {
+                name: 'className',
+                type: 'text',
+                label: 'Class Name',
+                admin: {
+                  description: 'Add a CSS class to the link.',
+                },
+              },
+            ],
+          }),
+
         ]
       },
     }),
@@ -126,6 +140,6 @@ export const Content: Block = {
       name: 'backgroundimage',
       type: 'upload',
       relationTo: 'media',
-    }
+    },
   ],
 }

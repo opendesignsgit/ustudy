@@ -1,77 +1,116 @@
-import React from "react";
+import Link from 'next/link'
+import React from 'react'
+import {
+  faYoutube,
+  faXTwitter,
+  faInstagram,
+  faLinkedinIn,
+} from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Footer = () => {
   return (
     <footer className="bg-blue-900 text-white">
-      <div className="max-w-7xl mx-auto p-8">
-        <div className="flex flex-col md:flex-row justify-between gap-8">
+      <div className="container mx-auto">
+        <div className="flex flex-col md:flex-row justify-between footbtm">
           {/* Logo and Social Icons Section */}
-          <div>
-            <h3 className="font-bold text-lg mb-2">UStudy Global</h3>
-            <img
-              src="/path/to/logo.png" // Replace with the actual logo path
-              alt="UStudy Logo"
-              className="w-24 mb-4"
-            />
-            <div className="flex items-center space-x-4">
-              <a href="#" className="hover:text-gray-300 transition">
-                <i className="fab fa-facebook"></i> {/* Replace with an actual icon */}
-              </a>
-              <a href="#" className="hover:text-gray-300 transition">
-                <i className="fab fa-instagram"></i> {/* Replace with an actual icon */}
-              </a>
-              <a href="#" className="hover:text-gray-300 transition">
-                <i className="fab fa-twitter"></i> {/* Replace with an actual icon */}
-              </a>
-              <a href="#" className="hover:text-gray-300 transition">
-                <i className="fab fa-linkedin"></i> {/* Replace with an actual icon */}
-              </a>
+          <div className="footmcol">
+            <div className="footlogoimg">
+              {' '}
+              <img
+                src="/media/footlogo.svg" // Replace with the actual logo path
+                alt="UStudy Logo"
+                className="footlogo"
+              />
+            </div>
+            <div className="footSmedialist">
+              <ul className="footSmediaul flex items-center ">
+                <li>
+                  <a href="https://www.instagram.com/ustudy_global/" target='_blank' className="hover:text-gray-300 transition">
+                    <FontAwesomeIcon icon={faInstagram} />
+                  </a>
+                </li>
+                <li>
+                  <a href="https://x.com/ustudy_global" target='_blank' className="hover:text-gray-300 transition">
+                    <FontAwesomeIcon icon={faXTwitter} />
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.linkedin.com/in/ustudy-global-456651354/" target='_blank' className="hover:text-gray-300 transition">
+                    <FontAwesomeIcon icon={faLinkedinIn} />
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.youtube.com/channel/UCOAPhVbote6lIYHk6OJiFcg" target='_blank' className="hover:text-gray-300 transition">
+                    <FontAwesomeIcon icon={faYoutube} />
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
 
           {/* Contact Section */}
-          <div>
-            <h3 className="font-bold text-lg mb-2">CONTACT</h3>
-            <p className="text-sm">
-              2/21, 2nd floor, B.W.East Ave Rd, <br />
-              CIT Colony, Mylapore, Chennai, <br />
-              Tamil Nadu 600004.
-            </p>
-            <div className="mt-4">
-              <p className="flex items-center gap-2">
-                📧 <a href="mailto:info@ustudyglobal.in">info@ustudyglobal.in</a>
+          <div className="footmcol">
+            <h3 className="footTitle">CONTACT</h3>
+            <address>
+              2nd Floor, Chettinad Chambers, 39, <br />
+              Dr. Radha Krishnan Salai, 5th Street, <br />
+              Mylapore, Chennai – 600 004.
+            </address>
+            <div className="mt-4 contlink">
+              <p className="flex items-center gap-2 mailpara">
+                <a href="mailto:info@ustudyglobal.in">info@ustudyglobal.in</a>
               </p>
-              <p>📞 89 39 39 39 62 / 89 39 39 39 18</p>
+              <p className="flex items-center gap-2 phonepara">
+                <a href="tel:+918939393962">89 39 39 39 62</a> /
+                <a href="tel:+918939393918">89 39 39 39 18</a>
+              </p>
             </div>
           </div>
 
           {/* Useful Links Section */}
-          <div>
-            <h3 className="font-bold text-lg mb-2">USEFUL LINK</h3>
-            <ul className="space-y-2 text-sm">
-              <li>About Us</li>
-              <li>Contact Us</li>
-              <li>Enquiry</li>
-              <li>University Login</li>
+          <div className="footmcol">
+            <h3 className="footTitle">USEFUL LINK</h3>
+            <ul className="space-y-2 text-sm fonteighteen">
+              <li>
+                <Link href="/">About Us</Link>
+              </li>
+              <li>
+                <Link href="/">Contact Us</Link>
+              </li>
+              <li>
+                <Link href="/">Enquiry</Link>
+              </li>
+              <li>
+                <Link href="/">University Login</Link>
+              </li>
             </ul>
           </div>
 
           {/* Policy Links Section */}
-          <div>
-            <h3 className="font-bold text-lg mb-2">POLICY LINK</h3>
-            <ul className="space-y-2 text-sm">
-              <li>Terms & Condition</li>
-              <li>Privacy Policy</li>
-              <li>Refund Policy</li>
+          <div className="footmcol">
+            <h3 className="footTitle">POLICY LINK</h3>
+            <ul className="space-y-2 text-sm fonteighteen">
+              <li>
+                <Link href="/">Terms & Condition</Link>
+              </li>
+              <li>
+                <Link href="/">Privacy Policy</Link>
+              </li>
+              <li>
+                <Link href="/">Refund Policy</Link>
+              </li>
             </ul>
           </div>
         </div>
-        <div className="text-center mt-8 text-sm">
-          Copyright © 2025. Ustudy / Designed By ❤️
+        <div className="footcorightrow text-center py-[15px] flex justify-center">
+          <p className="flex justify-center">
+            Copyright © 2025. Ustudy / <a href="https://opendesignsin.com/" target='_blank'>Designed By <img src="/media/openlogo.png" alt="" /></a>
+          </p>
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

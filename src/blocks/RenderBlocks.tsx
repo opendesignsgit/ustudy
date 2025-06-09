@@ -8,6 +8,8 @@ import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { YearlyCoursesBlock } from '@/blocks/CoursesComponents/YearsModule/Component'
+import { RegisterFormBlock } from './RegisterForm/config'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -15,6 +17,8 @@ const blockComponents = {
   cta: CallToActionBlock,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
+  yearlyBlock: YearlyCoursesBlock,
+  registerBlock: RegisterFormBlock
 }
 
 export const RenderBlocks: React.FC<{

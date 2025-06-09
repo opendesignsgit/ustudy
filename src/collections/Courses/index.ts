@@ -1,5 +1,4 @@
 import type { CollectionConfig } from 'payload'
-
 import {
   BlocksFeature,
   FixedToolbarFeature,
@@ -20,9 +19,14 @@ import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { SliderBlock } from '@/blocks/SliderBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
+// import { withFiltersEndpoint } from '../endpoints/withFilters'
+import { addFilterOptions } from './hooks/afterOperation'
+import { YearlyCourses } from '@/blocks/CoursesComponents/YearsModule/config'
+import { RegisterFormBlock } from '@/blocks/RegisterForm/config'
 
 import {
   MetaDescriptionField,
@@ -33,29 +37,48 @@ import {
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from '@/fields/slug'
 
+const SimpleHiddenCollection = (slug: string): CollectionConfig => ({
+  slug,
+  admin: {
+    hidden: true,
+    useAsTitle: 'name', // or 'title' depending on your preference
+  },
+  fields: [
+    {
+      name: 'name',
+      type: 'text',
+      required: true,
+    },
+    ...slugField(),
+  ],
+})
+
+export const IntakeMonths: CollectionConfig = SimpleHiddenCollection('intake-months')
+export const StudyModes: CollectionConfig = SimpleHiddenCollection('study-modes')
+export const StudyYears: CollectionConfig = SimpleHiddenCollection('study-years')
+export const StudyAreas: CollectionConfig = SimpleHiddenCollection('study-areas')
+export const Departments: CollectionConfig = SimpleHiddenCollection('departments')
+export const DegreePrograms: CollectionConfig = SimpleHiddenCollection('degree-programs')
+
 export const Courses: CollectionConfig<'courses'> = {
   slug: 'courses',
+  // endpoints: [withFiltersEndpoint],
   access: {
     create: authenticated,
     delete: authenticated,
     read: authenticatedOrPublished,
     update: authenticated,
   },
-  // This config controls what's populated by default when a post is referenced
-  // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
-  // Type safe if the collection slug generic is passed to `CollectionConfig` - `CollectionConfig<'courses'>
   defaultPopulate: {
     title: true,
     slug: true,
-    categories: true,
     meta: {
       image: true,
       description: true,
     },
   },
   admin: {
-    
-    group: 'Courses',
+    group: 'Universities',
     defaultColumns: ['title', 'slug', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) => {
@@ -83,6 +106,10 @@ export const Courses: CollectionConfig<'courses'> = {
       required: true,
     },
     {
+      name: 'description',
+      type: 'textarea',
+    },
+    {
       type: 'tabs',
       tabs: [
         {
@@ -92,17 +119,6 @@ export const Courses: CollectionConfig<'courses'> = {
               type: 'upload',
               relationTo: 'media',
             },
-            // {
-            //   name: 'content',
-            //   type: 'blocks',
-            //   blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
-            //   required: true,
-            //   admin: {
-            //     initCollapsed: true,
-            //   },
-             
-            //   label: false,
-            // },
             {
               name: 'content',
               type: 'richText',
@@ -110,13 +126,26 @@ export const Courses: CollectionConfig<'courses'> = {
                 features: ({ rootFeatures }) => {
                   return [
                     ...rootFeatures,
-                    HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                    BlocksFeature({ blocks: [Banner, Code, MediaBlock, CallToAction, Content, Archive, FormBlock] }),
+                    HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }),
+                    BlocksFeature({
+                      blocks: [
+                        Banner,
+                        Code,
+                        MediaBlock,
+                        CallToAction,
+                        Content,
+                        Archive,
+                        FormBlock,
+                        SliderBlock,
+                        YearlyCourses,
+                        RegisterFormBlock,
+                      ],
+                    }),
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),
                     HorizontalRuleFeature(),
                     OrderedListFeature(),
-                    UnorderedListFeature()
+                    UnorderedListFeature(),
                   ]
                 },
               }),
@@ -129,33 +158,96 @@ export const Courses: CollectionConfig<'courses'> = {
         {
           fields: [
             {
-              name: 'relatedPosts',
+              name: 'university',
               type: 'relationship',
-              admin: {
-                position: 'sidebar',
-              },
-              filterOptions: ({ id }) => {
-                return {
-                  id: {
-                    not_in: [id],
-                  },
-                }
-              },
-              hasMany: true,
-              relationTo: 'posts',
+              relationTo: 'universities',
+              required: true,
             },
             {
-              name: 'categories',
+              name: 'degreeProgram',
+              label: 'Degree Program',
               type: 'relationship',
-              admin: {
-                position: 'sidebar',
-              },
+              relationTo: 'degree-programs',
+              required: false,
+            },
+            {
+              name: 'department',
+              label: 'Department',
+              type: 'relationship',
+              relationTo: 'departments',
+              required: false,
+            },
+            {
+              name: 'studyArea',
+              label: 'Study Area',
+              type: 'relationship',
+              relationTo: 'study-areas',
+              required: false,
+            },
+            {
+              name: 'studyYear',
+              label: 'Study Year',
+              type: 'relationship',
+              relationTo: 'study-years',
+              required: false,
+            },
+            {
+              name: 'studyMode',
+              label: 'Study Mode',
+              type: 'relationship',
+              relationTo: 'study-modes',
+              required: false,
+            },
+            {
+              name: 'intakeMonths',
+              label: 'Intake Months',
+              type: 'relationship',
+              relationTo: 'intake-months',
               hasMany: true,
-              relationTo: 'categories',
+              required: false,
+            },
+            {
+              name: 'programmeAccreditationCode',
+              type: 'text',
+            },
+            {
+              name: 'pathway',
+              type: 'text',
+            },
+            {
+              name: 'assessments',
+              type: 'text',
+            },
+            {
+              name: 'fees',
+              type: 'array',
+              label: 'Fees',
+              fields: [
+                {
+                  name: 'feeName',
+                  type: 'text',
+                  label: 'Fee Name',
+                  required: true,
+                },
+                {
+                  name: 'feeAmount',
+                  type: 'number',
+                  label: 'Fee Amount',
+                  required: true,
+                },
+                {
+                  name: 'feeCurrency',
+                  type: 'relationship',
+                  relationTo: 'currencies',
+                  label: 'Fee Currency',
+                  required: true,
+                },
+              ],
             },
           ],
           label: 'Meta',
         },
+
         {
           name: 'meta',
           label: 'SEO',
@@ -171,13 +263,9 @@ export const Courses: CollectionConfig<'courses'> = {
             MetaImageField({
               relationTo: 'media',
             }),
-
             MetaDescriptionField({}),
             PreviewField({
-              // if the `generateUrl` function is configured
               hasGenerateFn: true,
-
-              // field paths to match the target field for data
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
             }),
@@ -214,41 +302,18 @@ export const Courses: CollectionConfig<'courses'> = {
       hasMany: true,
       relationTo: 'users',
     },
-    // This field is only used to populate the user data via the `populateAuthors` hook
-    // This is because the `user` collection has access control locked to protect user privacy
-    // GraphQL will also not return mutated user data that differs from the underlying schema
-    {
-      name: 'populatedAuthors',
-      type: 'array',
-      access: {
-        update: () => false,
-      },
-      admin: {
-        disabled: true,
-        readOnly: true,
-      },
-      fields: [
-        {
-          name: 'id',
-          type: 'text',
-        },
-        {
-          name: 'name',
-          type: 'text',
-        },
-      ],
-    },
     ...slugField(),
   ],
   hooks: {
     afterChange: [revalidatePost],
     afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],
+    afterOperation: [addFilterOptions],
   },
   versions: {
     drafts: {
       autosave: {
-        interval: 100, // We set this interval for optimal live preview
+        interval: 100,
       },
       schedulePublish: true,
     },

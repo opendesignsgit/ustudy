@@ -1,14 +1,14 @@
 import React from 'react'
 
 const defaultLabels = {
-  plural: 'Docs',
-  singular: 'Doc',
+  plural: 'Courses',
+  singular: 'Course',
 }
 
 const defaultCollectionLabels = {
   posts: {
-    plural: 'Posts',
-    singular: 'Post',
+    plural: 'Courses',
+    singular: 'Course',
   },
 }
 
@@ -42,13 +42,13 @@ export const PageRange: React.FC<{
     collectionLabelsFromProps || defaultCollectionLabels[collection || ''] || defaultLabels || {}
 
   return (
-    <div className={[className, 'font-semibold'].filter(Boolean).join(' ')}>
+    <h3 className={[className, 'showtitle'].filter(Boolean).join(' ')}>
       {(typeof totalDocs === 'undefined' || totalDocs === 0) && 'Search produced no results.'}
       {typeof totalDocs !== 'undefined' &&
         totalDocs > 0 &&
-        `Showing ${indexStart}${indexStart > 0 ? ` - ${indexEnd}` : ''} of ${totalDocs} ${
-          totalDocs > 1 ? plural : singular
+        `Showing ${indexStart}${indexStart > 0 ? ` - ${indexEnd}` : ''} of ${totalDocs} ${totalDocs > 1 ? plural : singular
         }`}
-    </div>
+    </h3>
   )
 }
+//Final

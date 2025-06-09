@@ -35,9 +35,10 @@ export const AdminBar: React.FC<{
   adminBarProps?: PayloadAdminBarProps
 }> = (props) => {
   const { adminBarProps } = props || {}
-  const segments = useSelectedLayoutSegments()
   const [show, setShow] = useState(false)
-  const collection = collectionLabels?.[segments?.[1]] ? segments?.[1] : 'pages'
+  const segments = useSelectedLayoutSegments() ?? []
+  const currentSegment = typeof segments[1] === 'string' ? segments[1] : null
+  const collection = currentSegment && (currentSegment in collectionLabels) ? currentSegment : 'pages'
   const router = useRouter()
 
   const onAuthChange = React.useCallback((user) => {

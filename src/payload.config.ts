@@ -11,15 +11,17 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
-import { Courses } from './collections/Courses'
-import { Events } from './collections/Events'
-import { LearningLab } from './collections/Learning Lab'
+import { Courses, IntakeMonths, StudyModes, StudyYears, StudyAreas, Departments, DegreePrograms } from './collections/Courses'
+import { Bookings } from './collections/Bookings'
+import { Students } from './collections/Students'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
-
+import { Universities } from './collections/Universities'
+import { Countries } from './collections/Countries'
+import { Currencies } from './collections/Courses/currencies'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -67,7 +69,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Courses, LearningLab, Events],
+  collections: [Pages, Posts, Media, Categories, Users, Courses, IntakeMonths, StudyModes, StudyYears, StudyAreas, Departments, DegreePrograms, Universities, Countries, Bookings, Students, Currencies],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

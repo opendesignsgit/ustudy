@@ -1,127 +1,132 @@
-import React from "react";
-
-// Array to hold card data
-const sections = [
-  {
-    title: "APPLICATION GUIDANCE",
-    description:
-      "Ustudy offers expert application guidance, ensuring your documents are accurate and submissions timely.",
-    icon: "📄", // Replace with an actual icon or component
-  },
-  {
-    title: "VISA, FOREX",
-    description:
-      "Ustudy assists in obtaining the right student visa and ensures smooth foreign exchange transactions.",
-    icon: "💳", // Replace with an actual icon or component
-  },
-  {
-    title: "TICKETING PROCESS",
-    description:
-      "We help ensure your travel aligns with your academic schedule and is as cost-effective as possible.",
-    icon: "✈️", // Replace with an actual icon or component
-  },
-  {
-    title: "PRE-DEPARTURE COUNSELING",
-    description:
-      "Pre-departure counseling prepares you for life abroad, covering academic, cultural, and logistical aspects.",
-    icon: "🗺️", // Replace with an actual icon or component
-  },
-  {
-    title: "DOS AND DON'TS",
-    description:
-      "Ustudy's Dos and Don'ts guide ensures you are well-prepared for cultural and academic life abroad.",
-    icon: "📖", // Replace with an actual icon or component
-  },
-  {
-    title: "ACCOMMODATION AREA",
-    description:
-      "We help you choose a location that's safe, convenient, and within your budget.",
-    icon: "🏠", // Replace with an actual icon or component
-  },
-  {
-    title: "POST LANDING FORMALITIES",
-    description:
-      "We ensure you complete all required formalities smoothly after you arrive in your destination country.",
-    icon: "📋", // Replace with an actual icon or component
-  },
-  {
-    title: "FINANCIAL GUIDANCE",
-    description:
-      "Ustudy provides expert financial guidance to help manage your budget and find scholarships.",
-    icon: "💰", // Replace with an actual icon or component
-  },
-  {
-    title: "GUIDED HANDS ON PROJECTS",
-    description:
-      "Ustudy offers guided hands-on projects that provide practical experience alongside your academic studies.",
-    icon: "💡", // Replace with an actual icon or component
-  },
-];
+'use client'
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
+import React from 'react'
+import Slider from 'react-slick'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 
 const UniversitySolutionSection = () => {
-  return (
-    <div className="bg-blue-900 text-white py-16 px-6">
-      {/* Section Heading */}
-      <div className="text-center max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold">
-          All-in-One University Solution through Ustudy Global
-        </h1>
-        <p className="mt-4 text-xl">
-          A complete system covering admissions, education, facilities, and
-          student support.
-        </p>
-      </div>
+  const [isMobile, setIsMobile] = useState(false)
 
-      {/* Cards Grid */}
-      {/* Top Row: Five Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mt-12">
-        {sections.slice(0, 5).map((section, index) => (
-          <div
-            key={index}
-            className="bg-white text-blue-900 rounded-lg shadow-lg p-6 flex flex-col justify-between relative transition-transform transform hover:scale-105 h-64"
-            style={{
-              backgroundImage: `url("/path-to-pattern.svg")`, // Replace with your pattern image URL
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-            }}
-          >
-            {/* Icon in a Circle */}
-            <div className="absolute top-4 right-4 bg-blue-100 text-blue-900 rounded-full w-12 h-12 flex items-center justify-center shadow-md">
-              <span className="text-2xl">{section.icon}</span>
-            </div>
-            {/* Title */}
-            <h2 className="text-lg font-bold mb-2">{section.title}</h2>
-            {/* Description */}
-            <p className="text-sm">{section.description}</p>
-          </div>
-        ))}
-      </div>
+  useEffect(() => {
+    const checkScreen = () => setIsMobile(window.innerWidth < 600)
+    checkScreen()
+    window.addEventListener('resize', checkScreen)
+    return () => window.removeEventListener('resize', checkScreen)
+  }, [])
 
-      {/* Bottom Row: Four Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-        {sections.slice(5).map((section, index) => (
-          <div
-            key={index}
-            className="bg-white text-blue-900 rounded-lg shadow-lg p-6 flex flex-col justify-between relative transition-transform transform hover:scale-105 h-64"
-            style={{
-              backgroundImage: `url("/path-to-pattern.svg")`, // Replace with your pattern image URL
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-            }}
-          >
-            {/* Icon in a Circle */}
-            <div className="absolute top-4 right-4 bg-blue-100 text-blue-900 rounded-full w-12 h-12 flex items-center justify-center shadow-md">
-              <span className="text-2xl">{section.icon}</span>
-            </div>
-            {/* Title */}
-            <h2 className="text-lg font-bold mb-2">{section.title}</h2>
-            {/* Description */}
-            <p className="text-sm">{section.description}</p>
-          </div>
-        ))}
+  const settings = {
+    dots: false,
+    arrows: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 2,
+    slidesToScroll: 1,
+  }
+  // Array to hold card data
+  const sections = [
+    {
+      title: 'COUNSELING AND GUIDANCE',
+      description:
+        'Ustudy provides personalized counseling and guidance to help you choose the right academic and career path.',
+      icon: '/media/home/hser-cg-icon.png', // Replace with an actual icon or component
+    },
+    {
+      title: 'APPLICATION GUIDANCE',
+      description:
+        'Ustudy offers expert application guidance, ensuring your documents are accurate and submissions timely.',
+      icon: '/media/home/hser-ag-icon.png', // Replace with an actual icon or component
+    },
+    {
+      title: 'VISA, FOREX',
+      description:
+        'Ustudy assists in obtaining the right student visa and ensures smooth foreign exchange transactions.',
+      icon: '/media/home/hser-vf-icon.png', // Replace with an actual icon or component
+    },
+    {
+      title: 'TICKETING PROCESS',
+      description:
+        'Ustudy offers guidance in booking flights for students traveling abroad for their education.',
+      icon: '/media/home/hser-tp-icon.png', // Replace with an actual icon or component
+    },
+    {
+      title: 'PRE-DEPARTURE COUNSELING',
+      description:
+        'Pre-departure counseling prepares you for life abroad, covering academic, cultural, and logistical aspects.',
+      icon: '/media/home/hser-pdc-icon.png', // Replace with an actual icon or component
+    },
+    {
+      title: "DOS AND DON'TS",
+      description:
+        'Ustudy’s Dos and Don’ts guide ensures you are well-prepared for cultural and academic life abroad.',
+      icon: '/media/home/hser-dd-icon.png', // Replace with an actual icon or component
+    },
+    {
+      title: 'ACCOMMODATION AREA',
+      description:
+        'Ustudy assists in finding the right accommodation, whether on-campus or off-campus, for a comfortable living experience.',
+      icon: '/media/home/hser-aa-icon.png', // Replace with an actual icon or component
+    },
+    {
+      title: 'POST LANDING FORMALITIES',
+      description:
+        'Ustudy provides support for post-landing formalities, including immigration and orientation.',
+      icon: '/media/home/hser-plf-icon.png', // Replace with an actual icon or component
+    },
+    {
+      title: 'FINANCIAL GUIDANCE',
+      description:
+        'Ustudy provides expert financial guidance to help manage your budget and find scholarships.',
+      icon: '/media/home/hser-fg-icon.png', // Replace with an actual icon or component
+    },
+    {
+      title: 'GUIDED HANDS ON PROJECTS',
+      description:
+        'Ustudy offers guided hands-on projects that provide practical experience alongside your academic studies.',
+      icon: '/media/home/hser-ghp-icon.png', // Replace with an actual icon or component
+    },
+  ]
+
+  const content = sections.slice(0, 10).map((section, index) => (
+    <div key={index} className="halinmainBox">
+      <div className="bg-white halinoneItems relative">
+        {/* Icon in a Circle */}
+        <div className="halinoneicon absolute rounded-full flex items-center justify-center">
+          <Image src={section.icon} alt={section.title} width="60" height="60" />
+        </div>
+        {/* Title */}
+        <h3>{section.title}</h3>
+        {/* Description */}
+        <p>{section.description}</p>
       </div>
     </div>
-  );
-};
+  ))
 
-export default UniversitySolutionSection;
+  return (
+    <section className="halinonesec secpadblock bg-[#0056D2] relative">
+      {/* Section Heading */}
+      <div className="container relative">
+        <div className="sectitle marbtm textcenter whitetext">
+          <h2>
+            All-in-One University Solution <br />
+            through Ustudy Global
+          </h2>
+          <p>
+            A complete system covering admissions, education, <br />
+            facilities, and student support.
+          </p>
+        </div>
+        {isMobile ? (
+          <Slider {...settings} className="halinoneBox">
+            {content}
+          </Slider>
+        ) : (
+          <div className="flex flex-wrap justify-center halinoneBox">{content}</div>
+        )}
+      </div>
+    </section>
+  )
+}
+
+export default UniversitySolutionSection

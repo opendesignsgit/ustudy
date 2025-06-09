@@ -6,6 +6,7 @@ import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import { homeStatic } from '@/endpoints/seed/home-static'
+import './home.css'
 
 import type { Page as PageType } from '@/payload-types'
 
@@ -23,6 +24,8 @@ import StudyDestinationCarousel from '@/components/Home/study-destination'
 import UniversitySlider from '@/components/Home/university-slider'
 import FooterForm from '@/components/Home/footer-form'
 import Footer from '@/components/Home/footer'
+import Services from '@/components/Services/Services'
+import Contactus from '@/components/Contactus/Contactus'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -77,15 +80,14 @@ export default async function Page({ params: paramsPromise }: Args) {
   const { hero, layout } = page
 
   return (
-    <article className={`pt-8 ${slug}`}>
+    <article className={`${slug}`}>
       <PageClient />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
 
-      
-      {slug === 'home-new' ? (
+      {slug === 'home' ? (
         <div>
           <EducationPromoSection></EducationPromoSection>
           <AboutUstudy></AboutUstudy>
@@ -100,7 +102,23 @@ export default async function Page({ params: paramsPromise }: Args) {
       ) : (
         <RenderBlocks blocks={layout} />
       )}
-
+      {slug === 'services' ? (
+        <div>
+          <Services></Services>
+          <FooterForm></FooterForm>
+          <Footer></Footer>
+        </div>
+      ) : (
+        <RenderBlocks blocks={layout} />
+      )}
+      {slug === 'contact-us' ? (
+        <div>
+          <Contactus></Contactus>
+          <Footer></Footer>
+        </div>
+      ) : (
+        <RenderBlocks blocks={layout} />
+      )}
     </article>
   )
 }

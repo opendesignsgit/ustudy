@@ -6,10 +6,67 @@
  * and re-run `payload generate:types` to regenerate this file.
  */
 
+/**
+ * Supported timezones in IANA format.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "supportedTimezones".
+ */
+export type SupportedTimezones =
+  | 'Pacific/Midway'
+  | 'Pacific/Niue'
+  | 'Pacific/Honolulu'
+  | 'Pacific/Rarotonga'
+  | 'America/Anchorage'
+  | 'Pacific/Gambier'
+  | 'America/Los_Angeles'
+  | 'America/Tijuana'
+  | 'America/Denver'
+  | 'America/Phoenix'
+  | 'America/Chicago'
+  | 'America/Guatemala'
+  | 'America/New_York'
+  | 'America/Bogota'
+  | 'America/Caracas'
+  | 'America/Santiago'
+  | 'America/Buenos_Aires'
+  | 'America/Sao_Paulo'
+  | 'Atlantic/South_Georgia'
+  | 'Atlantic/Azores'
+  | 'Atlantic/Cape_Verde'
+  | 'Europe/London'
+  | 'Europe/Berlin'
+  | 'Africa/Lagos'
+  | 'Europe/Athens'
+  | 'Africa/Cairo'
+  | 'Europe/Moscow'
+  | 'Asia/Riyadh'
+  | 'Asia/Dubai'
+  | 'Asia/Baku'
+  | 'Asia/Karachi'
+  | 'Asia/Tashkent'
+  | 'Asia/Calcutta'
+  | 'Asia/Dhaka'
+  | 'Asia/Almaty'
+  | 'Asia/Jakarta'
+  | 'Asia/Bangkok'
+  | 'Asia/Shanghai'
+  | 'Asia/Singapore'
+  | 'Asia/Tokyo'
+  | 'Asia/Seoul'
+  | 'Australia/Brisbane'
+  | 'Australia/Sydney'
+  | 'Pacific/Guam'
+  | 'Pacific/Noumea'
+  | 'Pacific/Auckland'
+  | 'Pacific/Fiji';
+
 export interface Config {
   auth: {
     users: UserAuthOperations;
+    students: StudentAuthOperations;
   };
+  blocks: {};
   collections: {
     pages: Page;
     posts: Post;
@@ -17,8 +74,17 @@ export interface Config {
     categories: Category;
     users: User;
     courses: Course;
-    'learning-lab': LearningLab;
-    events: Event;
+    'intake-months': IntakeMonth;
+    'study-modes': StudyMode;
+    'study-years': StudyYear;
+    'study-areas': StudyArea;
+    departments: Department;
+    'degree-programs': DegreeProgram;
+    universities: University;
+    countries: Country;
+    bookings: Booking;
+    students: Student;
+    currencies: Currency;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -36,8 +102,17 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
-    'learning-lab': LearningLabSelect<false> | LearningLabSelect<true>;
-    events: EventsSelect<false> | EventsSelect<true>;
+    'intake-months': IntakeMonthsSelect<false> | IntakeMonthsSelect<true>;
+    'study-modes': StudyModesSelect<false> | StudyModesSelect<true>;
+    'study-years': StudyYearsSelect<false> | StudyYearsSelect<true>;
+    'study-areas': StudyAreasSelect<false> | StudyAreasSelect<true>;
+    departments: DepartmentsSelect<false> | DepartmentsSelect<true>;
+    'degree-programs': DegreeProgramsSelect<false> | DegreeProgramsSelect<true>;
+    universities: UniversitiesSelect<false> | UniversitiesSelect<true>;
+    countries: CountriesSelect<false> | CountriesSelect<true>;
+    bookings: BookingsSelect<false> | BookingsSelect<true>;
+    students: StudentsSelect<false> | StudentsSelect<true>;
+    currencies: CurrenciesSelect<false> | CurrenciesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -59,9 +134,13 @@ export interface Config {
     footer: FooterSelect<false> | FooterSelect<true>;
   };
   locale: null;
-  user: User & {
-    collection: 'users';
-  };
+  user:
+    | (User & {
+        collection: 'users';
+      })
+    | (Student & {
+        collection: 'students';
+      });
   jobs: {
     tasks: {
       schedulePublish: TaskSchedulePublish;
@@ -74,6 +153,24 @@ export interface Config {
   };
 }
 export interface UserAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+export interface StudentAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -589,6 +686,7 @@ export interface Form {
             label?: string | null;
             width?: number | null;
             defaultValue?: string | null;
+            placeholder?: string | null;
             options?:
               | {
                   label: string;
@@ -697,6 +795,7 @@ export interface Form {
 export interface Course {
   id: number;
   title: string;
+  description?: string | null;
   heroImage?: (number | null) | Media;
   content: {
     root: {
@@ -713,8 +812,24 @@ export interface Course {
     };
     [k: string]: unknown;
   };
-  relatedPosts?: (number | Post)[] | null;
-  categories?: (number | Category)[] | null;
+  university: number | University;
+  degreeProgram?: (number | null) | DegreeProgram;
+  department?: (number | null) | Department;
+  studyArea?: (number | null) | StudyArea;
+  studyYear?: (number | null) | StudyYear;
+  studyMode?: (number | null) | StudyMode;
+  intakeMonths?: (number | IntakeMonth)[] | null;
+  programmeAccreditationCode?: string | null;
+  pathway?: string | null;
+  assessments?: string | null;
+  fees?:
+    | {
+        feeName: string;
+        feeAmount: number;
+        feeCurrency: number | Currency;
+        id?: string | null;
+      }[]
+    | null;
   meta?: {
     title?: string | null;
     /**
@@ -725,12 +840,6 @@ export interface Course {
   };
   publishedAt?: string | null;
   authors?: (number | User)[] | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -739,104 +848,164 @@ export interface Course {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "learning-lab".
+ * via the `definition` "universities".
  */
-export interface LearningLab {
+export interface University {
   id: number;
   title: string;
-  excerpt?: string | null;
-  heroImage?: (number | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  relatedPosts?: (number | Post)[] | null;
-  categories?: (number | Category)[] | null;
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
-  authors?: (number | User)[] | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
+  logo: number | Media;
+  secondaryLogo?: (number | null) | Media;
+  email?: string | null;
+  country: number | Country;
   slug?: string | null;
   slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries".
+ */
+export interface Country {
+  id: number;
+  name: string;
+  code: string;
+  logo?: (number | null) | Media;
+  feeCurrency: number | Currency;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "currencies".
+ */
+export interface Currency {
+  id: number;
+  currencyName: string;
+  currencyCode: string;
+  currencyValue: number;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "degree-programs".
+ */
+export interface DegreeProgram {
+  id: number;
+  name: string;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "departments".
+ */
+export interface Department {
+  id: number;
+  name: string;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "study-areas".
+ */
+export interface StudyArea {
+  id: number;
+  name: string;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "study-years".
+ */
+export interface StudyYear {
+  id: number;
+  name: string;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "study-modes".
+ */
+export interface StudyMode {
+  id: number;
+  name: string;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "intake-months".
+ */
+export interface IntakeMonth {
+  id: number;
+  name: string;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings".
+ */
+export interface Booking {
+  id: number;
+  courseName: string;
+  courseID?: string | null;
+  book?: string | null;
+  customerName: string;
+  customerID?: string | null;
+  orderDate: string;
+  razorpayResponse: string;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "events".
+ * via the `definition` "students".
  */
-export interface Event {
+export interface Student {
   id: number;
-  title: string;
-  heroImage?: (number | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  relatedPosts?: (number | Post)[] | null;
-  categories?: (number | Category)[] | null;
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
-  authors?: (number | User)[] | null;
-  populatedAuthors?:
+  name: string;
+  phone: string;
+  college: string;
+  dept: string;
+  terms: boolean;
+  is_mobile_verified?: boolean | null;
+  is_email_verified?: boolean | null;
+  books?:
     | {
+        bookId?: string | null;
         id?: string | null;
-        name?: string | null;
       }[]
     | null;
-  slug?: string | null;
-  slugLock?: boolean | null;
-  /**
-   * Add an external link to the post
-   */
-  externalLink?: string | null;
-  eventfrom?: string | null;
-  eventto?: string | null;
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1039,12 +1208,48 @@ export interface PayloadLockedDocument {
         value: number | Course;
       } | null)
     | ({
-        relationTo: 'learning-lab';
-        value: number | LearningLab;
+        relationTo: 'intake-months';
+        value: number | IntakeMonth;
       } | null)
     | ({
-        relationTo: 'events';
-        value: number | Event;
+        relationTo: 'study-modes';
+        value: number | StudyMode;
+      } | null)
+    | ({
+        relationTo: 'study-years';
+        value: number | StudyYear;
+      } | null)
+    | ({
+        relationTo: 'study-areas';
+        value: number | StudyArea;
+      } | null)
+    | ({
+        relationTo: 'departments';
+        value: number | Department;
+      } | null)
+    | ({
+        relationTo: 'degree-programs';
+        value: number | DegreeProgram;
+      } | null)
+    | ({
+        relationTo: 'universities';
+        value: number | University;
+      } | null)
+    | ({
+        relationTo: 'countries';
+        value: number | Country;
+      } | null)
+    | ({
+        relationTo: 'bookings';
+        value: number | Booking;
+      } | null)
+    | ({
+        relationTo: 'students';
+        value: number | Student;
+      } | null)
+    | ({
+        relationTo: 'currencies';
+        value: number | Currency;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1067,10 +1272,15 @@ export interface PayloadLockedDocument {
         value: number | PayloadJob;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'students';
+        value: number | Student;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -1080,10 +1290,15 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: number;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'students';
+        value: number | Student;
+      };
   key?: string | null;
   value?:
     | {
@@ -1417,10 +1632,27 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface CoursesSelect<T extends boolean = true> {
   title?: T;
+  description?: T;
   heroImage?: T;
   content?: T;
-  relatedPosts?: T;
-  categories?: T;
+  university?: T;
+  degreeProgram?: T;
+  department?: T;
+  studyArea?: T;
+  studyYear?: T;
+  studyMode?: T;
+  intakeMonths?: T;
+  programmeAccreditationCode?: T;
+  pathway?: T;
+  assessments?: T;
+  fees?:
+    | T
+    | {
+        feeName?: T;
+        feeAmount?: T;
+        feeCurrency?: T;
+        id?: T;
+      };
   meta?:
     | T
     | {
@@ -1430,12 +1662,6 @@ export interface CoursesSelect<T extends boolean = true> {
       };
   publishedAt?: T;
   authors?: T;
-  populatedAuthors?:
-    | T
-    | {
-        id?: T;
-        name?: T;
-      };
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
@@ -1444,69 +1670,152 @@ export interface CoursesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "learning-lab_select".
+ * via the `definition` "intake-months_select".
  */
-export interface LearningLabSelect<T extends boolean = true> {
-  title?: T;
-  excerpt?: T;
-  heroImage?: T;
-  content?: T;
-  relatedPosts?: T;
-  categories?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        image?: T;
-        description?: T;
-      };
-  publishedAt?: T;
-  authors?: T;
-  populatedAuthors?:
-    | T
-    | {
-        id?: T;
-        name?: T;
-      };
+export interface IntakeMonthsSelect<T extends boolean = true> {
+  name?: T;
   slug?: T;
   slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "study-modes_select".
+ */
+export interface StudyModesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "study-years_select".
+ */
+export interface StudyYearsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "study-areas_select".
+ */
+export interface StudyAreasSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "departments_select".
+ */
+export interface DepartmentsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "degree-programs_select".
+ */
+export interface DegreeProgramsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "universities_select".
+ */
+export interface UniversitiesSelect<T extends boolean = true> {
+  title?: T;
+  logo?: T;
+  secondaryLogo?: T;
+  email?: T;
+  country?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries_select".
+ */
+export interface CountriesSelect<T extends boolean = true> {
+  name?: T;
+  code?: T;
+  logo?: T;
+  feeCurrency?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings_select".
+ */
+export interface BookingsSelect<T extends boolean = true> {
+  courseName?: T;
+  courseID?: T;
+  book?: T;
+  customerName?: T;
+  customerID?: T;
+  orderDate?: T;
+  razorpayResponse?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "events_select".
+ * via the `definition` "students_select".
  */
-export interface EventsSelect<T extends boolean = true> {
-  title?: T;
-  heroImage?: T;
-  content?: T;
-  relatedPosts?: T;
-  categories?: T;
-  meta?:
+export interface StudentsSelect<T extends boolean = true> {
+  name?: T;
+  phone?: T;
+  college?: T;
+  dept?: T;
+  terms?: T;
+  is_mobile_verified?: T;
+  is_email_verified?: T;
+  books?:
     | T
     | {
-        title?: T;
-        image?: T;
-        description?: T;
-      };
-  publishedAt?: T;
-  authors?: T;
-  populatedAuthors?:
-    | T
-    | {
+        bookId?: T;
         id?: T;
-        name?: T;
       };
-  slug?: T;
-  slugLock?: T;
-  externalLink?: T;
-  eventfrom?: T;
-  eventto?: T;
   updatedAt?: T;
   createdAt?: T;
-  _status?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "currencies_select".
+ */
+export interface CurrenciesSelect<T extends boolean = true> {
+  currencyName?: T;
+  currencyCode?: T;
+  currencyValue?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1589,6 +1898,7 @@ export interface FormsSelect<T extends boolean = true> {
               label?: T;
               width?: T;
               defaultValue?: T;
+              placeholder?: T;
               options?:
                 | T
                 | {
@@ -1903,12 +2213,8 @@ export interface TaskSchedulePublish {
           value: number | Course;
         } | null)
       | ({
-          relationTo: 'learning-lab';
-          value: number | LearningLab;
-        } | null)
-      | ({
-          relationTo: 'events';
-          value: number | Event;
+          relationTo: 'bookings';
+          value: number | Booking;
         } | null);
     global?: string | null;
     user?: (number | null) | User;
@@ -1950,6 +2256,62 @@ export interface CodeBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'code';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "YearlyCoursesBlock".
+ */
+export interface YearlyCoursesBlock {
+  years?:
+    | {
+        yearNumber: string;
+        leftColumn: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        rightColumn: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'yearlyCourses';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RegisterFormBlock".
+ */
+export interface RegisterFormBlock {
+  formTitle: string;
+  termslink: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'registerFormBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
