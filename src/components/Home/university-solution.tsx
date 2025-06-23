@@ -30,25 +30,25 @@ const UniversitySolutionSection = () => {
     {
       title: 'COUNSELING AND GUIDANCE',
       description:
-        'Ustudy provides personalized counseling and guidance to help you choose the right academic and career path.',
+        'UStudy Global provides personalized counseling and guidance to help you choose the right academic and career path.',
       icon: '/media/home/hser-cg-icon.png', // Replace with an actual icon or component
     },
     {
       title: 'APPLICATION GUIDANCE',
       description:
-        'Ustudy offers expert application guidance, ensuring your documents are accurate and submissions timely.',
+        'UStudy Global offers expert application guidance, ensuring your documents are accurate and submissions timely.',
       icon: '/media/home/hser-ag-icon.png', // Replace with an actual icon or component
     },
     {
       title: 'VISA, FOREX',
       description:
-        'Ustudy assists in obtaining the right student visa and ensures smooth foreign exchange transactions.',
+        'UStudy Global assists in obtaining the right student visa and ensures smooth foreign exchange transactions.',
       icon: '/media/home/hser-vf-icon.png', // Replace with an actual icon or component
     },
     {
       title: 'TICKETING PROCESS',
       description:
-        'Ustudy offers guidance in booking flights for students traveling abroad for their education.',
+        'UStudy Global offers guidance in booking flights for students traveling abroad for their education.',
       icon: '/media/home/hser-tp-icon.png', // Replace with an actual icon or component
     },
     {
@@ -60,31 +60,31 @@ const UniversitySolutionSection = () => {
     {
       title: "DOS AND DON'TS",
       description:
-        'Ustudy’s Dos and Don’ts guide ensures you are well-prepared for cultural and academic life abroad.',
+        'UStudy Global Dos and Don’ts guide ensures you are well-prepared for cultural and academic life abroad.',
       icon: '/media/home/hser-dd-icon.png', // Replace with an actual icon or component
     },
     {
       title: 'ACCOMMODATION AREA',
       description:
-        'Ustudy assists in finding the right accommodation, whether on-campus or off-campus, for a comfortable living experience.',
+        'UStudy Global assists in finding the right accommodation, whether on-campus or off-campus, for a comfortable living experience.',
       icon: '/media/home/hser-aa-icon.png', // Replace with an actual icon or component
     },
     {
       title: 'POST LANDING FORMALITIES',
       description:
-        'Ustudy provides support for post-landing formalities, including immigration and orientation.',
+        'UStudy Global provides support for post-landing formalities, including immigration and orientation.',
       icon: '/media/home/hser-plf-icon.png', // Replace with an actual icon or component
     },
     {
       title: 'FINANCIAL GUIDANCE',
       description:
-        'Ustudy provides expert financial guidance to help manage your budget and find scholarships.',
+        'UStudy Global provides expert financial guidance to help manage your budget and find scholarships.',
       icon: '/media/home/hser-fg-icon.png', // Replace with an actual icon or component
     },
     {
       title: 'GUIDED HANDS ON PROJECTS',
       description:
-        'Ustudy offers guided hands-on projects that provide practical experience alongside your academic studies.',
+        'UStudy Global offers guided hands-on projects that provide practical experience alongside your academic studies.',
       icon: '/media/home/hser-ghp-icon.png', // Replace with an actual icon or component
     },
   ]

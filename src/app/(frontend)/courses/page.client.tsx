@@ -2,7 +2,7 @@
 
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 import React, { useEffect, useState, useCallback, useRef } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { CollectionArchiveCourses } from '@/components/Courses/CollectionArchiveCourses'
 import { PageRange } from '@/components/PageRange'
 import { CoursesPagination } from '@/components/Courses/CoursesPagination'
@@ -64,10 +64,36 @@ const initialFilters = {
   searchQuery: '',
 }
 
+function filtersAreEqual(f1: typeof initialFilters, f2: typeof initialFilters) {
+  // Compare all filter keys except pagination controls (which are not in filters)
+  return (
+    JSON.stringify({
+      countries: f1.countries,
+      universities: f1.universities,
+      studyAreas: f1.studyAreas,
+      degreePrograms: f1.degreePrograms,
+      studyYears: f1.studyYears,
+      studyModes: f1.studyModes,
+      searchQuery: f1.searchQuery,
+    }) ===
+    JSON.stringify({
+      countries: f2.countries,
+      universities: f2.universities,
+      studyAreas: f2.studyAreas,
+      degreePrograms: f2.degreePrograms,
+      studyYears: f2.studyYears,
+      studyModes: f2.studyModes,
+      searchQuery: f2.searchQuery,
+    })
+  );
+}
+
 export default function PageClient() {
   const { setHeaderTheme } = useHeaderTheme()
+  const router = useRouter()
   const searchParams = useSearchParams() ?? new URLSearchParams()
   const couresLInBoxRef = useRef<HTMLDivElement | null>(null)
+  const lastFiltersRef = useRef<typeof initialFilters>(initialFilters)
   const [filtersInitialized, setFiltersInitialized] = useState(false)
   const [courses, setCourses] = useState<CoursesResponse>({
     docs: [],
@@ -102,7 +128,13 @@ export default function PageClient() {
     setFiltersInitialized(true)
   }, [searchParams])
 
-  // Update URL when filters change, include searchQuery
+  // Initialize page from query param if present
+  useEffect(() => {
+    const pageFromUrl = parseInt(searchParams.get('page') || '1', 10)
+    setCurrentPage(pageFromUrl > 0 ? pageFromUrl : 1)
+  }, [searchParams])
+
+  // Update URL when filters or page change, include searchQuery and page
   useEffect(() => {
     const params = new URLSearchParams()
     Object.entries(filters).forEach(([key, values]) => {
@@ -114,14 +146,17 @@ export default function PageClient() {
         values.forEach(value => params.append(key, value))
       }
     })
+    if (currentPage && currentPage !== 1) {
+      params.set('page', currentPage.toString())
+    }
     const paramsString = params.toString()
     const newUrl = paramsString
       ? `${window.location.pathname}?${paramsString}`
       : window.location.pathname
     if (newUrl !== window.location.href) {
-      window.history.pushState(null, '', newUrl)
+      window.history.replaceState(null, '', newUrl)
     }
-  }, [filters])
+  }, [filters, currentPage])
 
   // Fetch all courses only once, unfiltered, for filter options
   useEffect(() => {
@@ -212,23 +247,35 @@ export default function PageClient() {
     }
   }, [filters, limit, currentPage, fetchCourses, filtersInitialized])
 
-  // Scroll to couresLInBox after filters are set from query params
+  // Scroll to couresLInBox ONLY when filter (not page) changes
   useEffect(() => {
+    if (!filtersInitialized) return;
+
+    // Only scroll if the filters (excluding pagination) have changed
     if (
-      filtersInitialized &&
       typeof window !== 'undefined' &&
       couresLInBoxRef.current &&
-      (
-        Object.values(filters).some(v => Array.isArray(v) ? v.length > 0 : v)
-      )
+      !filtersAreEqual(filters, lastFiltersRef.current)
     ) {
       setTimeout(() => {
         couresLInBoxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 200);
     }
-  }, [filtersInitialized, filters])
+    lastFiltersRef.current = filters;
+    // eslint-disable-next-line
+  }, [
+    filtersInitialized,
+    filters.countries,
+    filters.universities,
+    filters.degreePrograms,
+    filters.studyAreas,
+    filters.studyYears,
+    filters.studyModes,
+    filters.searchQuery,
+  ])
 
-  // Scroll to couresLInBox if searchQuery is present and changes
+  // (Optional) Scroll to couresLInBox if searchQuery is present and changes
+  // If you want searchQuery to not scroll, remove this effect.
   useEffect(() => {
     if (
       filters.searchQuery &&
@@ -319,6 +366,7 @@ export default function PageClient() {
     (page: number) => {
       setCurrentPage(page)
       setSuggestedFilters(null)
+      // Do NOT scroll here!
     },
     []
   )
@@ -498,8 +546,8 @@ export default function PageClient() {
                   ))}
                 </div>
               ) : courses.docs.length === 0 ? (
-                <div className="text-center py-16 text-gray-500 text-lg font-medium">
-                  Search produced no results.
+                <div className="text-center py-16 text-gray-500 text-lg font-medium searchnoresult">
+                  <h4>Search produced no results.</h4>
                   <div className="mt-4">
                     <button
                       className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"

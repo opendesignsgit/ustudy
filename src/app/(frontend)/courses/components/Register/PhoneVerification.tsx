@@ -6,14 +6,27 @@ type PhoneVerificationProps = {
     phone: string;
     onVerified: () => void;
     onBack: () => void;
+    otpAlreadySent: boolean;  // Add this prop
 };
 
-export const PhoneVerification = ({ phone, onVerified, onBack }: PhoneVerificationProps) => {
+export const PhoneVerification = ({
+    phone,
+    onVerified,
+    onBack,
+    otpAlreadySent  // Add this prop
+}: PhoneVerificationProps) => {
     const [otp, setOtp] = useState('');
     const [timer, setTimer] = useState(120);
     const [isVerifying, setIsVerifying] = useState(false);
     const [error, setError] = useState('');
     const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+
+    useEffect(() => {
+        if (otpAlreadySent) {
+            setTimer(120);
+        }
+    }, [otpAlreadySent]);
 
     // Start timer on component mount
     useEffect(() => {

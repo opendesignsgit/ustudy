@@ -4,17 +4,30 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 type PersonalInfoFormProps = {
+    initialData?: {
+        name: string;
+        phone: string;
+        email: string;
+        college: string;
+        dept: string;
+    };
     onSubmit: (data: any) => void;
     onClose: () => void;
+    shouldSendOtp?: boolean; // Add this prop
 };
 
-export const PersonalInfoForm = ({ onSubmit, onClose }: PersonalInfoFormProps) => {
+export const PersonalInfoForm = ({
+    initialData,
+    onSubmit,
+    onClose,
+    shouldSendOtp = true // Default to true for backward compatibility
+}: PersonalInfoFormProps) => {
     const [formData, setFormData] = useState({
-        name: '',
-        phone: '',
-        email: '',
-        college: '',
-        dept: '',
+        name: initialData?.name || '',
+        phone: initialData?.phone || '',
+        email: initialData?.email || '',
+        college: initialData?.college || '',
+        dept: initialData?.dept || '',
     });
     const [isSending, setIsSending] = useState(false);
     const [error, setError] = useState('');
@@ -80,7 +93,6 @@ export const PersonalInfoForm = ({ onSubmit, onClose }: PersonalInfoFormProps) =
         setIsSending(true);
         setError('');
 
-        // Do the checkStudentExists during submit
         const exists = await checkStudentExists(formData.phone, formData.email);
         setStudentExists(exists);
 
@@ -91,22 +103,25 @@ export const PersonalInfoForm = ({ onSubmit, onClose }: PersonalInfoFormProps) =
             return;
         } else {
             try {
-                if (formData.phone) {
-                    const phoneResponse = await fetch('/api/send-otp', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ phone: formData.phone }),
-                    });
-                    if (!phoneResponse.ok) throw new Error('Failed to send phone OTP');
-                }
+                // Only send OTPs if shouldSendOtp is true
+                if (shouldSendOtp) {
+                    if (formData.phone) {
+                        const phoneResponse = await fetch('/api/send-otp', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ phone: formData.phone }),
+                        });
+                        if (!phoneResponse.ok) throw new Error('Failed to send phone OTP');
+                    }
 
-                if (formData.email) {
-                    const emailResponse = await fetch('/api/send-otp', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: formData.email }),
-                    });
-                    if (!emailResponse.ok) throw new Error('Failed to send email OTP');
+                    if (formData.email) {
+                        const emailResponse = await fetch('/api/send-otp', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email: formData.email }),
+                        });
+                        if (!emailResponse.ok) throw new Error('Failed to send email OTP');
+                    }
                 }
 
                 onSubmit(formData);

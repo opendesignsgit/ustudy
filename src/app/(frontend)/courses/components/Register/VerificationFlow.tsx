@@ -10,7 +10,7 @@ type VerificationFlowProps = {
     onSuccess: (data: any) => void;
     onClose: () => void;
     onToggleToLogin: () => void;
-    onLoginSuccess?: (loginData: any) => void; // <-- Added for login support
+    onLoginSuccess?: (loginData: any) => void;
 };
 
 export const VerificationFlow = ({
@@ -20,17 +20,38 @@ export const VerificationFlow = ({
     onLoginSuccess
 }: VerificationFlowProps) => {
     const [step, setStep] = useState<'personal' | 'phone' | 'email'>('personal');
-    const [formData, setFormData] = useState<any>({});
+    const [formData, setFormData] = useState<any>({
+        name: '',
+        phone: '',
+        email: '',
+        college: '',
+        dept: ''
+    });
+    const [otpSent, setOtpSent] = useState(false);
     const { register } = useAuth();
 
-    // Called after registration form submit (could be register or login)
-    const handlePersonalInfoSubmit = (data: any) => {
-        // If login was successful, data will likely have a user or token
+    const handlePersonalInfoSubmit = async (data: any) => {
         if (data && data.token && onLoginSuccess) {
-            onLoginSuccess(data); // Skip verification, go to payment in modal
+            onLoginSuccess(data);
         } else {
             setFormData(data);
+            setOtpSent(true);
             setStep('phone');
+        }
+    };
+
+    const handleFieldChange = async (field: 'phone' | 'email', value: string) => {
+        const updatedData = { ...formData, [field]: value };
+        setFormData(updatedData);
+
+        try {
+            await fetch('/api/send-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ [field]: value }),
+            });
+        } catch (error) {
+            console.error(`Error sending ${field} OTP:`, error);
         }
     };
 
@@ -40,25 +61,33 @@ export const VerificationFlow = ({
 
     const handleEmailVerified = async () => {
         try {
-            // Register the user with all collected data
             const user = await register({
                 ...formData,
                 isPhoneVerified: true,
                 isEmailVerified: true
             });
-
             onSuccess(user);
         } catch (error) {
             console.error('Registration failed:', error);
         }
     };
 
+    const handleBackFromPhone = () => {
+        setStep('personal');
+    };
+
+    const handleBackFromEmail = () => {
+        setStep('phone');
+    };
+
     return (
         <div className="space-y-4">
             {step === 'personal' && (
                 <PersonalInfoForm
+                    initialData={formData}
                     onSubmit={handlePersonalInfoSubmit}
                     onClose={onClose}
+                    shouldSendOtp={!otpSent} // Only send OTPs if not already sent
                 />
             )}
 
@@ -66,7 +95,8 @@ export const VerificationFlow = ({
                 <PhoneVerification
                     phone={formData.phone}
                     onVerified={handlePhoneVerified}
-                    onBack={() => setStep('personal')}
+                    onBack={handleBackFromPhone}
+                    otpAlreadySent={otpSent}
                 />
             )}
 
@@ -74,7 +104,8 @@ export const VerificationFlow = ({
                 <EmailVerification
                     email={formData.email}
                     onVerified={handleEmailVerified}
-                    onBack={() => setStep('phone')}
+                    onBack={handleBackFromEmail}
+                    otpAlreadySent={otpSent}
                 />
             )}
         </div>

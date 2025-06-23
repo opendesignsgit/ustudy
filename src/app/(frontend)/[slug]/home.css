@@ -77,7 +77,7 @@
 }
 .uyllist ul li {
   padding-block: 10px;
-  padding-right: 3vw;
+  padding-right: 0vw;
   margin: 0 !important;
   border-bottom: 1px solid rgb(255 255 255 / 20%);
   position: relative;
@@ -89,10 +89,14 @@
   width: 30px;
   aspect-ratio: 1;
 }
+.uyllist ul li a {
+  position: relative;
+  width: calc(100% - 30px);
+}
 .colRight .uyllist ul li {
   border-bottom: 1px solid rgb(0 0 0 / 20%);
 }
-.uyllist ul li::before {
+.uyllist ul li a::before {
   content: '';
   position: absolute;
   width: 1.1vw;
@@ -106,7 +110,7 @@
   transform: translateY(-50%);
   opacity: 0;
 }
-.uyllist ul li:hover::before {
+.uyllist ul li:hover a::before {
   opacity: 1;
 }
 .uyllist ul li .listicon {
@@ -377,6 +381,7 @@
   letter-spacing: 0.5px;
   backdrop-filter: blur(2px);
   color: #ffffff;
+  text-transform: uppercase;
 }
 .dyapitemcont {
   padding: 20px;
@@ -409,11 +414,12 @@
   position: relative;
   height: 100%;
   padding-inline: 30px;
-  padding-block: 15vh 6vh;
+  padding-block: 6vh;
   color: #000000;
   border-radius: 20px;
   background: url(/media/home/hseritembg.jpg);
 }
+
 .halinoneItems h3 {
   color: #0056d2;
   font-size: 1.2vw;
@@ -426,8 +432,11 @@
   color: #333333;
 }
 .halinoneicon {
-  top: 50px;
-  right: 30px;
+  position: relative;
+    top: 0px;
+    right: 0px;
+    margin-left: auto;
+    margin-bottom: 10px;
   width: 70px;
   height: auto;
   aspect-ratio: 1;
@@ -588,7 +597,7 @@
     padding-block: 17vh 4vh;
   }
   .halinoneicon {
-    top: 35px;
+    top: 0px;
   }
 }
 @media screen and (max-width: 1620px) {
@@ -825,7 +834,7 @@
     font-size: 16px;
   }
   .halinoneicon {
-    top: 18px;
+    top: 0px;
   }
   .formboxs .form-col {
     width: 100%;

@@ -59,7 +59,7 @@ const Footer = () => {
             </address>
             <div className="mt-4 contlink">
               <p className="flex items-center gap-2 mailpara">
-                <a href="mailto:info@ustudyglobal.in">info@ustudyglobal.in</a>
+                <a href="mailto:info@ustudyglobal.co">info@ustudyglobal.co</a>
               </p>
               <p className="flex items-center gap-2 phonepara">
                 <a href="tel:+918939393962">89 39 39 39 62</a> /
@@ -73,16 +73,16 @@ const Footer = () => {
             <h3 className="footTitle">USEFUL LINK</h3>
             <ul className="space-y-2 text-sm fonteighteen">
               <li>
-                <Link href="/">About Us</Link>
+                <Link href="/">Home</Link>
               </li>
               <li>
-                <Link href="/">Contact Us</Link>
+                <Link href="/courses">Study Abroad</Link>
               </li>
               <li>
-                <Link href="/">Enquiry</Link>
+                <Link href="/services">Services</Link>
               </li>
               <li>
-                <Link href="/">University Login</Link>
+                <Link href="/contact-us">Contact Us</Link>
               </li>
             </ul>
           </div>
@@ -90,7 +90,7 @@ const Footer = () => {
           {/* Policy Links Section */}
           <div className="footmcol">
             <h3 className="footTitle">POLICY LINK</h3>
-            <ul className="space-y-2 text-sm fonteighteen">
+            <ul className="space-y-2 text-sm fonteighteen nolink">
               <li>
                 <Link href="/">Terms & Condition</Link>
               </li>

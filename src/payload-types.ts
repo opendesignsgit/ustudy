@@ -126,10 +126,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    'website-settings': WebsiteSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'website-settings': WebsiteSettingsSelect<false> | WebsiteSettingsSelect<true>;
   };
   locale: null;
   user:
@@ -815,7 +817,7 @@ export interface Course {
   degreeProgram?: (number | null) | DegreeProgram;
   department?: (number | null) | Department;
   studyArea?: (number | null) | StudyArea;
-  studyYear?: (number | null) | StudyYear;
+  studyYear?: (number | StudyYear)[] | null;
   studyMode?: (number | null) | StudyMode;
   intakeMonths?: (number | IntakeMonth)[] | null;
   programmeAccreditationCode?: string | null;
@@ -2137,6 +2139,32 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "website-settings".
+ */
+export interface WebsiteSetting {
+  id: number;
+  gtagID?: string | null;
+  /**
+   * Upload the site favicon (should be a square image, e.g. 32x32px)
+   */
+  favicon?: (number | null) | Media;
+  /**
+   * This will be used as the default meta title across the site.
+   */
+  metaTitle?: string | null;
+  /**
+   * This will be used as the default meta description across the site.
+   */
+  metaDescription?: string | null;
+  /**
+   * Upload the default image for social sharing (OpenGraph, etc).
+   */
+  metaImage?: (number | null) | Media;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2178,6 +2206,20 @@ export interface FooterSelect<T extends boolean = true> {
         id?: T;
       };
   content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "website-settings_select".
+ */
+export interface WebsiteSettingsSelect<T extends boolean = true> {
+  gtagID?: T;
+  favicon?: T;
+  metaTitle?: T;
+  metaDescription?: T;
+  metaImage?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

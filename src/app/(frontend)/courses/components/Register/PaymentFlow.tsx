@@ -76,7 +76,7 @@ export const PaymentFlow = ({ userData, pageId, onComplete }: PaymentFlowProps) 
                 key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
                 amount: orderData.amount,
                 currency: orderData.currency,
-                name: 'Ustudy Global',
+                name: 'UStudy Global',
                 description: `Payment for ${course.name}`,
                 order_id: orderData.id,
                 handler: async (response: any) => {
