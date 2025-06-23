@@ -6,14 +6,27 @@ type EmailVerificationProps = {
     email: string;
     onVerified: () => void;
     onBack: () => void;
+    otpAlreadySent: boolean;  // Add this prop
 };
 
-export const EmailVerification = ({ email, onVerified, onBack }: EmailVerificationProps) => {
+export const EmailVerification = ({
+    email,
+    onVerified,
+    onBack,
+    otpAlreadySent  // Add this prop
+}: EmailVerificationProps) => {
     const [otp, setOtp] = useState('');
     const [timer, setTimer] = useState(0);
     const [isVerifying, setIsVerifying] = useState(false);
     const [error, setError] = useState('');
     const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+
+    useEffect(() => {
+        if (otpAlreadySent) {
+            setTimer(120);
+        }
+    }, [otpAlreadySent]);
 
     // Start timer on component mount
     useEffect(() => {

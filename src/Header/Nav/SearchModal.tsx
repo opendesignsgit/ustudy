@@ -291,7 +291,7 @@ export const SearchModal = ({
                           )}
 
                           {/* Department */}
-                          {course.department?.name && (
+                          {/* {course.department?.name && (
                             <button
                               className="bg-gray-100 px-2 py-1 rounded text-xs hover:bg-blue-100"
                               onClick={(e) => {
@@ -303,7 +303,7 @@ export const SearchModal = ({
                             >
                               {course.department.name}
                             </button>
-                          )}
+                          )} */}
 
                           {/* Study Area */}
                           {course.studyArea?.name && (

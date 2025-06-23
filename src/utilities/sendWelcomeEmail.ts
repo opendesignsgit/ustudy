@@ -25,8 +25,10 @@ const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 587,
   auth: {
-    user: process.env.EMAIL_USER || 'info@ustudyglobal.co',
-    pass: process.env.EMAIL_PASSWORD || 'xfuakliubkcxkrvq',
+    user: 'ueducate2023@gmail.com',
+    pass: 'suckyzoajhnsvsqe',
+    // user: 'info@ustudyglobal.co',
+    // pass: 'ynaevbaookrvumsm',
   },
 });
 
@@ -40,12 +42,12 @@ export const sendWelcomeEmail = async ({
   password 
 }: WelcomeEmailProps) => {
   const mailOptions = {
-    from: process.env.EMAIL_FROM || 'Ustudy Global <info@ustudyglobal.co>',
+    from: process.env.EMAIL_FROM || 'UStudy Global <info@ustudyglobal.co>',
     to: email,
-    subject: 'Welcome to Ustudy Global',
+    subject: 'Welcome to UStudy Global',
     text: `Dear ${name},
 
-Welcome to Ustudy Global! We are excited to have you on board.
+Welcome to UStudy Global! We are excited to have you on board.
 
 Your login credentials are:
 Username: ${username}
@@ -54,10 +56,10 @@ Password: ${password}
 Please keep this information secure.
 
 Best regards,
-Ustudy Global Team`,
+UStudy Global Team`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #1f9714;">Welcome to Ustudy Global!</h2>
+        <h2 style="color: #1f9714;">Welcome to UStudy Global!</h2>
         <p>Dear ${name},</p>
         <p>We are excited to have you on board.</p>
         
@@ -67,7 +69,7 @@ Ustudy Global Team`,
         
         <p style="color: #ff0000;">Please keep this information secure.</p>
         
-        <p>Best regards,<br/>Ustudy Global Team</p>
+        <p>Best regards,<br/>UStudy Global Team</p>
       </div>
     `
   };
@@ -86,12 +88,12 @@ export const sendBookingConfirmation = async ({
 }: BookingEmailProps) => {
   // Send to student
   const studentMailOptions = {
-    from: process.env.EMAIL_FROM || 'Ustudy Global <info@ustudyglobal.co>',
+    from: process.env.EMAIL_FROM || 'UStudy Global <info@ustudyglobal.co>',
     to: email,
     subject: 'Your Course Booking Confirmation',
     text: `Dear ${name},
 
-Thank you for enrolling in ${courseName} with Ustudy Global.
+Thank you for enrolling in ${courseName} with UStudy Global.
 
 Booking Details:
 - University: ${universityName}
@@ -102,12 +104,12 @@ Booking Details:
 We will contact you shortly with further details.
 
 Best regards,
-Ustudy Global Team`,
+UStudy Global Team`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #1f9714;">Course Booking Confirmation</h2>
         <p>Dear ${name},</p>
-        <p>Thank you for enrolling in <strong>${courseName}</strong> with Ustudy Global.</p>
+        <p>Thank you for enrolling in <strong>${courseName}</strong> with UStudy Global.</p>
         
         <h3 style="color: #1f9714;">Booking Details:</h3>
         <ul>
@@ -119,14 +121,14 @@ Ustudy Global Team`,
         
         <p>We will contact you shortly with further details.</p>
         
-        <p>Best regards,<br/>Ustudy Global Team</p>
+        <p>Best regards,<br/>UStudy Global Team</p>
       </div>
     `
   };
 
   // Send to admin (second email)
   const adminMailOptions = {
-    from: process.env.EMAIL_FROM || 'Ustudy Global <info@ustudyglobal.co>',
+    from: process.env.EMAIL_FROM || 'UStudy Global <info@ustudyglobal.co>',
     to: process.env.ADMIN_EMAIL || 'info@ustudyglobal.co' || email,
     subject: `New Booking: ${courseName}`,
     text: `New course booking received:

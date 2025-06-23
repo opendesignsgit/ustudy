@@ -29,7 +29,7 @@ export const CourseHero: React.FC<{
     degreeProgram,
     department,
     studyArea,
-    studyYear,
+    studyYear, // updated field: plural for hasMany
     studyMode,
     intakeMonths,
     programmeAccreditationCode,
@@ -46,8 +46,31 @@ export const CourseHero: React.FC<{
       : undefined;
   const universityTitle = uniObj ? getRelationshipLabel(uniObj) : undefined;
 
-  // Study year label (show raw value/label as requested)
-  const studyYearDisplay = getRelationshipLabel(studyYear);
+  // Study years (hasMany)
+  let studyYearDisplay: string | undefined = undefined;
+  if (Array.isArray(studyYear)) {
+    const labels = studyYear
+      .map(item => getRelationshipLabel(item))
+      .filter(Boolean);
+    if (labels.length === 2) {
+      // Sort numerically if possible, otherwise as strings
+      const [first, second] = labels.sort((a, b) => {
+        const nA = parseInt(a as string, 10);
+        const nB = parseInt(b as string, 10);
+        if (!isNaN(nA) && !isNaN(nB)) {
+          return nA - nB;
+        }
+        return String(a).localeCompare(String(b));
+      });
+      studyYearDisplay = `${first} to ${second}`;
+    } else if (labels.length === 1) {
+      studyYearDisplay = labels[0];
+    } else if (labels.length > 2) {
+      studyYearDisplay = labels.join(', ');
+    }
+  } else {
+    studyYearDisplay = getRelationshipLabel(studyYear);
+  }
 
   // Study mode
   const studyModeLabel = studyMode ? getRelationshipLabel(studyMode) : undefined

@@ -7,44 +7,60 @@ article header.sticky {
 article header.sticky nav ul li a {
   color: #ffffff;
 }
+article header.sticky nav ul li a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
 
 article header .colgelogo {
   background: #ffffff;
   padding-inline: 10px;
-}
-article header nav {}
-
-article header nav button {
-  position: relative;
-}
-
-article header nav button:before {
-  content: '';
-  position: relative;
-  width: 30px;
-  aspect-ratio: 1;
-  display: block;
-  -webkit-filter: brightness(0) invert(1);
-  filter: brightness(0) invert(1);
-}
-
-article header nav button:after {
-  opacity: 0;
-  visibility: hidden;
-}
-
-article header nav button svg {
-  display: none;
-}
-
-article header nav button[aria-label="Previous"]:before {
-  background: url(/media/home/arrow-left-icon.svg) no-repeat 50%;
-  background-size: 50%;
-}
-
-article header nav button[aria-label="Next"]:before {
-  background: url(/media/home/arrow-right-icon.svg) no-repeat 50%;
-  background-size: 50%;
+    width: 12%;
+    }
+    
+    article header .colgelogo a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    article header .colgelogo a img {}
+    
+    article header nav {
+      width: 88%;
+    }
+    
+    article header nav button {
+      position: relative;
+    }
+    
+    article header nav button:before {
+      content: '';
+      position: relative;
+      width: 30px;
+      aspect-ratio: 1;
+      display: block;
+      -webkit-filter: brightness(0) invert(1);
+      filter: brightness(0) invert(1);
+    }
+    
+    article header nav button:after {
+      opacity: 0;
+      visibility: hidden;
+    }
+    
+    article header nav button svg {
+      display: none;
+    }
+    
+    article header nav button[aria-label="Previous"]:before {
+      background: url(/media/home/arrow-left-icon.svg) no-repeat 50%;
+      background-size: 50%;
+    }
+    
+    article header nav button[aria-label="Next"]:before {
+      background: url(/media/home/arrow-right-icon.svg) no-repeat 50%;
+      background-size: 50%;
 }
 .cdpagebansec {
   height: auto;
@@ -525,6 +541,8 @@ ul li {
   font-weight: 500;
   letter-spacing: 0.5px;
   backdrop-filter: blur(2px);
+  color: #ffffff;
+    text-transform: uppercase;
 }
 .dyapitemcont {
   padding: 20px;
@@ -634,6 +652,10 @@ ul li {
 }
 .cdtutionfeessec .grid .tution-fees-right p {
   display: flex;
+}
+
+.cdtutionfeessec .grid .tution-fees-right p strong {
+  color: #333333
 }
 .cdtutionfeessec .grid .tution-fees-right p a {
   background: #0056d2;

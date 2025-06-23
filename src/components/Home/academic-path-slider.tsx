@@ -38,12 +38,6 @@ const AcademicPathSlider: React.FC = () => {
 
   const sections = [
     {
-      title: 'MEDIA',
-      description: 'Gain cutting-edge media skills and hands-on experience to innovate and...',
-      image: '/media/home/dyapImg1.jpg',
-      link: '/courses?studyAreas=Media+%26+Communication',
-    },
-    {
       title: 'LAW',
       description: 'Studying law equips you with critical thinking, problem-solving, and advoca...',
       image: '/media/home/dyapImg2.jpg',
@@ -55,12 +49,6 @@ const AcademicPathSlider: React.FC = () => {
         'Master the art of leadership, strategy, and innovation with business program...',
       image: '/media/home/dyapImg3.jpg',
       link: '/courses?studyAreas=Business',
-    },
-    {
-      title: 'MEDICAL',
-      description: 'Pursue excellence in healthcare with in-depth medical education, hands-on...',
-      image: '/media/home/dyapImg4.jpg',
-      link: '/contact-us',
     },
     {
       title: 'Digital Technology',
@@ -75,22 +63,16 @@ const AcademicPathSlider: React.FC = () => {
       link: '/courses?studyAreas=Digital+Marketing',
     },
     {
-      title: 'Hospital Management',
-      description: 'Learn hospital operations, administration, and patient care systems.',
-      image: '/media/home/HHospitalManagement-img.jpg',
+      title: 'Hospitality Management',
+      description: 'It prepares professionals for careers in hotels, resorts, tourism, and travel industries.',
+      image: '/media/home/HHospitalManagement-Nimg.jpg',
       link: '/courses?studyAreas=Hospitality+Management',
     },
     {
       title: 'Computer Science & Engineering',
       description: 'Study programming, AI, software, and cybersecurity fundamentals.',
       image: '/media/home/HComputerScienceEngineering-img.jpg',
-      link: '/courses?studyAreas=Computer+science+and+engineering',
-    },
-    {
-      title: 'Hospitality & Tourism',
-      description: 'Train in hotels, tourism, and global guest experiences.',
-      image: '/media/home/HHospitalityTourism-img.jpg',
-      link: '/contact-us',
+      link: '/courses?studyAreas=Computer+Science+and+Engineering',
     },
     {
       title: 'Psychology',

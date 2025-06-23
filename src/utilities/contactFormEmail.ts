@@ -35,8 +35,10 @@ const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 587,
   auth: {
-    user: process.env.EMAIL_USER || 'ueducate2023@gmail.com',
-    pass: process.env.EMAIL_PASSWORD || 'suckyzoajhnsvsqe',
+    user: 'ueducate2023@gmail.com',
+    pass: 'suckyzoajhnsvsqe',
+    // user: 'info@ustudyglobal.co',
+    // pass: 'ynaevbaookrvumsm',
   },
 });
 
@@ -75,7 +77,7 @@ export async function sendContactFormEmail({
 
   // Send to admin
   const adminMailOptions = {
-    from: process.env.EMAIL_FROM || 'Ustudy Global <info@ustudyglobal.co>',
+    from: process.env.EMAIL_FROM || 'UStudy Global <info@ustudyglobal.co>',
     to: "info@ustudyglobal.co",
     subject: 'New Contact Form Submission',
     text: contactText(fields),
@@ -87,22 +89,22 @@ export async function sendContactFormEmail({
   // Optionally send a confirmation/copy to the user
   if (sendCopyToUser && fields.email) {
     const userMailOptions = {
-      from: process.env.EMAIL_FROM || 'Ustudy Global <info@ustudyglobal.co>',
+      from: process.env.EMAIL_FROM || 'UStudy Global <info@ustudyglobal.co>',
       to: fields.email,
       subject: 'We have received your inquiry',
       text: `Dear ${fields.name},
 
-Thank you for contacting Ustudy Global.
+Thank you for contacting UStudy Global.
 We have received your message and will get back to you soon.
 
 Best regards,
-Ustudy Global Team`,
+UStudy Global Team`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #1f9714;">Thank you for contacting Ustudy Global!</h2>
+          <h2 style="color: #1f9714;">Thank you for contacting UStudy Global!</h2>
           <p>Dear ${fields.name},</p>
           <p>We have received your message and will get back to you soon.</p>
-          <p>Best regards,<br/>Ustudy Global Team</p>
+          <p>Best regards,<br/>UStudy Global Team</p>
         </div>
       `
     };

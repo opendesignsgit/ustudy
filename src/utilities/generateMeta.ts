@@ -1,22 +1,21 @@
 import type { Metadata } from 'next'
 
-import type { Media, Page, Post, Config } from '../payload-types'
+import type { Media, Page, Post, Config, WebsiteSetting } from '../payload-types'
 
 import { mergeOpenGraph } from './mergeOpenGraph'
 import { getServerSideURL } from './getURL'
 
+import { getCachedGlobal } from '@/utilities/getGlobals'
+
 const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
   const serverUrl = getServerSideURL()
 
-  let url = serverUrl + '/website-template-OG.webp'
-
   if (image && typeof image === 'object' && 'url' in image) {
     const ogUrl = image.sizes?.og?.url
-
-    url = ogUrl ? serverUrl + ogUrl : serverUrl + image.url
+    return ogUrl ? serverUrl + ogUrl : serverUrl + image.url
   }
 
-  return url
+  return undefined
 }
 
 export const generateMeta = async (args: {
@@ -24,16 +23,32 @@ export const generateMeta = async (args: {
 }): Promise<Metadata> => {
   const { doc } = args || {}
 
-  const ogImage = getImageURL(doc?.meta?.image)
+  // Get website settings from cache/global
+  const websiteSettings: WebsiteSetting = await getCachedGlobal('website-settings', 1)()
 
+  // Title: doc meta > global meta > fallback
   const title = doc?.meta?.title
-    ? doc?.meta?.title + ' | Ustudy Global'
-    : 'Ustudy Global'
+    ? `${doc.meta.title} | UStudy Global`
+    : websiteSettings.metaTitle
+      ? websiteSettings.metaTitle
+      : 'UStudy Global'
+
+  // Description: doc meta > global meta > fallback
+  const description = doc?.meta?.description
+    || websiteSettings.metaDescription
+    || ''
+
+  // OG Image: doc meta > global meta > fallback
+  const ogImage =
+    getImageURL(doc?.meta?.image) ||
+    getImageURL(websiteSettings.metaImage) ||
+    getServerSideURL() + '/website-template-OG.webp'
 
   return {
-    description: doc?.meta?.description,
+    title,
+    description,
     openGraph: mergeOpenGraph({
-      description: doc?.meta?.description || '',
+      description,
       images: ogImage
         ? [
             {
@@ -44,6 +59,5 @@ export const generateMeta = async (args: {
       title,
       url: Array.isArray(doc?.slug) ? doc?.slug.join('/') : '/',
     }),
-    title,
   }
 }

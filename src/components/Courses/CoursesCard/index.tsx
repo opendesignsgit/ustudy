@@ -103,8 +103,31 @@ export const CoursesCard: React.FC<{
     ? intakeMonths.map(getRelationshipLabel).filter(Boolean)
     : [getRelationshipLabel(intakeMonths)].filter(Boolean);
 
-  // Study Year display (show raw value/label directly)
-  const studyYearsDisplay = getRelationshipLabel(studyYear);
+  // Study Year display (hasMany and display logic)
+  let studyYearsDisplay: string | undefined = undefined;
+  if (Array.isArray(studyYear)) {
+    const labels = studyYear
+      .map(item => getRelationshipLabel(item))
+      .filter(Boolean);
+    if (labels.length === 2) {
+      // Sort numerically if possible, otherwise as strings
+      const [first, second] = labels.sort((a, b) => {
+        const nA = parseInt(a as string, 10);
+        const nB = parseInt(b as string, 10);
+        if (!isNaN(nA) && !isNaN(nB)) {
+          return nA - nB;
+        }
+        return String(a).localeCompare(String(b));
+      });
+      studyYearsDisplay = `${first} to ${second}`;
+    } else if (labels.length === 1) {
+      studyYearsDisplay = labels[0];
+    } else if (labels.length > 2) {
+      studyYearsDisplay = labels.join(', ');
+    }
+  } else {
+    studyYearsDisplay = getRelationshipLabel(studyYear);
+  }
 
   return (
     <article
@@ -235,4 +258,3 @@ export const CoursesCard: React.FC<{
     </article>
   )
 }
-// Final

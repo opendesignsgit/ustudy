@@ -70,7 +70,7 @@ export const RegisterFlow = ({ pageId }: { pageId?: number }) => {
         <>
             <FloatingEnrollButton
                 onClick={handleButtonClick}
-                text={hasCourseFee ? "Enroll Now" : "Enquire Now"}
+                text={hasCourseFee ? "Enroll Now" : "Contact For More Information"}
             />
 
             {hasCourseFee && (

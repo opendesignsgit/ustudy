@@ -6,18 +6,20 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: 'ueducate2023@gmail.com',
     pass: 'suckyzoajhnsvsqe',
+    // user: 'info@ustudyglobal.co',
+    // pass: 'ynaevbaookrvumsm',
   },
 });
 
 export const sendOTPEmail = async (recipientEmail: string, otp: string): Promise<void> => {
   const mailOptions = {
-    from: '"Ustudy Global" <info@ustudyglobal.co>',
+    from: '"UStudy Global" <info@ustudyglobal.co>',
     to: recipientEmail,
     subject: 'Your Verification Code',
     html: `
       <p>Dear User,</p>
       <p>Your verification code is: <strong>${otp}</strong></p>
-      <p>Thank you,<br/>Ustudy Global</p>
+      <p>Thank you,<br/>UStudy Global</p>
     `,
   };
 

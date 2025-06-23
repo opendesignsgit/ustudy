@@ -43,7 +43,7 @@ const SimpleHiddenCollection = (slug: string): CollectionConfig => ({
     read: () => true,
   },
   admin: {
-    hidden: true,
+    hidden: false,
     useAsTitle: 'name', // or 'title' depending on your preference
   },
   fields: [
@@ -207,6 +207,8 @@ export const Courses: CollectionConfig<'courses'> = {
               type: 'relationship',
               relationTo: 'study-years',
               required: false,
+              hasMany: true,
+              maxRows: 2,
             },
             {
               name: 'studyMode',

@@ -345,6 +345,16 @@ footer .footer-content ul li a {
   border-bottom-color: #0056d2;
 }
 
+.formboxs .form-error {
+  color: red;
+  font-size: 14px;
+}
+
+.formboxs .form-success {
+  color: green;
+  font-size: 1.1rem;
+  margin-top: 2vh;
+}
 .formboxs button {
   background: #0056d2;
   color: #ffffff;
@@ -421,6 +431,9 @@ footer .footbtm ul li a {
   display: block;
   position: relative;
   color: #ffffff;
+}
+footer .footbtm ul.nolink li a {
+  pointer-events: none;
 }
 footer .footbtm ul li a::before {
   content: '';
@@ -814,6 +827,7 @@ footer .footbtm ul.footSmediaul li a:hover {
 }
 .contliItems address {
   font-style: normal;
+  color: #ffffff;
 }
 
 .contliItems:nth-child(2) {
@@ -855,6 +869,11 @@ footer .footbtm ul.footSmediaul li a:hover {
 
 .contliItems h3 {
   font-size: 2.1vw;
+      color: #ffffff;
+      }
+      
+      contliItems address {
+        color: #ffffff;
 }
 
 .contliItems:nth-child(2) h3 {
@@ -933,6 +952,7 @@ footer .footbtm ul.footSmediaul li a:hover {
 }
 
 .countryitems {
+  padding-top: 1px;
 }
 
 .countryitems img {
@@ -952,7 +972,9 @@ footer .footbtm ul.footSmediaul li a:hover {
 .ListFilerSec {
   color: #777777;
 }
-
+.truncate {
+  padding-bottom: 2px;
+}
 .FlistCol {
 }
 
@@ -1089,8 +1111,14 @@ h3.showtitle {
 
 .clboxItemview .Universitylogo img {
   width: auto;
-  height: 40px;
+  height: 60px;
   padding: 0;
+}
+.searchnoresult {}
+
+.searchnoresult h4 {
+  font-size: 1.5rem;
+  color: #333333;
 }
 
 .descriptbox {
@@ -1120,6 +1148,7 @@ h3.showtitle {
   /* aspect-ratio: 1;     */
   height: 100%;
   object-fit: cover;
+  cursor: pointer;
 }
 
 .coursListBox article .courseContbox {
@@ -1138,7 +1167,7 @@ h3.showtitle {
   color: #0056d2;
   font-weight: 600;
   font-size: 1.1vw;
-  padding-right: 3vw;
+  padding-right: 106px;
 }
 
 .coursListBox article .courseContbox .cousindetlcol {
@@ -1200,6 +1229,8 @@ h3.showtitle {
   border: 1px solid #0056d1;
   color: #fff;
   cursor: pointer;
+    font-size: 16px;
+      letter-spacing: 0.5px;
 }
 
 .flitmsvBoxs .flitmsviews button {
@@ -2156,8 +2187,15 @@ p.sboxvcontrytxt {
   text-align: center;
   justify-content: center;
   margin-inline: -1rem;
+    position: relative;
 }
-
+.ListFilerRow .mobfilterbtn button:after {
+  content: '>';
+  position: relative;
+  display: block;
+  font-family: monospace;
+  padding-left: 5px;
+}
 .ListFilerRow .mobfitflColLeft {
   z-index: 99999;
 }
@@ -2395,6 +2433,13 @@ html body .PaymenyPop form .allow-dropdown .selected-flag .selected-dial-code {
   }
 }
 @media screen and (max-width: 800px) {
+  .FListInrow .ApplieBox {
+      display: block;
+    }
+  
+    .countryitems {
+      padding-top: 2px;
+    }
   .humnavLists ul li a {
     color: #ffffff;
   }
