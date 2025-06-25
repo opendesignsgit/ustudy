@@ -1,15 +1,18 @@
 // components/DashboardSidebar.tsx
 "use client"
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React from 'react'
 
 export default function DashboardSidebar() {
   const router = useRouter()
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const handleLogout = () => {
-    // Implement your logout logic (e.g., clear tokens, session, etc.)
-    router.push('/login')
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    setIsLoggedIn(false)
+    window.dispatchEvent(new Event("authchange"))
+    router.push('/') // or reload page or redirect as needed
   }
 
   return (

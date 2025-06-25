@@ -6,23 +6,46 @@ import { CMSLink } from '@/components/Link'
 import type { Header as HeaderType } from '@/payload-types'
 import { SearchModal } from './SearchModal'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [selectedCountry, setSelectedCountry] = useState('Malaysia')
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const navItems = data?.navItems || []
+  const router = useRouter()
+
+  // Check login state on mount and on custom "authchange" event (for live updates)
+  useEffect(() => {
+    const checkLogin = () => {
+      setIsLoggedIn(!!localStorage.getItem("token"))
+    }
+    checkLogin()
+    window.addEventListener("authchange", checkLogin)
+    return () => window.removeEventListener("authchange", checkLogin)
+  }, [])
+
   useEffect(() => {
     if (isSearchOpen) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = ''
     }
-
     return () => {
       document.body.style.overflow = ''
     }
   }, [isSearchOpen])
+
+  // Logout handler
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    setIsLoggedIn(false)
+    window.dispatchEvent(new Event("authchange"))
+    router.push('/') // or reload page or redirect as needed
+  }
+
   return (
     <>
       {/* Mobile controls - hamburger and search */}
@@ -48,7 +71,6 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
             <MenuIcon className="w-6 h-6 transition-transform duration-300" />
           )}
         </button>
-
       </div>
 
       {/* Desktop navigation */}
@@ -71,6 +93,39 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
           <SearchIcon className="w-5 h-5" />
           <span className="hidden md:inline text-sm font-medium">Search</span>
         </button>
+
+        {/* Login/Signup/Logout Buttons */}
+        {!isLoggedIn && (
+          <>
+            <button
+              onClick={() => {
+                router.push('/login')
+                // fire authchange event for immediate update on login in single-page apps
+                window.dispatchEvent(new Event("authchange"))
+              }}
+              className="ml-4 px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+            >
+              Login
+            </button>
+            <button
+              onClick={() => {
+                router.push('/register')
+                window.dispatchEvent(new Event("authchange"))
+              }}
+              className="ml-2 px-4 py-2 rounded border border-blue-600 text-blue-600 font-semibold hover:bg-blue-600 hover:text-white transition"
+            >
+              Sign Up
+            </button>
+          </>
+        )}
+        {isLoggedIn && (
+          <button
+            onClick={handleLogout}
+            className="ml-4 px-4 py-2 rounded bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 transition"
+          >
+            Logout
+          </button>
+        )}
       </nav>
 
       {/* Mobile menu */}
@@ -133,6 +188,45 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
               <SearchIcon className="w-6 h-6" />
               <span className="font-medium">Search</span>
             </button>
+
+            {/* Mobile Login/Signup/Logout Buttons */}
+            <div className="mt-8 flex space-x-4">
+              {!isLoggedIn && (
+                <>
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false)
+                      router.push('/login')
+                      window.dispatchEvent(new Event("authchange"))
+                    }}
+                    className="flex-1 px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+                  >
+                    Login
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false)
+                      router.push('/register')
+                      window.dispatchEvent(new Event("authchange"))
+                    }}
+                    className="flex-1 px-4 py-2 rounded border border-blue-600 text-blue-600 font-semibold hover:bg-blue-600 hover:text-white transition"
+                  >
+                    Sign Up
+                  </button>
+                </>
+              )}
+              {isLoggedIn && (
+                <button
+                  onClick={() => {
+                    setIsMenuOpen(false)
+                    handleLogout()
+                  }}
+                  className="flex-1 px-4 py-2 rounded bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 transition"
+                >
+                  Logout
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
