@@ -970,6 +970,10 @@ export interface Booking {
   convertedAmount?: number | null;
   currencyRate?: number | null;
   razorpayResponse: string;
+  /**
+   * Set the status of the booking (like WooCommerce orders)
+   */
+  bookingStatus: 'pending' | 'completed' | 'failed' | 'cancelled';
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -984,12 +988,21 @@ export interface Student {
   phone: string;
   college: string;
   dept: string;
+  profilePic?: (number | null) | Media;
   terms: boolean;
   is_mobile_verified?: boolean | null;
   is_email_verified?: boolean | null;
-  books?:
+  interestedCourses?:
     | {
-        bookId?: string | null;
+        course: number | Course;
+        dateAdded?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  browsedCourses?:
+    | {
+        course: number | Course;
+        dateBrowsed?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -1777,6 +1790,7 @@ export interface BookingsSelect<T extends boolean = true> {
   convertedAmount?: T;
   currencyRate?: T;
   razorpayResponse?: T;
+  bookingStatus?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1790,13 +1804,22 @@ export interface StudentsSelect<T extends boolean = true> {
   phone?: T;
   college?: T;
   dept?: T;
+  profilePic?: T;
   terms?: T;
   is_mobile_verified?: T;
   is_email_verified?: T;
-  books?:
+  interestedCourses?:
     | T
     | {
-        bookId?: T;
+        course?: T;
+        dateAdded?: T;
+        id?: T;
+      };
+  browsedCourses?:
+    | T
+    | {
+        course?: T;
+        dateBrowsed?: T;
         id?: T;
       };
   isActive?: T;

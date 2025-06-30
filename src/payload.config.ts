@@ -69,7 +69,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
     },
-    push: false,
+    // push: false,
   }),
   collections: [Pages, Posts, Media, Categories, Users, Courses, IntakeMonths, StudyModes, StudyYears, StudyAreas, Departments, DegreePrograms, Universities, Countries, Bookings, Students],
   cors: [getServerSideURL()].filter(Boolean),

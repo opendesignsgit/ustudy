@@ -1,7 +1,7 @@
-// providers/Auth.tsx
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 type AuthContextType = {
     user: any;
@@ -9,6 +9,8 @@ type AuthContextType = {
     logout: () => Promise<void>;
     register: (userData: any) => Promise<void>;
     loading: boolean;
+    refreshUser: () => Promise<void>;
+    updateUser: (userData: any) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -17,73 +19,98 @@ const AuthContext = createContext<AuthContextType>({
     logout: async () => { },
     register: async () => { },
     loading: true,
+    refreshUser: async () => { },
+    updateUser: async () => { },
 });
-
-const generatePassword = () => {
-    return Math.random().toString(36).slice(-8);
-};
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const router = useRouter();
+
+    const fetchUser = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                setUser(null);
+                setLoading(false);
+                return;
+            }
+
+            const response = await fetch('/api/students/me?depth=1', {
+                headers: { 'Authorization': `Bearer ${token}` },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setUser(data);
+                localStorage.setItem('user', JSON.stringify(data));
+            } else {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                setUser(null);
+            }
+        } catch (error) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            setUser(null);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const refreshUser = async () => { await fetchUser(); };
 
     useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await fetch('/api/students/me');
-                if (response.ok) {
-                    const data = await response.json();
-                    setUser(data.user);
-                }
-            } catch (error) {
-                console.error('Failed to fetch user', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchUser();
+
+        const handleStorageChange = () => fetchUser();
+        window.addEventListener('storage', handleStorageChange);
+        window.addEventListener('authchange', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+            window.removeEventListener('authchange', handleStorageChange);
+        };
     }, []);
 
     const login = async (credentials: { email: string; password: string }) => {
         try {
+            setLoading(true);
             const response = await fetch('/api/students/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(credentials),
             });
 
-            if (!response.ok) {
-                throw new Error('Login failed');
-            }
-
+            if (!response.ok) throw new Error('Login failed');
             const data = await response.json();
-            setUser(data.user);
-        } catch (error) {
-            console.error('Login error:', error);
-            throw error;
+            localStorage.setItem('token', data.token);
+            await fetchUser();
+            window.dispatchEvent(new Event("authchange"));
+        } finally {
+            setLoading(false);
         }
     };
 
     const logout = async () => {
-        try {
-            await fetch('/api/students/logout', {
-                method: 'POST',
-            });
-            setUser(null);
-        } catch (error) {
-            console.error('Logout error:', error);
-        }
+        await fetch('/api/students/logout', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+        });
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setUser(null);
+        window.dispatchEvent(new Event("authchange"));
+        router.push('/login');
     };
 
     const register = async (userData: any) => {
+        setLoading(true);
         try {
-            // Generate a password and add it to the user data
-            const password = generatePassword();
+            const password = Math.random().toString(36).slice(-8);
             const userDataWithPassword = { ...userData, password };
-
-            // Register the user
-            const response = await fetch('/api/students/', {
+            const response = await fetch('/api/students/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userDataWithPassword),
@@ -93,41 +120,39 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 const errData = await response.json();
                 throw new Error(errData.message || 'Registration failed');
             }
+            await fetchUser();
+            window.dispatchEvent(new Event("authchange"));
+        } finally {
+            setLoading(false);
+        }
+    };
 
-            const data = await response.json();
-
-            // Add the generated password to the returned data
-            const userWithPassword = { ...data.user, password };
-            setUser(userWithPassword);
-            localStorage.setItem('user', JSON.stringify(userWithPassword));
-            if (data.token) {
-                localStorage.setItem('token', data.token);
-            }
-
-            // Send welcome email after successful registration
-            await fetch('/api/sendWelcomeEmail', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email: userData.email,
-                    name: userData.name,
-                    phone: userData.phone,
-                    college: userData.college,
-                    dept: userData.dept,
-                    username: userData.email,
-                    password: password,
-                }),
+    const updateUser = async (userData: any) => {
+        setLoading(true);
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) throw new Error("Not authenticated");
+            const response = await fetch('/api/students/me', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify(userData),
             });
-
-            return userWithPassword;
-        } catch (error) {
-            console.error('Registration error:', error);
-            throw error;
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message || 'Failed to update profile');
+            }
+            await fetchUser();
+            window.dispatchEvent(new Event("authchange"));
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, register, loading }}>
+        <AuthContext.Provider value={{ user, login, logout, register, loading, refreshUser, updateUser }}>
             {children}
         </AuthContext.Provider>
     );
