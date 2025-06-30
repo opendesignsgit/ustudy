@@ -1,40 +1,63 @@
+// /app/(authenticated)/dashboard/page.tsx
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useAuth } from '@/providers/Auth';
 import MainPage from "../components/WelcomePage";
 import AccountDetails from "../components/AccountDetailsPage";
 import CoursesMenu from "../components/CoursesPage";
-
+import Footer from '@/components/Home/footer'
 import './style.scss'
+
 export default function Dashboard() {
-  // Default to 'courses'
+  const searchParams = useSearchParams();
   const [selectedComponent, setSelectedComponent] = useState<
     "main" | "account" | "courses"
-  >("courses");
+  >("main");
   const router = useRouter();
+  const { user, logout: authLogout, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
+  useEffect(() => {
+    const tab = searchParams?.get('tab');
+    switch (tab) {
+      case 'my-account':
+        setSelectedComponent('account');
+        break;
+      case 'my-courses':
+        setSelectedComponent('courses');
+        break;
+      default:
+        setSelectedComponent('main');
+    }
+  }, [searchParams]);
 
   const handleLogout = async () => {
     try {
-      const res = await fetch("/api/students/logout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
-      if (res.ok) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        router.push("/login");
-      } else {
-        console.error("Failed to logout", await res.json());
-      }
-    } catch (error: any) {
-      console.error("Logout error:", error.message);
+      await authLogout();
+    } catch (error) {
+      console.error("Logout error:", error);
     }
   };
 
+  const handleTabChange = (tab: "main" | "account" | "courses") => {
+    setSelectedComponent(tab);
+    let param = '';
+    if (tab === 'account') param = 'my-account';
+    if (tab === 'courses') param = 'my-courses';
+    router.push(`/dashboard?tab=${param}`);
+  };
+
   const renderContent = () => {
+    if (loading) return <div className="text-center py-8">Loading...</div>;
+    if (!user) return <div className="text-center py-8">Unauthorized</div>;
+
     switch (selectedComponent) {
       case "main":
         return <MainPage />;
@@ -52,38 +75,43 @@ export default function Dashboard() {
     }`;
 
   return (
-    <div className="dashboard-container flex h-screen">
-      <aside className="w-64 bg-gray-200 p-4">
-        <nav>
-          <ul className="space-y-2">
-            <li
-              className={menuItemClass("main")}
-              onClick={() => setSelectedComponent("main")}
-            >
-              Home
-            </li>
-            <li
-              className={menuItemClass("account")}
-              onClick={() => setSelectedComponent("account")}
-            >
-              Account Details
-            </li>
-            <li
-              className={menuItemClass("courses")}
-              onClick={() => setSelectedComponent("courses")}
-            >
-              My Courses
-            </li>
-            <li
-              className="cursor-pointer p-2 rounded hover:bg-gray-300 text-red-600"
-              onClick={handleLogout}
-            >
-              Logout
-            </li>
-          </ul>
-        </nav>
-      </aside>
-      <main className="flex-1 p-6 overflow-auto">{renderContent()}</main>
-    </div>
+    <article>
+      <div className="dashboard-container flex h-screen">
+        <aside className="w-64 bg-gray-800 p-4 text-white">
+          <nav>
+            <ul className="space-y-2">
+              <li
+                className={menuItemClass("main")}
+                onClick={() => handleTabChange("main")}
+              >
+                Home
+              </li>
+              <li
+                className={menuItemClass("account")}
+                onClick={() => handleTabChange("account")}
+              >
+                Account Details
+              </li>
+              <li
+                className={menuItemClass("courses")}
+                onClick={() => handleTabChange("courses")}
+              >
+                My Courses
+              </li>
+              <li
+                className="cursor-pointer p-2 rounded hover:bg-gray-700 text-red-400"
+                onClick={handleLogout}
+              >
+                Logout
+              </li>
+            </ul>
+          </nav>
+        </aside>
+        <main className="flex-1 p-6 overflow-auto bg-gray-50 text-gray-900">
+          {renderContent()}
+        </main>
+      </div>
+      <Footer></Footer>
+    </article>
   );
 }

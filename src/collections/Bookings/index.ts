@@ -89,6 +89,22 @@ export const Bookings: CollectionConfig = {
         readOnly: true,
       },
     },
+    {
+      name: 'bookingStatus',
+      type: 'select',
+      label: 'Booking Status',
+      options: [
+        { label: 'Pending', value: 'pending' },
+        { label: 'Completed', value: 'completed' },
+        { label: 'Failed', value: 'failed' },
+        { label: 'Cancelled', value: 'cancelled' },
+      ],
+      defaultValue: 'completed',
+      required: true,
+      admin: {
+        description: 'Set the status of the booking (like WooCommerce orders)',
+      },
+    },
   ],
   hooks: {
     afterChange: [revalidatePost],

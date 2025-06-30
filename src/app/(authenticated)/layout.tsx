@@ -1,4 +1,4 @@
-// app/dashboard/layout.tsx
+// /app/(authenticated)/layout.tsx
 import type { Metadata } from 'next'
 
 import { cn } from 'src/utilities/cn'
@@ -13,54 +13,98 @@ import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
+import { AuthProvider } from '@/providers/Auth'
 import { getServerSideURL } from '@/utilities/getURL'
-import { redirect } from 'next/navigation';
-
+import { getCachedGlobal } from '@/utilities/getGlobals'
+import type { WebsiteSetting } from '@/payload-types'
 
 import '../(frontend)/globals.css';
-// import { getUser } from './actions/getUsers';
 
-export default async function DashboardRootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-    const { isEnabled } = await draftMode()
-    // const user = await getUser();
-    // console.log(user)
-    // if (!user) {
-    //     redirect('/login');
-    //     return null;
-    // }
-    // if (user) { 
-    //     redirect('/login');
-    //     return null;
-    // }
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const { isEnabled } = await draftMode()
+  const websiteSettings: WebsiteSetting = await getCachedGlobal('website-settings', 1)()
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || getServerSideURL()
+
+  const getMediaUrl = (
+    media: number | { url?: string | null } | null | undefined
+  ): string | undefined =>
+    media &&
+      typeof media === 'object' &&
+      'url' in media &&
+      media.url
+      ? media.url.startsWith('http')
+        ? media.url
+        : siteUrl + media.url
+      : undefined
+
+  const getMimeType = (
+    media: number | { mimeType?: string | null } | null | undefined
+  ): string | undefined =>
+    media &&
+      typeof media === 'object' &&
+      'mimeType' in media &&
+      typeof media.mimeType === 'string'
+      ? media.mimeType
+      : undefined
+
   return (
-    <html
-      className={cn(GeistSans.variable, GeistMono.variable)}
-      lang="en"
-      suppressHydrationWarning
-    >
-      <head>
-        <InitTheme />
-        <link href="/favicon.ico" rel="icon" sizes="32x32" />
-        <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
-      </head>
-      <body>
-        <Providers>
-          <AdminBar adminBarProps={{ preview: isEnabled }} />
-          <Header />
-          {/* Dashboard layout with aside nav and main content */}
-          <div style={{ display: 'flex', minHeight: 'calc(100vh - 200px)' }}>
-            <main style={{ flex: 1, padding: '1rem' }}>
-              {children}
-            </main>
-          </div>
-          <Footer />
-        </Providers>
-      </body>
-    </html>
+    <AuthProvider>
+      <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
+        <head>
+          <InitTheme />
+          {/* Dynamic favicon from global settings */}
+          {websiteSettings?.favicon && typeof websiteSettings.favicon === 'object' && (
+            <link
+              rel="icon"
+              href={getMediaUrl(websiteSettings.favicon)}
+              sizes="32x32"
+              type={getMimeType(websiteSettings.favicon) || 'image/png'}
+            />
+          )}
+
+          {/* Default Meta */}
+          <title>{websiteSettings?.metaTitle || 'UStudy Global'}</title>
+          {websiteSettings?.metaDescription && (
+            <meta name="description" content={websiteSettings.metaDescription} />
+          )}
+          {/* OG tags */}
+          <meta property="og:title" content={websiteSettings?.metaTitle || 'UStudy Global'} />
+          <meta property="og:description" content={websiteSettings?.metaDescription || ''} />
+          {websiteSettings?.metaImage && typeof websiteSettings.metaImage === 'object' && (
+            <meta property="og:image" content={getMediaUrl(websiteSettings.metaImage)} />
+          )}
+
+          {/* Google Analytics */}
+          {websiteSettings?.gtagID && (
+            <>
+              <script async src={`https://www.googletagmanager.com/gtag/js?id=${websiteSettings.gtagID}`}></script>
+              <script
+                dangerouslySetInnerHTML={{
+                  __html: `
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', '${websiteSettings.gtagID}');
+                  `,
+                }}
+              />
+            </>
+          )}
+        </head>
+        <body>
+          <Providers>
+            <AdminBar
+              adminBarProps={{
+                preview: isEnabled,
+              }}
+            />
+            <Header />
+            {children}
+            <Footer />
+          </Providers>
+        </body>
+      </html>
+    </AuthProvider>
   )
 }
 
