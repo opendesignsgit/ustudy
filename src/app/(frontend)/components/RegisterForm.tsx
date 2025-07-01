@@ -520,7 +520,7 @@ export const RegisterForm = ({ onToggle }: { onToggle: () => void }) => {
                 className="w-full bg-[#34c3ec] hover:bg-[#34b2d7] text-white font-bold py-2 px-4 rounded"
                 disabled={loading || !fieldVer.phone || !fieldVer.email || !formData.terms}
             >
-                {loading ? "Registering..." : "Enroll Now"}
+                {loading ? "Registering..." : "Register Now"}
             </button>
             <p className="mt-4 text-center">
                 Already a user?{" "}
