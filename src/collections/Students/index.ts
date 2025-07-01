@@ -8,7 +8,7 @@ export const Students: CollectionConfig = {
   access: {
     create: () => true,
     read: () => true,
-    update: authenticated,
+    update: () => true,
     delete: authenticated,
   },
   admin: {
