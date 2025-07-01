@@ -163,6 +163,7 @@ export default function AccountDetails() {
     }
   };
 
+  // Only hide OTP field after successful verification
   const handleVerifyOtp = async (type: "phone" | "email") => {
     setError(""); setSuccess("");
     const value = type === "phone" ? phoneOtp : emailOtp;
@@ -179,10 +180,16 @@ export default function AccountDetails() {
       setFieldVer((v) => ({ ...v, [type]: true }));
       setSuccess(type === "phone" ? "Phone verified!" : "Email verified!");
       setEditField((v) => ({ ...v, [type]: false }));
-      if (type === "phone") setPhoneOtp(""); else setEmailOtp("");
-      await refreshUser();
+      if (type === "phone") {
+        setPhoneOtp("");
+        setPhoneOtpSent(false); // Only hide OTP field on success
+      } else {
+        setEmailOtp("");
+        setEmailOtpSent(false); // Only hide OTP field on success
+      }
     } else {
       setError(json.message || "OTP verification failed");
+      // Do NOT hide the OTP input on failure!
     }
   };
 
@@ -207,6 +214,7 @@ export default function AccountDetails() {
     }
     try {
       await updateUser({
+        id: user.user.id,
         ...formData,
         is_mobile_verified: fieldVer.phone,
         is_email_verified: fieldVer.email,
@@ -245,160 +253,163 @@ export default function AccountDetails() {
           </div>
 
           {/* Phone Field with "Change" and OTP */}
-          <div className="relative">
+          <div className="relative mb-6">
             <label className="block mb-1">Phone:</label>
-            <input
-              name="phone"
-              type="tel"
-              value={formData.phone}
-              onChange={e => {
-                const val = e.target.value.replace(/[^0-9]/g, "");
-                setFormData(f => ({
-                  ...f,
-                  phone: val.length > 10 ? val.slice(0, 10) : val
-                }));
-              }}
-              className="border p-2 w-full rounded"
-              pattern="[6-9][0-9]{9}"
-              maxLength={10}
-              required
-              readOnly={!editField.phone}
-            />
-            {!editField.phone && (
-              <button
-                type="button"
-                className="absolute text-xs underline text-[#34c3ec] changeBtn"
-                style={{ zIndex: 2 }}
-                onClick={() => handleChangeField("phone")}
-              >Change</button>
-            )}
-            {editField.phone && (
-              <>
+            <div className="relative w-full">
+              <input
+                name="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={e => {
+                  const val = e.target.value.replace(/[^0-9]/g, "");
+                  setFormData(f => ({
+                    ...f,
+                    phone: val.length > 10 ? val.slice(0, 10) : val
+                  }));
+                }}
+                className="border p-2 w-full rounded pr-32 focus:outline-none"
+                pattern="[6-9][0-9]{9}"
+                maxLength={10}
+                required
+                readOnly={!editField.phone}
+              />
+              {!editField.phone && (
                 <button
                   type="button"
-                  className="absolute px-3 py-1 rounded text-white font-bold bg-[#34c3ec] hover:bg-[#34b2d7] sendBtn"
-                  style={{ opacity: isValidPhone(formData.phone) && formData.phone !== original.phone && !phoneOtpSent ? 1 : 0.5, zIndex: 2 }}
-                  disabled={!isValidPhone(formData.phone) || formData.phone === original.phone || phoneOtpSent}
+                  className="absolute text-xs underline text-[#34c3ec] right-0 top-1 z-20 changeBtn"
+                  onClick={() => handleChangeField("phone")}
+                >Change</button>
+              )}
+              {editField.phone && !phoneOtpSent && (
+                <button
+                  type="button"
+                  className="absolute right-0 top-0 h-full px-5 text-white font-bold rounded-r transition bg-[#34c3ec] hover:bg-[#34b2d7]"
+                  style={{
+                    borderTopLeftRadius: 0,
+                    borderBottomLeftRadius: 0,
+                    opacity: isValidPhone(formData.phone) && formData.phone !== original.phone ? 1 : 0.5
+                  }}
+                  disabled={!isValidPhone(formData.phone) || formData.phone === original.phone}
                   onClick={() => handleSendOtp("phone")}
-                >Send OTP</button>
-                {(phoneOtpSent || phoneOtpTimer > 0) && (
-                  <span
-                    className="absolute right-3 top-2 text-xs font-semibold"
-                    style={{
-                      background: "#fff",
-                      color: THEME_COLOR,
-                      padding: "2px 8px",
-                      borderRadius: "8px",
-                      border: `1px solid ${THEME_COLOR}`,
-                      pointerEvents: "none"
-                    }}
-                  >
-                    {phoneOtpTimer > 0
-                      ? `${Math.floor(phoneOtpTimer / 60)}:${(phoneOtpTimer % 60).toString().padStart(2, "0")}`
-                      : <button type="button" className="text-[#34c3ec]" onClick={() => handleSendOtp("phone")}>Resend</button>
-                    }
-                  </span>
-                )}
-                {phoneOtpSent && (
-                  <div className="transition-all duration-300 mt-3">
-                    <input
-                      type="text"
-                      placeholder="Enter Phone OTP"
-                      value={phoneOtp}
-                      onChange={e => setPhoneOtp(e.target.value.replace(/\D/g, ""))}
-                      maxLength={6}
-                      className="border p-2 rounded w-32"
-                    />
-                    <button
-                      type="button"
-                      className="ml-2 bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600"
-                      disabled={phoneOtp.length !== 6}
-                      onClick={() => handleVerifyOtp("phone")}
-                    >Verify OTP</button>
-                  </div>
-                )}
-              </>
+                >
+                  Send OTP
+                </button>
+              )}
+              {editField.phone && phoneOtpSent && (
+                <button
+                  type="button"
+                  className="absolute right-0 top-0 h-full px-5 text-white font-bold rounded-r transition bg-[#34c3ec] hover:bg-[#34b2d7]"
+                  style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+                  onClick={() => handleSendOtp("phone")}
+                  disabled={phoneOtpTimer > 0}
+                >
+                  {phoneOtpTimer > 0
+                    ? `${Math.floor(phoneOtpTimer / 60)}:${(phoneOtpTimer % 60).toString().padStart(2, "0")}`
+                    : "Resend"}
+                </button>
+              )}
+            </div>
+            {phoneOtpSent && (
+              <div className="transition-all duration-300 mt-3 relative w-full max-w-lg">
+                <input
+                  type="text"
+                  placeholder="Enter Phone OTP"
+                  value={phoneOtp}
+                  onChange={e => setPhoneOtp(e.target.value.replace(/\D/g, ""))}
+                  maxLength={6}
+                  className="border p-2 rounded w-full pr-32 focus:outline-none"
+                />
+                <button
+                  type="button"
+                  className="absolute right-0 top-0 h-full px-5 text-white rounded-r font-semibold transition"
+                  style={{
+                    background: "rgb(52 195 236)",
+                    borderTopLeftRadius: 0,
+                    borderBottomLeftRadius: 0
+                  }}
+                  disabled={phoneOtp.length !== 6}
+                  onClick={() => handleVerifyOtp("phone")}
+                >
+                  Verify OTP
+                </button>
+              </div>
             )}
-            {/* Show verified status */}
-            {/* {!editField.phone && (fieldVer.phone ? (
-              <span className="ml-2 text-green-600 text-sm">Verified</span>
-            ) : (
-              <span className="ml-2 text-red-600 text-sm">Not verified</span>
-            ))} */}
           </div>
 
           {/* Email Field with "Change" and OTP */}
-          <div className="relative">
+          <div className="relative mb-6">
             <label className="block mb-1">Email:</label>
-            <input
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={e => setFormData(f => ({ ...f, email: e.target.value }))}
-              className="border p-2 w-full rounded"
-              required
-              readOnly={!editField.email}
-            />
-            {!editField.email && (
-              <button
-                type="button"
-                className="absolute text-xs underline text-[#34c3ec] changeBtn"
-                style={{ zIndex: 2 }}
-                onClick={() => handleChangeField("email")}
-              >Change</button>
-            )}
-            {editField.email && (
-              <>
+            <div className="relative w-full">
+              <input
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={e => setFormData(f => ({ ...f, email: e.target.value }))}
+                className="border p-2 w-full rounded pr-32 focus:outline-none"
+                required
+                readOnly={!editField.email}
+              />
+              {!editField.email && (
                 <button
                   type="button"
-                  className="absolute px-3 py-1 rounded text-white font-bold bg-[#34c3ec] hover:bg-[#34b2d7] sendBtn"
-                  style={{ opacity: isValidEmail(formData.email) && formData.email !== original.email && !emailOtpSent ? 1 : 0.5, zIndex: 2 }}
-                  disabled={!isValidEmail(formData.email) || formData.email === original.email || emailOtpSent}
+                  className="absolute text-xs underline text-[#34c3ec] right-0 top-1 z-20 changeBtn"
+                  onClick={() => handleChangeField("email")}
+                >Change</button>
+              )}
+              {editField.email && !emailOtpSent && (
+                <button
+                  type="button"
+                  className="absolute right-0 top-0 h-full px-5 text-white font-bold rounded-r transition bg-[#34c3ec] hover:bg-[#34b2d7]"
+                  style={{
+                    borderTopLeftRadius: 0,
+                    borderBottomLeftRadius: 0,
+                    opacity: isValidEmail(formData.email) && formData.email !== original.email ? 1 : 0.5
+                  }}
+                  disabled={!isValidEmail(formData.email) || formData.email === original.email}
                   onClick={() => handleSendOtp("email")}
-                >Send OTP</button>
-                {(emailOtpSent || emailOtpTimer > 0) && (
-                  <span
-                    className="absolute right-3 top-2 text-xs font-semibold"
-                    style={{
-                      background: "#fff",
-                      color: THEME_COLOR,
-                      padding: "2px 8px",
-                      borderRadius: "8px",
-                      border: `1px solid ${THEME_COLOR}`,
-                      pointerEvents: "none"
-                    }}
-                  >
-                    {emailOtpTimer > 0
-                      ? `${Math.floor(emailOtpTimer / 60)}:${(emailOtpTimer % 60).toString().padStart(2, "0")}`
-                      : <button type="button" className="text-[#34c3ec]" onClick={() => handleSendOtp("email")}>Resend</button>
-                    }
-                  </span>
-                )}
-                {emailOtpSent && (
-                  <div className="transition-all duration-300 mt-3">
-                    <input
-                      type="text"
-                      placeholder="Enter Email OTP"
-                      value={emailOtp}
-                      onChange={e => setEmailOtp(e.target.value.replace(/\D/g, ""))}
-                      maxLength={6}
-                      className="border p-2 rounded w-32"
-                    />
-                    <button
-                      type="button"
-                      className="ml-2 bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600"
-                      disabled={emailOtp.length !== 6}
-                      onClick={() => handleVerifyOtp("email")}
-                    >Verify OTP</button>
-                  </div>
-                )}
-              </>
+                >
+                  Send OTP
+                </button>
+              )}
+              {editField.email && emailOtpSent && (
+                <button
+                  type="button"
+                  className="absolute right-0 top-0 h-full px-5 text-white font-bold rounded-r transition bg-[#34c3ec] hover:bg-[#34b2d7]"
+                  style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+                  onClick={() => handleSendOtp("email")}
+                  disabled={emailOtpTimer > 0}
+                >
+                  {emailOtpTimer > 0
+                    ? `${Math.floor(emailOtpTimer / 60)}:${(emailOtpTimer % 60).toString().padStart(2, "0")}`
+                    : "Resend"}
+                </button>
+              )}
+            </div>
+            {emailOtpSent && (
+              <div className="transition-all duration-300 mt-3 relative w-full max-w-lg">
+                <input
+                  type="text"
+                  placeholder="Enter Email OTP"
+                  value={emailOtp}
+                  onChange={e => setEmailOtp(e.target.value.replace(/\D/g, ""))}
+                  maxLength={6}
+                  className="border p-2 rounded w-full pr-32 focus:outline-none"
+                />
+                <button
+                  type="button"
+                  className="absolute right-0 top-0 h-full px-5 text-white rounded-r font-semibold transition"
+                  style={{
+                    background: "rgb(52 195 236)",
+                    borderTopLeftRadius: 0,
+                    borderBottomLeftRadius: 0
+                  }}
+                  disabled={emailOtp.length !== 6}
+                  onClick={() => handleVerifyOtp("email")}
+                >
+                  Verify OTP
+                </button>
+              </div>
             )}
-            {/* {!editField.email && (fieldVer.email ? (
-              <span className="ml-2 text-green-600 text-sm">Verified</span>
-            ) : (
-              <span className="ml-2 text-red-600 text-sm">Not verified</span>
-            ))} */}
           </div>
 
           <div>
@@ -421,7 +432,7 @@ export default function AccountDetails() {
               />
             </label>
           </div>
-          <div>
+          {/* <div>
             <label className="block mb-1">Profile Picture:
               <input
                 type="file"
@@ -459,7 +470,7 @@ export default function AccountDetails() {
                 className="border p-2 w-full rounded"
               />
             </label>
-          </div>
+          </div> */}
 
           <div className="flex space-x-4 mt-6">
             <button

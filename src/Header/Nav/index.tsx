@@ -114,7 +114,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
             {/* Mobile Dropdown */}
             <div
               className={`absolute right-0 mt-2 w-56 rounded-xl bg-white border border-gray-100 shadow-2xl z-50 transition-all duration-200
-                ${showProfileMenuMobile ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'}`}
+    ${showProfileMenuMobile ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'}`}
               style={{ minWidth: 220 }}
             >
               <span className="px-6 py-3 font-bold text-[#232323] text-base border-b border-gray-100 flex items-center gap-2">
@@ -124,16 +124,22 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
                 {userName}
               </span>
               <button
-                onClick={() => { router.push('/account'); setShowProfileMenuMobile(false); }}
+                onClick={() => { router.push('/dashboard'); setShowProfileMenuMobile(false); }}
+                className="w-full text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal"
+              >
+                Dashboard
+              </button>
+              <button
+                onClick={() => { router.push('/dashboard?tab=my-account'); setShowProfileMenuMobile(false); }}
                 className="w-full text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal"
               >
                 Account details
               </button>
               <button
-                onClick={() => { router.push('/my-courses'); setShowProfileMenuMobile(false); }}
+                onClick={() => { router.push('/dashboard?tab=my-courses'); setShowProfileMenuMobile(false); }}
                 className="w-full text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal"
               >
-                My Course
+                My Courses
               </button>
               <button
                 onClick={() => { setShowProfileMenuMobile(false); handleLogout(); }}
@@ -249,7 +255,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
             </span>
             <div
               className={`absolute left-0 mt-3 rounded-xl bg-white border border-gray-100 shadow-2xl z-50 transition-all duration-200
-     ${showProfileMenu ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'}`}
+    ${showProfileMenu ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'}`}
               style={{
                 minWidth: 260,
                 boxShadow: '0 6px 24px 0 rgba(31, 61, 102, 0.13)'
@@ -264,8 +270,17 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
                 {userName}
               </span>
               <a
-                onClick={e => { e.preventDefault(); router.push('/account'); setShowProfileMenu(false); }}
-                href="/account"
+                onClick={e => { e.preventDefault(); router.push('/dashboard'); setShowProfileMenu(false); }}
+                href="/dashboard"
+                className="w-full block text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal cursor-pointer"
+                style={{ border: 'none', background: 'none', outline: 'none' }}
+                tabIndex={0}
+              >
+                Dashboard
+              </a>
+              <a
+                onClick={e => { e.preventDefault(); router.push('/dashboard?tab=my-account'); setShowProfileMenu(false); }}
+                href="/dashboard?tab=my-account"
                 className="w-full block text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal cursor-pointer"
                 style={{ border: 'none', background: 'none', outline: 'none' }}
                 tabIndex={0}
@@ -273,13 +288,13 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
                 Account details
               </a>
               <a
-                onClick={e => { e.preventDefault(); router.push('/my-courses'); setShowProfileMenu(false); }}
-                href="/my-courses"
+                onClick={e => { e.preventDefault(); router.push('/dashboard?tab=my-courses'); setShowProfileMenu(false); }}
+                href="/dashboard?tab=my-courses"
                 className="w-full block text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal cursor-pointer"
                 style={{ border: 'none', background: 'none', outline: 'none' }}
                 tabIndex={0}
               >
-                My Course
+                My Courses
               </a>
               <a
                 onClick={e => { e.preventDefault(); setShowProfileMenu(false); handleLogout(); }}

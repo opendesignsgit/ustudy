@@ -1,8 +1,7 @@
-// /app/(authenticated)/dashboard/page.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useAuth } from '@/providers/Auth';
 import MainPage from "../components/WelcomePage";
 import AccountDetails from "../components/AccountDetailsPage";
@@ -11,32 +10,43 @@ import Footer from '@/components/Home/footer'
 import './style.scss'
 
 export default function Dashboard() {
-  const searchParams = useSearchParams();
   const [selectedComponent, setSelectedComponent] = useState<
     "main" | "account" | "courses"
   >("main");
   const router = useRouter();
   const { user, logout: authLogout, loading } = useAuth();
 
+  // Sync tab from URL on mount and when popstate occurs
+  useEffect(() => {
+    const getTab = () => {
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const tab = params.get('tab');
+        switch (tab) {
+          case 'my-account':
+            setSelectedComponent('account');
+            break;
+          case 'my-courses':
+            setSelectedComponent('courses');
+            break;
+          default:
+            setSelectedComponent('main');
+        }
+      }
+    };
+
+    getTab();
+    window.addEventListener('popstate', getTab);
+
+    return () => window.removeEventListener('popstate', getTab);
+  }, []);
+
+  // On auth state: redirect if not logged in
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
     }
   }, [user, loading, router]);
-
-  useEffect(() => {
-    const tab = searchParams?.get('tab');
-    switch (tab) {
-      case 'my-account':
-        setSelectedComponent('account');
-        break;
-      case 'my-courses':
-        setSelectedComponent('courses');
-        break;
-      default:
-        setSelectedComponent('main');
-    }
-  }, [searchParams]);
 
   const handleLogout = async () => {
     try {
@@ -51,7 +61,14 @@ export default function Dashboard() {
     let param = '';
     if (tab === 'account') param = 'my-account';
     if (tab === 'courses') param = 'my-courses';
-    router.push(`/dashboard?tab=${param}`);
+    // ReplaceState to update query string without reload
+    if (typeof window !== "undefined") {
+      const base = window.location.pathname;
+      const url = param ? `${base}?tab=${param}` : base;
+      window.history.pushState({}, '', url);
+      // Optionally, trigger the tab change logic again to ensure sync
+      // but useEffect with popstate will handle it
+    }
   };
 
   const renderContent = () => {
@@ -111,7 +128,7 @@ export default function Dashboard() {
           {renderContent()}
         </main>
       </div>
-      <Footer></Footer>
+      <Footer />
     </article>
   );
 }
