@@ -952,8 +952,7 @@ footer .footbtm ul.footSmediaul li a:hover {
 }
 
 .countryitems {
-  padding: 10px 10px;
-  background: #0056d2;
+  padding-top: 1px;
 }
 
 .countryitems img {
@@ -962,10 +961,10 @@ footer .footbtm ul.footSmediaul li a:hover {
 }
 
 .countryitems h5 {
-  color: #ffffff;
+  color: #000000;
   text-transform: uppercase;
   font-weight: 600;
-  font-size: 1vw;
+  font-size: 1.2vw;
   margin-top: 10px;
   margin-bottom: 0;
 }

@@ -29,15 +29,7 @@ const FiltersClient = ({
 }) => {
   const [filterOptions, setFilterOptions] = useState<any>({})
   const [searchTerms, setSearchTerms] = useState<any>({})
-  const [collapsedSections, setCollapsedSections] = useState<any>({
-    countries: true,
-    universities: true,
-    degreePrograms: true,
-    studyAreas: true,
-    studyYears: true,
-    studyModes: true,
-  }) // Default: all collapsed
-
+  const [collapsedSections, setCollapsedSections] = useState<any>({})
   const showLoading = isLoading && courses.length === 0;
 
   useEffect(() => {
@@ -87,6 +79,16 @@ const FiltersClient = ({
       studyYears: Array.from(options.studyYears).sort(),
       studyModes: Array.from(options.studyModes).sort(),
     })
+
+    // Initialize collapsed sections
+    setCollapsedSections({
+      countries: false,
+      universities: false,
+      degreePrograms: false,
+      studyAreas: false,
+      studyYears: false,
+      studyModes: false,
+    })
   }, [courses])
 
   const handleFilterChange = (category: string, value: string) => {
@@ -105,14 +107,13 @@ const FiltersClient = ({
     const type = filter.substring(0, separatorIndex);
     const value = filter.substring(separatorIndex + 2);
 
-    const categoryMap: Record<string, keyof typeof filters> = {
+    const categoryMap: Record<string, string> = {
       'Country': 'countries',
       'University': 'universities',
       'Program': 'degreePrograms',
-      'Courses': 'studyAreas',    // mapped to new label
-      'Duration': 'studyYears',   // mapped to new label
+      'Area': 'studyAreas',
+      'Years': 'studyYears',
       'Mode': 'studyModes',
-      'Search': 'searchQuery'
     };
 
     const category = categoryMap[type];
@@ -136,8 +137,8 @@ const FiltersClient = ({
     ...filters.countries.map((c: string) => `Country: ${c}`),
     ...filters.universities.map((u: string) => `University: ${u}`),
     ...filters.degreePrograms.map((d: string) => `Program: ${d}`),
-    ...filters.studyAreas.map((s: string) => `Courses: ${s}`), // label changed
-    ...filters.studyYears.map((y: string) => `Duration: ${y}`), // label changed
+    ...filters.studyAreas.map((s: string) => `Area: ${s}`),
+    ...filters.studyYears.map((y: string) => `Durartion: ${y}`),
     ...filters.studyModes.map((m: string) => `Mode: ${m}`),
   ]
 
@@ -145,8 +146,8 @@ const FiltersClient = ({
     { key: 'countries', label: 'Countries' },
     { key: 'universities', label: 'Universities' },
     { key: 'degreePrograms', label: 'Degree Programs' },
-    { key: 'studyAreas', label: 'Courses' }, // label changed
-    { key: 'studyYears', label: 'Duration' }, // label changed
+    { key: 'studyAreas', label: 'Study Areas' },
+    { key: 'studyYears', label: 'Study Years' },
     { key: 'studyModes', label: 'Study Modes' },
   ]
 

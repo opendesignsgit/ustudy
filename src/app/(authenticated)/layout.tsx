@@ -1,4 +1,3 @@
-// /app/(authenticated)/layout.tsx
 import type { Metadata } from 'next'
 
 import { cn } from 'src/utilities/cn'
