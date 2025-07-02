@@ -105,7 +105,7 @@ const CountryFlagSlider: React.FC<CountryFlagSliderProps> = ({
                 onClick={() => onCountryToggle(country.name)}
               >
                 <div className={`relative w-16 h-16 flex items-center justify-center rounded-full p-1 ${selectedCountries.includes(country.name)
-                  ? 'ring-4 ring-white'
+                  ? 'ring-4 ring-blue-400'
                   : 'ring-1 ring-gray-200'
                   }`}>
                   {country.logo?.url ? (
