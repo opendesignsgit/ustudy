@@ -2,7 +2,7 @@
 
 interface AppliedFiltersProps {
   appliedFilters: string[]
-  onRemove: (type: string, value: string) => void // Update to expect two arguments
+  onRemove: (type: string, value: string) => void
   onClear: () => void
 }
 
@@ -11,12 +11,13 @@ const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   onRemove,
   onClear
 }) => {
-  if (appliedFilters.length === 0) {
-    return null
-  }
+  if (appliedFilters.length === 0) return null
 
   const handleRemove = (filter: string) => {
-    const [type, value] = filter.split(': ')
+    // Defensive: Accept both new and old keys
+    let [type, value] = filter.split(': ')
+    if (type === 'Area' || type === 'Courses') type = 'Courses'
+    if (type === 'Years' || type === 'Duration') type = 'Duration'
     onRemove(type, value)
   }
 
@@ -30,7 +31,9 @@ const AppliedFilters: React.FC<AppliedFiltersProps> = ({
               key={index}
               className="flitmsviews flex items-center gap-1 bg-white px-3 py-1 rounded-full border border-gray-200"
             >
-              <span className="truncate">{filter}</span>
+              <span className="truncate">
+                {filter.replace(/^Area:/, 'Courses:').replace(/^Years:/, 'Duration:')}
+              </span>
               <button
                 onClick={() => handleRemove(filter)}
                 className="ml-1 text-gray-500 hover:text-red-500 transition-colors"
