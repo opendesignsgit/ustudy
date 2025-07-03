@@ -1,4 +1,4 @@
-// lib/courseFetch.ts
+// utilities/courseFetch.ts
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 
