@@ -311,8 +311,8 @@ export default function PageClient() {
         'Country': 'countries',
         'University': 'universities',
         'Program': 'degreePrograms',
-        'Area': 'studyAreas',
-        'Years': 'studyYears',
+        'Courses': 'studyAreas',
+        'Duration': 'studyYears',
         'Mode': 'studyModes',
         'Search': 'searchQuery'
       };
@@ -325,14 +325,14 @@ export default function PageClient() {
       } else {
         setFilters(prev => ({
           ...prev,
-          [category]: prev[category].filter(item => item !== value)
+          [category]: prev[category].filter((item: string) => item !== value)
         }));
       }
-      setCurrentPage(1)
-      setSuggestedFilters(null)
+      setCurrentPage?.(1)
+      setSuggestedFilters?.(null)
     },
     [],
-  );
+  )
 
   const clearFilters = useCallback(() => {
     setFilters(initialFilters)
@@ -436,7 +436,7 @@ export default function PageClient() {
   }
 
   return (
-    <div className="pt-24 pb-24 couresLInBox" ref={couresLInBoxRef}>
+    <div className="pt-14 pb-24 couresLInBox" ref={couresLInBoxRef}>
       <CountryFlagSlider
         selectedCountries={filters.countries}
         onCountryToggle={handleCountryToggle}
@@ -485,13 +485,17 @@ export default function PageClient() {
             </div>
 
             <div className="FlistCol flColLeft w-1/4 hidden md:block">
-              <FiltersClient
-                filters={filters}
-                setFilters={setFilters}
-                courses={allCourses}
-                clearFilters={clearFilters}
-                isLoading={isLoading}
-              />
+              <div className="relative">
+                <div className="sticky top-28">
+                  <FiltersClient
+                    filters={filters}
+                    setFilters={setFilters}
+                    courses={allCourses}
+                    clearFilters={clearFilters}
+                    isLoading={isLoading}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="FlistCol flColRight w-full md:w-3/4">
