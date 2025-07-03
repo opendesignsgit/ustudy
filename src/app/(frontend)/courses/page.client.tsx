@@ -443,7 +443,7 @@ export default function PageClient() {
       />
       <section className="ListFilerSec">
         <div className="container mx-auto">
-          <div className="ListFilerRow flex gap-8">
+          <div className="ListFilerRow flex gap-8 items-start">
             <div className="mobfilterbtn md:hidden ">
               <button
                 onClick={() => setIsMobileFiltersOpen(true)}
@@ -485,8 +485,15 @@ export default function PageClient() {
             </div>
 
             <div className="FlistCol flColLeft w-1/4 hidden md:block">
-              <div className="relative">
-                <div className="sticky top-28">
+              <div className="relative h-full">
+                <div
+                  className="sticky top-28"
+                  style={{
+                    // This keeps the filter visible and scrollable, but not overflowing the viewport.
+                    maxHeight: 'calc(100vh - 7rem)', // adjust 7rem if your header/footer is a different height
+                    overflowY: 'auto',
+                  }}
+                >
                   <FiltersClient
                     filters={filters}
                     setFilters={setFilters}

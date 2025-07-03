@@ -3,6 +3,18 @@
 import React, { useState, useEffect } from 'react'
 import AppliedFilters from './AppliedFilters'
 
+// Add simple arrow SVGs
+const DownArrow = () => (
+  <svg className="inline ml-1" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+    <path d="M5.23 7.21a1 1 0 0 1 1.42 0L10 10.59l3.35-3.38a1 1 0 1 1 1.42 1.42l-4.06 4.09a1 1 0 0 1-1.42 0L5.23 8.63a1 1 0 0 1 0-1.42z" />
+  </svg>
+)
+const UpArrow = () => (
+  <svg className="inline ml-1" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+    <path d="M14.77 12.79a1 1 0 0 1-1.42 0L10 9.41l-3.35 3.38a1 1 0 1 1-1.42-1.42l4.06-4.09a1 1 0 0 1 1.42 0l4.06 4.09a1 1 0 0 1 0 1.42z" />
+  </svg>
+)
+
 function getRelationshipLabel<T extends { title?: string; name?: string; id?: string | number }>(
   value: T | string | number | undefined | null
 ): string | undefined {
@@ -191,8 +203,8 @@ const FiltersClient = ({
                   onClick={() => toggleCollapse(key)}
                 >
                   <h3>{label}</h3>
-                  <button>
-                    {collapsedSections[key] ? 'Expand' : 'Collapse'}
+                  <button type="button" aria-label={collapsedSections[key] ? `Expand ${label}` : `Collapse ${label}`}>
+                    {collapsedSections[key] ? <DownArrow /> : <UpArrow />}
                   </button>
                 </div>
 

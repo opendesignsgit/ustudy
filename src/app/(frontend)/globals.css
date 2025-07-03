@@ -1022,7 +1022,7 @@ footer .footbtm ul.footSmediaul li a:hover {
   font-size: 0;
   width: 20px;
   height: 20px;
-  background: url(/media/expand-icon.png) no-repeat center center;
+  /* background: url(/media/expand-icon.png) no-repeat center center; */
   background-size: 100%;
 }
 

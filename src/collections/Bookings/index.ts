@@ -8,6 +8,10 @@ import { revalidateDelete, revalidatePost } from './hooks/revalidatePost';
 
 export const Bookings: CollectionConfig = {
   slug: 'bookings',
+  labels: {
+    singular: 'Enrollment',
+    plural: 'Enrollments',
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -45,7 +49,7 @@ export const Bookings: CollectionConfig = {
       type: 'relationship',
       relationTo: 'courses',
       required: true,
-      label: 'Course Booked',
+      label: 'Enrolled Course',
     },
     {
       name: 'student',
@@ -58,7 +62,7 @@ export const Bookings: CollectionConfig = {
       name: 'orderDate',
       type: 'date',
       required: true,
-      label: 'Order Date',
+      label: 'Date Of Enrollment',
       admin: {
         date: {
           pickerAppearance: 'dayOnly',
