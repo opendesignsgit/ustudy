@@ -19,6 +19,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'ustudyglobal.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ustudyglobal.in',
       }
     ],
   },
