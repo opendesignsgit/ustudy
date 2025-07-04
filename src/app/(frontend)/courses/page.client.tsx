@@ -484,7 +484,15 @@ export default function PageClient() {
               </div>
             </div>
 
-            <div className="FlistCol flColLeft w-1/4 hidden md:block">
+            <div className="FlistCol flColLeft w-1/4 hidden md:block"
+              style={{
+                width: '30%',
+                height: '80vh',
+                color: '#000',
+                padding: 0,
+                position: 'sticky',
+                top: '100px',
+              }}>
               <div className="relative h-full">
                 <div
                   className="sticky top-28"
