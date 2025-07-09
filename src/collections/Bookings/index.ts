@@ -41,7 +41,7 @@ export const Bookings: CollectionConfig = {
         collection: 'bookings',
         req,
       }),
-    useAsTitle: 'student',
+      useAsTitle: 'id',
   },
   fields: [
     {
