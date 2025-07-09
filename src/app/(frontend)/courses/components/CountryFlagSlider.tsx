@@ -92,7 +92,7 @@ const CountryFlagSlider: React.FC<CountryFlagSliderProps> = ({
   }
 
   return (
-    <section className="flex justify-center w-full FlagListSec py-2">
+    <section className="flex justify-center w-full FlagListSec py-1">
       <div className="container mx-auto">
         <Slider {...settings} className="flagSlider">
           {countries.map((country) => (
