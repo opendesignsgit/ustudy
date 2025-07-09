@@ -156,7 +156,7 @@ const FiltersClient = ({
   const filterSections = [
     { key: 'countries', label: 'Countries' },
     { key: 'universities', label: 'Universities' },
-    { key: 'degreePrograms', label: 'Degree Programs' },
+    { key: 'degreePrograms', label: 'Programs' },
     { key: 'studyAreas', label: 'Courses' }, // label changed
     { key: 'studyYears', label: 'Duration' }, // label changed
     { key: 'studyModes', label: 'Study Modes' },

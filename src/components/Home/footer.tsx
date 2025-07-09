@@ -59,7 +59,7 @@ const Footer = () => {
             </address>
             <div className="mt-4 contlink">
               <p className="flex items-center gap-2 mailpara">
-                <a href="mailto:info@ustudyglobal.co">info@ustudyglobal.co</a>
+                <a href="mailto:info@ustudyglobal.in">info@ustudyglobal.in</a>
               </p>
               <p className="flex items-center gap-2 phonepara">
                 <a href="tel:+918939393962">89 39 39 39 62</a> /
@@ -70,13 +70,13 @@ const Footer = () => {
 
           {/* Useful Links Section */}
           <div className="footmcol">
-            <h3 className="footTitle">USEFUL LINK</h3>
+            <h3 className="footTitle">ESSENTIAL LINK</h3>
             <ul className="space-y-2 text-sm fonteighteen">
               <li>
                 <Link href="/">Home</Link>
               </li>
               <li>
-                <Link href="/courses">Study Abroad</Link>
+                <Link href="/courses">Courses</Link>
               </li>
               <li>
                 <Link href="/services">Services</Link>

@@ -41,15 +41,15 @@ export default function CoursesMenu() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6 text-blue-800">My Bookings</h1>
+      <h1 className="text-2xl font-bold mb-6 text-blue-800">My Courses</h1>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white rounded-lg overflow-hidden shadow-sm">
           <thead className="bg-blue-50">
             <tr>
               <th className="py-3 px-4 text-left text-blue-900">Course</th>
-              <th className="py-3 px-4 text-left text-blue-900">Booking Date</th>
+              <th className="py-3 px-4 text-left text-blue-900">Date of Enrollment</th>
               <th className="py-3 px-4 text-left text-blue-900">Amount Paid</th>
-              <th className="py-3 px-4 text-left text-blue-900">Booking Status</th>
+              <th className="py-3 px-4 text-left text-blue-900">Enrollment Status</th>
             </tr>
           </thead>
           <tbody>
@@ -86,7 +86,7 @@ export default function CoursesMenu() {
             ) : (
               <tr>
                 <td colSpan={4} className="py-4 text-center text-gray-500">
-                  No bookings found
+                  No courses found
                 </td>
               </tr>
             )}

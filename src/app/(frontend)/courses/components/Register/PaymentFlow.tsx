@@ -151,7 +151,7 @@ export const PaymentFlow = ({ userData, pageId, onComplete }: PaymentFlowProps) 
                     </div>
                 ) : (
                     <>
-                        <h3 className="text-lg font-medium mb-4">Complete Your Enrollment</h3>
+                        <h3 className="text-black text-lg font-medium mb-4">Complete Your Enrollment</h3>
                         <CoursePriceDisplay pageId={pageId} />
                         <div className="mt-6">
                             <button

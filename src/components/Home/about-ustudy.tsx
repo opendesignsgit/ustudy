@@ -13,6 +13,14 @@ const AboutUstudy = () => {
           <div className="relative z-10 introcont">
             <h2 className="ffamilyTNR">About UStudy Global</h2>
             <p>
+              We partner with top universities and institutions across the globe<br />
+              to offer programs that are not only recognized but also relevant to today’s <br />
+              evolving industries. Whether it’s MBBS, business, engineering, or creative fields,<br />
+              our personalized guidance ensures that each student finds the right path.<br />
+              From admissions to accommodation, we support our students <br />
+              at every step—making global education not just a dream, but a reality.
+            </p>
+            <p>
               At UStudy Global, we are committed to transforming <br />
               education through innovation and accessibility. Our <br />
               platform bridges academic learning with real-world skills, <br />
