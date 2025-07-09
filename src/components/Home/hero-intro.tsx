@@ -29,7 +29,7 @@ const EducationPromoSection = () => {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push('/courses'); // change to your desired route
+    router.push('/courses?countries=Malaysia&countries=Singapore&universities=BAC+-+Malaysia&universities=BAC+-+Singapore&universities=Veritas+University+College'); // change to your desired route
   };
   const ContactClick = () => {
     router.push('/contact-us#contformSec'); // change to your desired route

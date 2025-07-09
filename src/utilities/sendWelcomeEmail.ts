@@ -27,7 +27,7 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: 'ueducate2023@gmail.com',
     pass: 'suckyzoajhnsvsqe',
-    // user: 'info@ustudyglobal.co',
+    // user: 'info@ustudyglobal.in',
     // pass: 'ynaevbaookrvumsm',
   },
 });
@@ -42,7 +42,7 @@ export const sendWelcomeEmail = async ({
   password 
 }: WelcomeEmailProps) => {
   const mailOptions = {
-    from: process.env.EMAIL_FROM || 'UStudy Global <info@ustudyglobal.co>',
+    from: process.env.EMAIL_FROM || 'UStudy Global <info@ustudyglobal.in>',
     to: email,
     subject: 'Welcome to UStudy Global',
     text: `Dear ${name},
@@ -88,7 +88,7 @@ export const sendBookingConfirmation = async ({
 }: BookingEmailProps) => {
   // Send to student
   const studentMailOptions = {
-    from: process.env.EMAIL_FROM || 'UStudy Global <info@ustudyglobal.co>',
+    from: process.env.EMAIL_FROM || 'UStudy Global <info@ustudyglobal.in>',
     to: email,
     subject: 'Your Course Booking Confirmation',
     text: `Dear ${name},
@@ -128,8 +128,8 @@ UStudy Global Team`,
 
   // Send to admin (second email)
   const adminMailOptions = {
-    from: process.env.EMAIL_FROM || 'UStudy Global <info@ustudyglobal.co>',
-    to: process.env.ADMIN_EMAIL || 'info@ustudyglobal.co' || email,
+    from: process.env.EMAIL_FROM || 'UStudy Global <info@ustudyglobal.in>',
+    to: process.env.ADMIN_EMAIL || 'info@ustudyglobal.in' || email,
     subject: `New Booking: ${courseName}`,
     text: `New course booking received:
 

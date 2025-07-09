@@ -37,7 +37,7 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: 'ueducate2023@gmail.com',
     pass: 'suckyzoajhnsvsqe',
-    // user: 'info@ustudyglobal.co',
+    // user: 'info@ustudyglobal.in',
     // pass: 'ynaevbaookrvumsm',
   },
 });
@@ -73,12 +73,12 @@ export async function sendContactFormEmail({
   adminEmail,
   sendCopyToUser = true
 }: SendContactFormOptions) {
-  const adminTo = adminEmail || process.env.ADMIN_EMAIL || 'info@ustudyglobal.co';
+  const adminTo = adminEmail || process.env.ADMIN_EMAIL || 'info@ustudyglobal.in';
 
   // Send to admin
   const adminMailOptions = {
-    from: process.env.EMAIL_FROM || 'UStudy Global <info@ustudyglobal.co>',
-    to: "info@ustudyglobal.co",
+    from: process.env.EMAIL_FROM || 'UStudy Global <info@ustudyglobal.in>',
+    to: "info@ustudyglobal.in",
     subject: 'New Contact Form Submission',
     text: contactText(fields),
     html: contactHtml(fields),
@@ -89,7 +89,7 @@ export async function sendContactFormEmail({
   // Optionally send a confirmation/copy to the user
   if (sendCopyToUser && fields.email) {
     const userMailOptions = {
-      from: process.env.EMAIL_FROM || 'UStudy Global <info@ustudyglobal.co>',
+      from: process.env.EMAIL_FROM || 'UStudy Global <info@ustudyglobal.in>',
       to: fields.email,
       subject: 'We have received your inquiry',
       text: `Dear ${fields.name},
