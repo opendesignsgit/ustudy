@@ -43,7 +43,7 @@ const SimpleHiddenCollection = (slug: string): CollectionConfig => ({
     read: () => true,
   },
   admin: {
-    hidden: false,
+    hidden: true,
     useAsTitle: 'name', // or 'title' depending on your preference
   },
   fields: [

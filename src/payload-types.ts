@@ -81,6 +81,7 @@ export interface Config {
     departments: Department;
     'degree-programs': DegreeProgram;
     universities: University;
+    'university-templates': UniversityTemplate;
     countries: Country;
     bookings: Booking;
     students: Student;
@@ -108,6 +109,7 @@ export interface Config {
     departments: DepartmentsSelect<false> | DepartmentsSelect<true>;
     'degree-programs': DegreeProgramsSelect<false> | DegreeProgramsSelect<true>;
     universities: UniversitiesSelect<false> | UniversitiesSelect<true>;
+    'university-templates': UniversityTemplatesSelect<false> | UniversityTemplatesSelect<true>;
     countries: CountriesSelect<false> | CountriesSelect<true>;
     bookings: BookingsSelect<false> | BookingsSelect<true>;
     students: StudentsSelect<false> | StudentsSelect<true>;
@@ -959,6 +961,25 @@ export interface IntakeMonth {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "university-templates".
+ */
+export interface UniversityTemplate {
+  id: number;
+  title: string;
+  status: 'active' | 'inactive';
+  blocks?:
+    | {
+        block: 'banner' | 'content' | 'media' | 'cta' | 'form' | 'slider' | 'courses' | 'registration';
+        id?: string | null;
+      }[]
+    | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "bookings".
  */
 export interface Booking {
@@ -1245,6 +1266,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'universities';
         value: number | University;
+      } | null)
+    | ({
+        relationTo: 'university-templates';
+        value: number | UniversityTemplate;
       } | null)
     | ({
         relationTo: 'countries';
@@ -1758,6 +1783,24 @@ export interface UniversitiesSelect<T extends boolean = true> {
   universityImage?: T;
   email?: T;
   country?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "university-templates_select".
+ */
+export interface UniversityTemplatesSelect<T extends boolean = true> {
+  title?: T;
+  status?: T;
+  blocks?:
+    | T
+    | {
+        block?: T;
+        id?: T;
+      };
   slug?: T;
   slugLock?: T;
   updatedAt?: T;

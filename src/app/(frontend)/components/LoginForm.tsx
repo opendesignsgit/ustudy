@@ -1,3 +1,4 @@
+//src\app\(frontend)\components\LoginForm.tsx
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -96,7 +97,7 @@ export const LoginForm = ({
         setForgotError("");
         setForgotSuccess("");
         const input = forgotEmailOrPhone.trim();
-        let payload: any = {};
+        const payload: any = {};
         if (/^[0-9]{10}$/.test(input)) payload.phone = input;
         else payload.email = input;
 
@@ -124,7 +125,7 @@ export const LoginForm = ({
         setForgotError("");
         setForgotSuccess("");
         const input = forgotEmailOrPhone.trim();
-        let payload: any = { otp: forgotOtp };
+        const payload: any = { otp: forgotOtp };
         if (/^[0-9]{10}$/.test(input)) {
             payload.medium = "phone";
             payload.phone = input;
@@ -154,7 +155,7 @@ export const LoginForm = ({
         setForgotError("");
         setForgotSuccess("");
         const input = forgotEmailOrPhone.trim();
-        let payload: any = { password: forgotNewPassword };
+        const payload: any = { password: forgotNewPassword };
         if (/^[0-9]{10}$/.test(input)) payload.phone = input;
         else payload.email = input;
 

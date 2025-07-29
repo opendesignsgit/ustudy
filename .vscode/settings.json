@@ -40,5 +40,7 @@
   "[html]": {
     "editor.defaultFormatter": "vscode.html-language-features"
   },
-  "CodeGPT.apiKey": "CodeGPT Plus Beta"
+  "CodeGPT.apiKey": "CodeGPT Plus Beta",
+  "window.autoDetectColorScheme": false,
+  "accessibility.windowTitleOptimized": true
 }

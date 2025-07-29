@@ -22,11 +22,13 @@ import { getServerSideURL } from './utilities/getURL'
 import { Universities } from './collections/Universities'
 import { Countries } from './collections/Countries'
 import { WebsiteSettings } from './collections/Settings'
+import { UniversityTemplates } from './collections/Universities/university-templates'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  debug: true,
   admin: {
     components: {
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
@@ -69,9 +71,9 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
     },
-    // push: false,
+    push: false,
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Courses, IntakeMonths, StudyModes, StudyYears, StudyAreas, Departments, DegreePrograms, Universities, Countries, Bookings, Students],
+  collections: [Pages, Posts, Media, Categories, Users, Courses, IntakeMonths, StudyModes, StudyYears, StudyAreas, Departments, DegreePrograms, Universities, UniversityTemplates, Countries, Bookings, Students],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, WebsiteSettings],
   plugins: [
