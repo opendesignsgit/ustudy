@@ -11,11 +11,13 @@ export const LoginForm = ({
     prefillEmail = "",
     prefillPhone = "",
     showForgotPassword = true,
+    userType = "student",
 }: {
     onToggle: () => void;
     prefillEmail?: string;
     prefillPhone?: string;
     showForgotPassword?: boolean;
+    userType?: "student" | "university";
 }) => {
     const [emailOrPhone, setEmailOrPhone] = useState(prefillEmail || prefillPhone || "");
     const [password, setPassword] = useState("");
@@ -60,7 +62,9 @@ export const LoginForm = ({
         setErrorMessage("");
         setSuccessMessage("");
         let loginEmail = emailOrPhone.trim();
-        if (/^[0-9]{10}$/.test(loginEmail)) {
+        
+        // For student login, check if phone number and convert to email
+        if (userType === "student" && /^[0-9]{10}$/.test(loginEmail)) {
             const res = await fetch(`/api/students?where[phone][equals]=${loginEmail}`);
             const data = await res.json();
             if (!data.docs || !data.docs[0]) {
@@ -69,8 +73,10 @@ export const LoginForm = ({
             }
             loginEmail = data.docs[0].email;
         }
+        
         try {
-            const res = await fetch("/api/students/login", {
+            const endpoint = userType === "student" ? "/api/students/login" : "/api/universities/login";
+            const res = await fetch(endpoint, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email: loginEmail, password }),
@@ -79,10 +85,19 @@ export const LoginForm = ({
                 const json = await res.json();
                 setSuccessMessage("Login successful");
                 localStorage.setItem("token", json.token);
-                localStorage.setItem("user", JSON.stringify(json.user));
+                localStorage.setItem("userType", userType);
+                
+                if (userType === "student") {
+                    localStorage.setItem("user", JSON.stringify(json.user));
+                } else {
+                    localStorage.setItem("universityUser", JSON.stringify(json.user));
+                }
+                
                 // Dispatch authchange event so header, etc. update immediately
                 window.dispatchEvent(new Event("authchange"));
-                router.push("/dashboard");
+                
+                const dashboardRoute = userType === "student" ? "/dashboard" : "/university/dashboard";
+                router.push(dashboardRoute);
             } else {
                 const errorData = await res.json();
                 setErrorMessage(errorData.message || "Invalid credentials");
@@ -178,9 +193,13 @@ export const LoginForm = ({
 
     return (
         <form onSubmit={handleLogin}>
-            <h2 className="text-2xl font-bold mb-4 text-[#34c3ec]">Login</h2>
+            <h2 className="text-2xl font-bold mb-4 text-[#34c3ec]">
+                {userType === "student" ? "Student Login" : "University Login"}
+            </h2>
             <div className="mb-4">
-                <label className="block mb-1">Email / Phone</label>
+                <label className="block mb-1">
+                    {userType === "student" ? "Email / Phone" : "Email"}
+                </label>
                 <input
                     type="text"
                     className="w-full border rounded p-2 text-black"
@@ -203,7 +222,7 @@ export const LoginForm = ({
                 type="submit"
                 className="w-full bg-[#34c3ec] hover:bg-[#34b2d7] text-white p-2 rounded"
             >
-                Login
+                {userType === "student" ? "Login as Student" : "Login as University"}
             </button>
             {showForgotPassword && (
                 <p className="mt-2 text-right">

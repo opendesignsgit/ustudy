@@ -7,15 +7,33 @@ import { LoginForm } from "./LoginForm";
 const THEME_COLOR = "#34c3ec";
 const OTP_TIMER = 120;
 
-export const RegisterForm = ({ onToggle }: { onToggle: () => void }) => {
-    const [formData, setFormData] = useState({
-        name: "",
-        phone: "",
-        email: "",
-        college: "",
-        dept: "",
-        terms: false,
-    });
+export const RegisterForm = ({ 
+    onToggle, 
+    userType = "student" 
+}: { 
+    onToggle: () => void;
+    userType?: "student" | "university";
+}) => {
+    const [formData, setFormData] = useState<any>(
+        userType === "student" 
+            ? {
+                name: "",
+                phone: "",
+                email: "",
+                college: "",
+                dept: "",
+                terms: false,
+              }
+            : {
+                title: "",
+                phone: "",
+                email: "",
+                country: "",
+                websiteUrl: "",
+                description: "",
+                terms: false,
+              }
+    );
     const [fieldVer, setFieldVer] = useState<{ phone: boolean; email: boolean }>({ phone: false, email: false });
     const [stage, setStage] = useState<"fields" | "phone-otp" | "email-otp">("fields");
     const [phoneOtp, setPhoneOtp] = useState("");
@@ -81,7 +99,8 @@ export const RegisterForm = ({ onToggle }: { onToggle: () => void }) => {
 
     const checkStudentExists = async (phone: string, email: string) => {
         if (!phone && !email) return false;
-        let url = "/api/students?";
+        const collection = userType === "student" ? "students" : "universities";
+        let url = `/api/${collection}?`;
         if (phone && email) {
             url += `where[or][0][phone][equals]=${encodeURIComponent(phone)}&where[or][1][email][equals]=${encodeURIComponent(email)}`;
         } else if (phone) {
@@ -192,7 +211,8 @@ export const RegisterForm = ({ onToggle }: { onToggle: () => void }) => {
         try {
             const password = Math.random().toString(36).slice(-8);
             const sendData = { ...formData, password, username: formData.email };
-            const response = await fetch("/api/students", {
+            const collection = userType === "student" ? "students" : "universities";
+            const response = await fetch(`/api/${collection}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(sendData),
@@ -202,25 +222,37 @@ export const RegisterForm = ({ onToggle }: { onToggle: () => void }) => {
 
                 // Send Welcome Email
                 try {
-                    await fetch("/api/sendWelcomeEmail", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
+                    const emailEndpoint = userType === "student" ? "/api/sendWelcomeEmail" : "/api/sendUniversityWelcomeEmail";
+                    const emailData = userType === "student"
+                        ? {
                             email: formData.email,
-                            name: formData.name,
+                            name: (formData as any).name,
                             phone: formData.phone,
-                            college: formData.college,
-                            dept: formData.dept,
+                            college: (formData as any).college,
+                            dept: (formData as any).dept,
                             username: formData.email,
                             password: password,
-                        }),
+                          }
+                        : {
+                            email: formData.email,
+                            title: (formData as any).title,
+                            phone: formData.phone,
+                            username: formData.email,
+                            password: password,
+                          };
+
+                    await fetch(emailEndpoint, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(emailData),
                     });
                 } catch (err) {
                     // Optionally: setError("Registered, but failed to send welcome email.");
                 }
 
                 // Login the user after registration and welcome email
-                const loginRes = await fetch("/api/students/login", {
+                const loginEndpoint = userType === "student" ? "/api/students/login" : "/api/universities/login";
+                const loginRes = await fetch(loginEndpoint, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email: formData.email, password }),
@@ -228,8 +260,16 @@ export const RegisterForm = ({ onToggle }: { onToggle: () => void }) => {
                 if (loginRes.ok) {
                     const json = await loginRes.json();
                     localStorage.setItem("token", json.token);
-                    localStorage.setItem("user", JSON.stringify(json.user));
-                    router.push("/dashboard");
+                    localStorage.setItem("userType", userType);
+                    
+                    if (userType === "student") {
+                        localStorage.setItem("user", JSON.stringify(json.user));
+                    } else {
+                        localStorage.setItem("universityUser", JSON.stringify(json.user));
+                    }
+                    
+                    const dashboardRoute = userType === "student" ? "/dashboard" : "/university/dashboard";
+                    router.push(dashboardRoute);
                 } else {
                     setError("Registered, but failed to login. Please try logging in.");
                 }
@@ -255,6 +295,7 @@ export const RegisterForm = ({ onToggle }: { onToggle: () => void }) => {
                     }}
                     prefillEmail={formData.email}
                     prefillPhone={formData.phone}
+                    userType={userType}
                 />
             </div>
         );
@@ -262,23 +303,25 @@ export const RegisterForm = ({ onToggle }: { onToggle: () => void }) => {
 
     return (
         <form onSubmit={handleSubmit} className="w-full max-w-lg">
-            <h2 className="text-lg font-bold mb-8 text-[#34c3ec]">Register</h2>
-            {/* Name Field */}
+            <h2 className="text-lg font-bold mb-8 text-[#34c3ec]">
+                {userType === "student" ? "Student Registration" : "University Registration"}
+            </h2>
+            {/* Name/Title Field */}
             <div className="flex flex-wrap -mx-3">
                 <div className="w-full px-3 mb-6">
                     <label
                         className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                        htmlFor="name"
+                        htmlFor={userType === "student" ? "name" : "title"}
                     >
-                        Full Name
+                        {userType === "student" ? "Full Name" : "University Name"}
                     </label>
                     <input
                         className="appearance-none block w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                        id="name"
+                        id={userType === "student" ? "name" : "title"}
                         type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={e => setFormData(f => ({ ...f, name: e.target.value }))}
+                        name={userType === "student" ? "name" : "title"}
+                        value={userType === "student" ? (formData as any).name : (formData as any).title}
+                        onChange={e => setFormData(f => ({ ...f, [userType === "student" ? "name" : "title"]: e.target.value }))}
                         required
                     />
                 </div>
@@ -455,46 +498,109 @@ export const RegisterForm = ({ onToggle }: { onToggle: () => void }) => {
                     )}
                 </div>
             </div>
-            {/* College Field */}
-            <div className="flex flex-wrap -mx-3">
-                <div className="w-full px-3 mb-6">
-                    <label
-                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                        htmlFor="college"
-                    >
-                        College
-                    </label>
-                    <input
-                        className="appearance-none block w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                        id="college"
-                        type="text"
-                        name="college"
-                        value={formData.college}
-                        onChange={e => setFormData(f => ({ ...f, college: e.target.value }))}
-                        required
-                    />
+            {/* College/Country Field */}
+            {userType === "student" ? (
+                <div className="flex flex-wrap -mx-3">
+                    <div className="w-full px-3 mb-6">
+                        <label
+                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                            htmlFor="college"
+                        >
+                            College
+                        </label>
+                        <input
+                            className="appearance-none block w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            id="college"
+                            type="text"
+                            name="college"
+                            value={(formData as any).college}
+                            onChange={e => setFormData(f => ({ ...f, college: e.target.value }))}
+                            required
+                        />
+                    </div>
                 </div>
-            </div>
-            {/* Department Field */}
-            <div className="flex flex-wrap -mx-3">
-                <div className="w-full px-3 mb-6">
-                    <label
-                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                        htmlFor="dept"
-                    >
-                        Department
-                    </label>
-                    <input
-                        className="appearance-none block w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                        id="dept"
-                        type="text"
-                        name="dept"
-                        value={formData.dept}
-                        onChange={e => setFormData(f => ({ ...f, dept: e.target.value }))}
-                        required
-                    />
+            ) : (
+                <div className="flex flex-wrap -mx-3">
+                    <div className="w-full px-3 mb-6">
+                        <label
+                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                            htmlFor="country"
+                        >
+                            Country
+                        </label>
+                        <input
+                            className="appearance-none block w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            id="country"
+                            type="text"
+                            name="country"
+                            value={(formData as any).country}
+                            onChange={e => setFormData(f => ({ ...f, country: e.target.value }))}
+                            required
+                        />
+                    </div>
                 </div>
-            </div>
+            )}
+            {/* Department/Website Field */}
+            {userType === "student" ? (
+                <div className="flex flex-wrap -mx-3">
+                    <div className="w-full px-3 mb-6">
+                        <label
+                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                            htmlFor="dept"
+                        >
+                            Department
+                        </label>
+                        <input
+                            className="appearance-none block w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            id="dept"
+                            type="text"
+                            name="dept"
+                            value={(formData as any).dept}
+                            onChange={e => setFormData(f => ({ ...f, dept: e.target.value }))}
+                            required
+                        />
+                    </div>
+                </div>
+            ) : (
+                <>
+                    <div className="flex flex-wrap -mx-3">
+                        <div className="w-full px-3 mb-6">
+                            <label
+                                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                htmlFor="websiteUrl"
+                            >
+                                Website URL (Optional)
+                            </label>
+                            <input
+                                className="appearance-none block w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                id="websiteUrl"
+                                type="url"
+                                name="websiteUrl"
+                                value={(formData as any).websiteUrl}
+                                onChange={e => setFormData(f => ({ ...f, websiteUrl: e.target.value }))}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex flex-wrap -mx-3">
+                        <div className="w-full px-3 mb-6">
+                            <label
+                                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                htmlFor="description"
+                            >
+                                University Description (Optional)
+                            </label>
+                            <textarea
+                                className="appearance-none block w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                id="description"
+                                name="description"
+                                rows={3}
+                                value={(formData as any).description}
+                                onChange={e => setFormData(f => ({ ...f, description: e.target.value }))}
+                            />
+                        </div>
+                    </div>
+                </>
+            )}
             {/* Terms */}
             <div className="flex flex-wrap -mx-3 items-center mb-6">
                 <input
@@ -520,7 +626,7 @@ export const RegisterForm = ({ onToggle }: { onToggle: () => void }) => {
                 className="w-full bg-[#34c3ec] hover:bg-[#34b2d7] text-white font-bold py-2 px-4 rounded"
                 disabled={loading || !fieldVer.phone || !fieldVer.email || !formData.terms}
             >
-                {loading ? "Registering..." : "Register Now"}
+                {loading ? "Registering..." : `Register as ${userType === "student" ? "Student" : "University"}`}
             </button>
             <p className="mt-4 text-center">
                 Already a user?{" "}
