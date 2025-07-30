@@ -64,6 +64,7 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     users: UserAuthOperations;
+    universities: UniversityAuthOperations;
     students: StudentAuthOperations;
   };
   blocks: {};
@@ -81,6 +82,7 @@ export interface Config {
     departments: Department;
     'degree-programs': DegreeProgram;
     universities: University;
+    'university-templates': UniversityTemplate;
     countries: Country;
     bookings: Booking;
     students: Student;
@@ -108,6 +110,7 @@ export interface Config {
     departments: DepartmentsSelect<false> | DepartmentsSelect<true>;
     'degree-programs': DegreeProgramsSelect<false> | DegreeProgramsSelect<true>;
     universities: UniversitiesSelect<false> | UniversitiesSelect<true>;
+    'university-templates': UniversityTemplatesSelect<false> | UniversityTemplatesSelect<true>;
     countries: CountriesSelect<false> | CountriesSelect<true>;
     bookings: BookingsSelect<false> | BookingsSelect<true>;
     students: StudentsSelect<false> | StudentsSelect<true>;
@@ -138,6 +141,9 @@ export interface Config {
     | (User & {
         collection: 'users';
       })
+    | (University & {
+        collection: 'universities';
+      })
     | (Student & {
         collection: 'students';
       });
@@ -153,6 +159,24 @@ export interface Config {
   };
 }
 export interface UserAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+export interface UniversityAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -853,15 +877,51 @@ export interface Course {
 export interface University {
   id: number;
   title: string;
+  phone: string;
   logo: number | Media;
   secondaryLogo?: (number | null) | Media;
   universityImage?: (number | null) | Media;
-  email?: string | null;
   country: number | Country;
+  /**
+   * Select a template for your university website layout
+   */
+  template?: (number | null) | UniversityTemplate;
+  websiteUrl?: string | null;
+  description?: string | null;
+  /**
+   * Inactive universities cannot login
+   */
+  isActive?: boolean | null;
+  /**
+   * Content will be filled based on the selected template layout
+   */
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -876,6 +936,37 @@ export interface Country {
   currencyName: string;
   currencyCode: string;
   currencyValue: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "university-templates".
+ */
+export interface UniversityTemplate {
+  id: number;
+  title: string;
+  description?: string | null;
+  status: 'active' | 'inactive' | 'draft';
+  previewImage?: (number | null) | Media;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  category?: ('landing' | 'about' | 'courses' | 'contact' | 'custom') | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1247,6 +1338,10 @@ export interface PayloadLockedDocument {
         value: number | University;
       } | null)
     | ({
+        relationTo: 'university-templates';
+        value: number | UniversityTemplate;
+      } | null)
+    | ({
         relationTo: 'countries';
         value: number | Country;
       } | null)
@@ -1285,6 +1380,10 @@ export interface PayloadLockedDocument {
         value: number | User;
       }
     | {
+        relationTo: 'universities';
+        value: number | University;
+      }
+    | {
         relationTo: 'students';
         value: number | Student;
       };
@@ -1301,6 +1400,10 @@ export interface PayloadPreference {
     | {
         relationTo: 'users';
         value: number | User;
+      }
+    | {
+        relationTo: 'universities';
+        value: number | University;
       }
     | {
         relationTo: 'students';
@@ -1753,11 +1856,39 @@ export interface DegreeProgramsSelect<T extends boolean = true> {
  */
 export interface UniversitiesSelect<T extends boolean = true> {
   title?: T;
+  phone?: T;
   logo?: T;
   secondaryLogo?: T;
   universityImage?: T;
-  email?: T;
   country?: T;
+  template?: T;
+  websiteUrl?: T;
+  description?: T;
+  isActive?: T;
+  content?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "university-templates_select".
+ */
+export interface UniversityTemplatesSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  status?: T;
+  previewImage?: T;
+  content?: T;
+  category?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;

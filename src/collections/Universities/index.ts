@@ -95,7 +95,7 @@ export const Universities: CollectionConfig = {
             {
               name: 'template',
               type: 'relationship',
-              relationTo: 'university-templates' as any,
+              relationTo: 'university-templates',
               required: false,
               label: 'University Template',
               admin: {
