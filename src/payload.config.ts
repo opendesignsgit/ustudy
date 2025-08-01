@@ -20,6 +20,7 @@ import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import { Universities } from './collections/Universities'
+import { UniversityTemplates } from './collections/UniversityTemplates'
 import { Countries } from './collections/Countries'
 import { WebsiteSettings } from './collections/Settings'
 
@@ -71,7 +72,7 @@ export default buildConfig({
     },
     // push: false,
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Courses, IntakeMonths, StudyModes, StudyYears, StudyAreas, Departments, DegreePrograms, Universities, Countries, Bookings, Students],
+  collections: [Pages, Posts, Media, Categories, Users, Courses, IntakeMonths, StudyModes, StudyYears, StudyAreas, Departments, DegreePrograms, Universities, UniversityTemplates, Countries, Bookings, Students],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, WebsiteSettings],
   plugins: [
