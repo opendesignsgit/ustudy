@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/Auth";
 import { RegisterForm } from "../components/RegisterForm";
@@ -9,13 +9,15 @@ import Footer from '@/components/Home/footer';
 export default function RegisterPage() {
     const router = useRouter();
     const { user, loading } = useAuth();
+    const [userType, setUserType] = useState<"student" | "university">("student");
 
     useEffect(() => {
         if (!loading && user) {
-            // Redirect to dashboard if already logged in
-            router.replace("/dashboard");
+            // Redirect to dashboard if already logged in based on user type
+            const dashboardRoute = userType === "student" ? "/dashboard" : "/university/dashboard";
+            router.replace(dashboardRoute);
         }
-    }, [user, loading, router]);
+    }, [user, loading, router, userType]);
 
     return (
         <article>
@@ -58,7 +60,38 @@ export default function RegisterPage() {
                         color: "#222",
                     }}
                 >
-                    <RegisterForm onToggle={() => (window.location.href = "/login")} />
+                    {/* User Type Selection Tabs */}
+                    <div className="mb-6">
+                        <div className="flex border-b border-gray-200">
+                            <button
+                                type="button"
+                                className={`flex-1 py-2 px-4 text-sm font-medium border-b-2 ${
+                                    userType === "student"
+                                        ? "border-[#34c3ec] text-[#34c3ec]"
+                                        : "border-transparent text-gray-500 hover:text-gray-700"
+                                }`}
+                                onClick={() => setUserType("student")}
+                            >
+                                Student Registration
+                            </button>
+                            <button
+                                type="button"
+                                className={`flex-1 py-2 px-4 text-sm font-medium border-b-2 ${
+                                    userType === "university"
+                                        ? "border-[#34c3ec] text-[#34c3ec]"
+                                        : "border-transparent text-gray-500 hover:text-gray-700"
+                                }`}
+                                onClick={() => setUserType("university")}
+                            >
+                                University Registration
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <RegisterForm 
+                        onToggle={() => (window.location.href = "/login")} 
+                        userType={userType}
+                    />
                 </div>
             </div>
 

@@ -32,6 +32,7 @@ export const RegisterForm = ({
                 country: "",
                 websiteUrl: "",
                 description: "",
+                template: "",
                 terms: false,
               }
     );
@@ -49,7 +50,27 @@ export const RegisterForm = ({
     const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(false);
     const [showLoginInstead, setShowLoginInstead] = useState(false);
+    const [templates, setTemplates] = useState<any[]>([]);
+    const [templatesLoading, setTemplatesLoading] = useState(false);
     const router = useRouter();
+
+    // Fetch university templates if userType is university
+    useEffect(() => {
+        if (userType === "university") {
+            setTemplatesLoading(true);
+            fetch("/api/university-templates?where[status][equals]=active")
+                .then(res => res.json())
+                .then(data => {
+                    setTemplates(data.docs || []);
+                })
+                .catch(err => {
+                    console.error("Failed to fetch templates:", err);
+                })
+                .finally(() => {
+                    setTemplatesLoading(false);
+                });
+        }
+    }, [userType]);
 
     useEffect(() => {
         if (phoneOtpSent && phoneOtpTimer === 0) setPhoneOtpSent(false);
@@ -598,6 +619,61 @@ export const RegisterForm = ({
                                 value={(formData as any).description}
                                 onChange={e => setFormData(f => ({ ...f, description: e.target.value }))}
                             />
+                        </div>
+                    </div>
+                    {/* Template Selection */}
+                    <div className="flex flex-wrap -mx-3">
+                        <div className="w-full px-3 mb-6">
+                            <label
+                                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                htmlFor="template"
+                            >
+                                University Template (Optional)
+                            </label>
+                            {templatesLoading ? (
+                                <div className="text-center py-4 text-gray-500">Loading templates...</div>
+                            ) : (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {templates.map((template) => (
+                                        <div
+                                            key={template.id}
+                                            className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                                                (formData as any).template === template.id
+                                                    ? "border-[#34c3ec] bg-blue-50"
+                                                    : "border-gray-200 hover:border-gray-300"
+                                            }`}
+                                            onClick={() => setFormData(f => ({ ...f, template: template.id }))}
+                                        >
+                                            {template.previewImage && (
+                                                <img
+                                                    src={template.previewImage.url || `/api/media/file/${template.previewImage.filename}`}
+                                                    alt={template.title}
+                                                    className="w-full h-32 object-cover rounded mb-2"
+                                                />
+                                            )}
+                                            <h4 className="font-semibold text-sm">{template.title}</h4>
+                                            {template.description && (
+                                                <p className="text-xs text-gray-600 mt-1">{template.description}</p>
+                                            )}
+                                        </div>
+                                    ))}
+                                    {/* None option */}
+                                    <div
+                                        className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                                            !(formData as any).template
+                                                ? "border-[#34c3ec] bg-blue-50"
+                                                : "border-gray-200 hover:border-gray-300"
+                                        }`}
+                                        onClick={() => setFormData(f => ({ ...f, template: "" }))}
+                                    >
+                                        <div className="w-full h-32 bg-gray-100 rounded mb-2 flex items-center justify-center">
+                                            <span className="text-gray-400">No Template</span>
+                                        </div>
+                                        <h4 className="font-semibold text-sm">None</h4>
+                                        <p className="text-xs text-gray-600 mt-1">Start with a blank page</p>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </>
