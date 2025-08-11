@@ -94,6 +94,16 @@ export const Universities: CollectionConfig = {
               label: 'Country',
             },
             {
+              name: 'template',
+              type: 'relationship',
+              relationTo: 'university-templates',
+              required: false,
+              label: 'University Template',
+              admin: {
+                description: 'Select a template for your university website layout',
+              },
+            },
+            {
               name: 'websiteUrl',
               type: 'text',
               label: 'Website URL',
