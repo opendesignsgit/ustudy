@@ -21,6 +21,7 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { SliderBlock } from '@/blocks/SliderBlock/config'
 import { YearlyCourses } from '@/blocks/CoursesComponents/YearsModule/config'
 import { RegisterFormBlock } from '@/blocks/RegisterForm/config'
+import { UniversityHero, UniversityAbout, UniversityPrograms, UniversityContact } from '@/blocks/UniversityTemplateBlocks'
 import { slugField } from '@/fields/slug'
 
 export const UniversityTemplates: CollectionConfig = {
@@ -94,6 +95,10 @@ export const UniversityTemplates: CollectionConfig = {
                 SliderBlock,
                 YearlyCourses,
                 RegisterFormBlock,
+                UniversityHero,
+                UniversityAbout,
+                UniversityPrograms,
+                UniversityContact,
               ],
             }),
             FixedToolbarFeature(),

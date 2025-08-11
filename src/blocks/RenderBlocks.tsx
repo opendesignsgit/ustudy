@@ -10,6 +10,10 @@ import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { YearlyCoursesBlock } from '@/blocks/CoursesComponents/YearsModule/Component'
 import { RegisterFormBlock } from './RegisterForm/config'
+import { UniversityHero } from '@/blocks/UniversityTemplateBlocks/UniversityHero/Component'
+import { UniversityAbout } from '@/blocks/UniversityTemplateBlocks/UniversityAbout/Component'
+import { UniversityPrograms } from '@/blocks/UniversityTemplateBlocks/UniversityPrograms/Component'
+import { UniversityContact } from '@/blocks/UniversityTemplateBlocks/UniversityContact/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -18,7 +22,11 @@ const blockComponents = {
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
   yearlyBlock: YearlyCoursesBlock,
-  registerBlock: RegisterFormBlock
+  registerBlock: RegisterFormBlock,
+  'university-hero': UniversityHero,
+  'university-about': UniversityAbout,
+  'university-programs': UniversityPrograms,
+  'university-contact': UniversityContact,
 }
 
 export const RenderBlocks: React.FC<{

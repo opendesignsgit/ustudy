@@ -1893,13 +1893,6 @@ export interface UniversityTemplatesSelect<T extends boolean = true> {
   slugLock?: T;
   updatedAt?: T;
   createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2506,6 +2499,131 @@ export interface RegisterFormBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'registerFormBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "UniversityHeroBlock".
+ */
+export interface UniversityHeroBlock {
+  style: 'default' | 'centered' | 'left' | 'overlay';
+  title: string;
+  subtitle?: string | null;
+  backgroundImage?: (number | null) | Media;
+  buttons?:
+    | {
+        text: string;
+        url: string;
+        style?: ('primary' | 'secondary' | 'outline') | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'university-hero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "UniversityAboutBlock".
+ */
+export interface UniversityAboutBlock {
+  layout: 'side-by-side' | 'image-top' | 'text-only' | 'centered';
+  title: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  image?: (number | null) | Media;
+  stats?:
+    | {
+        number: string;
+        label: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'university-about';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "UniversityProgramsBlock".
+ */
+export interface UniversityProgramsBlock {
+  title: string;
+  subtitle?: string | null;
+  layout: 'grid' | 'list' | 'carousel';
+  programs?:
+    | {
+        title: string;
+        description: string;
+        image?: (number | null) | Media;
+        duration?: string | null;
+        level?: ('undergraduate' | 'graduate' | 'doctoral' | 'certificate') | null;
+        link?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  showAll?: boolean | null;
+  allProgramsLink?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'university-programs';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "UniversityContactBlock".
+ */
+export interface UniversityContactBlock {
+  title: string;
+  layout: 'side-by-side' | 'info-only' | 'form-only' | 'stacked';
+  contactInfo?: {
+    address?: string | null;
+    phone?: string | null;
+    email?: string | null;
+    website?: string | null;
+    admissionsEmail?: string | null;
+    admissionsPhone?: string | null;
+  };
+  showContactForm?: boolean | null;
+  formFields?:
+    | {
+        fieldType: 'text' | 'email' | 'textarea' | 'select';
+        label: string;
+        required?: boolean | null;
+        placeholder?: string | null;
+        options?:
+          | {
+              label: string;
+              value: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  socialLinks?:
+    | {
+        platform: 'facebook' | 'twitter' | 'linkedin' | 'instagram' | 'youtube' | 'other';
+        url: string;
+        customLabel?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'university-contact';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

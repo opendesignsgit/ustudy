@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/Auth";
 import { LoginForm } from "../components/LoginForm";
@@ -9,13 +9,15 @@ import Footer from '@/components/Home/footer';
 export default function LoginPage() {
   const router = useRouter();
   const { user, loading } = useAuth();
+  const [userType, setUserType] = useState<"student" | "university">("student");
 
   useEffect(() => {
     if (!loading && user) {
-      // Redirect to dashboard if already logged in
-      router.replace("/dashboard");
+      // Redirect to dashboard if already logged in based on user type
+      const dashboardRoute = userType === "student" ? "/dashboard" : "/university/dashboard";
+      router.replace(dashboardRoute);
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, userType]);
 
   return (
     <article>
@@ -56,7 +58,25 @@ export default function LoginPage() {
             color: "#222",
           }}
         >
-          <LoginForm onToggle={() => (window.location.href = "/register")} />
+          {/* User Type Selection */}
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Login As:
+            </label>
+            <select
+              value={userType}
+              onChange={(e) => setUserType(e.target.value as "student" | "university")}
+              className="w-full border rounded p-2 text-black bg-white"
+            >
+              <option value="student">Student</option>
+              <option value="university">University</option>
+            </select>
+          </div>
+          
+          <LoginForm 
+            onToggle={() => (window.location.href = "/register")} 
+            userType={userType}
+          />
         </div>
       </div>
       <Footer></Footer>
