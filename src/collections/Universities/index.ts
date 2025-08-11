@@ -1,3 +1,4 @@
+//src\collections\Universities\index.ts
 import type { CollectionConfig } from 'payload'
 import {
   BlocksFeature,
