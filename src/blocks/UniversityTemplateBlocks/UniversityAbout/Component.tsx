@@ -1,9 +1,8 @@
 import React from 'react'
-import type { UniversityAboutBlock } from '@/payload-types'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 
 type Props = {
-  block: UniversityAboutBlock
+  block: any // UniversityAboutBlock when types are generated
 }
 
 export const UniversityAbout: React.FC<Props> = ({ block }) => {

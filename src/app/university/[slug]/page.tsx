@@ -55,7 +55,7 @@ export default async function UniversityPage({ params: paramsPromise }: Args) {
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="relative max-w-6xl mx-auto px-4 py-16">
           <div className="text-center">
-            {university.logo && (
+            {university.logo && typeof university.logo === 'object' && (
               <div className="mb-6">
                 <img
                   src={university.logo.url || `/api/media/file/${university.logo.filename}`}
@@ -90,12 +90,12 @@ export default async function UniversityPage({ params: paramsPromise }: Args) {
 
       {/* University Content */}
       <div className="max-w-6xl mx-auto px-4 py-12">
-        {university.content && (
-          <RenderBlocks blocks={university.content} />
+        {university.content && Array.isArray(university.content) && university.content.length > 0 && (
+          <RenderBlocks blocks={university.content as any} />
         )}
         
         {/* Default content if no custom content exists */}
-        {(!university.content || university.content.length === 0) && (
+        {(!university.content || !Array.isArray(university.content) || university.content.length === 0) && (
           <div className="prose prose-lg max-w-none">
             <div className="grid md:grid-cols-2 gap-8 mb-12">
               <div>
@@ -104,7 +104,7 @@ export default async function UniversityPage({ params: paramsPromise }: Args) {
                   {university.description || 'Welcome to our university. We are committed to providing excellent education and fostering innovation.'}
                 </p>
               </div>
-              {university.universityImage && (
+              {university.universityImage && typeof university.universityImage === 'object' && (
                 <div>
                   <img
                     src={university.universityImage.url || `/api/media/file/${university.universityImage.filename}`}
@@ -127,7 +127,7 @@ export default async function UniversityPage({ params: paramsPromise }: Args) {
                   </p>
                   {university.country && typeof university.country === 'object' && (
                     <p className="text-gray-600">
-                      <strong>Country:</strong> {university.country.title}
+                      <strong>Country:</strong> {(university.country as any).title}
                     </p>
                   )}
                 </div>
@@ -177,9 +177,12 @@ export async function generateMetadata({ params: paramsPromise }: Args) {
   const university = await queryUniversityBySlug({ slug })
 
   return generateMeta({
-    title: university?.title || 'University',
-    description: university?.description || 'University information and programs',
-    url: `/university/${slug}`,
+    doc: { 
+      title: university?.title || 'University',
+      meta: {
+        description: university?.description || 'University information and programs'
+      }
+    } as any,
   })
 }
 

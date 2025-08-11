@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import type { UniversityContactBlock } from '@/payload-types'
 
 type Props = {
-  block: UniversityContactBlock
+  block: any // UniversityContactBlock when types are generated
 }
 
 export const UniversityContact: React.FC<Props> = ({ block }) => {

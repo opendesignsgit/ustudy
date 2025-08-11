@@ -1,8 +1,7 @@
 import React from 'react'
-import type { UniversityProgramsBlock } from '@/payload-types'
 
 type Props = {
-  block: UniversityProgramsBlock
+  block: any // UniversityProgramsBlock when types are generated
 }
 
 export const UniversityPrograms: React.FC<Props> = ({ block }) => {
