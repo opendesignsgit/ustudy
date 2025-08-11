@@ -14,23 +14,28 @@ import { cache } from 'react'
 import Footer from '@/components/Home/footer'
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const universities = await payload.find({
-    collection: 'universities',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-  })
-
-  const params = universities.docs
-    ?.filter((doc) => {
-      return doc.slug !== 'home'
-    })
-    .map(({ slug }) => {
-      return { slug }
+  try {
+    const payload = await getPayload({ config: configPromise })
+    const universities = await payload.find({
+      collection: 'universities',
+      draft: false,
+      limit: 1000,
+      overrideAccess: false,
     })
 
-  return params || []
+    const params = universities.docs
+      ?.filter((doc) => {
+        return doc.slug !== 'home'
+      })
+      .map(({ slug }) => {
+        return { slug }
+      })
+
+    return params || []
+  } catch (error) {
+    console.warn('Failed to generate static params for universities, falling back to empty array:', error)
+    return []
+  }
 }
 
 type Args = {

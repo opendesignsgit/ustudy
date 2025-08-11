@@ -20,11 +20,11 @@ export const Bookings: CollectionConfig = {
   },
   defaultPopulate: {
     course: true,
-    customer: true,
+    student: true,
   },
   admin: {
     group: 'Universities',
-    defaultColumns: ['customer', 'course'],
+    defaultColumns: ['student', 'course'],
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({

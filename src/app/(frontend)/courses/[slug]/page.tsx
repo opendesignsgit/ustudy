@@ -27,23 +27,28 @@ import { RegisterFlow } from '../components/Register/RegisterFlow'
 import { RazorpayScriptLoader } from '../components/Register/RazorpayScriptLoader'
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const posts = await payload.find({
-    collection: 'courses',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  })
+  try {
+    const payload = await getPayload({ config: configPromise })
+    const posts = await payload.find({
+      collection: 'courses',
+      draft: false,
+      limit: 1000,
+      overrideAccess: false,
+      pagination: false,
+      select: {
+        slug: true,
+      },
+    })
 
-  const params = posts.docs.map(({ slug }) => {
-    return { slug }
-  })
+    const params = posts.docs.map(({ slug }) => {
+      return { slug }
+    })
 
-  return params
+    return params || []
+  } catch (error) {
+    console.warn('Failed to generate static params for courses, falling back to empty array:', error)
+    return []
+  }
 }
 
 type Args = {
