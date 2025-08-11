@@ -28,6 +28,9 @@ const nextConfig = {
   },
   reactStrictMode: true,
   redirects,
-};
+  // Skip static optimization for database-dependent pages when no DB available
+  skipTrailingSlashRedirect: true,
+  skipMiddlewareUrlNormalize: true,
+}
 
 export default withPayload(nextConfig);

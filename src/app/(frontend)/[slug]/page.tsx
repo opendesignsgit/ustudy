@@ -28,27 +28,38 @@ import Services from '@/components/Services/Services'
 import Contactus from '@/components/Contactus/Contactus'
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const pages = await payload.find({
-    collection: 'pages',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  })
+  // Skip static generation if database is not available
+  if (!process.env.DATABASE_URI || process.env.DATABASE_URI.includes('localhost')) {
+    console.warn('Database not available for static generation, skipping...')
+    return []
+  }
 
-  const params = pages.docs
-    ?.filter((doc) => {
-      return doc.slug !== 'home'
-    })
-    .map(({ slug }) => {
-      return { slug }
+  try {
+    const payload = await getPayload({ config: configPromise })
+    const pages = await payload.find({
+      collection: 'pages',
+      draft: false,
+      limit: 1000,
+      overrideAccess: false,
+      pagination: false,
+      select: {
+        slug: true,
+      },
     })
 
-  return params
+    const params = pages.docs
+      ?.filter((doc) => {
+        return doc.slug !== 'home'
+      })
+      .map(({ slug }) => {
+        return { slug }
+      })
+
+    return params || []
+  } catch (error) {
+    console.warn('Failed to generate static params for pages, falling back to empty array:', error)
+    return []
+  }
 }
 
 type Args = {

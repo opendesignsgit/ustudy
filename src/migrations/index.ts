@@ -1,5 +1,6 @@
 import * as migration_20250730_123444_add_university_auth_templates from './20250730_123444_add_university_auth_templates';
 import * as migration_20250801_051900_check_and_fix_university_templates_rels from './20250801_051900_check_and_fix_university_templates_rels';
+import * as migration_20250115_114256_ensure_complete_schema from './20250115_114256_ensure_complete_schema';
 
 export const migrations = [
   {
@@ -11,5 +12,10 @@ export const migrations = [
     up: migration_20250801_051900_check_and_fix_university_templates_rels.up,
     down: migration_20250801_051900_check_and_fix_university_templates_rels.down,
     name: '20250801_051900_check_and_fix_university_templates_rels'
+  },
+  {
+    up: migration_20250115_114256_ensure_complete_schema.up,
+    down: migration_20250115_114256_ensure_complete_schema.down,
+    name: '20250115_114256_ensure_complete_schema'
   },
 ];
