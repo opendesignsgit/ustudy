@@ -52,11 +52,16 @@ export const RegisterForm = ({
     const [showLoginInstead, setShowLoginInstead] = useState(false);
     const [templates, setTemplates] = useState<any[]>([]);
     const [templatesLoading, setTemplatesLoading] = useState(false);
+    const [countries, setCountries] = useState<any[]>([]);
+    const [countriesLoading, setCountriesLoading] = useState(false);
+    const [logoFile, setLogoFile] = useState<File | null>(null);
+    const [logoUploading, setLogoUploading] = useState(false);
     const router = useRouter();
 
-    // Fetch university templates if userType is university
+    // Fetch university templates and countries if userType is university
     useEffect(() => {
         if (userType === "university") {
+            // Fetch templates
             setTemplatesLoading(true);
             fetch("/api/university-templates?where[status][equals]=active")
                 .then(res => res.json())
@@ -68,6 +73,20 @@ export const RegisterForm = ({
                 })
                 .finally(() => {
                     setTemplatesLoading(false);
+                });
+
+            // Fetch countries
+            setCountriesLoading(true);
+            fetch("/api/countries")
+                .then(res => res.json())
+                .then(data => {
+                    setCountries(data.docs || []);
+                })
+                .catch(err => {
+                    console.error("Failed to fetch countries:", err);
+                })
+                .finally(() => {
+                    setCountriesLoading(false);
                 });
         }
     }, [userType]);
@@ -210,6 +229,31 @@ export const RegisterForm = ({
         setStage("fields");
     };
 
+    const uploadLogo = async (file: File): Promise<string | null> => {
+        setLogoUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            const response = await fetch('/api/media', {
+                method: 'POST',
+                body: formData,
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                return data.doc.id;
+            } else {
+                throw new Error('Failed to upload logo');
+            }
+        } catch (error) {
+            console.error('Logo upload error:', error);
+            throw error;
+        } finally {
+            setLogoUploading(false);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
@@ -218,6 +262,13 @@ export const RegisterForm = ({
 
         if (!fieldVer.phone || !fieldVer.email) {
             setError("Please verify phone and email.");
+            setLoading(false);
+            return;
+        }
+
+        // For universities, check if logo is provided
+        if (userType === "university" && !logoFile) {
+            setError("University logo is required.");
             setLoading(false);
             return;
         }
@@ -232,7 +283,20 @@ export const RegisterForm = ({
 
         try {
             const password = Math.random().toString(36).slice(-8);
-            const sendData = { ...formData, password, username: formData.email };
+            let sendData = { ...formData, password, username: formData.email };
+            
+            // Upload logo for university registration
+            if (userType === "university" && logoFile) {
+                try {
+                    const logoId = await uploadLogo(logoFile);
+                    sendData = { ...sendData, logo: logoId };
+                } catch (error) {
+                    setError("Failed to upload logo. Please try again.");
+                    setLoading(false);
+                    return;
+                }
+            }
+            
             const collection = userType === "student" ? "students" : "universities";
             const response = await fetch(`/api/${collection}`, {
                 method: "POST",
@@ -542,25 +606,69 @@ export const RegisterForm = ({
                     </div>
                 </div>
             ) : (
-                <div className="flex flex-wrap -mx-3">
-                    <div className="w-full px-3 mb-6">
-                        <label
-                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                            htmlFor="country"
-                        >
-                            Country
-                        </label>
-                        <input
-                            className="appearance-none block w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            id="country"
-                            type="text"
-                            name="country"
-                            value={(formData as any).country}
-                            onChange={e => setFormData(f => ({ ...f, country: e.target.value }))}
-                            required
-                        />
+                <>
+                    {/* Logo Upload Field */}
+                    <div className="flex flex-wrap -mx-3">
+                        <div className="w-full px-3 mb-6">
+                            <label
+                                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                htmlFor="logo"
+                            >
+                                University Logo *
+                            </label>
+                            <input
+                                className="appearance-none block w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                id="logo"
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                        setLogoFile(file);
+                                    }
+                                }}
+                                required
+                            />
+                            {logoFile && (
+                                <p className="text-xs text-gray-600 mt-1">
+                                    Selected: {logoFile.name}
+                                </p>
+                            )}
+                        </div>
                     </div>
-                </div>
+                    {/* Country Dropdown */}
+                    <div className="flex flex-wrap -mx-3">
+                        <div className="w-full px-3 mb-6">
+                            <label
+                                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                htmlFor="country"
+                            >
+                                Country *
+                            </label>
+                            {countriesLoading ? (
+                                <div className="appearance-none block w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 leading-tight">
+                                    Loading countries...
+                                </div>
+                            ) : (
+                                <select
+                                    className="appearance-none block w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    id="country"
+                                    name="country"
+                                    value={(formData as any).country}
+                                    onChange={e => setFormData(f => ({ ...f, country: e.target.value }))}
+                                    required
+                                >
+                                    <option value="">Select a country</option>
+                                    {countries.map((country) => (
+                                        <option key={country.id} value={country.id}>
+                                            {country.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
+                        </div>
+                    </div>
+                </>
             )}
             {/* Department/Website Field */}
             {userType === "student" ? (
@@ -701,9 +809,9 @@ export const RegisterForm = ({
             <button
                 type="submit"
                 className="w-full bg-[#34c3ec] hover:bg-[#34b2d7] text-white font-bold py-2 px-4 rounded"
-                disabled={loading || !fieldVer.phone || !fieldVer.email || !formData.terms}
+                disabled={loading || logoUploading || !fieldVer.phone || !fieldVer.email || !formData.terms || (userType === "university" && !logoFile)}
             >
-                {loading ? "Registering..." : `Register as ${userType === "student" ? "Student" : "University"}`}
+                {loading ? "Registering..." : logoUploading ? "Uploading logo..." : `Register as ${userType === "student" ? "Student" : "University"}`}
             </button>
             <p className="mt-4 text-center">
                 Already a user?{" "}
