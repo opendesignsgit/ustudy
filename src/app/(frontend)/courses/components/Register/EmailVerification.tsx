@@ -117,7 +117,7 @@ export const EmailVerification = ({
         <div className="space-y-4">
             <h3 className="text-lg font-medium">Verify Your Email</h3>
             <p className="text-sm text-gray-600">
-                We've sent a 6-digit verification code to <span className="font-medium">{email}</span>
+                We&apos;ve sent a 6-digit verification code to <span className="font-medium">{email}</span>
             </p>
 
             {error && <div className="text-red-500 text-sm">{error}</div>}

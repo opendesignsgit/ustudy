@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
+import Link from 'next/link'
 import { SearchIcon, MenuIcon, XIcon, User2 } from 'lucide-react'
 import { CMSLink } from '@/components/Link'
 import type { Header as HeaderType } from '@/payload-types'
@@ -290,7 +291,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
                 )}
                 {userName}
               </span>
-              <a
+              <Link
                 onClick={e => { 
                   e.preventDefault()
                   const dashboardRoute = userType === 'student' ? '/dashboard' : '/university-dashboard'
@@ -303,8 +304,8 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
                 tabIndex={0}
               >
                 {userType === 'student' ? 'Dashboard' : 'University Dashboard'}
-              </a>
-              <a
+              </Link>
+              <Link
                 onClick={e => { 
                   e.preventDefault()
                   const accountRoute = userType === 'student' ? '/dashboard?tab=my-account' : '/university-dashboard?tab=account'
@@ -317,9 +318,9 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
                 tabIndex={0}
               >
                 Account details
-              </a>
+              </Link>
               {userType === 'student' && (
-                <a
+                <Link
                   onClick={e => { e.preventDefault(); router.push('/dashboard?tab=my-courses'); setShowProfileMenu(false); }}
                   href="/dashboard?tab=my-courses"
                   className="w-full block text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal cursor-pointer"
@@ -327,10 +328,10 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
                   tabIndex={0}
                 >
                   My Courses
-                </a>
+                </Link>
               )}
               {userType === 'university' && (
-                <a
+                <Link
                   onClick={e => { e.preventDefault(); router.push('/university-dashboard?tab=content'); setShowProfileMenu(false); }}
                   href="/university-dashboard?tab=content"
                   className="w-full block text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal cursor-pointer"
@@ -338,9 +339,9 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
                   tabIndex={0}
                 >
                   Content Editor
-                </a>
+                </Link>
               )}
-              <a
+              <Link
                 onClick={e => { e.preventDefault(); setShowProfileMenu(false); handleLogout(); }}
                 href="/"
                 className="w-full block text-left px-6 py-4 text-[17px] text-red-600 hover:bg-[#fbeaea] transition-colors font-normal cursor-pointer"
@@ -348,7 +349,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
                 tabIndex={0}
               >
                 Logout
-              </a>
+              </Link>
             </div>
           </div>
         )}

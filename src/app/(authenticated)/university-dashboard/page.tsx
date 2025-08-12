@@ -384,7 +384,7 @@ function ContentEditorTab({ universityData }: { universityData: any }) {
       <div className="bg-white p-6 rounded-lg shadow">
         <div className="mb-4">
           <p className="text-gray-600 text-sm mb-4">
-            Edit your university's content using the rich text editor below. This content will be displayed on your university page.
+            Edit your university&apos;s content using the rich text editor below. This content will be displayed on your university page.
             You can add/remove blocks, format text, and structure your content as needed.
           </p>
           
