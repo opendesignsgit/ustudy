@@ -183,6 +183,45 @@ export const Universities: CollectionConfig = {
         return user;
       },
     ],
+    beforeChange: [
+      async ({ data, req }) => {
+        // Validate country relationship if it exists
+        if (data.country !== null && data.country !== undefined) {
+          // Check if country is a valid object or ID
+          let countryId = data.country;
+          if (typeof data.country === 'object' && data.country.id) {
+            countryId = data.country.id;
+          }
+          
+          // Ensure countryId is a valid number and not the problematic values
+          if (typeof countryId === 'string' && countryId.includes(' ')) {
+            throw new Error('Invalid country relationship format detected. Please select a valid country.');
+          }
+          
+          if (countryId === 0 || countryId === '0' || parseInt(countryId) === 0) {
+            throw new Error('Invalid country selected. Please choose a valid country.');
+          }
+          
+          // If we have a payload instance, verify the country exists
+          if (req.payload && countryId) {
+            try {
+              const country = await req.payload.findByID({
+                collection: 'countries',
+                id: countryId,
+              });
+              if (!country) {
+                throw new Error('Selected country does not exist. Please choose a valid country.');
+              }
+            } catch (error) {
+              // If we can't find the country, it's invalid
+              throw new Error('Selected country is invalid. Please choose a valid country.');
+            }
+          }
+        }
+        
+        return data;
+      },
+    ],
   },
   timestamps: true,
 }
