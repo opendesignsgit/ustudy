@@ -51,26 +51,66 @@ export default function UniversityDashboard() {
   };
 
   useEffect(() => {
-    // For demo purposes, allow access with mock data if no user is logged in
-    const userType = localStorage.getItem("userType");
-    const universityUser = localStorage.getItem("universityUser");
-    
-    if (userType === "university" && universityUser) {
+    const fetchUniversityData = async () => {
       try {
-        const userData = JSON.parse(universityUser);
-        setUniversityData(userData);
+        const token = localStorage.getItem("token");
+        const userType = localStorage.getItem("userType");
+        const universityUser = localStorage.getItem("universityUser");
+        
+        if (userType === "university" && token) {
+          // Try to fetch current user data to get university ID
+          const userResponse = await fetch('/api/users/me', {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+          
+          if (userResponse.ok) {
+            const currentUser = await userResponse.json();
+            
+            // Fetch university data using the user's ID (if the user is a university record)
+            const universityResponse = await fetch(`/api/universities/${currentUser.user.id}`, {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            });
+            
+            if (universityResponse.ok) {
+              const universityData = await universityResponse.json();
+              setUniversityData(universityData);
+              // Update localStorage with fresh data
+              localStorage.setItem("universityUser", JSON.stringify(universityData));
+            } else {
+              console.log("University not found via API, falling back to stored data");
+              throw new Error("University not found");
+            }
+          } else {
+            throw new Error("User authentication failed");
+          }
+        } else if (universityUser) {
+          // Fallback to stored university data
+          try {
+            const userData = JSON.parse(universityUser);
+            setUniversityData(userData);
+          } catch (error) {
+            throw new Error("Invalid stored user data");
+          }
+        } else {
+          throw new Error("No authentication data found");
+        }
       } catch (error) {
-        console.error("Error parsing university user data:", error);
-        // Use demo data if parsing fails
-        setUniversityData(getDemoUniversityData());
+        console.error("Error fetching university data:", error);
+        // Use demo data as fallback
+        const demoData = getDemoUniversityData();
+        setUniversityData(demoData);
+      } finally {
+        setLoading(false);
       }
-    } else {
-      // For demo purposes, provide mock university data
-      const demoData = getDemoUniversityData();
-      setUniversityData(demoData);
-    }
-    
-    setLoading(false);
+    };
+
+    fetchUniversityData();
   }, [router]);
 
   const getDemoUniversityData = () => ({
