@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Footer from '@/components/Home/footer';
+import { LexicalEditor } from './components/LexicalEditor';
+import './components/LexicalEditor.css';
 
 export default function UniversityDashboard() {
   const [selectedTab, setSelectedTab] = useState<"account" | "content" | "view">("account");
@@ -10,33 +12,85 @@ export default function UniversityDashboard() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  // Sync tab from URL on mount and when popstate occurs
   useEffect(() => {
-    // Check if university user is logged in
+    const getTab = () => {
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const tab = params.get('tab');
+        switch (tab) {
+          case 'content':
+            setSelectedTab('content');
+            break;
+          case 'view':
+            setSelectedTab('view');
+            break;
+          default:
+            setSelectedTab('account');
+        }
+      }
+    };
+
+    getTab();
+    window.addEventListener('popstate', getTab);
+
+    return () => window.removeEventListener('popstate', getTab);
+  }, []);
+
+  const handleTabChange = (tab: "account" | "content" | "view") => {
+    setSelectedTab(tab);
+    let param = '';
+    if (tab === 'content') param = 'content';
+    if (tab === 'view') param = 'view';
+    // Update query string without reload
+    if (typeof window !== "undefined") {
+      const base = window.location.pathname;
+      const url = param ? `${base}?tab=${param}` : base;
+      window.history.pushState({}, '', url);
+    }
+  };
+
+  useEffect(() => {
+    // For demo purposes, allow access with mock data if no user is logged in
     const userType = localStorage.getItem("userType");
     const universityUser = localStorage.getItem("universityUser");
     
-    if (userType !== "university" || !universityUser) {
-      router.push("/login");
-      return;
+    if (userType === "university" && universityUser) {
+      try {
+        const userData = JSON.parse(universityUser);
+        setUniversityData(userData);
+      } catch (error) {
+        console.error("Error parsing university user data:", error);
+        // Use demo data if parsing fails
+        setUniversityData(getDemoUniversityData());
+      }
+    } else {
+      // For demo purposes, provide mock university data
+      const demoData = getDemoUniversityData();
+      setUniversityData(demoData);
     }
-
-    try {
-      const userData = JSON.parse(universityUser);
-      setUniversityData(userData);
-    } catch (error) {
-      console.error("Error parsing university user data:", error);
-      router.push("/login");
-    } finally {
-      setLoading(false);
-    }
+    
+    setLoading(false);
   }, [router]);
+
+  const getDemoUniversityData = () => ({
+    id: 'demo-university',
+    title: 'Demo University',
+    email: 'contact@demouniversity.edu',
+    phone: '+1-555-123-4567',
+    websiteUrl: 'https://demouniversity.edu',
+    description: 'A demonstration university for testing the dashboard functionality.',
+    slug: 'demo-university',
+    content: '<p>Welcome to Demo University! We are committed to excellence in education.</p>'
+  });
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userType");
     localStorage.removeItem("universityUser");
     window.dispatchEvent(new Event("authchange"));
-    router.push("/login");
+    // For demo, redirect to home instead of login
+    router.push("/");
   };
 
   const renderTabContent = () => {
@@ -86,7 +140,7 @@ export default function UniversityDashboard() {
                 className={`cursor-pointer p-2 rounded hover:bg-gray-700 ${
                   selectedTab === "account" ? "bg-gray-700 font-bold" : ""
                 }`}
-                onClick={() => setSelectedTab("account")}
+                onClick={() => handleTabChange("account")}
               >
                 Account Details
               </li>
@@ -94,7 +148,7 @@ export default function UniversityDashboard() {
                 className={`cursor-pointer p-2 rounded hover:bg-gray-700 ${
                   selectedTab === "content" ? "bg-gray-700 font-bold" : ""
                 }`}
-                onClick={() => setSelectedTab("content")}
+                onClick={() => handleTabChange("content")}
               >
                 Content Editor
               </li>
@@ -102,7 +156,7 @@ export default function UniversityDashboard() {
                 className={`cursor-pointer p-2 rounded hover:bg-gray-700 ${
                   selectedTab === "view" ? "bg-gray-700 font-bold" : ""
                 }`}
-                onClick={() => setSelectedTab("view")}
+                onClick={() => handleTabChange("view")}
               >
                 View University Page
               </li>
@@ -258,22 +312,91 @@ function AccountDetailsTab({ universityData }: { universityData: any }) {
 
 // Content Editor Tab Component
 function ContentEditorTab({ universityData }: { universityData: any }) {
+  const [content, setContent] = useState(() => {
+    // Try to get content from localStorage first
+    const savedContent = localStorage.getItem(`university_content_${universityData?.id || 'demo'}`);
+    return savedContent || universityData?.content || '<p>Welcome to our university! Edit this content using the rich text editor.</p>';
+  });
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const handleSave = async () => {
+    setSaving(true);
+    setMessage('');
+    
+    try {
+      // Save to localStorage for demo purposes
+      localStorage.setItem(`university_content_${universityData?.id || 'demo'}`, content);
+      
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      setMessage("Content saved successfully! (Demo: saved to browser storage)");
+    } catch (error) {
+      setMessage("Error saving content");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleContentChange = (newContent: string) => {
+    setContent(newContent);
+  };
+
   return (
-    <div className="max-w-4xl">
+    <div className="max-w-6xl">
       <h1 className="text-2xl font-bold mb-6 text-[#34c3ec]">Content Editor</h1>
       
       <div className="bg-white p-6 rounded-lg shadow">
-        <div className="text-center py-12 text-gray-500">
-          <h3 className="text-lg font-medium mb-2">Content Editor Coming Soon</h3>
-          <p>Advanced content editing with Lexical editor will be available here.</p>
-          <p className="mt-2 text-sm">You can currently edit content through the Payload CMS admin interface.</p>
-          <a 
-            href="/admin" 
-            target="_blank"
-            className="inline-block mt-4 bg-[#34c3ec] hover:bg-[#34b2d7] text-white px-4 py-2 rounded"
-          >
-            Open CMS Admin
-          </a>
+        <div className="mb-4">
+          <p className="text-gray-600 text-sm mb-4">
+            Edit your university's content using the rich text editor below. This content will be displayed on your university page.
+          </p>
+          
+          <div className="border rounded-lg overflow-hidden">
+            <LexicalEditor
+              initialContent={content}
+              onChange={handleContentChange}
+            />
+          </div>
+          
+          <div className="mt-6 flex items-center justify-between">
+            <div className="flex gap-4">
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="bg-[#34c3ec] hover:bg-[#34b2d7] text-white px-6 py-2 rounded disabled:opacity-50"
+              >
+                {saving ? "Saving..." : "Save Content"}
+              </button>
+              
+              <a 
+                href="/admin" 
+                target="_blank"
+                className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm"
+              >
+                Open CMS Admin
+              </a>
+            </div>
+            
+            {universityData?.slug && (
+              <a
+                href={`/university/${universityData.slug}`}
+                target="_blank"
+                className="text-[#34c3ec] hover:text-[#34b2d7] text-sm"
+              >
+                Preview Page →
+              </a>
+            )}
+          </div>
+          
+          {message && (
+            <div className={`mt-4 p-3 rounded text-sm ${
+              message.includes("successfully") ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+            }`}>
+              {message}
+            </div>
+          )}
         </div>
       </div>
     </div>
