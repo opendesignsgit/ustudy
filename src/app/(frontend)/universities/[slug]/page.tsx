@@ -27,7 +27,7 @@ type Args = {
 
 export default async function UniversityPage({ params: paramsPromise }: Args) {
   const { slug = '' } = await paramsPromise
-  const url = '/university/' + slug
+  const url = '/universities/' + slug
   const university = await queryUniversityBySlug({ slug })
 
   if (!university) {
@@ -202,7 +202,10 @@ const queryUniversityBySlug = cache(async ({ slug }: { slug: string }) => {
         phone: '+1-555-123-4567',
         websiteUrl: 'https://demouniversity.edu',
         description: 'A demonstration university showcasing the content management features.',
-        content: null // Will use default content
+        content: null, // Will use default content
+        logo: null,
+        country: null,
+        universityImage: null
       }
     }
     return null

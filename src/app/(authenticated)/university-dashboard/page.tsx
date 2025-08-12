@@ -381,7 +381,7 @@ function ContentEditorTab({ universityData }: { universityData: any }) {
             
             {universityData?.slug && (
               <a
-                href={`/university/${universityData.slug}`}
+                href={`/universities/${universityData.slug}`}
                 target="_blank"
                 className="text-[#34c3ec] hover:text-[#34b2d7] text-sm"
               >

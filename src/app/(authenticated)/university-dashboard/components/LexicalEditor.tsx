@@ -14,12 +14,16 @@ import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
+import { HorizontalRuleNode } from '@lexical/react/LexicalHorizontalRuleNode';
 
 // Lexical nodes
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { ListItemNode, ListNode } from '@lexical/list';
 import { LinkNode, AutoLinkNode } from '@lexical/link';
 import { CodeNode, CodeHighlightNode } from '@lexical/code';
+
+// Markdown transformers
+import { TRANSFORMERS } from '@lexical/markdown';
 
 // Toolbar component
 import { ToolbarPlugin } from './LexicalToolbar';
@@ -111,6 +115,7 @@ const initialConfig = {
     CodeHighlightNode,
     LinkNode,
     AutoLinkNode,
+    HorizontalRuleNode,
   ],
 };
 
@@ -161,7 +166,7 @@ export function LexicalEditor({ initialContent = '', onChange, readOnly = false 
           <HistoryPlugin />
           <ListPlugin />
           <LinkPlugin />
-          <MarkdownShortcutPlugin />
+          <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
           <EditorChangePlugin onChange={onChange} initialContent={initialContent} />
         </div>
       </div>
