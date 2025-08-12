@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
+import Link from 'next/link'
 import { SearchIcon, MenuIcon, XIcon, User2 } from 'lucide-react'
 import { CMSLink } from '@/components/Link'
 import type { Header as HeaderType } from '@/payload-types'
@@ -22,12 +23,13 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   const hoverTimeout = useRef<NodeJS.Timeout | null>(null)
 
   // Use AuthProvider for user info
-  const { user: authUser } = useAuth()
+  const { user: authUser, universityUser, userType } = useAuth()
 
-  // Extract user info from AuthProvider
-  const isLoggedIn = !!authUser?.user?.id
-  const userName = authUser?.user?.name || authUser?.user?.username || authUser?.user?.email?.split('@')[0] || 'User'
-  const userProfilePic = authUser?.user?.profilePic
+  // Extract user info from AuthProvider - handle both student and university users
+  const currentUser = userType === 'student' ? authUser?.user : universityUser
+  const isLoggedIn = !!currentUser?.id
+  const userName = currentUser?.name || currentUser?.title || currentUser?.username || currentUser?.email?.split('@')[0] || 'User'
+  const userProfilePic = currentUser?.profilePic
 
   // Dropdown: close on outside click
   useEffect(() => {
@@ -60,6 +62,8 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   const handleLogout = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
+    localStorage.removeItem('universityUser')
+    localStorage.removeItem('userType')
     window.dispatchEvent(new Event("authchange"))
     router.push('/login')
   }
@@ -124,23 +128,41 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
                 {userName}
               </span>
               <button
-                onClick={() => { router.push('/dashboard'); setShowProfileMenuMobile(false); }}
+                onClick={() => { 
+                  const dashboardRoute = userType === 'student' ? '/dashboard' : '/university-dashboard'
+                  router.push(dashboardRoute)
+                  setShowProfileMenuMobile(false)
+                }}
                 className="w-full text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal"
               >
-                Dashboard
+                {userType === 'student' ? 'Dashboard' : 'University Dashboard'}
               </button>
               <button
-                onClick={() => { router.push('/dashboard?tab=my-account'); setShowProfileMenuMobile(false); }}
+                onClick={() => { 
+                  const accountRoute = userType === 'student' ? '/dashboard?tab=my-account' : '/university-dashboard?tab=account'
+                  router.push(accountRoute)
+                  setShowProfileMenuMobile(false)
+                }}
                 className="w-full text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal"
               >
                 Account details
               </button>
-              <button
-                onClick={() => { router.push('/dashboard?tab=my-courses'); setShowProfileMenuMobile(false); }}
-                className="w-full text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal"
-              >
-                My Courses
-              </button>
+              {userType === 'student' && (
+                <button
+                  onClick={() => { router.push('/dashboard?tab=my-courses'); setShowProfileMenuMobile(false); }}
+                  className="w-full text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal"
+                >
+                  My Courses
+                </button>
+              )}
+              {userType === 'university' && (
+                <button
+                  onClick={() => { router.push('/university-dashboard?tab=content'); setShowProfileMenuMobile(false); }}
+                  className="w-full text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal"
+                >
+                  Content Editor
+                </button>
+              )}
               <button
                 onClick={() => { setShowProfileMenuMobile(false); handleLogout(); }}
                 className="w-full text-left px-6 py-4 text-[17px] text-red-600 hover:bg-[#fbeaea] transition-colors font-normal"
@@ -269,34 +291,57 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
                 )}
                 {userName}
               </span>
-              <a
-                onClick={e => { e.preventDefault(); router.push('/dashboard'); setShowProfileMenu(false); }}
-                href="/dashboard"
+              <Link
+                onClick={e => { 
+                  e.preventDefault()
+                  const dashboardRoute = userType === 'student' ? '/dashboard' : '/university-dashboard'
+                  router.push(dashboardRoute)
+                  setShowProfileMenu(false)
+                }}
+                href={userType === 'student' ? '/dashboard' : '/university-dashboard'}
                 className="w-full block text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal cursor-pointer"
                 style={{ border: 'none', background: 'none', outline: 'none' }}
                 tabIndex={0}
               >
-                Dashboard
-              </a>
-              <a
-                onClick={e => { e.preventDefault(); router.push('/dashboard?tab=my-account'); setShowProfileMenu(false); }}
-                href="/dashboard?tab=my-account"
+                {userType === 'student' ? 'Dashboard' : 'University Dashboard'}
+              </Link>
+              <Link
+                onClick={e => { 
+                  e.preventDefault()
+                  const accountRoute = userType === 'student' ? '/dashboard?tab=my-account' : '/university-dashboard?tab=account'
+                  router.push(accountRoute)
+                  setShowProfileMenu(false)
+                }}
+                href={userType === 'student' ? '/dashboard?tab=my-account' : '/university-dashboard?tab=account'}
                 className="w-full block text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal cursor-pointer"
                 style={{ border: 'none', background: 'none', outline: 'none' }}
                 tabIndex={0}
               >
                 Account details
-              </a>
-              <a
-                onClick={e => { e.preventDefault(); router.push('/dashboard?tab=my-courses'); setShowProfileMenu(false); }}
-                href="/dashboard?tab=my-courses"
-                className="w-full block text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal cursor-pointer"
-                style={{ border: 'none', background: 'none', outline: 'none' }}
-                tabIndex={0}
-              >
-                My Courses
-              </a>
-              <a
+              </Link>
+              {userType === 'student' && (
+                <Link
+                  onClick={e => { e.preventDefault(); router.push('/dashboard?tab=my-courses'); setShowProfileMenu(false); }}
+                  href="/dashboard?tab=my-courses"
+                  className="w-full block text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal cursor-pointer"
+                  style={{ border: 'none', background: 'none', outline: 'none' }}
+                  tabIndex={0}
+                >
+                  My Courses
+                </Link>
+              )}
+              {userType === 'university' && (
+                <Link
+                  onClick={e => { e.preventDefault(); router.push('/university-dashboard?tab=content'); setShowProfileMenu(false); }}
+                  href="/university-dashboard?tab=content"
+                  className="w-full block text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal cursor-pointer"
+                  style={{ border: 'none', background: 'none', outline: 'none' }}
+                  tabIndex={0}
+                >
+                  Content Editor
+                </Link>
+              )}
+              <Link
                 onClick={e => { e.preventDefault(); setShowProfileMenu(false); handleLogout(); }}
                 href="/"
                 className="w-full block text-left px-6 py-4 text-[17px] text-red-600 hover:bg-[#fbeaea] transition-colors font-normal cursor-pointer"
@@ -304,7 +349,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
                 tabIndex={0}
               >
                 Logout
-              </a>
+              </Link>
             </div>
           </div>
         )}

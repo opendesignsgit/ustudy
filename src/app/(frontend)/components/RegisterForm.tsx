@@ -285,6 +285,19 @@ export const RegisterForm = ({
             const password = Math.random().toString(36).slice(-8);
             let sendData = { ...formData, password, username: formData.email };
             
+            // Ensure country is properly formatted for universities
+            if (userType === "university" && sendData.country) {
+                // Convert to number and validate
+                const countryId = parseInt(sendData.country);
+                if (!isNaN(countryId) && countryId > 0) {
+                    sendData.country = countryId;
+                } else {
+                    setError("Please select a valid country.");
+                    setLoading(false);
+                    return;
+                }
+            }
+            
             // Upload logo for university registration
             if (userType === "university" && logoFile) {
                 try {
@@ -354,7 +367,7 @@ export const RegisterForm = ({
                         localStorage.setItem("universityUser", JSON.stringify(json.user));
                     }
                     
-                    const dashboardRoute = userType === "student" ? "/dashboard" : "/university/dashboard";
+                    const dashboardRoute = userType === "student" ? "/dashboard" : "/university-dashboard";
                     router.push(dashboardRoute);
                 } else {
                     setError("Registered, but failed to login. Please try logging in.");

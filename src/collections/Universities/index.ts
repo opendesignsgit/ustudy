@@ -186,34 +186,56 @@ export const Universities: CollectionConfig = {
     beforeChange: [
       async ({ data, req }) => {
         // Validate country relationship if it exists
-        if (data.country !== null && data.country !== undefined) {
-          // Check if country is a valid object or ID
+        if (data.country !== null && data.country !== undefined && data.country !== '') {
+          // Clean up the country value
           let countryId = data.country;
+          
+          // Handle object format
           if (typeof data.country === 'object' && data.country.id) {
             countryId = data.country.id;
           }
           
-          // Ensure countryId is a valid number and not the problematic values
-          if (typeof countryId === 'string' && countryId.includes(' ')) {
-            throw new Error('Invalid country relationship format detected. Please select a valid country.');
+          // Convert to string and clean up
+          countryId = String(countryId).trim();
+          
+          // Check for invalid formats with spaces or multiple values
+          if (countryId.includes(' ')) {
+            // If it looks like "2 0", take the first valid number
+            const firstNumber = countryId.split(' ')[0];
+            if (/^\d+$/.test(firstNumber)) {
+              countryId = firstNumber;
+              data.country = countryId;
+            } else {
+              throw new Error('Invalid country selection. Please choose a valid country from the dropdown.');
+            }
           }
           
-          if (countryId === 0 || countryId === '0' || parseInt(countryId) === 0) {
+          // Ensure countryId is a valid number
+          if (!/^\d+$/.test(countryId)) {
+            throw new Error('Invalid country format. Please select a country from the dropdown.');
+          }
+          
+          // Convert to number for validation
+          const countryIdNum = parseInt(countryId);
+          if (countryIdNum === 0 || isNaN(countryIdNum)) {
             throw new Error('Invalid country selected. Please choose a valid country.');
           }
           
+          // Update the data with cleaned value
+          data.country = countryIdNum;
+          
           // If we have a payload instance, verify the country exists
-          if (req.payload && countryId) {
+          if (req.payload && countryIdNum) {
             try {
               const country = await req.payload.findByID({
                 collection: 'countries',
-                id: countryId,
+                id: countryIdNum,
               });
               if (!country) {
                 throw new Error('Selected country does not exist. Please choose a valid country.');
               }
             } catch (error) {
-              // If we can't find the country, it's invalid
+              console.error('Country validation error:', error);
               throw new Error('Selected country is invalid. Please choose a valid country.');
             }
           }

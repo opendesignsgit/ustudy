@@ -115,7 +115,7 @@ export const PhoneVerification = ({
         <div className="space-y-4">
             <h3 className="text-lg font-medium">Verify Your Phone</h3>
             <p className="text-sm text-gray-600">
-                We've sent a 6-digit verification code to <span className="font-medium">{phone}</span>
+                We&apos;ve sent a 6-digit verification code to <span className="font-medium">{phone}</span>
             </p>
 
             {error && <div className="text-red-500 text-sm">{error}</div>}

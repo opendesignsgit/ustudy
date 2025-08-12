@@ -183,7 +183,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setUniversityUser(null);
             setUserType(null);
             window.dispatchEvent(new Event("authchange"));
-            router.push('/login');
+            router.push(userType === 'student' ? '/login' : '/login');
         } catch (error) {
             console.error('Logout error:', error);
         }

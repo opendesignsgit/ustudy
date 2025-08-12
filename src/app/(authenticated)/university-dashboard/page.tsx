@@ -198,21 +198,32 @@ function AccountDetailsTab({ universityData }: { universityData: any }) {
     
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`/api/universities/${universityData.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      });
+      const userType = localStorage.getItem("userType");
       
-      if (response.ok) {
-        const updatedData = await response.json();
-        localStorage.setItem("universityUser", JSON.stringify(updatedData));
-        setMessage("Account details updated successfully!");
+      if (userType === "university" && token && universityData?.id) {
+        const response = await fetch(`/api/universities/${universityData.id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
+        });
+        
+        if (response.ok) {
+          const updatedData = await response.json();
+          localStorage.setItem("universityUser", JSON.stringify(updatedData));
+          // Update the universityData in parent component would require state lifting
+          // For now, just show success message
+          setMessage("Account details updated successfully!");
+          window.dispatchEvent(new Event("authchange")); // Trigger auth state update
+        } else {
+          const errorData = await response.json();
+          setMessage(errorData.message || "Failed to update account details");
+        }
       } else {
-        setMessage("Failed to update account details");
+        // Demo mode
+        setMessage("Demo mode: Account details would be updated in a real application");
       }
     } catch (error) {
       setMessage("Error updating account details");
@@ -313,7 +324,7 @@ function AccountDetailsTab({ universityData }: { universityData: any }) {
 // Content Editor Tab Component
 function ContentEditorTab({ universityData }: { universityData: any }) {
   const [content, setContent] = useState(() => {
-    // Try to get content from localStorage first
+    // Try to get content from localStorage first (for demo)
     const savedContent = localStorage.getItem(`university_content_${universityData?.id || 'demo'}`);
     return savedContent || universityData?.content || '<p>Welcome to our university! Edit this content using the rich text editor.</p>';
   });
@@ -325,15 +336,38 @@ function ContentEditorTab({ universityData }: { universityData: any }) {
     setMessage('');
     
     try {
-      // Save to localStorage for demo purposes
-      localStorage.setItem(`university_content_${universityData?.id || 'demo'}`, content);
+      const token = localStorage.getItem("token");
+      const userType = localStorage.getItem("userType");
       
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setMessage("Content saved successfully! (Demo: saved to browser storage)");
+      if (userType === "university" && token && universityData?.id) {
+        // Try to save to API first
+        const response = await fetch(`/api/universities/${universityData.id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+          body: JSON.stringify({ content }),
+        });
+        
+        if (response.ok) {
+          const updatedData = await response.json();
+          localStorage.setItem("universityUser", JSON.stringify(updatedData));
+          setMessage("Content saved successfully!");
+        } else {
+          // Fallback to localStorage if API fails
+          localStorage.setItem(`university_content_${universityData?.id || 'demo'}`, content);
+          setMessage("Content saved locally (API unavailable)");
+        }
+      } else {
+        // Demo mode - save to localStorage
+        localStorage.setItem(`university_content_${universityData?.id || 'demo'}`, content);
+        setMessage("Content saved successfully! (Demo: saved to browser storage)");
+      }
     } catch (error) {
-      setMessage("Error saving content");
+      // Fallback to localStorage on error
+      localStorage.setItem(`university_content_${universityData?.id || 'demo'}`, content);
+      setMessage("Content saved locally (offline mode)");
     } finally {
       setSaving(false);
     }
@@ -350,7 +384,8 @@ function ContentEditorTab({ universityData }: { universityData: any }) {
       <div className="bg-white p-6 rounded-lg shadow">
         <div className="mb-4">
           <p className="text-gray-600 text-sm mb-4">
-            Edit your university's content using the rich text editor below. This content will be displayed on your university page.
+            Edit your university&apos;s content using the rich text editor below. This content will be displayed on your university page.
+            You can add/remove blocks, format text, and structure your content as needed.
           </p>
           
           <div className="border rounded-lg overflow-hidden">
