@@ -9,11 +9,13 @@ import {
   REDO_COMMAND,
   UNDO_COMMAND,
 } from 'lexical';
+import { $generateNodesFromDOM } from '@lexical/html';
 import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
 import { $setBlocksType } from '@lexical/selection';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND } from '@lexical/list';
 import { $createLinkNode } from '@lexical/link';
+import { $createHorizontalRuleNode } from '@lexical/react/LexicalHorizontalRuleNode';
 
 export function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -69,6 +71,58 @@ export function ToolbarPlugin() {
     }
   }, [editor]);
 
+  const insertHorizontalRule = useCallback(() => {
+    editor.update(() => {
+      const selection = $getSelection();
+      if ($isRangeSelection(selection)) {
+        const nodes = selection.extract();
+        const hr = $createHorizontalRuleNode();
+        if (nodes.length === 0) {
+          selection.insertNodes([hr, $createParagraphNode()]);
+        } else {
+          const lastNode = nodes[nodes.length - 1];
+          lastNode.insertAfter(hr);
+          hr.insertAfter($createParagraphNode());
+        }
+      }
+    });
+  }, [editor]);
+
+  const insertContentBlock = useCallback((blockType: string) => {
+    editor.update(() => {
+      const selection = $getSelection();
+      if ($isRangeSelection(selection)) {
+        const content = prompt(`Enter content for ${blockType}:`);
+        if (content) {
+          let blockElement: any;
+          
+          switch (blockType) {
+            case 'callout':
+              blockElement = `<div class="content-block callout-block"><div class="callout-content"><strong>💡 Callout:</strong> ${content}</div></div>`;
+              break;
+            case 'hero':
+              blockElement = `<div class="content-block hero-block"><h2 class="hero-title">${content}</h2><p class="hero-subtitle">Add your hero subtitle here</p></div>`;
+              break;
+            case 'feature':
+              blockElement = `<div class="content-block feature-block"><h3 class="feature-title">${content}</h3><p class="feature-description">Add feature description here</p></div>`;
+              break;
+            case 'stats':
+              blockElement = `<div class="content-block stats-block"><div class="stat-item"><span class="stat-number">${content}</span><span class="stat-label">Statistic Label</span></div></div>`;
+              break;
+            default:
+              blockElement = `<div class="content-block generic-block">${content}</div>`;
+          }
+          
+          // Insert the HTML block
+          const parser = new DOMParser();
+          const dom = parser.parseFromString(blockElement, 'text/html');
+          const blockNodes = $generateNodesFromDOM(editor, dom);
+          selection.insertNodes([...blockNodes, $createParagraphNode()]);
+        }
+      }
+    });
+  }, [editor]);
+
   return (
     <div className="toolbar">
       <button
@@ -120,7 +174,7 @@ export function ToolbarPlugin() {
         }}
         title="Bold"
       >
-        B
+        <strong>B</strong>
       </button>
       <button
         className={`toolbar-item ${isItalic ? 'active' : ''}`}
@@ -130,7 +184,7 @@ export function ToolbarPlugin() {
         }}
         title="Italic"
       >
-        I
+        <em>I</em>
       </button>
       <button
         className={`toolbar-item ${isUnderline ? 'active' : ''}`}
@@ -140,7 +194,7 @@ export function ToolbarPlugin() {
         }}
         title="Underline"
       >
-        U
+        <u>U</u>
       </button>
       
       <div className="divider" />
@@ -157,7 +211,7 @@ export function ToolbarPlugin() {
         onClick={formatNumberedList}
         title="Numbered List"
       >
-        #
+        1.
       </button>
       
       <div className="divider" />
@@ -169,6 +223,36 @@ export function ToolbarPlugin() {
       >
         🔗
       </button>
+      
+      <button
+        className="toolbar-item"
+        onClick={insertHorizontalRule}
+        title="Insert Horizontal Rule"
+      >
+        ―
+      </button>
+      
+      <div className="divider" />
+      
+      {/* Content Blocks Dropdown */}
+      <select
+        className="toolbar-select"
+        onChange={(e) => {
+          const value = e.target.value;
+          if (value && value !== 'blocks') {
+            insertContentBlock(value);
+            e.target.value = 'blocks'; // Reset selection
+          }
+        }}
+        defaultValue="blocks"
+        title="Insert Content Blocks"
+      >
+        <option value="blocks">+ Add Block</option>
+        <option value="hero">Hero Section</option>
+        <option value="feature">Feature Block</option>
+        <option value="callout">Callout Box</option>
+        <option value="stats">Statistics</option>
+      </select>
     </div>
   );
 }
