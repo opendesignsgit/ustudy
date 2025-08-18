@@ -12,7 +12,7 @@ import { getPayload } from 'payload'
 import { cache } from 'react'
 
 import Footer from '@/components/Home/footer'
-import '../university-content.css'
+import '../../university-content.css'
 
 export async function generateStaticParams() {
   // Return empty array to allow dynamic generation
