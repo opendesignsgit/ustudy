@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 
 // Lexical imports
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from '@lexical/html';
-import { $createParagraphNode, $createTextNode, $getRoot } from 'lexical';
+import { $createParagraphNode, $createTextNode, $getRoot, $insertNodes } from 'lexical';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
@@ -14,7 +14,7 @@ import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
-import { HorizontalRuleNode } from '@lexical/react/LexicalHorizontalRuleNode';
+import { HorizontalRuleNode, $createHorizontalRuleNode } from '@lexical/react/LexicalHorizontalRuleNode';
 
 // Lexical nodes
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
