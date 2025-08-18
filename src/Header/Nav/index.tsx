@@ -293,25 +293,24 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
               <Link
                 onClick={e => { 
                   e.preventDefault()
-                  const dashboardRoute = userType === 'student' ? '/dashboard' : '/university-dashboard'
-                  router.push(dashboardRoute)
+                  router.push('/dashboard')
                   setShowProfileMenu(false)
                 }}
-                href={userType === 'student' ? '/dashboard' : '/university-dashboard'}
+                href="/dashboard"
                 className="w-full block text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal cursor-pointer"
                 style={{ border: 'none', background: 'none', outline: 'none' }}
                 tabIndex={0}
               >
-                {userType === 'student' ? 'Dashboard' : 'University Dashboard'}
+                Dashboard
               </Link>
               <Link
                 onClick={e => { 
                   e.preventDefault()
-                  const accountRoute = userType === 'student' ? '/dashboard?tab=my-account' : '/university-dashboard?tab=account'
+                  const accountRoute = userType === 'student' ? '/dashboard?tab=my-account' : '/dashboard?tab=account'
                   router.push(accountRoute)
                   setShowProfileMenu(false)
                 }}
-                href={userType === 'student' ? '/dashboard?tab=my-account' : '/university-dashboard?tab=account'}
+                href={userType === 'student' ? '/dashboard?tab=my-account' : '/dashboard?tab=account'}
                 className="w-full block text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal cursor-pointer"
                 style={{ border: 'none', background: 'none', outline: 'none' }}
                 tabIndex={0}
@@ -331,8 +330,8 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
               )}
               {userType === 'university' && (
                 <Link
-                  onClick={e => { e.preventDefault(); router.push('/university-dashboard?tab=content'); setShowProfileMenu(false); }}
-                  href="/university-dashboard?tab=content"
+                  onClick={e => { e.preventDefault(); router.push('/dashboard?tab=content'); setShowProfileMenu(false); }}
+                  href="/dashboard?tab=content"
                   className="w-full block text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal cursor-pointer"
                   style={{ border: 'none', background: 'none', outline: 'none' }}
                   tabIndex={0}

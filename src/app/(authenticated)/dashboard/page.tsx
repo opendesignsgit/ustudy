@@ -13,10 +13,11 @@ import './style.scss'
 import { UniversityAccountDetails } from '../components/UniversityAccountDetails';
 import { UniversityContentEditor } from '../components/UniversityContentEditor';
 import { UniversityPageView } from '../components/UniversityPageView';
+import { UniversityPagesManager } from '../components/UniversityPagesManager';
 
 export default function Dashboard() {
   const [selectedComponent, setSelectedComponent] = useState<
-    "main" | "account" | "courses" | "content" | "view"
+    "main" | "account" | "courses" | "content" | "view" | "pages"
   >("main");
   const router = useRouter();
   const { user, universityUser, userType, logout: authLogout, loading } = useAuth();
@@ -41,6 +42,9 @@ export default function Dashboard() {
             break;
           case 'view':
             setSelectedComponent('view');
+            break;
+          case 'pages':
+            setSelectedComponent('pages');
             break;
           default:
             setSelectedComponent('main');
@@ -112,13 +116,14 @@ export default function Dashboard() {
     }
   };
 
-  const handleTabChange = (tab: "main" | "account" | "courses" | "content" | "view") => {
+  const handleTabChange = (tab: "main" | "account" | "courses" | "content" | "view" | "pages") => {
     setSelectedComponent(tab);
     let param = '';
     if (tab === 'account') param = userType === 'student' ? 'my-account' : 'account';
     if (tab === 'courses') param = 'my-courses';
     if (tab === 'content') param = 'content';
     if (tab === 'view') param = 'view';
+    if (tab === 'pages') param = 'pages';
     // ReplaceState to update query string without reload
     if (typeof window !== "undefined") {
       const base = window.location.pathname;
@@ -141,6 +146,8 @@ export default function Dashboard() {
           return <UniversityContentEditor universityData={universityData} />;
         case "view":
           return <UniversityPageView universityData={universityData} />;
+        case "pages":
+          return <UniversityPagesManager universityData={universityData} />;
         default:
           return <UniversityAccountDetails universityData={universityData} />;
       }
@@ -159,7 +166,7 @@ export default function Dashboard() {
     }
   };
 
-  const menuItemClass = (component: "main" | "account" | "courses" | "content" | "view") =>
+  const menuItemClass = (component: "main" | "account" | "courses" | "content" | "view" | "pages") =>
     `cursor-pointer p-2 rounded hover:bg-gray-300 ${selectedComponent === component ? "bg-gray-300 font-bold" : ""
     }`;
 
@@ -223,6 +230,12 @@ export default function Dashboard() {
                     onClick={() => handleTabChange("view")}
                   >
                     View University Page
+                  </li>
+                  <li
+                    className={menuItemClass("pages")}
+                    onClick={() => handleTabChange("pages")}
+                  >
+                    Manage Pages
                   </li>
                 </>
               )}

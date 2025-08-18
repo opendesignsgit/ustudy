@@ -83,6 +83,7 @@ export interface Config {
     'degree-programs': DegreeProgram;
     universities: University;
     'university-templates': UniversityTemplate;
+    'university-pages': UniversityPage;
     countries: Country;
     bookings: Booking;
     students: Student;
@@ -111,6 +112,7 @@ export interface Config {
     'degree-programs': DegreeProgramsSelect<false> | DegreeProgramsSelect<true>;
     universities: UniversitiesSelect<false> | UniversitiesSelect<true>;
     'university-templates': UniversityTemplatesSelect<false> | UniversityTemplatesSelect<true>;
+    'university-pages': UniversityPagesSelect<false> | UniversityPagesSelect<true>;
     countries: CountriesSelect<false> | CountriesSelect<true>;
     bookings: BookingsSelect<false> | BookingsSelect<true>;
     students: StudentsSelect<false> | StudentsSelect<true>;
@@ -1050,6 +1052,50 @@ export interface IntakeMonth {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "university-pages".
+ */
+export interface UniversityPage {
+  id: number;
+  title: string;
+  /**
+   * A brief description of this page (used for SEO and meta descriptions)
+   */
+  description?: string | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  /**
+   * The university this page belongs to
+   */
+  university: number | University;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Whether this page should appear in the university navigation menu
+   */
+  showInMenu?: boolean | null;
+  /**
+   * Order in which this page appears in the menu (lower numbers appear first)
+   */
+  menuOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "bookings".
  */
 export interface Booking {
@@ -1340,6 +1386,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'university-templates';
         value: number | UniversityTemplate;
+      } | null)
+    | ({
+        relationTo: 'university-pages';
+        value: number | UniversityPage;
       } | null)
     | ({
         relationTo: 'countries';
@@ -1893,6 +1943,23 @@ export interface UniversityTemplatesSelect<T extends boolean = true> {
   slugLock?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "university-pages_select".
+ */
+export interface UniversityPagesSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  slug?: T;
+  slugLock?: T;
+  university?: T;
+  content?: T;
+  showInMenu?: T;
+  menuOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
