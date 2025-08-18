@@ -41,12 +41,13 @@ export default function Dashboard() {
     return () => window.removeEventListener('popstate', getTab);
   }, []);
 
-  // On auth state: redirect if not logged in
+  // On auth state: redirect if not logged in or not a student
   useEffect(() => {
-    if (!loading && !user) {
+    if (!loading && (!user || userType !== 'student')) {
       router.push('/login');
+      return;
     }
-  }, [user, loading, router]);
+  }, [user, userType, loading, router]);
 
   const handleLogout = async () => {
     try {
@@ -73,7 +74,7 @@ export default function Dashboard() {
 
   const renderContent = () => {
     if (loading) return <div className="text-center py-8">Loading...</div>;
-    if (!user) return <div className="text-center py-8">Unauthorized</div>;
+    if (!user || userType !== 'student') return null; // Will redirect via useEffect
 
     switch (selectedComponent) {
       case "main":

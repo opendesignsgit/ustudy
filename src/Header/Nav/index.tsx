@@ -27,7 +27,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
 
   // Extract user info from AuthProvider - handle both student and university users
   const currentUser = userType === 'student' ? authUser?.user : universityUser
-  const isLoggedIn = !!currentUser?.id
+  const isLoggedIn = !!(userType === 'student' ? authUser?.user?.id : universityUser?.id)
   const userName = currentUser?.name || currentUser?.title || currentUser?.username || currentUser?.email?.split('@')[0] || 'User'
   const userProfilePic = currentUser?.profilePic
 
