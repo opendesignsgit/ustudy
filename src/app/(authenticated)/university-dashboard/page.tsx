@@ -2,15 +2,25 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from '@/providers/Auth';
 import Footer from '@/components/Home/footer';
 import { LexicalEditor } from './components/LexicalEditor';
 import './components/LexicalEditor.css';
 
 export default function UniversityDashboard() {
-  const [selectedTab, setSelectedTab] = useState<"account" | "content" | "view">("account");
+  const [selectedTab, setSelectedTab] = useState<"account" | "content" | "pages" | "view">("account");
   const [universityData, setUniversityData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { universityUser, userType, loading: authLoading } = useAuth();
+
+  // Redirect if not authenticated or not a university user
+  useEffect(() => {
+    if (!authLoading && (!universityUser || userType !== 'university')) {
+      router.push('/login');
+      return;
+    }
+  }, [universityUser, userType, authLoading, router]);
 
   // Sync tab from URL on mount and when popstate occurs
   useEffect(() => {
@@ -21,6 +31,9 @@ export default function UniversityDashboard() {
         switch (tab) {
           case 'content':
             setSelectedTab('content');
+            break;
+          case 'pages':
+            setSelectedTab('pages');
             break;
           case 'view':
             setSelectedTab('view');
@@ -37,10 +50,11 @@ export default function UniversityDashboard() {
     return () => window.removeEventListener('popstate', getTab);
   }, []);
 
-  const handleTabChange = (tab: "account" | "content" | "view") => {
+  const handleTabChange = (tab: "account" | "content" | "pages" | "view") => {
     setSelectedTab(tab);
     let param = '';
     if (tab === 'content') param = 'content';
+    if (tab === 'pages') param = 'pages';
     if (tab === 'view') param = 'view';
     // Update query string without reload
     if (typeof window !== "undefined") {
@@ -52,66 +66,27 @@ export default function UniversityDashboard() {
 
   useEffect(() => {
     const fetchUniversityData = async () => {
+      // Don't fetch if not authenticated
+      if (!universityUser || userType !== 'university') {
+        setLoading(false);
+        return;
+      }
+
       try {
-        const token = localStorage.getItem("token");
-        const userType = localStorage.getItem("userType");
-        const universityUser = localStorage.getItem("universityUser");
-        
-        if (userType === "university" && token) {
-          // Try to fetch current user data to get university ID
-          const userResponse = await fetch('/api/users/me', {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          });
-          
-          if (userResponse.ok) {
-            const currentUser = await userResponse.json();
-            
-            // Fetch university data using the user's ID (if the user is a university record)
-            const universityResponse = await fetch(`/api/universities/${currentUser.user.id}`, {
-              headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              },
-            });
-            
-            if (universityResponse.ok) {
-              const universityData = await universityResponse.json();
-              setUniversityData(universityData);
-              // Update localStorage with fresh data
-              localStorage.setItem("universityUser", JSON.stringify(universityData));
-            } else {
-              console.log("University not found via API, falling back to stored data");
-              throw new Error("University not found");
-            }
-          } else {
-            throw new Error("User authentication failed");
-          }
-        } else if (universityUser) {
-          // Fallback to stored university data
-          try {
-            const userData = JSON.parse(universityUser);
-            setUniversityData(userData);
-          } catch (error) {
-            throw new Error("Invalid stored user data");
-          }
-        } else {
-          throw new Error("No authentication data found");
-        }
+        // Use the authenticated university user data from context
+        setUniversityData(universityUser);
+        setLoading(false);
       } catch (error) {
-        console.error("Error fetching university data:", error);
-        // Use demo data as fallback
+        console.error("Error setting university data:", error);
+        // Only fall back to demo data if we can't use auth context data
         const demoData = getDemoUniversityData();
         setUniversityData(demoData);
-      } finally {
         setLoading(false);
       }
     };
 
     fetchUniversityData();
-  }, [router]);
+  }, [universityUser, userType]);
 
   const getDemoUniversityData = () => ({
     id: 'demo-university',
@@ -129,9 +104,25 @@ export default function UniversityDashboard() {
     localStorage.removeItem("userType");
     localStorage.removeItem("universityUser");
     window.dispatchEvent(new Event("authchange"));
-    // For demo, redirect to home instead of login
-    router.push("/");
+    router.push("/login");
   };
+
+  // Show loading while authenticating
+  if (authLoading || loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirect if not authenticated (this should not show due to useEffect redirect)
+  if (!universityUser || userType !== 'university') {
+    return null;
+  }
 
   const renderTabContent = () => {
     switch (selectedTab) {
@@ -139,6 +130,8 @@ export default function UniversityDashboard() {
         return <AccountDetailsTab universityData={universityData} />;
       case "content":
         return <ContentEditorTab universityData={universityData} />;
+      case "pages":
+        return <PagesManagementTab universityData={universityData} />;
       case "view":
         return <ViewUniversityTab universityData={universityData} />;
       default:
@@ -191,6 +184,14 @@ export default function UniversityDashboard() {
                 onClick={() => handleTabChange("content")}
               >
                 Content Editor
+              </li>
+              <li
+                className={`cursor-pointer p-2 rounded hover:bg-gray-700 ${
+                  selectedTab === "pages" ? "bg-gray-700 font-bold" : ""
+                }`}
+                onClick={() => handleTabChange("pages")}
+              >
+                Manage Pages
               </li>
               <li
                 className={`cursor-pointer p-2 rounded hover:bg-gray-700 ${
@@ -478,6 +479,312 @@ function ContentEditorTab({ universityData }: { universityData: any }) {
   );
 }
 
+// Pages Management Tab Component
+function PagesManagementTab({ universityData }: { universityData: any }) {
+  const [pages, setPages] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [newPageTitle, setNewPageTitle] = useState('');
+  const [newPageSlug, setNewPageSlug] = useState('');
+  const [message, setMessage] = useState('');
+
+  const fetchPages = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token || !universityData?.id) {
+        setLoading(false);
+        return;
+      }
+
+      const response = await fetch(`/api/university-pages?where[university][equals]=${universityData.id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setPages(data.docs || []);
+      } else {
+        console.error('Failed to fetch pages');
+      }
+    } catch (error) {
+      console.error('Error fetching pages:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createPage = async () => {
+    if (!newPageTitle.trim()) {
+      setMessage('Page title is required');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setMessage('Not authenticated');
+        return;
+      }
+
+      const slug = newPageSlug.trim() || newPageTitle.toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-');
+
+      const pageData = {
+        title: newPageTitle.trim(),
+        slug: slug,
+        university: universityData.id,
+        published: true,
+        layout: [
+          {
+            blockType: 'content',
+            content: {
+              root: {
+                children: [
+                  {
+                    children: [
+                      {
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: `Welcome to ${newPageTitle}`,
+                        type: 'text',
+                        version: 1
+                      }
+                    ],
+                    direction: 'ltr',
+                    format: '',
+                    indent: 0,
+                    type: 'heading',
+                    version: 1,
+                    tag: 'h1'
+                  },
+                  {
+                    children: [
+                      {
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: 'Edit this content to customize your page.',
+                        type: 'text',
+                        version: 1
+                      }
+                    ],
+                    direction: 'ltr',
+                    format: '',
+                    indent: 0,
+                    type: 'paragraph',
+                    version: 1
+                  }
+                ],
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                type: 'root',
+                version: 1
+              }
+            }
+          }
+        ]
+      };
+
+      const response = await fetch('/api/university-pages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(pageData),
+      });
+
+      if (response.ok) {
+        setMessage('Page created successfully');
+        setNewPageTitle('');
+        setNewPageSlug('');
+        setShowCreateForm(false);
+        fetchPages();
+      } else {
+        const errorData = await response.json();
+        setMessage(errorData.message || 'Failed to create page');
+      }
+    } catch (error) {
+      setMessage('Error creating page');
+      console.error('Error creating page:', error);
+    }
+  };
+
+  const deletePage = async (pageId: string) => {
+    if (!confirm('Are you sure you want to delete this page?')) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setMessage('Not authenticated');
+        return;
+      }
+
+      const response = await fetch(`/api/university-pages/${pageId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        setMessage('Page deleted successfully');
+        fetchPages();
+      } else {
+        setMessage('Failed to delete page');
+      }
+    } catch (error) {
+      setMessage('Error deleting page');
+      console.error('Error deleting page:', error);
+    }
+  };
+
+  React.useEffect(() => {
+    if (universityData?.id) {
+      fetchPages();
+    }
+  }, [universityData?.id]);
+
+  return (
+    <div className="max-w-6xl">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-[#34c3ec]">Manage Pages</h1>
+        <button
+          onClick={() => setShowCreateForm(!showCreateForm)}
+          className="bg-[#34c3ec] hover:bg-[#34b2d7] text-white px-4 py-2 rounded-lg"
+        >
+          {showCreateForm ? 'Cancel' : 'Create New Page'}
+        </button>
+      </div>
+
+      {showCreateForm && (
+        <div className="bg-white p-6 rounded-lg shadow mb-6">
+          <h3 className="text-lg font-medium mb-4">Create New Page</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Page Title
+              </label>
+              <input
+                type="text"
+                value={newPageTitle}
+                onChange={(e) => setNewPageTitle(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#34c3ec]"
+                placeholder="e.g., About Us, Admissions, Research"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Page Slug (URL path)
+              </label>
+              <input
+                type="text"
+                value={newPageSlug}
+                onChange={(e) => setNewPageSlug(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#34c3ec]"
+                placeholder="e.g., about-us, admissions, research (leave empty to auto-generate)"
+              />
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={createPage}
+                className="bg-[#34c3ec] hover:bg-[#34b2d7] text-white px-4 py-2 rounded-md"
+              >
+                Create Page
+              </button>
+              <button
+                onClick={() => setShowCreateForm(false)}
+                className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-md"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="bg-white rounded-lg shadow">
+        <div className="p-6">
+          <h3 className="text-lg font-medium mb-4">Your Pages</h3>
+          
+          {loading ? (
+            <div className="text-center py-8 text-gray-500">Loading pages...</div>
+          ) : pages.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              <p>No pages created yet.</p>
+              <p className="text-sm mt-2">Create your first page to add custom content to your university website.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {pages.map((page) => (
+                <div key={page.id} className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <h4 className="font-medium text-gray-900">{page.title}</h4>
+                      <p className="text-sm text-gray-500 mt-1">
+                        URL: /university/{universityData?.slug || 'university-slug'}/{page.slug}
+                      </p>
+                      <div className="flex items-center gap-4 mt-2">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          page.published 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-gray-100 text-gray-800'
+                        }`}>
+                          {page.published ? 'Published' : 'Draft'}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          Updated: {new Date(page.updatedAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 ml-4">
+                      <a
+                        href={`/admin/collections/university-pages/${page.id}`}
+                        target="_blank"
+                        className="text-[#34c3ec] hover:text-[#34b2d7] text-sm"
+                      >
+                        Edit
+                      </a>
+                      <a
+                        href={`/university/${universityData?.slug || 'university-slug'}/${page.slug}`}
+                        target="_blank"
+                        className="text-blue-600 hover:text-blue-800 text-sm"
+                      >
+                        View
+                      </a>
+                      <button
+                        onClick={() => deletePage(page.id)}
+                        className="text-red-600 hover:text-red-800 text-sm"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {message && (
+        <div className={`mt-4 p-3 rounded text-sm ${
+          message.includes("successfully") ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+        }`}>
+          {message}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // View University Tab Component  
 function ViewUniversityTab({ universityData }: { universityData: any }) {
   const universitySlug = universityData?.slug || universityData?.title?.toLowerCase().replace(/\s+/g, '-');
@@ -496,14 +803,14 @@ function ViewUniversityTab({ universityData }: { universityData: any }) {
           {universitySlug ? (
             <div className="space-y-4">
               <a
-                href={`/university/${universitySlug}`}
+                href={`/universities/${universitySlug}`}
                 target="_blank"
                 className="inline-block bg-[#34c3ec] hover:bg-[#34b2d7] text-white px-6 py-3 rounded-lg"
               >
                 View Live Page
               </a>
               <div className="text-sm text-gray-500">
-                URL: {window.location.origin}/university/{universitySlug}
+                URL: {typeof window !== 'undefined' ? window.location.origin : ''}/universities/{universitySlug}
               </div>
             </div>
           ) : (

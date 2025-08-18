@@ -27,7 +27,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
 
   // Extract user info from AuthProvider - handle both student and university users
   const currentUser = userType === 'student' ? authUser?.user : universityUser
-  const isLoggedIn = !!currentUser?.id
+  const isLoggedIn = !!(userType === 'student' ? authUser?.user?.id : universityUser?.id)
   const userName = currentUser?.name || currentUser?.title || currentUser?.username || currentUser?.email?.split('@')[0] || 'User'
   const userProfilePic = currentUser?.profilePic
 
@@ -156,12 +156,20 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
                 </button>
               )}
               {userType === 'university' && (
-                <button
-                  onClick={() => { router.push('/university-dashboard?tab=content'); setShowProfileMenuMobile(false); }}
-                  className="w-full text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal"
-                >
-                  Content Editor
-                </button>
+                <>
+                  <button
+                    onClick={() => { router.push('/university-dashboard?tab=content'); setShowProfileMenuMobile(false); }}
+                    className="w-full text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal"
+                  >
+                    Content Editor
+                  </button>
+                  <button
+                    onClick={() => { router.push('/university-dashboard?tab=pages'); setShowProfileMenuMobile(false); }}
+                    className="w-full text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal"
+                  >
+                    Manage Pages
+                  </button>
+                </>
               )}
               <button
                 onClick={() => { setShowProfileMenuMobile(false); handleLogout(); }}
@@ -331,15 +339,26 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
                 </Link>
               )}
               {userType === 'university' && (
-                <Link
-                  onClick={e => { e.preventDefault(); router.push('/university-dashboard?tab=content'); setShowProfileMenu(false); }}
-                  href="/university-dashboard?tab=content"
-                  className="w-full block text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal cursor-pointer"
-                  style={{ border: 'none', background: 'none', outline: 'none' }}
-                  tabIndex={0}
-                >
-                  Content Editor
-                </Link>
+                <>
+                  <Link
+                    onClick={e => { e.preventDefault(); router.push('/university-dashboard?tab=content'); setShowProfileMenu(false); }}
+                    href="/university-dashboard?tab=content"
+                    className="w-full block text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal cursor-pointer"
+                    style={{ border: 'none', background: 'none', outline: 'none' }}
+                    tabIndex={0}
+                  >
+                    Content Editor
+                  </Link>
+                  <Link
+                    onClick={e => { e.preventDefault(); router.push('/university-dashboard?tab=pages'); setShowProfileMenu(false); }}
+                    href="/university-dashboard?tab=pages"
+                    className="w-full block text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal cursor-pointer"
+                    style={{ border: 'none', background: 'none', outline: 'none' }}
+                    tabIndex={0}
+                  >
+                    Manage Pages
+                  </Link>
+                </>
               )}
               <Link
                 onClick={e => { e.preventDefault(); setShowProfileMenu(false); handleLogout(); }}

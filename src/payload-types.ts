@@ -83,6 +83,7 @@ export interface Config {
     'degree-programs': DegreeProgram;
     universities: University;
     'university-templates': UniversityTemplate;
+    'university-pages': UniversityPage;
     countries: Country;
     bookings: Booking;
     students: Student;
@@ -111,6 +112,7 @@ export interface Config {
     'degree-programs': DegreeProgramsSelect<false> | DegreeProgramsSelect<true>;
     universities: UniversitiesSelect<false> | UniversitiesSelect<true>;
     'university-templates': UniversityTemplatesSelect<false> | UniversityTemplatesSelect<true>;
+    'university-pages': UniversityPagesSelect<false> | UniversityPagesSelect<true>;
     countries: CountriesSelect<false> | CountriesSelect<true>;
     bookings: BookingsSelect<false> | BookingsSelect<true>;
     students: StudentsSelect<false> | StudentsSelect<true>;
@@ -1050,6 +1052,80 @@ export interface IntakeMonth {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "university-pages".
+ */
+export interface UniversityPage {
+  id: number;
+  title: string;
+  /**
+   * The university this page belongs to
+   */
+  university: number | University;
+  /**
+   * Check to publish this page
+   */
+  published?: boolean | null;
+  publishedAt?: string | null;
+  hero: {
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    richText?: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    links?:
+      | {
+          link: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: number | Post;
+                } | null);
+            url?: string | null;
+            label: string;
+            /**
+             * Choose how the link should be rendered.
+             */
+            appearance?: ('default' | 'outline') | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+    media?: (number | null) | Media;
+  };
+  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "bookings".
  */
 export interface Booking {
@@ -1340,6 +1416,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'university-templates';
         value: number | UniversityTemplate;
+      } | null)
+    | ({
+        relationTo: 'university-pages';
+        value: number | UniversityPage;
       } | null)
     | ({
         relationTo: 'countries';
@@ -1893,6 +1973,59 @@ export interface UniversityTemplatesSelect<T extends boolean = true> {
   slugLock?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "university-pages_select".
+ */
+export interface UniversityPagesSelect<T extends boolean = true> {
+  title?: T;
+  university?: T;
+  published?: T;
+  publishedAt?: T;
+  hero?:
+    | T
+    | {
+        type?: T;
+        richText?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                    appearance?: T;
+                  };
+              id?: T;
+            };
+        media?: T;
+      };
+  layout?:
+    | T
+    | {
+        cta?: T | CallToActionBlockSelect<T>;
+        content?: T | ContentBlockSelect<T>;
+        mediaBlock?: T | MediaBlockSelect<T>;
+        archive?: T | ArchiveBlockSelect<T>;
+        formBlock?: T | FormBlockSelect<T>;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
