@@ -12,7 +12,6 @@ import { getPayload } from 'payload'
 import { cache } from 'react'
 
 import Footer from '@/components/Home/footer'
-import '../university-content.css'
 
 export async function generateStaticParams() {
   // Return empty array to allow dynamic generation
@@ -77,23 +76,12 @@ export default async function UniversityPage({ params: paramsPromise }: Args) {
 
       {/* University Content */}
       <div className="max-w-6xl mx-auto px-4 py-12">
-        {/* Handle structured blocks content from CMS */}
         {university.content && Array.isArray(university.content) && university.content.length > 0 && (
           <RenderBlocks blocks={university.content as any} />
         )}
         
-        {/* Handle HTML content from dashboard editor */}
-        {university.content && typeof university.content === 'string' && university.content.trim() && (
-          <div 
-            className="prose prose-lg max-w-none university-content"
-            dangerouslySetInnerHTML={{ __html: university.content }}
-          />
-        )}
-        
         {/* Default content if no custom content exists */}
-        {(!university.content || 
-          (Array.isArray(university.content) && university.content.length === 0) ||
-          (typeof university.content === 'string' && !university.content.trim())) && (
+        {(!university.content || !Array.isArray(university.content) || university.content.length === 0) && (
           <div className="prose prose-lg max-w-none">
             <div className="grid md:grid-cols-2 gap-8 mb-12">
               <div>
@@ -214,7 +202,7 @@ const queryUniversityBySlug = cache(async ({ slug }: { slug: string }) => {
         phone: '+1-555-123-4567',
         websiteUrl: 'https://demouniversity.edu',
         description: 'A demonstration university showcasing the content management features.',
-        content: '<p>Welcome to Demo University! This content can be edited from the university dashboard.</p><div class="content-block hero-block"><h2 class="hero-title">Excellence in Education</h2><p class="hero-subtitle">Discover our innovative programs and world-class faculty</p></div>',
+        content: null, // Will use default content
         logo: null,
         country: null,
         universityImage: null
