@@ -75,9 +75,6 @@ export default async function UniversityPage({ params: paramsPromise }: Args) {
         </div>
       </div>
 
-      {/* University Sub-Pages Navigation */}
-      <UniversitySubNavigation university={university} />
-
       {/* University Content */}
       <div className="max-w-6xl mx-auto px-4 py-12">
         {/* Handle structured blocks content from CMS */}
@@ -186,73 +183,6 @@ export async function generateMetadata({ params: paramsPromise }: Args) {
     } as any,
   })
 }
-
-async function UniversitySubNavigation({ university }: { university: University }) {
-  // Fetch university pages
-  const pages = await queryUniversityPages({ universityId: university.id })
-  
-  if (!pages || pages.length === 0) {
-    return null
-  }
-
-  return (
-    <div className="bg-white border-b border-gray-200">
-      <div className="max-w-6xl mx-auto px-4">
-        <nav className="flex space-x-8 py-4">
-          <a
-            href={`/universities/${university.slug}`}
-            className="text-blue-600 hover:text-blue-800 font-medium border-b-2 border-blue-600 pb-2"
-          >
-            Home
-          </a>
-          {pages.map((page) => (
-            <a
-              key={page.id}
-              href={`/universities/${university.slug}/${page.slug}`}
-              className="text-gray-600 hover:text-gray-900 font-medium pb-2 border-b-2 border-transparent hover:border-gray-300"
-            >
-              {page.title}
-            </a>
-          ))}
-        </nav>
-      </div>
-    </div>
-  )
-}
-
-const queryUniversityPages = cache(async ({ universityId }: { universityId: string | number }) => {
-  try {
-    const { isEnabled: draft } = await draftMode()
-    const payload = await getPayload({ config: configPromise })
-
-    const result = await payload.find({
-      collection: 'university-pages',
-      draft,
-      limit: 50, // Reasonable limit for navigation
-      overrideAccess: draft,
-      where: {
-        and: [
-          {
-            university: {
-              equals: universityId,
-            },
-          },
-          {
-            published: {
-              equals: true,
-            },
-          },
-        ],
-      },
-      sort: 'title',
-    })
-
-    return result.docs || []
-  } catch (error) {
-    console.error('Error fetching university pages:', error)
-    return []
-  }
-})
 
 const queryUniversityBySlug = cache(async ({ slug }: { slug: string }) => {
   try {
