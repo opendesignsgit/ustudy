@@ -129,17 +129,16 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
               </span>
               <button
                 onClick={() => { 
-                  const dashboardRoute = userType === 'student' ? '/dashboard' : '/university-dashboard'
-                  router.push(dashboardRoute)
+                  router.push('/dashboard')
                   setShowProfileMenuMobile(false)
                 }}
                 className="w-full text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal"
               >
-                {userType === 'student' ? 'Dashboard' : 'University Dashboard'}
+                Dashboard
               </button>
               <button
                 onClick={() => { 
-                  const accountRoute = userType === 'student' ? '/dashboard?tab=my-account' : '/university-dashboard?tab=account'
+                  const accountRoute = userType === 'student' ? '/dashboard?tab=my-account' : '/dashboard?tab=account'
                   router.push(accountRoute)
                   setShowProfileMenuMobile(false)
                 }}
@@ -157,7 +156,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
               )}
               {userType === 'university' && (
                 <button
-                  onClick={() => { router.push('/university-dashboard?tab=content'); setShowProfileMenuMobile(false); }}
+                  onClick={() => { router.push('/dashboard?tab=content'); setShowProfileMenuMobile(false); }}
                   className="w-full text-left px-6 py-4 text-[17px] text-[#232323] hover:bg-[#f5faff] transition-colors font-normal"
                 >
                   Content Editor
