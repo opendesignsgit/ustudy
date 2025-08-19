@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
+import { LexicalEditor } from './LexicalEditor';
 
 // Content Editor Tab Component
 export function UniversityContentEditor({ universityData }: { universityData: any }) {
-  const [content, setContent] = useState(universityData?.content || '<p>Welcome to our university!</p>');
+  // Handle the content structure from the API response
+  const initialContent = universityData?.content ? 
+    (typeof universityData.content === 'string' ? universityData.content : JSON.stringify(universityData.content)) : 
+    '';
+  
+  const [content, setContent] = useState(initialContent);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+
+  const handleContentChange = (newContent: string) => {
+    setContent(newContent);
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -43,24 +53,22 @@ export function UniversityContentEditor({ universityData }: { universityData: an
   };
 
   return (
-    <div className="max-w-4xl">
+    <div className="max-w-6xl">
       <h1 className="text-2xl font-bold mb-6 text-[#34c3ec]">Content Editor</h1>
       
       <div className="bg-white p-6 rounded-lg shadow">
         <div className="mb-4">
-          <h3 className="text-lg font-medium mb-2">University Description</h3>
+          <h3 className="text-lg font-medium mb-2">University Content</h3>
           <p className="text-gray-600 text-sm mb-4">
-            Edit the content that will appear on your university's public page.
+            Create rich content for your university page using the full-featured editor below. This editor supports headings, formatting, lists, links, and more.
           </p>
         </div>
         
-        <div className="border border-gray-300 rounded-md">
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            rows={12}
-            className="w-full p-4 border-none rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-[#34c3ec]"
-            placeholder="Enter your university description here..."
+        <div className="mb-6">
+          <LexicalEditor 
+            initialContent={content}
+            onChange={handleContentChange}
+            placeholder="Start creating your university content here..."
           />
         </div>
         
@@ -86,21 +94,22 @@ export function UniversityContentEditor({ universityData }: { universityData: an
             <a
               href="/payload/admin"
               target="_blank"
+              rel="noopener noreferrer"
               className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm"
             >
               Open CMS Admin
             </a>
+            {universityData?.slug && (
+              <a
+                href={`/university/${universityData.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
+              >
+                Preview University Page
+              </a>
+            )}
           </div>
-          
-          {universityData?.slug && (
-            <a
-              href={`/universities/${universityData.slug}`}
-              target="_blank"
-              className="text-[#34c3ec] hover:text-[#34b2d7] text-sm"
-            >
-              Preview Page →
-            </a>
-          )}
         </div>
         
         {message && (

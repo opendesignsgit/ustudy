@@ -78,9 +78,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                         localStorage.setItem('user', JSON.stringify(userWithCount));
                     }
                 } else {
-                    setUniversityUser(data);
+                    // Handle university user - the API response structure has user nested
+                    const universityUser = data.user || data;
+                    setUniversityUser(universityUser);
                     setUser(null);
-                    localStorage.setItem('universityUser', JSON.stringify(data));
+                    localStorage.setItem('universityUser', JSON.stringify(universityUser));
                 }
                 
                 setUserType(storedUserType);

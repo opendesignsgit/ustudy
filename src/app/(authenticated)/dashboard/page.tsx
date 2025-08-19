@@ -84,9 +84,11 @@ export default function Dashboard() {
           });
           
           if (userResponse.ok) {
-            const currentUser = await userResponse.json();
+            const apiResponse = await userResponse.json();
+            // The API response has the user data nested under 'user' property
+            const currentUser = apiResponse.user || apiResponse;
             setUniversityData(currentUser);
-            // Update localStorage with fresh data
+            // Update localStorage with fresh data - store the user object
             localStorage.setItem("universityUser", JSON.stringify(currentUser));
           } else {
             // Fallback to stored university data
