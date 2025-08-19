@@ -1,5 +1,5 @@
 import type { AccessArgs } from 'payload'
-import type { User, University } from '@/payload-types'
+import type { User, University } from '../payload-types'
 
 // Type for access functions that work with both User and University
 type AccessFunction = (args: AccessArgs<User | University>) => boolean
