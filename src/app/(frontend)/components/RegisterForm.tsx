@@ -367,8 +367,8 @@ export const RegisterForm = ({
                         localStorage.setItem("universityUser", JSON.stringify(json.user));
                     }
                     
-                    const dashboardRoute = userType === "student" ? "/dashboard" : "/university-dashboard";
-                    router.push(dashboardRoute);
+                    // Redirect to unified dashboard
+                    router.push("/dashboard");
                 } else {
                     setError("Registered, but failed to login. Please try logging in.");
                 }
