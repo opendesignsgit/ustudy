@@ -78,4 +78,7 @@ export const Media: CollectionConfig = {
       },
     ],
   },
+  admin: {
+    group: 'Content',
+  },
 }

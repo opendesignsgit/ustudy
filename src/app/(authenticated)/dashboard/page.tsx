@@ -11,7 +11,7 @@ import './style.scss'
 
 // Import university dashboard components
 import { UniversityAccountDetails } from '../components/UniversityAccountDetails';
-import { UniversityContentEditor } from '../components/UniversityContentEditor';
+import { UniversityAdminRedirect } from '../components/UniversityAdminRedirect';
 import { UniversityPageView } from '../components/UniversityPageView';
 import { UniversityPagesManager } from '../components/UniversityPagesManager';
 
@@ -145,7 +145,7 @@ export default function Dashboard() {
         case "account":
           return <UniversityAccountDetails universityData={universityData} />;
         case "content":
-          return <UniversityContentEditor universityData={universityData} />;
+          return <UniversityAdminRedirect universityData={universityData} />;
         case "view":
           return <UniversityPageView universityData={universityData} />;
         case "pages":
@@ -225,7 +225,7 @@ export default function Dashboard() {
                     className={menuItemClass("content")}
                     onClick={() => handleTabChange("content")}
                   >
-                    Content Editor
+                    Admin Panel
                   </li>
                   <li
                     className={menuItemClass("view")}
