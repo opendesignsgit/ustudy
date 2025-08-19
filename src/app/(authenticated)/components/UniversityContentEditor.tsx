@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { LexicalEditor } from '../university-dashboard/components/LexicalEditor';
 
 // Content Editor Tab Component
 export function UniversityContentEditor({ universityData }: { universityData: any }) {
@@ -56,9 +55,12 @@ export function UniversityContentEditor({ universityData }: { universityData: an
         </div>
         
         <div className="border border-gray-300 rounded-md">
-          <LexicalEditor
-            initialContent={content}
-            onChange={setContent}
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            rows={12}
+            className="w-full p-4 border-none rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-[#34c3ec]"
+            placeholder="Enter your university description here..."
           />
         </div>
         

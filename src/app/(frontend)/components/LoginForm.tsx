@@ -97,8 +97,8 @@ export const LoginForm = ({
                 // Dispatch authchange event so header, etc. update immediately
                 window.dispatchEvent(new Event("authchange"));
                 
-                const dashboardRoute = userType === "student" ? "/dashboard" : "/university-dashboard";
-                router.push(dashboardRoute);
+                // Redirect to unified dashboard
+                router.push("/dashboard");
             } else {
                 const errorData = await res.json();
                 setErrorMessage(errorData.message || "Invalid credentials");

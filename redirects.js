@@ -12,7 +12,14 @@ const redirects = async () => {
     source: '/:path((?!ie-incompatible.html$).*)', // all pages except the incompatibility page
   }
 
-  const redirects = [internetExplorerRedirect]
+  // Redirect old university-dashboard route to unified dashboard
+  const universityDashboardRedirect = {
+    source: '/university-dashboard/:path*',
+    destination: '/dashboard/:path*',
+    permanent: true,
+  }
+
+  const redirects = [internetExplorerRedirect, universityDashboardRedirect]
 
   return redirects
 }

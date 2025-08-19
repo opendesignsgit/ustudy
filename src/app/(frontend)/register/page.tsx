@@ -13,9 +13,8 @@ export default function RegisterPage() {
 
     useEffect(() => {
         if (!loading && user) {
-            // Redirect to dashboard if already logged in based on user type
-            const dashboardRoute = userType === "student" ? "/dashboard" : "/university-dashboard";
-            router.replace(dashboardRoute);
+            // Redirect to unified dashboard if already logged in
+            router.replace("/dashboard");
         }
     }, [user, loading, router, userType]);
 
