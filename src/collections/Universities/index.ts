@@ -29,6 +29,7 @@ import { slugField } from '@/fields/slug'
 export const Universities: CollectionConfig = {
   slug: 'universities',
   access: {
+    admin: () => true, // Allow university users to access admin panel
     create: () => true, // Allow registration
     delete: universitySelfAccess, // Universities can only delete their own record, admins can delete any
     read: () => true, // Publicly readable
