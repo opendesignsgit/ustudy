@@ -43,8 +43,9 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
-    // Configure admin authentication to use Universities collection as primary, with custom logic for multi-collection auth
-    user: Universities.slug,
+    // Remove user restriction to allow both Users and Universities collections to access admin panel
+    // Both collections use adminAccessControl for proper access management
+    // user: Universities.slug,
     livePreview: {
       breakpoints: [
         {
