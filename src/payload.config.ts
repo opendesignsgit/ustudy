@@ -42,7 +42,8 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
-    user: Users.slug,
+    // Remove user restriction to allow both Users and Universities collections to access admin panel
+    // user: Users.slug,
     livePreview: {
       breakpoints: [
         {
