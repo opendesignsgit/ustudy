@@ -32,14 +32,11 @@ export const adminAccessControl = ({ req: { user } }: { req: { user: any } }) =>
 export const enhancedBeforeLogin = async ({ req, user }: { req: PayloadRequest; user: any }) => {
   if (!user) return user
 
-  // Ensure collection is properly identified
-  if (!user.collection) {
-    // For Universities collection authentication (primary admin collection)
-    user.collection = 'universities'
-  }
-
+  // Collection should already be properly set by PayloadCMS
+  // Don't override it - let PayloadCMS handle collection identification
+  
   // Log successful authentication for debugging
-  console.log(`Admin authentication: ${user.email} (collection: ${user.collection})`)
+  console.log(`Admin authentication: ${user.email} (collection: ${user.collection || 'unknown'})`)
 
   return user
 }
