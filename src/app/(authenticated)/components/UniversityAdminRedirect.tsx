@@ -57,7 +57,7 @@ export function UniversityAdminRedirect({ universityData }: { universityData: an
               </a>
               {universityData?.slug && (
                 <a
-                  href={`/university/${universityData.slug}`}
+                  href={`/universities/${universityData.slug}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[#34c3ec] hover:text-[#34b2d7] underline"
