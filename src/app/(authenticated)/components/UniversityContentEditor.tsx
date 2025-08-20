@@ -101,7 +101,7 @@ export function UniversityContentEditor({ universityData }: { universityData: an
             </a>
             {universityData?.slug && (
               <a
-                href={`/universities/${universityData.slug}`}
+                href={`/university/${universityData.slug}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
