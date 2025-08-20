@@ -18,14 +18,14 @@ export function UniversityPageView({ universityData }: { universityData: any }) 
           {universitySlug ? (
             <div className="space-y-4">
               <a
-                href={`/university/${universitySlug}`}
+                href={`/universities/${universitySlug}`}
                 target="_blank"
                 className="inline-block bg-[#34c3ec] hover:bg-[#34b2d7] text-white px-6 py-3 rounded-lg"
               >
                 View Live Page
               </a>
               <div className="text-sm text-gray-500">
-                URL: {typeof window !== 'undefined' ? window.location.origin : ''}/university/{universitySlug}
+                URL: {typeof window !== 'undefined' ? window.location.origin : ''}/universities/{universitySlug}
               </div>
             </div>
           ) : (

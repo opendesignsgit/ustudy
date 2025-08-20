@@ -216,7 +216,7 @@ export function UniversityPagesManager({ universityData }: { universityData: any
                       View →
                     </a>
                     <a
-                      href={`/payload/admin/collections/university-pages/${page.id}`}
+                      href={`/admin/collections/university-pages/${page.id}`}
                       target="_blank"
                       className="text-blue-600 hover:text-blue-800 text-sm"
                     >
