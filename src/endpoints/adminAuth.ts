@@ -54,18 +54,12 @@ const adminAuth: Endpoint = {
         })
 
         if (userResult.user) {
-          // Successful user authentication - create a session compatible with admin panel
-          // We'll use the Universities collection session format since that's the admin collection
-          
-          // Create a compatible user object for admin access
-          const adminCompatibleUser = {
-            ...userResult.user,
-            collection: 'universities', // Map to admin collection for session compatibility
-            originalCollection: 'users', // Keep track of original collection
-          }
-
+          // Successful user authentication - maintain proper collection identity
           return Response.json({
-            user: adminCompatibleUser,
+            user: {
+              ...userResult.user,
+              collection: 'users', // Keep original collection identity
+            },
             token: userResult.token,
             exp: userResult.exp,
           })
