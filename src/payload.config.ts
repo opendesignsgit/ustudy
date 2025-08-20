@@ -24,6 +24,7 @@ import { UniversityTemplates } from './collections/UniversityTemplates'
 import { UniversityPages } from './collections/UniversityPages'
 import { Countries } from './collections/Countries'
 import { WebsiteSettings } from './collections/Settings'
+import adminAuth from './endpoints/adminAuth'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -31,7 +32,6 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   debug: true,
   admin: {
-    user: 'users', // Set Users as the primary admin collection, but adminAccessControl allows both
     components: {
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below and the import `BeforeLogin` statement on line 15.
@@ -43,7 +43,7 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
-    // Both Users and Universities collections can access admin panel via adminAccessControl logic
+    // Allow both Users and Universities collections to access admin panel via adminAccessControl logic
     livePreview: {
       breakpoints: [
         {
@@ -77,6 +77,7 @@ export default buildConfig({
   }),
   collections: [Pages, Posts, Media, Categories, Users, Courses, IntakeMonths, StudyModes, StudyYears, StudyAreas, Departments, DegreePrograms, Universities, UniversityTemplates, UniversityPages, Countries, Bookings, Students],
   cors: [getServerSideURL()].filter(Boolean),
+  endpoints: [adminAuth],
   globals: [Header, Footer, WebsiteSettings],
   plugins: [
     ...plugins,
