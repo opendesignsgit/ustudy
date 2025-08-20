@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '../../access/authenticated'
-import { adminAccessControl } from '../../auth/adminAuth'
+import { adminAccessControl, enhancedBeforeLogin } from '../../auth/adminAuth'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -27,5 +27,18 @@ export const Users: CollectionConfig = {
       type: 'text',
     },
   ],
+  hooks: {
+    beforeLogin: [
+      enhancedBeforeLogin, // Multi-collection admin authentication
+      async ({ req, user }) => {
+        // Log successful admin user login for debugging
+        if (user && (user as any).collection === 'users') {
+          console.log(`Admin user login successful: ${user.email || user.id}`);
+        }
+        
+        return user;
+      },
+    ],
+  },
   timestamps: true,
 }
