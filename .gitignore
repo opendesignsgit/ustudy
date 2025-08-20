@@ -11,3 +11,6 @@ node_modules
 public/robots.txt
 public/sitemap*.xml
 echo "*.zip" >> .gitignore
+
+# Temporary validation scripts
+validate-auth.js
