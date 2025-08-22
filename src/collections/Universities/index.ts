@@ -12,7 +12,6 @@ import {
 } from '@payloadcms/richtext-lexical'
 
 import { authenticated } from '../../access/authenticated'
-import { universitySelfAccess, isAuthenticated } from '../../access/universityAccess'
 import { Banner } from '@/blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { Archive } from '../../blocks/ArchiveBlock/config'
@@ -30,18 +29,14 @@ export const Universities: CollectionConfig = {
   slug: 'universities',
   access: {
     create: () => true, // Allow registration
-    delete: universitySelfAccess, // Universities can only delete their own record, admins can delete any
+    delete: authenticated,
     read: () => true, // Publicly readable
-    update: universitySelfAccess, // Universities can only update their own record, admins can update any
+    update: authenticated,
   },
   admin: {
-    group: 'University Management',
+    group: 'Universities',
     defaultColumns: ['title', 'email', 'phone', 'country', 'updatedAt'],
     useAsTitle: 'title',
-    hidden: ({ user }: { user: any }) => {
-      // Hide from university users - they can only edit through specific UI flows
-      return user?.collection === 'universities'
-    },
   },
   auth: true, // Enable authentication for universities
   fields: [

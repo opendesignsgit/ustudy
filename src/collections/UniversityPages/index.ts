@@ -9,21 +9,19 @@ import {
   OrderedListFeature,
 } from '@payloadcms/richtext-lexical'
 import { authenticated } from '@/access/authenticated'
-import { universityPagesAccess, universityPagesFilter } from '@/access/universityAccess'
 import { slugField } from '@/fields/slug'
 
 export const UniversityPages: CollectionConfig = {
   slug: 'university-pages',
   access: {
-    create: universityPagesAccess.create,
-    delete: universityPagesAccess.delete,
-    read: universityPagesFilter, // Filter pages by university ownership for authenticated users, public for others
-    update: universityPagesAccess.update,
+    create: authenticated,
+    delete: authenticated,
+    read: () => true, // Public read access for published pages
+    update: authenticated,
   },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'university', 'updatedAt'],
-    group: 'University Management',
   },
   fields: [
     {
