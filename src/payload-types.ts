@@ -457,6 +457,11 @@ export interface Category {
 export interface User {
   id: number;
   name?: string | null;
+  role: 'admin' | 'editor' | 'university-role' | 'post-editor';
+  /**
+   * This field associates university-role users with their university.
+   */
+  university?: (number | null) | University;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -467,6 +472,106 @@ export interface User {
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "universities".
+ */
+export interface University {
+  id: number;
+  title: string;
+  phone: string;
+  logo: number | Media;
+  secondaryLogo?: (number | null) | Media;
+  universityImage?: (number | null) | Media;
+  country: number | Country;
+  /**
+   * Select a template for your university website layout
+   */
+  template?: (number | null) | UniversityTemplate;
+  websiteUrl?: string | null;
+  description?: string | null;
+  /**
+   * Inactive universities cannot login
+   */
+  isActive?: boolean | null;
+  /**
+   * Content will be filled based on the selected template layout
+   */
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries".
+ */
+export interface Country {
+  id: number;
+  name: string;
+  code: string;
+  logo?: (number | null) | Media;
+  countryImage?: (number | null) | Media;
+  currencyName: string;
+  currencyCode: string;
+  currencyValue: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "university-templates".
+ */
+export interface UniversityTemplate {
+  id: number;
+  title: string;
+  description?: string | null;
+  status: 'active' | 'inactive' | 'draft';
+  previewImage?: (number | null) | Media;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  category?: ('landing' | 'about' | 'courses' | 'contact' | 'custom') | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -871,106 +976,6 @@ export interface Course {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "universities".
- */
-export interface University {
-  id: number;
-  title: string;
-  phone: string;
-  logo: number | Media;
-  secondaryLogo?: (number | null) | Media;
-  universityImage?: (number | null) | Media;
-  country: number | Country;
-  /**
-   * Select a template for your university website layout
-   */
-  template?: (number | null) | UniversityTemplate;
-  websiteUrl?: string | null;
-  description?: string | null;
-  /**
-   * Inactive universities cannot login
-   */
-  isActive?: boolean | null;
-  /**
-   * Content will be filled based on the selected template layout
-   */
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  slug?: string | null;
-  slugLock?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  password?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "countries".
- */
-export interface Country {
-  id: number;
-  name: string;
-  code: string;
-  logo?: (number | null) | Media;
-  countryImage?: (number | null) | Media;
-  currencyName: string;
-  currencyCode: string;
-  currencyValue: number;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "university-templates".
- */
-export interface UniversityTemplate {
-  id: number;
-  title: string;
-  description?: string | null;
-  status: 'active' | 'inactive' | 'draft';
-  previewImage?: (number | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  category?: ('landing' | 'about' | 'courses' | 'contact' | 'custom') | null;
-  slug?: string | null;
-  slugLock?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1776,6 +1781,8 @@ export interface CategoriesSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  role?: T;
+  university?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;

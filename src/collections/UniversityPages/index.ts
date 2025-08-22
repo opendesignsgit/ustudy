@@ -8,16 +8,16 @@ import {
   UnorderedListFeature,
   OrderedListFeature,
 } from '@payloadcms/richtext-lexical'
-import { authenticated } from '@/access/authenticated'
+import { canAccessOwnUniversityPages } from '@/access/canAccessOwnUniversity'
 import { slugField } from '@/fields/slug'
 
 export const UniversityPages: CollectionConfig = {
   slug: 'university-pages',
   access: {
-    create: authenticated,
-    delete: authenticated,
+    create: canAccessOwnUniversityPages,
+    delete: canAccessOwnUniversityPages,
     read: () => true, // Public read access for published pages
-    update: authenticated,
+    update: canAccessOwnUniversityPages,
   },
   admin: {
     useAsTitle: 'title',
