@@ -43,6 +43,10 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     user: Users.slug,
+    // Allow both Users and Universities to access admin panel
+    meta: {
+      titleSuffix: '- UStudy',
+    },
     livePreview: {
       breakpoints: [
         {

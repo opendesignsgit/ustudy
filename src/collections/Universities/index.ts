@@ -11,7 +11,8 @@ import {
   UnorderedListFeature,
 } from '@payloadcms/richtext-lexical'
 
-import { authenticated } from '../../access/authenticated'
+import { canAccessOwnUniversity } from '../../access/canAccessOwnUniversity'
+import { isAdminOrUniversityUser } from '../../access/isUniversityUser'
 import { Banner } from '@/blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { Archive } from '../../blocks/ArchiveBlock/config'
@@ -29,9 +30,9 @@ export const Universities: CollectionConfig = {
   slug: 'universities',
   access: {
     create: () => true, // Allow registration
-    delete: authenticated,
+    delete: canAccessOwnUniversity,
     read: () => true, // Publicly readable
-    update: authenticated,
+    update: canAccessOwnUniversity,
   },
   admin: {
     group: 'Universities',
@@ -184,7 +185,29 @@ export const Universities: CollectionConfig = {
       },
     ],
     beforeChange: [
-      async ({ data, req }) => {
+      async ({ data, req, operation }) => {
+        // Create corresponding university-role user when university is created
+        if (operation === 'create' && req.payload) {
+          try {
+            // Create a university-role user for this university
+            const universityUser = await req.payload.create({
+              collection: 'users',
+              data: {
+                name: data.title,
+                email: data.email,
+                role: 'university-role',
+                // We'll associate the university after creation
+              },
+            })
+            
+            // Store the user ID to associate later in afterChange hook
+            data._universityUserId = universityUser.id
+          } catch (error) {
+            console.error('Error creating university user:', error)
+            throw new Error('Failed to create university user account. Please try again.')
+          }
+        }
+
         // Validate country relationship if it exists
         if (data.country !== null && data.country !== undefined && data.country !== '') {
           // Clean up the country value
@@ -242,6 +265,25 @@ export const Universities: CollectionConfig = {
         }
         
         return data;
+      },
+    ],
+    afterChange: [
+      async ({ doc, req, operation }) => {
+        // Associate the created user with this university
+        if (operation === 'create' && doc._universityUserId && req.payload) {
+          try {
+            await req.payload.update({
+              collection: 'users',
+              id: doc._universityUserId,
+              data: {
+                university: doc.id,
+              },
+            })
+          } catch (error) {
+            console.error('Error associating university with user:', error)
+            // Don't throw here as the university was already created
+          }
+        }
       },
     ],
   },

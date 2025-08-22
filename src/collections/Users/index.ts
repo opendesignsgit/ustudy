@@ -1,25 +1,80 @@
 import type { CollectionConfig } from 'payload'
 
-import { authenticated } from '../../access/authenticated'
+import { isAdmin, isAdminFieldLevel } from '../../access/isAdmin'
+import { isAdminOrSelf } from '../../access/isAdminOrSelf'
+import type { User } from '@/payload-types'
 
 export const Users: CollectionConfig = {
   slug: 'users',
   access: {
-    admin: authenticated,
-    create: authenticated,
-    delete: authenticated,
-    read: authenticated,
-    update: authenticated,
+    admin: ({ req: { user } }) => Boolean(
+      (user?.collection === 'users' && ((user as User)?.role === 'admin' || (user as User)?.role === 'university-role')) ||
+      user?.collection === 'universities'
+    ),
+    create: isAdmin,
+    delete: isAdmin,
+    read: isAdminOrSelf,
+    update: isAdminOrSelf,
   },
   admin: {
-    defaultColumns: ['name', 'email'],
+    defaultColumns: ['name', 'email', 'role'],
     useAsTitle: 'name',
   },
-  auth: true,
+  auth: {
+    // Include role and university in JWT for access control
+    depth: 1,
+  },
   fields: [
     {
       name: 'name',
       type: 'text',
+    },
+    {
+      name: 'role',
+      type: 'select',
+      required: true,
+      defaultValue: 'editor',
+      // Save this field to JWT so we can use from `req.user`
+      saveToJWT: true,
+      access: {
+        // Only admins can create or update roles
+        create: isAdminFieldLevel,
+        update: isAdminFieldLevel,
+      },
+      options: [
+        {
+          label: 'Admin',
+          value: 'admin',
+        },
+        {
+          label: 'Editor', 
+          value: 'editor',
+        },
+        {
+          label: 'University Role',
+          value: 'university-role',
+        },
+        {
+          label: 'Post Editor',
+          value: 'post-editor',
+        },
+      ],
+    },
+    {
+      name: 'university',
+      type: 'relationship',
+      relationTo: 'universities',
+      // Save this field to JWT so we can use from `req.user`
+      saveToJWT: true,
+      access: {
+        // Only admins can create or update university association
+        create: isAdminFieldLevel,
+        update: isAdminFieldLevel,
+      },
+      admin: {
+        condition: ({ role }) => role === 'university-role',
+        description: 'This field associates university-role users with their university.',
+      },
     },
   ],
   timestamps: true,
