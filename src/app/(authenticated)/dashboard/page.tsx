@@ -11,13 +11,12 @@ import './style.scss'
 
 // Import university dashboard components
 import { UniversityAccountDetails } from '../components/UniversityAccountDetails';
-import { UniversityContentEditor } from '../components/UniversityContentEditor';
 import { UniversityPageView } from '../components/UniversityPageView';
 import { UniversityPagesManager } from '../components/UniversityPagesManager';
 
 export default function Dashboard() {
   const [selectedComponent, setSelectedComponent] = useState<
-    "main" | "account" | "courses" | "content" | "view" | "pages"
+    "main" | "account" | "courses" | "view" | "pages"
   >("main");
   const router = useRouter();
   const { user, universityUser, userType, logout: authLogout, loading } = useAuth();
@@ -36,9 +35,6 @@ export default function Dashboard() {
             break;
           case 'my-courses':
             setSelectedComponent('courses');
-            break;
-          case 'content':
-            setSelectedComponent('content');
             break;
           case 'view':
             setSelectedComponent('view');
@@ -118,12 +114,11 @@ export default function Dashboard() {
     }
   };
 
-  const handleTabChange = (tab: "main" | "account" | "courses" | "content" | "view" | "pages") => {
+  const handleTabChange = (tab: "main" | "account" | "courses" | "view" | "pages") => {
     setSelectedComponent(tab);
     let param = '';
     if (tab === 'account') param = userType === 'student' ? 'my-account' : 'account';
     if (tab === 'courses') param = 'my-courses';
-    if (tab === 'content') param = 'content';
     if (tab === 'view') param = 'view';
     if (tab === 'pages') param = 'pages';
     // ReplaceState to update query string without reload
@@ -144,8 +139,6 @@ export default function Dashboard() {
         case "main":
         case "account":
           return <UniversityAccountDetails universityData={universityData} />;
-        case "content":
-          return <UniversityContentEditor universityData={universityData} />;
         case "view":
           return <UniversityPageView universityData={universityData} />;
         case "pages":
@@ -168,7 +161,7 @@ export default function Dashboard() {
     }
   };
 
-  const menuItemClass = (component: "main" | "account" | "courses" | "content" | "view" | "pages") =>
+  const menuItemClass = (component: "main" | "account" | "courses" | "view" | "pages") =>
     `cursor-pointer p-2 rounded hover:bg-gray-300 ${selectedComponent === component ? "bg-gray-300 font-bold" : ""
     }`;
 
@@ -222,10 +215,10 @@ export default function Dashboard() {
                     Account Details
                   </li>
                   <li
-                    className={menuItemClass("content")}
-                    onClick={() => handleTabChange("content")}
+                    className="cursor-pointer p-2 rounded hover:bg-gray-300"
+                    onClick={() => window.open('/admin', '_blank')}
                   >
-                    Content Editor
+                    Content Editor (Admin Panel)
                   </li>
                   <li
                     className={menuItemClass("view")}

@@ -11,6 +11,7 @@ import {
 
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
+import { hideFromUniversityRole } from '../../access/isAdminOrUniversityAdmin'
 import { Banner } from '../../blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
@@ -49,6 +50,7 @@ export const Posts: CollectionConfig<'posts'> = {
   },
   admin: {
     defaultColumns: ['title', 'slug', 'updatedAt'],
+    hidden: hideFromUniversityRole,
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({
