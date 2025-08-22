@@ -24,7 +24,6 @@ import { UniversityTemplates } from './collections/UniversityTemplates'
 import { UniversityPages } from './collections/UniversityPages'
 import { Countries } from './collections/Countries'
 import { WebsiteSettings } from './collections/Settings'
-import adminAuth from './endpoints/adminAuth'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -43,8 +42,8 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
-    // Configure admin authentication to use Universities collection as primary, with custom logic for multi-collection auth
-    user: Universities.slug,
+    // Remove user restriction to allow both Users and Universities collections to access admin panel
+    // user: Users.slug,
     livePreview: {
       breakpoints: [
         {
@@ -78,7 +77,6 @@ export default buildConfig({
   }),
   collections: [Pages, Posts, Media, Categories, Users, Courses, IntakeMonths, StudyModes, StudyYears, StudyAreas, Departments, DegreePrograms, Universities, UniversityTemplates, UniversityPages, Countries, Bookings, Students],
   cors: [getServerSideURL()].filter(Boolean),
-  endpoints: [adminAuth],
   globals: [Header, Footer, WebsiteSettings],
   plugins: [
     ...plugins,

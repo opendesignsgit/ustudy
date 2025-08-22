@@ -13,7 +13,6 @@ import {
 
 import { authenticated } from '../../access/authenticated'
 import { universitySelfAccess, isAuthenticated } from '../../access/universityAccess'
-import { adminAccessControl, enhancedBeforeLogin } from '../../auth/adminAuth'
 import { Banner } from '@/blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { Archive } from '../../blocks/ArchiveBlock/config'
@@ -30,7 +29,14 @@ import { slugField } from '@/fields/slug'
 export const Universities: CollectionConfig = {
   slug: 'universities',
   access: {
-    admin: adminAccessControl,
+    admin: ({ req: { user } }) => {
+      if (!user) return false
+      // Allow admin users (from users collection) full access
+      if ((user as any).collection === 'users') return true
+      // Allow university users (from universities collection) access to admin panel
+      if ((user as any).collection === 'universities') return true
+      return false
+    },
     create: () => true, // Allow registration
     delete: universitySelfAccess, // Universities can only delete their own record, admins can delete any
     read: () => true, // Publicly readable
@@ -183,7 +189,6 @@ export const Universities: CollectionConfig = {
   ],
   hooks: {
     beforeLogin: [
-      enhancedBeforeLogin, // Multi-collection admin authentication
       async ({ req, user }) => {
         // Enhanced error handling for university login
         if (user && user.isActive === false) {
