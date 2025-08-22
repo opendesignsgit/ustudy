@@ -5,14 +5,7 @@ import { authenticated } from '../../access/authenticated'
 export const Users: CollectionConfig = {
   slug: 'users',
   access: {
-    admin: ({ req: { user } }) => {
-      if (!user) return false
-      // Allow admin users (from users collection) 
-      if ((user as any).collection === 'users') return true
-      // Allow university users (from universities collection) to access admin panel
-      if ((user as any).collection === 'universities') return true
-      return false
-    },
+    admin: authenticated,
     create: authenticated,
     delete: authenticated,
     read: authenticated,
