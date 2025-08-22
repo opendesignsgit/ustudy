@@ -190,19 +190,9 @@ export const Universities: CollectionConfig = {
   hooks: {
     beforeLogin: [
       async ({ req, user }) => {
-        // Enhanced error handling for university login
         if (user && user.isActive === false) {
-          const error = new Error('Your university account is inactive. Please contact support.');
-          // Log the failed login attempt for debugging
-          console.log(`University login blocked - inactive account: ${user.email || user.id}`);
-          throw error;
+          throw new Error('Your university account is inactive. Please contact support.');
         }
-        
-        // Log successful university login for debugging
-        if (user && (user as any).collection === 'universities') {
-          console.log(`University admin login successful: ${user.email || user.id}`);
-        }
-        
         return user;
       },
     ],
