@@ -14,10 +14,6 @@ export const Users: CollectionConfig = {
   admin: {
     defaultColumns: ['name', 'email'],
     useAsTitle: 'name',
-    hidden: ({ user }: { user: any }) => {
-      // Hide Users collection from university users
-      return user?.collection === 'universities'
-    },
   },
   auth: true,
   fields: [
