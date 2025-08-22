@@ -38,6 +38,22 @@ export const Universities: CollectionConfig = {
     group: 'Universities',
     defaultColumns: ['title', 'email', 'phone', 'country', 'updatedAt'],
     useAsTitle: 'title',
+    livePreview: {
+      url: ({ data }) => {
+        const slug = typeof data?.slug === 'string' ? data.slug : ''
+        if (slug) {
+          return `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/university/${slug}`
+        }
+        return ''
+      },
+    },
+    preview: (data) => {
+      const slug = typeof data?.slug === 'string' ? data.slug : ''
+      if (slug) {
+        return `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/university/${slug}`
+      }
+      return ''
+    },
   },
   auth: true, // Enable authentication for universities
   fields: [
@@ -60,6 +76,20 @@ export const Universities: CollectionConfig = {
       required: true,
       unique: true, // Make email unique
       label: 'Contact Email',
+      access: {
+        // Make email read-only for university-role users and universities collection users
+        update: ({ req: { user } }) => {
+          // Allow admin to update email
+          if (user?.collection === 'users' && (user as any)?.role === 'admin') {
+            return true
+          }
+          // Make read-only for university-role users and universities collection users
+          return false
+        },
+      },
+      admin: {
+        description: 'Email is read-only as it serves as the unique identifier for login.',
+      },
     },
     {
       type: 'tabs',

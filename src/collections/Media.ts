@@ -11,6 +11,7 @@ import { slugField } from '@/fields/slug'
 
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
+import { hideFromUniversityRole } from '../access/isAdminOrUniversityAdmin'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -22,6 +23,9 @@ export const Media: CollectionConfig = {
     delete: authenticated,
     read: anyone,
     update: authenticated,
+  },
+  admin: {
+    hidden: hideFromUniversityRole,
   },
   fields: [
     {
