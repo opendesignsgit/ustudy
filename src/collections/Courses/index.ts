@@ -12,6 +12,7 @@ import {
 
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
+import { canAccessOwnUniversityCourses, filterCoursesForOwnUniversity } from '../../access/canAccessOwnUniversityCourses'
 import { Banner } from '@/blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { Archive } from '../../blocks/ArchiveBlock/config'
@@ -74,10 +75,10 @@ export const Courses: CollectionConfig<'courses'> = {
   slug: 'courses',
   // endpoints: [withFiltersEndpoint],
   access: {
-    create: authenticated,
-    delete: authenticated,
-    read: authenticatedOrPublished,
-    update: authenticated,
+    create: canAccessOwnUniversityCourses,
+    delete: canAccessOwnUniversityCourses,
+    read: filterCoursesForOwnUniversity,
+    update: canAccessOwnUniversityCourses,
   },
   defaultPopulate: {
     title: true,
