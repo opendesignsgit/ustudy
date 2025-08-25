@@ -76,7 +76,22 @@ export const LoginForm = ({
         }
         
         try {
-            const endpoint = userType === "student" ? "/api/students/login" : "/api/universities/login";
+            let endpoint = userType === "student" ? "/api/students/login" : "/api/users/login";
+            let loginPayload = { email: loginEmail, password };
+            
+            // For university login, we need to authenticate through the Users collection
+            // using the university-role user record that was created for this university
+            if (userType === "university") {
+                // First, check if there's a university-role user for this email
+                const userCheckRes = await fetch(`/api/users?where[email][equals]=${loginEmail}&where[role][equals]=university-role`);
+                const userCheckData = await userCheckRes.json();
+                
+                if (!userCheckData.docs || userCheckData.docs.length === 0) {
+                    setErrorMessage("No university account found with this email. Please contact support.");
+                    return;
+                }
+            }
+            
             const res = await fetch(endpoint, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -91,7 +106,27 @@ export const LoginForm = ({
                 if (userType === "student") {
                     localStorage.setItem("user", JSON.stringify(json.user));
                 } else {
-                    localStorage.setItem("universityUser", JSON.stringify(json.user));
+                    // For universities, we now get a User object with university-role
+                    // We need to fetch the actual university data and store both
+                    const userRecord = json.user;
+                    localStorage.setItem("user", JSON.stringify(userRecord)); // Store the user record for admin panel
+                    
+                    // Fetch the corresponding university data
+                    if (userRecord.university) {
+                        try {
+                            const universityRes = await fetch(`/api/universities/${userRecord.university}`, {
+                                headers: {
+                                    'Authorization': `Bearer ${json.token}`,
+                                },
+                            });
+                            if (universityRes.ok) {
+                                const universityData = await universityRes.json();
+                                localStorage.setItem("universityUser", JSON.stringify(universityData));
+                            }
+                        } catch (error) {
+                            console.error("Error fetching university data:", error);
+                        }
+                    }
                 }
                 
                 // Dispatch authchange event so header, etc. update immediately

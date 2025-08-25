@@ -12,6 +12,7 @@ import { getPayload } from 'payload'
 import { cache } from 'react'
 
 import Footer from '@/components/Home/footer'
+import { UniversityMenu } from '@/components/UniversityMenu'
 import '../university-content.css'
 
 export async function generateStaticParams() {
@@ -160,6 +161,15 @@ export default async function UniversityPage({ params: paramsPromise }: Args) {
                   please visit our official website or contact us directly.
                 </p>
               </div>
+            </div>
+
+            {/* University Navigation Menu */}
+            <div className="mb-12">
+              <UniversityMenu 
+                universityId={university.id}
+                universitySlug={university.slug || ''}
+                className="max-w-md"
+              />
             </div>
           </div>
         )}

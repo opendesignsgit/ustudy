@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 return;
             }
 
-            const endpoint = storedUserType === 'student' ? '/api/students/me' : '/api/universities/me';
+            const endpoint = storedUserType === 'student' ? '/api/students/me' : '/api/users/me';
             const response = await fetch(endpoint, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -78,11 +78,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                         localStorage.setItem('user', JSON.stringify(userWithCount));
                     }
                 } else {
-                    // Handle university user - the API response structure has user nested
-                    const universityUser = data.user || data;
-                    setUniversityUser(universityUser);
-                    setUser(null);
-                    localStorage.setItem('universityUser', JSON.stringify(universityUser));
+                    // For universities, we get a User object with university-role
+                    // We need to fetch the actual university data and store both
+                    const userRecord = data.user || data;
+                    setUser(userRecord);
+                    localStorage.setItem('user', JSON.stringify(userRecord));
+                    
+                    // Fetch the corresponding university data if we have the relationship
+                    if (userRecord.university) {
+                        try {
+                            const universityRes = await fetch(`/api/universities/${userRecord.university}`, {
+                                headers: {
+                                    'Authorization': `Bearer ${token}`,
+                                },
+                            });
+                            if (universityRes.ok) {
+                                const universityData = await universityRes.json();
+                                setUniversityUser(universityData);
+                                localStorage.setItem('universityUser', JSON.stringify(universityData));
+                            }
+                        } catch (error) {
+                            console.error("Error fetching university data:", error);
+                        }
+                    }
                 }
                 
                 setUserType(storedUserType);
@@ -132,7 +150,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const login = async (credentials: { email: string; password: string }, type: 'student' | 'university' = 'student') => {
         try {
             setLoading(true);
-            const endpoint = type === 'student' ? '/api/students/login' : '/api/universities/login';
+            let endpoint = type === 'student' ? '/api/students/login' : '/api/users/login';
+            
+            // For university login, we need to authenticate through the Users collection
+            if (type === 'university') {
+                // First, check if there's a university-role user for this email
+                const userCheckRes = await fetch(`/api/users?where[email][equals]=${credentials.email}&where[role][equals]=university-role`);
+                const userCheckData = await userCheckRes.json();
+                
+                if (!userCheckData.docs || userCheckData.docs.length === 0) {
+                    throw new Error('No university account found with this email. Please contact support.');
+                }
+            }
+            
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -152,9 +182,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 setUser(data.user);
                 setUniversityUser(null);
             } else {
-                localStorage.setItem('universityUser', JSON.stringify(data.user));
-                setUniversityUser(data.user);
-                setUser(null);
+                // For universities, we now get a User object with university-role
+                // We need to fetch the actual university data and store both
+                const userRecord = data.user;
+                localStorage.setItem('user', JSON.stringify(userRecord)); // Store the user record for admin panel
+                setUser(userRecord);
+                
+                // Fetch the corresponding university data
+                if (userRecord.university) {
+                    try {
+                        const universityRes = await fetch(`/api/universities/${userRecord.university}`, {
+                            headers: {
+                                'Authorization': `Bearer ${data.token}`,
+                            },
+                        });
+                        if (universityRes.ok) {
+                            const universityData = await universityRes.json();
+                            localStorage.setItem('universityUser', JSON.stringify(universityData));
+                            setUniversityUser(universityData);
+                        }
+                    } catch (error) {
+                        console.error("Error fetching university data:", error);
+                    }
+                }
             }
             
             setUserType(type);
@@ -169,7 +219,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const logout = async () => {
         try {
-            const endpoint = userType === 'student' ? '/api/students/logout' : '/api/universities/logout';
+            const endpoint = userType === 'student' ? '/api/students/logout' : '/api/users/logout';
             await fetch(endpoint, {
                 method: 'POST',
                 headers: {
