@@ -47,6 +47,14 @@ export const UniversityPages: CollectionConfig = {
       },
     },
     {
+      name: 'parent',
+      type: 'relationship',
+      relationTo: 'university-pages',
+      admin: {
+        description: 'Parent page (for creating hierarchical page structure)',
+      },
+    },
+    {
       name: 'content',
       type: 'richText',
       editor: lexicalEditor({
