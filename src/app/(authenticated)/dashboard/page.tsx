@@ -13,10 +13,11 @@ import './style.scss'
 import { UniversityAccountDetails } from '../components/UniversityAccountDetails';
 import { UniversityPageView } from '../components/UniversityPageView';
 import { UniversityPagesManager } from '../components/UniversityPagesManager';
+import { SettingsPage } from '../components/SettingsPage';
 
 export default function Dashboard() {
   const [selectedComponent, setSelectedComponent] = useState<
-    "main" | "account" | "courses" | "view" | "pages"
+    "main" | "account" | "courses" | "view" | "pages" | "settings"
   >("main");
   const router = useRouter();
   const { user, universityUser, userType, logout: authLogout, loading } = useAuth();
@@ -41,6 +42,9 @@ export default function Dashboard() {
             break;
           case 'pages':
             setSelectedComponent('pages');
+            break;
+          case 'settings':
+            setSelectedComponent('settings');
             break;
           default:
             setSelectedComponent('main');
@@ -114,13 +118,14 @@ export default function Dashboard() {
     }
   };
 
-  const handleTabChange = (tab: "main" | "account" | "courses" | "view" | "pages") => {
+  const handleTabChange = (tab: "main" | "account" | "courses" | "view" | "pages" | "settings") => {
     setSelectedComponent(tab);
     let param = '';
     if (tab === 'account') param = userType === 'student' ? 'my-account' : 'account';
     if (tab === 'courses') param = 'my-courses';
     if (tab === 'view') param = 'view';
     if (tab === 'pages') param = 'pages';
+    if (tab === 'settings') param = 'settings';
     // ReplaceState to update query string without reload
     if (typeof window !== "undefined") {
       const base = window.location.pathname;
@@ -143,6 +148,8 @@ export default function Dashboard() {
           return <UniversityPageView universityData={universityData} />;
         case "pages":
           return <UniversityPagesManager universityData={universityData} />;
+        case "settings":
+          return <SettingsPage />;
         default:
           return <UniversityAccountDetails universityData={universityData} />;
       }
@@ -156,12 +163,14 @@ export default function Dashboard() {
         return <AccountDetails />;
       case "courses":
         return <CoursesMenu />;
+      case "settings":
+        return <SettingsPage />;
       default:
         return <MainPage />;
     }
   };
 
-  const menuItemClass = (component: "main" | "account" | "courses" | "view" | "pages") =>
+  const menuItemClass = (component: "main" | "account" | "courses" | "view" | "pages" | "settings") =>
     `cursor-pointer p-2 rounded hover:bg-gray-300 ${selectedComponent === component ? "bg-gray-300 font-bold" : ""
     }`;
 
@@ -231,6 +240,12 @@ export default function Dashboard() {
                     onClick={() => handleTabChange("pages")}
                   >
                     Manage Pages
+                  </li>
+                  <li
+                    className={menuItemClass("settings")}
+                    onClick={() => handleTabChange("settings")}
+                  >
+                    Settings & Permissions
                   </li>
                 </>
               )}
