@@ -42,7 +42,7 @@ export const Universities: CollectionConfig = {
       url: ({ data }) => {
         const slug = typeof data?.slug === 'string' ? data.slug : ''
         if (slug) {
-          return `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/university/${slug}`
+          return `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/universities/${slug}`
         }
         return ''
       },
@@ -50,7 +50,7 @@ export const Universities: CollectionConfig = {
     preview: (data) => {
       const slug = typeof data?.slug === 'string' ? data.slug : ''
       if (slug) {
-        return `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/university/${slug}`
+        return `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/universities/${slug}`
       }
       return ''
     },

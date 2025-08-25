@@ -202,14 +202,14 @@ export function UniversityPagesManager({ universityData }: { universityData: any
                       <p className="text-gray-600 text-sm mt-1">{page.description}</p>
                     )}
                     <div className="flex items-center mt-2 text-sm text-gray-500 space-x-4">
-                      <span>Slug: /university/{page.slug}</span>
+                      <span>Slug: /universities/{universityData?.slug}/{page.slug}</span>
                       <span>Order: {page.menuOrder}</span>
                       <span>{page.showInMenu ? 'Shown in menu' : 'Hidden from menu'}</span>
                     </div>
                   </div>
                   <div className="flex space-x-2">
                     <a
-                      href={`/university/${page.slug}`}
+                      href={`/universities/${universityData?.slug}/${page.slug}`}
                       target="_blank"
                       className="text-[#34c3ec] hover:text-[#34b2d7] text-sm"
                     >
@@ -246,7 +246,7 @@ export function UniversityPagesManager({ universityData }: { universityData: any
         <div className="mt-6 pt-4 border-t border-gray-200">
           <h4 className="font-medium text-gray-700 mb-2">How it works</h4>
           <ul className="text-sm text-gray-600 space-y-1">
-            <li>• Create pages that will be accessible at /university/[page-slug]</li>
+            <li>• Create pages that will be accessible at /universities/{universityData?.slug}/[page-slug]</li>
             <li>• Pages with "Show in menu" enabled will appear in your university navigation</li>
             <li>• Use Menu Order to control the order of pages in navigation (lower numbers first)</li>
             <li>• Click "Edit" to modify page content using the CMS editor</li>
