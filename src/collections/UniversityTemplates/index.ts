@@ -11,6 +11,7 @@ import {
 } from '@payloadcms/richtext-lexical'
 
 import { authenticated } from '../../access/authenticated'
+import { createRoleBasedAccess, createRoleBasedVisibility } from '../../access/roleBasedAccess'
 import { Banner } from '@/blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { Archive } from '../../blocks/ArchiveBlock/config'
@@ -27,15 +28,16 @@ import { slugField } from '@/fields/slug'
 export const UniversityTemplates: CollectionConfig = {
   slug: 'university-templates',
   access: {
-    create: authenticated,
-    delete: authenticated,
-    read: () => true, // Publicly readable for universities to use
-    update: authenticated,
+    create: createRoleBasedAccess('create', 'university-templates', { fallbackAdmin: true }),
+    delete: createRoleBasedAccess('delete', 'university-templates', { fallbackAdmin: true }),
+    read: createRoleBasedAccess('read', 'university-templates', { fallbackAdmin: true, publicRead: true }),
+    update: createRoleBasedAccess('update', 'university-templates', { fallbackAdmin: true }),
   },
   admin: {
     group: 'Universities',
     defaultColumns: ['title', 'status', 'updatedAt'],
     useAsTitle: 'title',
+    hidden: createRoleBasedVisibility('university-templates'),
   },
   fields: [
     {
