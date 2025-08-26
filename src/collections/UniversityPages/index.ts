@@ -22,6 +22,7 @@ export const UniversityPages: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'university', 'updatedAt'],
+    group: 'Universities',
   },
   fields: [
     {
