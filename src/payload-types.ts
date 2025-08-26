@@ -87,7 +87,6 @@ export interface Config {
     countries: Country;
     bookings: Booking;
     students: Student;
-    'role-settings': RoleSetting;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -117,7 +116,6 @@ export interface Config {
     countries: CountriesSelect<false> | CountriesSelect<true>;
     bookings: BookingsSelect<false> | BookingsSelect<true>;
     students: StudentsSelect<false> | StudentsSelect<true>;
-    'role-settings': RoleSettingsSelect<false> | RoleSettingsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -519,9 +517,6 @@ export interface University {
   slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
-  /**
-   * Email is read-only as it serves as the unique identifier for login.
-   */
   email: string;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
@@ -1077,10 +1072,6 @@ export interface UniversityPage {
    * The university this page belongs to
    */
   university: number | University;
-  /**
-   * Parent page (for creating hierarchical page structure)
-   */
-  parent?: (number | null) | UniversityPage;
   content?: {
     root: {
       type: string;
@@ -1168,88 +1159,6 @@ export interface Student {
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "role-settings".
- */
-export interface RoleSetting {
-  id: number;
-  /**
-   * Select the role to configure permissions for
-   */
-  roleName: 'admin' | 'editor' | 'university-role' | 'post-editor';
-  permissions?: {
-    users?: {
-      create?: boolean | null;
-      read?: boolean | null;
-      update?: boolean | null;
-      delete?: boolean | null;
-      selfControl?: boolean | null;
-    };
-    universities?: {
-      create?: boolean | null;
-      read?: boolean | null;
-      update?: boolean | null;
-      delete?: boolean | null;
-      selfControl?: boolean | null;
-    };
-    'university-pages'?: {
-      create?: boolean | null;
-      read?: boolean | null;
-      update?: boolean | null;
-      delete?: boolean | null;
-      selfControl?: boolean | null;
-    };
-    courses?: {
-      create?: boolean | null;
-      read?: boolean | null;
-      update?: boolean | null;
-      delete?: boolean | null;
-      selfControl?: boolean | null;
-    };
-    students?: {
-      create?: boolean | null;
-      read?: boolean | null;
-      update?: boolean | null;
-      delete?: boolean | null;
-      selfControl?: boolean | null;
-    };
-    posts?: {
-      create?: boolean | null;
-      read?: boolean | null;
-      update?: boolean | null;
-      delete?: boolean | null;
-      selfControl?: boolean | null;
-    };
-    media?: {
-      create?: boolean | null;
-      read?: boolean | null;
-      update?: boolean | null;
-      delete?: boolean | null;
-      selfControl?: boolean | null;
-    };
-    categories?: {
-      create?: boolean | null;
-      read?: boolean | null;
-      update?: boolean | null;
-      delete?: boolean | null;
-      selfControl?: boolean | null;
-    };
-    bookings?: {
-      create?: boolean | null;
-      read?: boolean | null;
-      update?: boolean | null;
-      delete?: boolean | null;
-      selfControl?: boolean | null;
-    };
-  };
-  /**
-   * Optional description for this role configuration
-   */
-  description?: string | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1498,10 +1407,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'students';
         value: number | Student;
-      } | null)
-    | ({
-        relationTo: 'role-settings';
-        value: number | RoleSetting;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -2056,7 +1961,6 @@ export interface UniversityPagesSelect<T extends boolean = true> {
   slug?: T;
   slugLock?: T;
   university?: T;
-  parent?: T;
   content?: T;
   showInMenu?: T;
   menuOrder?: T;
@@ -2133,101 +2037,6 @@ export interface StudentsSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "role-settings_select".
- */
-export interface RoleSettingsSelect<T extends boolean = true> {
-  roleName?: T;
-  permissions?:
-    | T
-    | {
-        users?:
-          | T
-          | {
-              create?: T;
-              read?: T;
-              update?: T;
-              delete?: T;
-              selfControl?: T;
-            };
-        universities?:
-          | T
-          | {
-              create?: T;
-              read?: T;
-              update?: T;
-              delete?: T;
-              selfControl?: T;
-            };
-        'university-pages'?:
-          | T
-          | {
-              create?: T;
-              read?: T;
-              update?: T;
-              delete?: T;
-              selfControl?: T;
-            };
-        courses?:
-          | T
-          | {
-              create?: T;
-              read?: T;
-              update?: T;
-              delete?: T;
-              selfControl?: T;
-            };
-        students?:
-          | T
-          | {
-              create?: T;
-              read?: T;
-              update?: T;
-              delete?: T;
-              selfControl?: T;
-            };
-        posts?:
-          | T
-          | {
-              create?: T;
-              read?: T;
-              update?: T;
-              delete?: T;
-              selfControl?: T;
-            };
-        media?:
-          | T
-          | {
-              create?: T;
-              read?: T;
-              update?: T;
-              delete?: T;
-              selfControl?: T;
-            };
-        categories?:
-          | T
-          | {
-              create?: T;
-              read?: T;
-              update?: T;
-              delete?: T;
-              selfControl?: T;
-            };
-        bookings?:
-          | T
-          | {
-              create?: T;
-              read?: T;
-              update?: T;
-              delete?: T;
-              selfControl?: T;
-            };
-      };
-  description?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
