@@ -2,7 +2,6 @@ import type { CollectionConfig } from 'payload';
 
 import { authenticated } from '../../access/authenticated';
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished';
-import { createRoleBasedAccess, createRoleBasedVisibility } from '../../access/roleBasedAccess';
 import { generatePreviewPath } from '../../utilities/generatePreviewPath';
 import { populateAuthors } from './hooks/populateAuthors';
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost';
@@ -14,10 +13,10 @@ export const Bookings: CollectionConfig = {
     plural: 'Enrollments',
   },
   access: {
-    create: createRoleBasedAccess('create', 'bookings', { fallbackAdmin: true }),
-    delete: createRoleBasedAccess('delete', 'bookings', { fallbackAdmin: true }),
-    read: createRoleBasedAccess('read', 'bookings', { fallbackAdmin: true, allowSelfControl: true }),
-    update: createRoleBasedAccess('update', 'bookings', { fallbackAdmin: true }),
+    create: authenticated,
+    delete: authenticated,
+    read: authenticatedOrPublished,
+    update: authenticated,
   },
   defaultPopulate: {
     course: true,
@@ -26,7 +25,6 @@ export const Bookings: CollectionConfig = {
   admin: {
     group: 'Universities',
     defaultColumns: ['customer', 'course'],
-    hidden: createRoleBasedVisibility('bookings'),
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({

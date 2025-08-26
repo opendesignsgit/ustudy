@@ -12,7 +12,6 @@ import { slugField } from '@/fields/slug'
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
 import { hideFromUniversityRole } from '../access/isAdminOrUniversityAdmin'
-import { createRoleBasedAccess, createRoleBasedVisibility } from '../access/roleBasedAccess'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -20,14 +19,13 @@ const dirname = path.dirname(filename)
 export const Media: CollectionConfig = {
   slug: 'media',
   access: {
-    create: createRoleBasedAccess('create', 'media', { fallbackAdmin: true, allowSelfControl: true }),
-    delete: createRoleBasedAccess('delete', 'media', { fallbackAdmin: true, allowSelfControl: true }),
-    read: createRoleBasedAccess('read', 'media', { fallbackAdmin: true, publicRead: true }),
-    update: createRoleBasedAccess('update', 'media', { fallbackAdmin: true, allowSelfControl: true }),
+    create: authenticated,
+    delete: authenticated,
+    read: anyone,
+    update: authenticated,
   },
   admin: {
-    group: 'Content Management',
-    hidden: createRoleBasedVisibility('media'),
+    hidden: hideFromUniversityRole,
   },
   fields: [
     {
