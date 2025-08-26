@@ -27,7 +27,6 @@ export const Media: CollectionConfig = {
     admin: createRoleBasedAdminAccess('media'),
   },
   admin: {
-    group: 'Content',
     hidden: createRoleBasedAdminVisibility('media'),
   },
   fields: [

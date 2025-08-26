@@ -16,7 +16,6 @@ export const Categories: CollectionConfig = {
     admin: createRoleBasedAdminAccess('categories'),
   },
   admin: {
-    group: 'Content',
     useAsTitle: 'title',
     hidden: createRoleBasedAdminVisibility('categories'),
   },
