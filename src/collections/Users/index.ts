@@ -2,19 +2,17 @@ import type { CollectionConfig } from 'payload'
 
 import { isAdmin, isAdminFieldLevel } from '../../access/isAdmin'
 import { isAdminOrSelf } from '../../access/isAdminOrSelf'
+import { createRoleBasedAccess, createRoleBasedFilter, createRoleBasedAdminAccess } from '../../access/roleBasedAccess'
 import type { User } from '@/payload-types'
 
 export const Users: CollectionConfig = {
   slug: 'users',
   access: {
-    admin: ({ req: { user } }) => Boolean(
-      (user?.collection === 'users' && ((user as User)?.role === 'admin' || (user as User)?.role === 'university-role')) ||
-      user?.collection === 'universities'
-    ),
+    admin: createRoleBasedAdminAccess('users'),
     create: isAdmin,
-    delete: isAdmin,
-    read: isAdminOrSelf,
-    update: isAdminOrSelf,
+    delete: createRoleBasedAccess('users', 'delete'),
+    read: createRoleBasedFilter('users'),
+    update: createRoleBasedAccess('users', 'update'),
   },
   admin: {
     defaultColumns: ['name', 'email', 'role'],
