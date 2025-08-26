@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 return;
             }
 
-            const endpoint = storedUserType === 'student' ? '/api/students/me' : '/api/users/me';
+            const endpoint = storedUserType === 'student' ? '/api/students/me' : '/api/universities/me';
             const response = await fetch(endpoint, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -78,29 +78,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                         localStorage.setItem('user', JSON.stringify(userWithCount));
                     }
                 } else {
-                    // For universities, we get a User object with university-role
-                    // We need to fetch the actual university data and store both
-                    const userRecord = data.user || data;
-                    setUser(userRecord);
-                    localStorage.setItem('user', JSON.stringify(userRecord));
-                    
-                    // Fetch the corresponding university data if we have the relationship
-                    if (userRecord.university) {
-                        try {
-                            const universityRes = await fetch(`/api/universities/${userRecord.university}`, {
-                                headers: {
-                                    'Authorization': `Bearer ${token}`,
-                                },
-                            });
-                            if (universityRes.ok) {
-                                const universityData = await universityRes.json();
-                                setUniversityUser(universityData);
-                                localStorage.setItem('universityUser', JSON.stringify(universityData));
-                            }
-                        } catch (error) {
-                            console.error("Error fetching university data:", error);
-                        }
-                    }
+                    // For universities, we get the University object directly
+                    const universityRecord = data.user || data;
+                    setUniversityUser(universityRecord);
+                    setUser(null);
+                    localStorage.setItem('universityUser', JSON.stringify(universityRecord));
                 }
                 
                 setUserType(storedUserType);
