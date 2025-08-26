@@ -33,10 +33,6 @@ export const Universities: CollectionConfig = {
     delete: canAccessOwnUniversity,
     read: () => true, // Publicly readable
     update: canAccessOwnUniversity,
-    admin: ({ req: { user } }) => Boolean(
-      (user?.collection === 'users' && ((user as any)?.role === 'admin' || (user as any)?.role === 'university-role')) ||
-      user?.collection === 'universities'
-    ),
   },
   admin: {
     group: 'Universities',
