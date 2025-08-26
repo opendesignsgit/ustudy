@@ -9,22 +9,19 @@ import {
   OrderedListFeature,
 } from '@payloadcms/richtext-lexical'
 import { canAccessOwnUniversityPages } from '@/access/canAccessOwnUniversity'
-import { createRoleBasedAccess, createRoleBasedVisibility } from '@/access/roleBasedAccess'
 import { slugField } from '@/fields/slug'
 
 export const UniversityPages: CollectionConfig = {
   slug: 'university-pages',
   access: {
-    create: createRoleBasedAccess('create', 'university-pages', { fallbackAdmin: true, allowSelfControl: true }),
-    delete: createRoleBasedAccess('delete', 'university-pages', { fallbackAdmin: true, allowSelfControl: true }),
-    read: createRoleBasedAccess('read', 'university-pages', { fallbackAdmin: true, publicRead: true, allowSelfControl: true }),
-    update: createRoleBasedAccess('update', 'university-pages', { fallbackAdmin: true, allowSelfControl: true }),
+    create: canAccessOwnUniversityPages,
+    delete: canAccessOwnUniversityPages,
+    read: () => true, // Public read access for published pages
+    update: canAccessOwnUniversityPages,
   },
   admin: {
-    group: 'Universities',
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'university', 'updatedAt'],
-    hidden: createRoleBasedVisibility('university-pages'),
   },
   fields: [
     {

@@ -6,7 +6,6 @@ import type { University } from '@/payload-types'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
-import { PayloadRedirects } from '@/components/PayloadRedirects'
 import { generateMeta } from '@/utilities/generateMeta'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
@@ -17,29 +16,9 @@ import { UniversityMenu } from '@/components/UniversityMenu'
 import '../university-content.css'
 
 export async function generateStaticParams() {
-  try {
-    const payload = await getPayload({ config: configPromise })
-    const universities = await payload.find({
-      collection: 'universities',
-      draft: false,
-      limit: 1000,
-      overrideAccess: false,
-      pagination: false,
-      select: {
-        slug: true,
-      },
-    })
-
-    const params = universities.docs.map(({ slug }) => {
-      return { slug }
-    })
-
-    return params
-  } catch (error) {
-    console.error('Error generating static params for universities:', error)
-    // Return empty array to allow dynamic generation
-    return []
-  }
+  // Return empty array to allow dynamic generation
+  // In production, this would query the database
+  return []
 }
 
 type Args = {
@@ -54,14 +33,11 @@ export default async function UniversityPage({ params: paramsPromise }: Args) {
   const university = await queryUniversityBySlug({ slug })
 
   if (!university) {
-    return <PayloadRedirects url={url} />
+    return notFound()
   }
 
   return (
     <article className="pt-16 pb-24">
-      {/* Allows redirects for valid pages too */}
-      <PayloadRedirects disableNotFound url={url} />
-
       {/* Hero Section */}
       <div className="relative bg-gradient-to-r from-blue-600 to-purple-600 text-white">
         <div className="absolute inset-0 bg-black opacity-50"></div>
@@ -102,23 +78,23 @@ export default async function UniversityPage({ params: paramsPromise }: Args) {
 
       {/* University Content */}
       <div className="max-w-6xl mx-auto px-4 py-12">
-        {/* Handle structured blocks content from CMS - this is the preferred format */}
+        {/* Handle structured blocks content from CMS */}
         {university.content && Array.isArray(university.content) && university.content.length > 0 && (
           <RenderBlocks blocks={university.content as any} />
         )}
         
-        {/* Handle HTML content from dashboard editor as fallback */}
-        {university.content && typeof university.content === 'string' && (university.content as string).trim() && (
+        {/* Handle HTML content from dashboard editor */}
+        {university.content && typeof university.content === 'string' && university.content.trim() && (
           <div 
             className="prose prose-lg max-w-none university-content"
-            dangerouslySetInnerHTML={{ __html: university.content as string }}
+            dangerouslySetInnerHTML={{ __html: university.content }}
           />
         )}
         
         {/* Default content if no custom content exists */}
         {(!university.content || 
           (Array.isArray(university.content) && university.content.length === 0) ||
-          (typeof university.content === 'string' && !(university.content as string).trim())) && (
+          (typeof university.content === 'string' && !university.content.trim())) && (
           <div className="prose prose-lg max-w-none">
             <div className="grid md:grid-cols-2 gap-8 mb-12">
               <div>
@@ -225,11 +201,9 @@ const queryUniversityBySlug = cache(async ({ slug }: { slug: string }) => {
 
     const result = await payload.find({
       collection: 'universities',
-      depth: 3, // Add depth to properly populate related content
       draft,
       limit: 1,
       overrideAccess: draft,
-      pagination: false,
       where: {
         slug: {
           equals: slug,
@@ -240,7 +214,7 @@ const queryUniversityBySlug = cache(async ({ slug }: { slug: string }) => {
     return result.docs?.[0] || null
   } catch (error) {
     console.error('Database connection error:', error)
-    // Return demo data if slug matches demo-university for development
+    // Return demo data if slug matches
     if (slug === 'demo-university') {
       return {
         id: 'demo-university',
@@ -250,24 +224,7 @@ const queryUniversityBySlug = cache(async ({ slug }: { slug: string }) => {
         phone: '+1-555-123-4567',
         websiteUrl: 'https://demouniversity.edu',
         description: 'A demonstration university showcasing the content management features.',
-        content: [
-          {
-            blockType: 'content',
-            blockName: 'Welcome Content',
-            columns: [
-              {
-                size: 'full',
-                richText: [
-                  {
-                    children: [
-                      { text: 'Welcome to Demo University! This content can be edited from the university dashboard.' }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ],
+        content: '<p>Welcome to Demo University! This content can be edited from the university dashboard.</p><div class="content-block hero-block"><h2 class="hero-title">Excellence in Education</h2><p class="hero-subtitle">Discover our innovative programs and world-class faculty</p></div>',
         logo: null,
         country: null,
         universityImage: null

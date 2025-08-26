@@ -19,7 +19,7 @@ export const RoleSettings: CollectionConfig = {
     update: isAdmin,
   },
   admin: {
-    group: 'User Management',
+    group: 'Settings',
     defaultColumns: ['roleName', 'updatedAt'],
     useAsTitle: 'roleName',
   },

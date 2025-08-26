@@ -2,21 +2,19 @@
 import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '../../access/authenticated'
-import { createRoleBasedAccess, createRoleBasedVisibility } from '../../access/roleBasedAccess'
 
 export const Students: CollectionConfig = {
   slug: 'students',
   access: {
-    create: createRoleBasedAccess('create', 'students', { fallbackAdmin: true, publicRead: true }),
-    read: createRoleBasedAccess('read', 'students', { fallbackAdmin: true, publicRead: true }),
-    update: createRoleBasedAccess('update', 'students', { fallbackAdmin: true, allowSelfControl: true }),
-    delete: createRoleBasedAccess('delete', 'students', { fallbackAdmin: true }),
+    create: () => true,
+    read: () => true,
+    update: () => true,
+    delete: authenticated,
   },
   admin: {
     group: 'Universities',
     defaultColumns: ['name', 'email', 'phone'],
     useAsTitle: 'name',
-    hidden: createRoleBasedVisibility('students'),
   },
   auth: true,
   fields: [

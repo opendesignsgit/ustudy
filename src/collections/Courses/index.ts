@@ -13,7 +13,6 @@ import {
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { canAccessOwnUniversityCourses, filterCoursesForOwnUniversity } from '../../access/canAccessOwnUniversityCourses'
-import { createRoleBasedAccess, createRoleBasedVisibility } from '../../access/roleBasedAccess'
 import { Banner } from '@/blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { Archive } from '../../blocks/ArchiveBlock/config'
@@ -76,10 +75,10 @@ export const Courses: CollectionConfig<'courses'> = {
   slug: 'courses',
   // endpoints: [withFiltersEndpoint],
   access: {
-    create: createRoleBasedAccess('create', 'courses', { fallbackAdmin: true, allowSelfControl: true }),
-    delete: createRoleBasedAccess('delete', 'courses', { fallbackAdmin: true, allowSelfControl: true }),
-    read: createRoleBasedAccess('read', 'courses', { fallbackAdmin: true, publicRead: true, allowSelfControl: true }),
-    update: createRoleBasedAccess('update', 'courses', { fallbackAdmin: true, allowSelfControl: true }),
+    create: canAccessOwnUniversityCourses,
+    delete: canAccessOwnUniversityCourses,
+    read: filterCoursesForOwnUniversity,
+    update: canAccessOwnUniversityCourses,
   },
   defaultPopulate: {
     title: true,
@@ -92,7 +91,6 @@ export const Courses: CollectionConfig<'courses'> = {
   admin: {
     group: 'Universities',
     defaultColumns: ['title', 'slug', 'updatedAt'],
-    hidden: createRoleBasedVisibility('courses'),
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({
