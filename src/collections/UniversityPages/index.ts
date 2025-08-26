@@ -9,17 +9,15 @@ import {
   OrderedListFeature,
 } from '@payloadcms/richtext-lexical'
 import { canAccessOwnUniversityPages } from '@/access/canAccessOwnUniversity'
-import { createRoleBasedAccess, createRoleBasedFilter, createRoleBasedAdminAccess } from '@/access/roleBasedAccess'
 import { slugField } from '@/fields/slug'
 
 export const UniversityPages: CollectionConfig = {
   slug: 'university-pages',
   access: {
-    create: createRoleBasedAccess('university-pages', 'create'),
-    delete: createRoleBasedAccess('university-pages', 'delete'),
+    create: canAccessOwnUniversityPages,
+    delete: canAccessOwnUniversityPages,
     read: () => true, // Public read access for published pages
-    update: createRoleBasedAccess('university-pages', 'update'),
-    admin: createRoleBasedAdminAccess('university-pages'),
+    update: canAccessOwnUniversityPages,
   },
   admin: {
     useAsTitle: 'title',

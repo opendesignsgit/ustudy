@@ -34,7 +34,6 @@ export const RoleSettings: CollectionConfig = {
         { label: 'Editor', value: 'editor' },
         { label: 'University Role', value: 'university-role' },
         { label: 'Post Editor', value: 'post-editor' },
-        { label: 'Student Role', value: 'student-role' },
       ],
       admin: {
         description: 'Select the role to configure permissions for',
@@ -152,42 +151,6 @@ export const RoleSettings: CollectionConfig = {
             { name: 'selfControl', type: 'checkbox', defaultValue: false },
           ],
         },
-        {
-          name: 'pages',
-          type: 'group',
-          label: 'Pages Collection',
-          fields: [
-            { name: 'create', type: 'checkbox', defaultValue: false },
-            { name: 'read', type: 'checkbox', defaultValue: false },
-            { name: 'update', type: 'checkbox', defaultValue: false },
-            { name: 'delete', type: 'checkbox', defaultValue: false },
-            { name: 'selfControl', type: 'checkbox', defaultValue: false },
-          ],
-        },
-        {
-          name: 'settings',
-          type: 'group',
-          label: 'Settings Collection',
-          fields: [
-            { name: 'create', type: 'checkbox', defaultValue: false },
-            { name: 'read', type: 'checkbox', defaultValue: false },
-            { name: 'update', type: 'checkbox', defaultValue: false },
-            { name: 'delete', type: 'checkbox', defaultValue: false },
-            { name: 'selfControl', type: 'checkbox', defaultValue: false },
-          ],
-        },
-        {
-          name: 'groups',
-          type: 'group',
-          label: 'Groups Collection',
-          fields: [
-            { name: 'create', type: 'checkbox', defaultValue: false },
-            { name: 'read', type: 'checkbox', defaultValue: false },
-            { name: 'update', type: 'checkbox', defaultValue: false },
-            { name: 'delete', type: 'checkbox', defaultValue: false },
-            { name: 'selfControl', type: 'checkbox', defaultValue: false },
-          ],
-        },
       ],
     },
     {
@@ -206,7 +169,7 @@ export const RoleSettings: CollectionConfig = {
           switch (data.roleName) {
             case 'admin':
               // Admin has full access to everything
-              const collections = ['users', 'universities', 'university-pages', 'courses', 'students', 'posts', 'media', 'categories', 'bookings', 'pages', 'settings', 'groups']
+              const collections = ['users', 'universities', 'university-pages', 'courses', 'students', 'posts', 'media', 'categories', 'bookings']
               collections.forEach(collection => {
                 if (!data.permissions[collection]) {
                   data.permissions[collection] = {}
@@ -244,57 +207,11 @@ export const RoleSettings: CollectionConfig = {
                 delete: true,
                 selfControl: true,
               }
-              data.permissions.bookings = {
-                create: false,
-                read: true,
-                update: false,
-                delete: false,
-                selfControl: true,
-              }
               data.permissions.media = {
                 create: true,
                 read: true,
                 update: true,
                 delete: true,
-                selfControl: true,
-              }
-              data.permissions.students = {
-                create: false,
-                read: true,
-                update: false,
-                delete: false,
-                selfControl: false,
-              }
-              break
-              
-            case 'student-role':
-              // Student role can only manage their own data
-              data.permissions.students = {
-                create: false,
-                read: true,
-                update: true,
-                delete: false,
-                selfControl: true,
-              }
-              data.permissions.courses = {
-                create: false,
-                read: true,
-                update: false,
-                delete: false,
-                selfControl: false,
-              }
-              data.permissions.universities = {
-                create: false,
-                read: true,
-                update: false,
-                delete: false,
-                selfControl: false,
-              }
-              data.permissions.bookings = {
-                create: true,
-                read: true,
-                update: false,
-                delete: false,
                 selfControl: true,
               }
               break
@@ -309,20 +226,6 @@ export const RoleSettings: CollectionConfig = {
                 selfControl: false,
               }
               data.permissions.media = {
-                create: true,
-                read: true,
-                update: true,
-                delete: true,
-                selfControl: false,
-              }
-              data.permissions.categories = {
-                create: true,
-                read: true,
-                update: true,
-                delete: true,
-                selfControl: false,
-              }
-              data.permissions.pages = {
                 create: true,
                 read: true,
                 update: true,
