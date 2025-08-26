@@ -82,11 +82,7 @@ export default async function UniversityPage({ params: paramsPromise }: Args) {
         {/* Handle lexical/rich text content from CMS */}
         {university.content && (
           <div className="prose prose-lg max-w-none university-content mb-8">
-            {typeof university.content === 'string' ? (
-              <div dangerouslySetInnerHTML={{ __html: university.content }} />
-            ) : (
-              <RichText data={university.content} enableGutter={false} />
-            )}
+            <RichText data={university.content} enableGutter={false} />
           </div>
         )}
         

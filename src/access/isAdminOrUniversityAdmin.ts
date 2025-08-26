@@ -23,9 +23,9 @@ export const hideFromUniversityRole = ({ user }: { user: any }) => {
   return false
 }
 
-// Dynamic admin visibility based on role permissions (non-async version)
+// Dynamic admin visibility based on role permissions
 export const createRoleBasedAdminVisibility = (collectionSlug: string) => {
-  return ({ user }: { user: any }) => {
+  return async ({ user, payload }: { user: any, payload: any }) => {
     if (!user) return true // Hide if not authenticated
     
     // Always show to admin
@@ -33,11 +33,11 @@ export const createRoleBasedAdminVisibility = (collectionSlug: string) => {
       return false
     }
     
-    // For other users, use basic role check (simplified)
-    let userRole: string | null = null
+    // For other users, check role permissions
+    let userRole = null
     
     if (user?.collection === 'users') {
-      userRole = (user as User)?.role || null
+      userRole = (user as User)?.role
     } else if (user?.collection === 'universities') {
       userRole = 'university-role'
     } else if (user?.collection === 'students') {
@@ -46,17 +46,31 @@ export const createRoleBasedAdminVisibility = (collectionSlug: string) => {
     
     if (!userRole) return true // Hide if no role
     
-    // Use basic logic without async database calls
-    // This is a simplified check - for full permissions use the access controls
-    switch (collectionSlug) {
-      case 'categories':
-      case 'posts':
-      case 'pages':
-        return userRole === 'university-role' // Hide from university users
-      case 'media':
-        return false // Show to all authenticated users
-      default:
-        return false // Show by default
+    try {
+      // Get role permissions from settings
+      const roleSettings = await payload.find({
+        collection: 'role-settings',
+        where: {
+          roleName: {
+            equals: userRole,
+          },
+        },
+      })
+      
+      const permissions = roleSettings.docs[0]?.permissions || {}
+      const collectionPermissions = permissions[collectionSlug]
+      
+      // Hide if no permissions found or no access granted
+      if (!collectionPermissions) return true
+      
+      // Show if user has any permission on this collection
+      return !(collectionPermissions.create || 
+               collectionPermissions.read || 
+               collectionPermissions.update || 
+               collectionPermissions.delete)
+    } catch (error) {
+      console.error('Error checking role permissions for admin visibility:', error)
+      return true // Hide on error
     }
   }
 }

@@ -12,7 +12,7 @@ export const Groups: CollectionConfig = {
     admin: createRoleBasedAdminAccess('groups'),
   },
   admin: {
-    group: 'User Management',
+    group: 'Settings',
     defaultColumns: ['name', 'description', 'updatedAt'],
     useAsTitle: 'name',
   },
