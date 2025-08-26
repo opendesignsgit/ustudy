@@ -1,17 +1,19 @@
 import type { CollectionConfig } from 'payload'
+import { createRoleBasedAccess, createRoleBasedVisibility } from '../../access/roleBasedAccess'
 
 export const Countries: CollectionConfig = {
   slug: 'countries',
   access: {
-    create: ({ req: { user } }) => Boolean(user), // Only authenticated users
-    read: () => true, // Publicly readable
-    update: ({ req: { user } }) => Boolean(user), // Only authenticated users
-    delete: ({ req: { user } }) => Boolean(user), // Only authenticated users
+    create: createRoleBasedAccess('create', 'countries', { fallbackAdmin: true }),
+    read: createRoleBasedAccess('read', 'countries', { fallbackAdmin: true, publicRead: true }),
+    update: createRoleBasedAccess('update', 'countries', { fallbackAdmin: true }),
+    delete: createRoleBasedAccess('delete', 'countries', { fallbackAdmin: true }),
   },
   admin: {
     group: 'Universities',
     useAsTitle: 'name',
     defaultColumns: ['name', 'code'],
+    hidden: createRoleBasedVisibility('countries'),
   },
   fields: [
     {

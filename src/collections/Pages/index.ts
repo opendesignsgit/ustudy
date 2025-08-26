@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { hideFromUniversityRole } from '../../access/isAdminOrUniversityAdmin'
+import { createRoleBasedAccess, createRoleBasedVisibility } from '../../access/roleBasedAccess'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
@@ -25,10 +26,10 @@ import {
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
   access: {
-    create: authenticated,
-    delete: authenticated,
-    read: authenticatedOrPublished,
-    update: authenticated,
+    create: createRoleBasedAccess('create', 'pages', { fallbackAdmin: true }),
+    delete: createRoleBasedAccess('delete', 'pages', { fallbackAdmin: true }),
+    read: createRoleBasedAccess('read', 'pages', { fallbackAdmin: true, publicRead: true }),
+    update: createRoleBasedAccess('update', 'pages', { fallbackAdmin: true }),
   },
   // This config controls what's populated by default when a page is referenced
   // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
@@ -38,8 +39,9 @@ export const Pages: CollectionConfig<'pages'> = {
     slug: true,
   },
   admin: {
+    group: 'Content Management',
     defaultColumns: ['title', 'slug', 'updatedAt'],
-    hidden: hideFromUniversityRole,
+    hidden: createRoleBasedVisibility('pages'),
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({

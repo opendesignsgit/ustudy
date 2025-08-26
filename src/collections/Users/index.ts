@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { isAdmin, isAdminFieldLevel } from '../../access/isAdmin'
 import { isAdminOrSelf } from '../../access/isAdminOrSelf'
+import { createRoleBasedAccess, createRoleBasedVisibility, createRoleBasedFieldAccess } from '../../access/roleBasedAccess'
 import type { User } from '@/payload-types'
 
 export const Users: CollectionConfig = {
@@ -11,14 +12,16 @@ export const Users: CollectionConfig = {
       (user?.collection === 'users' && ((user as User)?.role === 'admin' || (user as User)?.role === 'university-role')) ||
       user?.collection === 'universities'
     ),
-    create: isAdmin,
-    delete: isAdmin,
-    read: isAdminOrSelf,
-    update: isAdminOrSelf,
+    create: createRoleBasedAccess('create', 'users', { fallbackAdmin: true }),
+    delete: createRoleBasedAccess('delete', 'users', { fallbackAdmin: true }),
+    read: createRoleBasedAccess('read', 'users', { fallbackAdmin: true, allowSelfControl: true }),
+    update: createRoleBasedAccess('update', 'users', { fallbackAdmin: true, allowSelfControl: true }),
   },
   admin: {
+    group: 'User Management',
     defaultColumns: ['name', 'email', 'role'],
     useAsTitle: 'name',
+    hidden: createRoleBasedVisibility('users'),
   },
   auth: {
     // Include role and university in JWT for access control
@@ -38,8 +41,8 @@ export const Users: CollectionConfig = {
       saveToJWT: true,
       access: {
         // Only admins can create or update roles
-        create: isAdminFieldLevel,
-        update: isAdminFieldLevel,
+        create: createRoleBasedFieldAccess('create', 'users', 'role'),
+        update: createRoleBasedFieldAccess('update', 'users', 'role'),
       },
       options: [
         {
@@ -68,8 +71,8 @@ export const Users: CollectionConfig = {
       saveToJWT: true,
       access: {
         // Only admins can create or update university association
-        create: isAdminFieldLevel,
-        update: isAdminFieldLevel,
+        create: createRoleBasedFieldAccess('create', 'users', 'university'),
+        update: createRoleBasedFieldAccess('update', 'users', 'university'),
       },
       admin: {
         condition: ({ role }) => role === 'university-role',
