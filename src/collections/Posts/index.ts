@@ -11,7 +11,7 @@ import {
 
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
-import { hideFromUniversityRole } from '../../access/isAdminOrUniversityAdmin'
+import { hideFromUniversityRole, createRoleBasedAdminVisibility } from '../../access/isAdminOrUniversityAdmin'
 import { createRoleBasedAccess, createRoleBasedFilter, createRoleBasedAdminAccess } from '../../access/roleBasedAccess'
 import { Banner } from '../../blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
@@ -52,7 +52,7 @@ export const Posts: CollectionConfig<'posts'> = {
   },
   admin: {
     defaultColumns: ['title', 'slug', 'updatedAt'],
-    hidden: hideFromUniversityRole,
+    hidden: createRoleBasedAdminVisibility('posts'),
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({

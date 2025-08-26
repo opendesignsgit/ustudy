@@ -11,7 +11,7 @@ import { slugField } from '@/fields/slug'
 
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
-import { hideFromUniversityRole } from '../access/isAdminOrUniversityAdmin'
+import { hideFromUniversityRole, createRoleBasedAdminVisibility } from '../access/isAdminOrUniversityAdmin'
 import { createRoleBasedAccess, createRoleBasedFilter, createRoleBasedAdminAccess } from '../access/roleBasedAccess'
 
 const filename = fileURLToPath(import.meta.url)
@@ -27,7 +27,7 @@ export const Media: CollectionConfig = {
     admin: createRoleBasedAdminAccess('media'),
   },
   admin: {
-    hidden: hideFromUniversityRole,
+    hidden: createRoleBasedAdminVisibility('media'),
   },
   fields: [
     {

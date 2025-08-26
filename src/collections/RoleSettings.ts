@@ -176,6 +176,18 @@ export const RoleSettings: CollectionConfig = {
             { name: 'selfControl', type: 'checkbox', defaultValue: false },
           ],
         },
+        {
+          name: 'groups',
+          type: 'group',
+          label: 'Groups Collection',
+          fields: [
+            { name: 'create', type: 'checkbox', defaultValue: false },
+            { name: 'read', type: 'checkbox', defaultValue: false },
+            { name: 'update', type: 'checkbox', defaultValue: false },
+            { name: 'delete', type: 'checkbox', defaultValue: false },
+            { name: 'selfControl', type: 'checkbox', defaultValue: false },
+          ],
+        },
       ],
     },
     {
@@ -194,7 +206,7 @@ export const RoleSettings: CollectionConfig = {
           switch (data.roleName) {
             case 'admin':
               // Admin has full access to everything
-              const collections = ['users', 'universities', 'university-pages', 'courses', 'students', 'posts', 'media', 'categories', 'bookings', 'pages', 'settings']
+              const collections = ['users', 'universities', 'university-pages', 'courses', 'students', 'posts', 'media', 'categories', 'bookings', 'pages', 'settings', 'groups']
               collections.forEach(collection => {
                 if (!data.permissions[collection]) {
                   data.permissions[collection] = {}
