@@ -2,7 +2,6 @@ import type { CollectionConfig } from 'payload';
 
 import { authenticated } from '../../access/authenticated';
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished';
-import { createRoleBasedAccess, createRoleBasedFilter, createRoleBasedAdminAccess } from '../../access/roleBasedAccess';
 import { generatePreviewPath } from '../../utilities/generatePreviewPath';
 import { populateAuthors } from './hooks/populateAuthors';
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost';
@@ -14,11 +13,10 @@ export const Bookings: CollectionConfig = {
     plural: 'Enrollments',
   },
   access: {
-    create: createRoleBasedAccess('bookings', 'create'),
-    delete: createRoleBasedAccess('bookings', 'delete'),
-    read: createRoleBasedFilter('bookings'),
-    update: createRoleBasedAccess('bookings', 'update'),
-    admin: createRoleBasedAdminAccess('bookings'),
+    create: authenticated,
+    delete: authenticated,
+    read: authenticatedOrPublished,
+    update: authenticated,
   },
   defaultPopulate: {
     course: true,

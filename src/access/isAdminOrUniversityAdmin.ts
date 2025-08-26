@@ -1,15 +1,9 @@
 import type { Access } from 'payload'
 import type { User } from '@/payload-types'
 
-// Helper function to hide collections from roles that don't have permission (return true to hide)
+// Helper function to hide collections from university-role users (return true to hide)
 export const hideFromUniversityRole = ({ user }: { user: any }) => {
-  // Don't hide from admin users
-  if (user?.collection === 'users' && (user as User)?.role === 'admin') {
-    return false
-  }
-
-  // Hide from university-role users for posts, categories by default
-  // They should use the role-based access system to determine visibility
+  // Hide from university-role users (they should only see Universities group)
   if (user?.collection === 'users' && (user as User)?.role === 'university-role') {
     return true
   }
@@ -21,58 +15,6 @@ export const hideFromUniversityRole = ({ user }: { user: any }) => {
 
   // Show to admin and other roles
   return false
-}
-
-// Dynamic admin visibility based on role permissions
-export const createRoleBasedAdminVisibility = (collectionSlug: string) => {
-  return async ({ user, payload }: { user: any, payload: any }) => {
-    if (!user) return true // Hide if not authenticated
-    
-    // Always show to admin
-    if (user?.collection === 'users' && (user as User)?.role === 'admin') {
-      return false
-    }
-    
-    // For other users, check role permissions
-    let userRole = null
-    
-    if (user?.collection === 'users') {
-      userRole = (user as User)?.role
-    } else if (user?.collection === 'universities') {
-      userRole = 'university-role'
-    } else if (user?.collection === 'students') {
-      userRole = 'student-role'
-    }
-    
-    if (!userRole) return true // Hide if no role
-    
-    try {
-      // Get role permissions from settings
-      const roleSettings = await payload.find({
-        collection: 'role-settings',
-        where: {
-          roleName: {
-            equals: userRole,
-          },
-        },
-      })
-      
-      const permissions = roleSettings.docs[0]?.permissions || {}
-      const collectionPermissions = permissions[collectionSlug]
-      
-      // Hide if no permissions found or no access granted
-      if (!collectionPermissions) return true
-      
-      // Show if user has any permission on this collection
-      return !(collectionPermissions.create || 
-               collectionPermissions.read || 
-               collectionPermissions.update || 
-               collectionPermissions.delete)
-    } catch (error) {
-      console.error('Error checking role permissions for admin visibility:', error)
-      return true // Hide on error
-    }
-  }
 }
 
 // Helper function for university-role users to only access Universities group collections
