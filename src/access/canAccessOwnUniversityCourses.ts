@@ -1,46 +1,14 @@
 import type { Access } from 'payload'
-import type { User, Role } from '@/payload-types'
-
-const checkAdminRole = (user: any): boolean => {
-  if (!user || user.collection !== 'users') return false
-  
-  // Check for old string-based role system (backward compatibility)
-  if (typeof user.role === 'string') {
-    return user.role === 'admin'
-  }
-  
-  // Check for new role collection system
-  if (typeof user.role === 'object' && user.role?.name) {
-    return user.role.name === 'admin'
-  }
-  
-  return false
-}
-
-const checkUniversityRole = (user: any): boolean => {
-  if (!user || user.collection !== 'users') return false
-  
-  // Check for old string-based role system (backward compatibility)
-  if (typeof user.role === 'string') {
-    return user.role === 'university-role'
-  }
-  
-  // Check for new role collection system
-  if (typeof user.role === 'object' && user.role?.name) {
-    return user.role.name === 'university-role'
-  }
-  
-  return false
-}
+import type { User } from '@/payload-types'
 
 export const canAccessOwnUniversityCourses: Access = async ({ req: { user, payload }, data, id }) => {
   // Check if user is from Users collection and has admin role
-  if (checkAdminRole(user)) {
+  if (user?.collection === 'users' && (user as User)?.role === 'admin') {
     return true
   }
 
   // For university-role users from Users collection, check if they're accessing courses for their own university
-  if (checkUniversityRole(user) && (user as User)?.university) {
+  if (user?.collection === 'users' && (user as User)?.role === 'university-role' && (user as User)?.university) {
     const userUniversity = (user as User).university
     const universityId = typeof userUniversity === 'object' && userUniversity ? userUniversity.id : userUniversity
 
@@ -96,12 +64,12 @@ export const canAccessOwnUniversityCourses: Access = async ({ req: { user, paylo
 // For queries, filter courses to only show those for the user's university
 export const filterCoursesForOwnUniversity: Access = ({ req: { user } }) => {
   // Allow all for admin
-  if (checkAdminRole(user)) {
+  if (user?.collection === 'users' && (user as User)?.role === 'admin') {
     return true
   }
 
   // For university-role users from Users collection
-  if (checkUniversityRole(user) && (user as User)?.university) {
+  if (user?.collection === 'users' && (user as User)?.role === 'university-role' && (user as User)?.university) {
     const userUniversity = (user as User).university
     const universityId = typeof userUniversity === 'object' && userUniversity ? userUniversity.id : userUniversity
     

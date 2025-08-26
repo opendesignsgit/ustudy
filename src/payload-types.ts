@@ -74,7 +74,6 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
-    roles: Role;
     courses: Course;
     'intake-months': IntakeMonth;
     'study-modes': StudyMode;
@@ -104,7 +103,6 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
-    roles: RolesSelect<false> | RolesSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
     'intake-months': IntakeMonthsSelect<false> | IntakeMonthsSelect<true>;
     'study-modes': StudyModesSelect<false> | StudyModesSelect<true>;
@@ -459,10 +457,7 @@ export interface Category {
 export interface User {
   id: number;
   name?: string | null;
-  /**
-   * Select the role for this user from the Roles collection
-   */
-  role: number | Role;
+  role: 'admin' | 'editor' | 'university-role' | 'post-editor';
   /**
    * This field associates university-role users with their university.
    */
@@ -477,55 +472,6 @@ export interface User {
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "roles".
- */
-export interface Role {
-  id: number;
-  /**
-   * Unique name for this role (e.g., "admin", "editor", "university-role")
-   */
-  name: string;
-  /**
-   * Human-readable description of this role
-   */
-  description?: string | null;
-  /**
-   * Define CRUD + Self Control privileges for each collection
-   */
-  privileges?:
-    | {
-        /**
-         * Collection slug (e.g., "users", "posts", "universities")
-         */
-        collection: string;
-        /**
-         * Show collection in admin panel/nav only if this is enabled
-         */
-        view?: boolean | null;
-        /**
-         * Allow creating new records in this collection
-         */
-        create?: boolean | null;
-        /**
-         * Allow editing existing records in this collection
-         */
-        edit?: boolean | null;
-        /**
-         * Allow deleting records from this collection
-         */
-        delete?: boolean | null;
-        /**
-         * Restrict access to entries created by (or assigned to) the logged-in user
-         */
-        selfControl?: boolean | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -571,9 +517,6 @@ export interface University {
   slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
-  /**
-   * Email is read-only as it serves as the unique identifier for login.
-   */
   email: string;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
@@ -1129,10 +1072,6 @@ export interface UniversityPage {
    * The university this page belongs to
    */
   university: number | University;
-  /**
-   * Parent page (for creating hierarchical page structure)
-   */
-  parent?: (number | null) | UniversityPage;
   content?: {
     root: {
       type: string;
@@ -1416,10 +1355,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
-      } | null)
-    | ({
-        relationTo: 'roles';
-        value: number | Role;
       } | null)
     | ({
         relationTo: 'courses';
@@ -1860,27 +1795,6 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "roles_select".
- */
-export interface RolesSelect<T extends boolean = true> {
-  name?: T;
-  description?: T;
-  privileges?:
-    | T
-    | {
-        collection?: T;
-        view?: T;
-        create?: T;
-        edit?: T;
-        delete?: T;
-        selfControl?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "courses_select".
  */
 export interface CoursesSelect<T extends boolean = true> {
@@ -2047,7 +1961,6 @@ export interface UniversityPagesSelect<T extends boolean = true> {
   slug?: T;
   slugLock?: T;
   university?: T;
-  parent?: T;
   content?: T;
   showInMenu?: T;
   menuOrder?: T;
