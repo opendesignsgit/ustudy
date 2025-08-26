@@ -13,7 +13,6 @@ import {
 
 import { canAccessOwnUniversity } from '../../access/canAccessOwnUniversity'
 import { isAdminOrUniversityUser } from '../../access/isUniversityUser'
-import { createRoleBasedAccess, createRoleBasedFilter, createRoleBasedAdminAccess } from '../../access/roleBasedAccess'
 import { Banner } from '@/blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { Archive } from '../../blocks/ArchiveBlock/config'
@@ -31,10 +30,13 @@ export const Universities: CollectionConfig = {
   slug: 'universities',
   access: {
     create: () => true, // Allow registration
-    delete: createRoleBasedAccess('universities', 'delete'),
+    delete: canAccessOwnUniversity,
     read: () => true, // Publicly readable
-    update: createRoleBasedAccess('universities', 'update'),
-    admin: createRoleBasedAdminAccess('universities'),
+    update: canAccessOwnUniversity,
+    admin: ({ req: { user } }) => Boolean(
+      (user?.collection === 'users' && ((user as any)?.role === 'admin' || (user as any)?.role === 'university-role')) ||
+      user?.collection === 'universities'
+    ),
   },
   admin: {
     group: 'Universities',

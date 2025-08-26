@@ -25,7 +25,6 @@ import { UniversityPages } from './collections/UniversityPages'
 import { Countries } from './collections/Countries'
 import { WebsiteSettings } from './collections/Settings'
 import { RoleSettings } from './collections/RoleSettings'
-import { Groups } from './collections/Groups'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -80,7 +79,7 @@ export default buildConfig({
     },
     push: false,
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Courses, IntakeMonths, StudyModes, StudyYears, StudyAreas, Departments, DegreePrograms, Universities, UniversityTemplates, UniversityPages, Countries, Bookings, Students, RoleSettings, Groups],
+  collections: [Pages, Posts, Media, Categories, Users, Courses, IntakeMonths, StudyModes, StudyYears, StudyAreas, Departments, DegreePrograms, Universities, UniversityTemplates, UniversityPages, Countries, Bookings, Students, RoleSettings],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, WebsiteSettings],
   plugins: [

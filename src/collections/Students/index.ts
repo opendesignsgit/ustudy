@@ -2,16 +2,14 @@
 import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '../../access/authenticated'
-import { createRoleBasedAccess, createRoleBasedFilter, createRoleBasedAdminAccess } from '../../access/roleBasedAccess'
 
 export const Students: CollectionConfig = {
   slug: 'students',
   access: {
     create: () => true,
-    read: createRoleBasedFilter('students'),
-    update: createRoleBasedAccess('students', 'update'),
-    delete: createRoleBasedAccess('students', 'delete'),
-    admin: createRoleBasedAdminAccess('students'),
+    read: () => true,
+    update: () => true,
+    delete: authenticated,
   },
   admin: {
     group: 'Universities',
