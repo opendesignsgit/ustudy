@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import type { University } from '@/payload-types'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
+import RichText from '@/components/RichText'
 import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import configPromise from '@payload-config'
@@ -78,23 +79,15 @@ export default async function UniversityPage({ params: paramsPromise }: Args) {
 
       {/* University Content */}
       <div className="max-w-6xl mx-auto px-4 py-12">
-        {/* Handle structured blocks content from CMS */}
-        {university.content && Array.isArray(university.content) && university.content.length > 0 && (
-          <RenderBlocks blocks={university.content as any} />
-        )}
-        
-        {/* Handle HTML content from dashboard editor */}
-        {university.content && typeof university.content === 'string' && university.content.trim() && (
-          <div 
-            className="prose prose-lg max-w-none university-content"
-            dangerouslySetInnerHTML={{ __html: university.content }}
-          />
+        {/* Handle lexical/rich text content from CMS */}
+        {university.content && (
+          <div className="prose prose-lg max-w-none university-content mb-8">
+            <RichText data={university.content} enableGutter={false} />
+          </div>
         )}
         
         {/* Default content if no custom content exists */}
-        {(!university.content || 
-          (Array.isArray(university.content) && university.content.length === 0) ||
-          (typeof university.content === 'string' && !university.content.trim())) && (
+        {!university.content && (
           <div className="prose prose-lg max-w-none">
             <div className="grid md:grid-cols-2 gap-8 mb-12">
               <div>

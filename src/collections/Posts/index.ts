@@ -11,7 +11,8 @@ import {
 
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
-import { hideFromUniversityRole } from '../../access/isAdminOrUniversityAdmin'
+import { hideFromUniversityRole, createRoleBasedAdminVisibility } from '../../access/isAdminOrUniversityAdmin'
+import { createRoleBasedAccess, createRoleBasedFilter, createRoleBasedAdminAccess } from '../../access/roleBasedAccess'
 import { Banner } from '../../blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
@@ -31,10 +32,11 @@ import { slugField } from '@/fields/slug'
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
   access: {
-    create: authenticated,
-    delete: authenticated,
+    create: createRoleBasedAccess('posts', 'create'),
+    delete: createRoleBasedAccess('posts', 'delete'),
     read: authenticatedOrPublished,
-    update: authenticated,
+    update: createRoleBasedAccess('posts', 'update'),
+    admin: createRoleBasedAdminAccess('posts'),
   },
   // This config controls what's populated by default when a post is referenced
   // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
@@ -50,7 +52,7 @@ export const Posts: CollectionConfig<'posts'> = {
   },
   admin: {
     defaultColumns: ['title', 'slug', 'updatedAt'],
-    hidden: hideFromUniversityRole,
+    hidden: createRoleBasedAdminVisibility('posts'),
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({
