@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react'
 import { useAuth } from '@payloadcms/ui'
 
-export const UniversityRedirect: React.FC = () => {
+const UniversityRedirect: React.FC = () => {
   const { user } = useAuth()
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export const UniversityRedirect: React.FC = () => {
         window.location.href = `/admin/collections/universities/${universityId}`
       }
     }
-    
+
     // Check if user is from universities collection and redirect to edit their own record
     if (user?.collection === 'universities' && user?.id && typeof window !== 'undefined') {
       // Redirect to edit their own university record
@@ -25,3 +25,5 @@ export const UniversityRedirect: React.FC = () => {
 
   return null
 }
+
+export default UniversityRedirect

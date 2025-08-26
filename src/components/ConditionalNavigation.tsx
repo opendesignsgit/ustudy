@@ -3,7 +3,8 @@
 import React from 'react'
 import { useAuth } from '@payloadcms/ui'
 
-export const ConditionalNavigation: React.FC = () => {
+const ConditionalNavigation: React.FC = () => {
+
   const { user } = useAuth()
 
   // For university-role users or universities collection users, hide non-university collections
@@ -35,7 +36,7 @@ export const ConditionalNavigation: React.FC = () => {
         }
       `
       document.head.appendChild(style)
-      
+
       return () => {
         document.head.removeChild(style)
       }
@@ -44,3 +45,6 @@ export const ConditionalNavigation: React.FC = () => {
 
   return null
 }
+
+
+export default ConditionalNavigation
