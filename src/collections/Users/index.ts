@@ -15,6 +15,7 @@ export const Users: CollectionConfig = {
     update: createRoleBasedAccess('users', 'update'),
   },
   admin: {
+    group: 'User Management',
     defaultColumns: ['name', 'email', 'role'],
     useAsTitle: 'name',
   },

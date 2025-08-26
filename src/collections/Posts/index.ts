@@ -51,6 +51,7 @@ export const Posts: CollectionConfig<'posts'> = {
     },
   },
   admin: {
+    group: 'Content',
     defaultColumns: ['title', 'slug', 'updatedAt'],
     hidden: createRoleBasedAdminVisibility('posts'),
     livePreview: {
