@@ -13,7 +13,6 @@ import {
 
 import { canAccessOwnUniversity } from '../../access/canAccessOwnUniversity'
 import { isAdminOrUniversityUser } from '../../access/isUniversityUser'
-import { roleBasedAccess, roleBasedAdminVisibility } from '../../access/roleBasedAccess'
 import { Banner } from '@/blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { Archive } from '../../blocks/ArchiveBlock/config'
@@ -30,7 +29,7 @@ import { slugField } from '@/fields/slug'
 export const Universities: CollectionConfig = {
   slug: 'universities',
   access: {
-    create: roleBasedAccess('universities', 'create'),
+    create: () => true, // Allow registration
     delete: canAccessOwnUniversity,
     read: () => true, // Publicly readable
     update: canAccessOwnUniversity,
@@ -39,7 +38,6 @@ export const Universities: CollectionConfig = {
     group: 'Universities',
     defaultColumns: ['title', 'email', 'phone', 'country', 'updatedAt'],
     useAsTitle: 'title',
-    hidden: roleBasedAdminVisibility('universities'),
     livePreview: {
       url: ({ data }) => {
         const slug = typeof data?.slug === 'string' ? data.slug : ''

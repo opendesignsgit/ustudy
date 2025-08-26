@@ -4,27 +4,20 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/providers/Auth';
 
 interface Permission {
-  view: boolean;
   create: boolean;
-  edit: boolean;
+  read: boolean;
+  update: boolean;
   delete: boolean;
   selfControl: boolean;
 }
 
-interface Privilege {
-  collection: string;
-  view?: boolean;
-  create?: boolean;
-  edit?: boolean;
-  delete?: boolean;
-  selfControl?: boolean;
+interface RolePermissions {
+  [collectionName: string]: Permission;
 }
 
 interface Role {
-  id: string;
   name: string;
-  description?: string;
-  privileges: Privilege[];
+  permissions: RolePermissions;
 }
 
 export const SettingsPage: React.FC = () => {
@@ -35,20 +28,21 @@ export const SettingsPage: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
 
-  // Define available collections based on the payload config
+  // Define available collections
   const availableCollections = [
     'users',
-    'roles',
     'universities',
     'university-pages',
     'students',
     'courses',
     'bookings',
     'posts',
-    'pages',
     'media',
     'categories'
   ];
+
+  // Define available roles
+  const availableRoles = ['admin', 'editor', 'university-role', 'post-editor'];
 
   useEffect(() => {
     // Check if user has permission to access settings
@@ -63,20 +57,101 @@ export const SettingsPage: React.FC = () => {
     try {
       setLoading(true);
       
-      // Fetch roles from the API
-      const response = await fetch('/api/roles', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      // Initialize default role permissions
+      const defaultRoles: Role[] = availableRoles.map(roleName => ({
+        name: roleName,
+        permissions: availableCollections.reduce((acc, collection) => {
+          acc[collection] = {
+            create: false,
+            read: false,
+            update: false,
+            delete: false,
+            selfControl: false
+          };
+          return acc;
+        }, {} as RolePermissions)
+      }));
+
+      // Set default permissions based on role
+      defaultRoles.forEach(role => {
+        switch (role.name) {
+          case 'admin':
+            // Admin has full access to everything
+            Object.keys(role.permissions).forEach(collection => {
+              role.permissions[collection] = {
+                create: true,
+                read: true,
+                update: true,
+                delete: true,
+                selfControl: true
+              };
+            });
+            break;
+          
+          case 'university-role':
+            // University role can manage their own university and related pages
+            role.permissions['universities'] = {
+              create: false,
+              read: true,
+              update: true,
+              delete: false,
+              selfControl: true
+            };
+            role.permissions['university-pages'] = {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              selfControl: true
+            };
+            role.permissions['media'] = {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              selfControl: true
+            };
+            break;
+          
+          case 'editor':
+            // Editor can manage posts and media
+            role.permissions['posts'] = {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              selfControl: false
+            };
+            role.permissions['media'] = {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              selfControl: false
+            };
+            role.permissions['categories'] = {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              selfControl: false
+            };
+            break;
+          
+          case 'post-editor':
+            // Post editor can only manage posts
+            role.permissions['posts'] = {
+              create: true,
+              read: true,
+              update: true,
+              delete: false,
+              selfControl: false
+            };
+            break;
+        }
       });
-      
-      if (response.ok) {
-        const rolesData = await response.json();
-        setRoles(rolesData.docs || []);
-      } else {
-        setMessage('Error loading roles from server');
-      }
-      
+
+      setRoles(defaultRoles);
       setCollections(availableCollections);
     } catch (error) {
       console.error('Error loading roles and permissions:', error);
@@ -88,24 +163,8 @@ export const SettingsPage: React.FC = () => {
 
   const updatePermission = (roleIndex: number, collection: string, permission: keyof Permission, value: boolean) => {
     const updatedRoles = [...roles];
-    const role = updatedRoles[roleIndex];
-    
-    // Find or create the privilege for this collection
-    let privilege = role.privileges.find(p => p.collection === collection);
-    if (!privilege) {
-      privilege = { collection };
-      role.privileges.push(privilege);
-    }
-    
-    // Update the specific permission
-    privilege[permission] = value;
-    
+    updatedRoles[roleIndex].permissions[collection][permission] = value;
     setRoles(updatedRoles);
-  };
-
-  const getPermissionValue = (role: Role, collection: string, permission: keyof Permission): boolean => {
-    const privilege = role.privileges.find(p => p.collection === collection);
-    return privilege?.[permission] || false;
   };
 
   const savePermissions = async () => {
@@ -113,22 +172,9 @@ export const SettingsPage: React.FC = () => {
       setSaving(true);
       setMessage('');
 
-      // Save each role to the server
-      for (const role of roles) {
-        const response = await fetch(`/api/roles/${role.id}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            privileges: role.privileges,
-          }),
-        });
-        
-        if (!response.ok) {
-          throw new Error(`Failed to save role ${role.name}`);
-        }
-      }
+      // Here you would typically save to backend
+      // For now, we'll just simulate saving to localStorage
+      localStorage.setItem('rolePermissions', JSON.stringify(roles));
       
       setMessage('Permissions saved successfully!');
       setTimeout(() => setMessage(''), 3000);
@@ -163,22 +209,13 @@ export const SettingsPage: React.FC = () => {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Settings - Roles & Access</h2>
-        <div className="space-x-2">
-          <button
-            onClick={loadRolesAndPermissions}
-            disabled={loading}
-            className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 disabled:opacity-50"
-          >
-            {loading ? 'Loading...' : 'Refresh'}
-          </button>
-          <button
-            onClick={savePermissions}
-            disabled={saving}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
-          >
-            {saving ? 'Saving...' : 'Save Changes'}
-          </button>
-        </div>
+        <button
+          onClick={savePermissions}
+          disabled={saving}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+        >
+          {saving ? 'Saving...' : 'Save Changes'}
+        </button>
       </div>
 
       {message && (
@@ -206,14 +243,9 @@ export const SettingsPage: React.FC = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {roles.map((role, roleIndex) => (
-                <tr key={role.id}>
+                <tr key={role.name}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    <div>
-                      <div className="font-semibold">{role.name}</div>
-                      {role.description && (
-                        <div className="text-xs text-gray-500">{role.description}</div>
-                      )}
-                    </div>
+                    {role.name}
                   </td>
                   {collections.map(collection => (
                     <td key={collection} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -221,16 +253,7 @@ export const SettingsPage: React.FC = () => {
                         <label className="flex items-center">
                           <input
                             type="checkbox"
-                            checked={getPermissionValue(role, collection, 'view')}
-                            onChange={(e) => updatePermission(roleIndex, collection, 'view', e.target.checked)}
-                            className="mr-1 h-3 w-3"
-                          />
-                          <span className="text-xs">View</span>
-                        </label>
-                        <label className="flex items-center">
-                          <input
-                            type="checkbox"
-                            checked={getPermissionValue(role, collection, 'create')}
+                            checked={role.permissions[collection]?.create || false}
                             onChange={(e) => updatePermission(roleIndex, collection, 'create', e.target.checked)}
                             className="mr-1 h-3 w-3"
                           />
@@ -239,16 +262,25 @@ export const SettingsPage: React.FC = () => {
                         <label className="flex items-center">
                           <input
                             type="checkbox"
-                            checked={getPermissionValue(role, collection, 'edit')}
-                            onChange={(e) => updatePermission(roleIndex, collection, 'edit', e.target.checked)}
+                            checked={role.permissions[collection]?.read || false}
+                            onChange={(e) => updatePermission(roleIndex, collection, 'read', e.target.checked)}
                             className="mr-1 h-3 w-3"
                           />
-                          <span className="text-xs">Edit</span>
+                          <span className="text-xs">Read</span>
                         </label>
                         <label className="flex items-center">
                           <input
                             type="checkbox"
-                            checked={getPermissionValue(role, collection, 'delete')}
+                            checked={role.permissions[collection]?.update || false}
+                            onChange={(e) => updatePermission(roleIndex, collection, 'update', e.target.checked)}
+                            className="mr-1 h-3 w-3"
+                          />
+                          <span className="text-xs">Update</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={role.permissions[collection]?.delete || false}
                             onChange={(e) => updatePermission(roleIndex, collection, 'delete', e.target.checked)}
                             className="mr-1 h-3 w-3"
                           />
@@ -257,7 +289,7 @@ export const SettingsPage: React.FC = () => {
                         <label className="flex items-center">
                           <input
                             type="checkbox"
-                            checked={getPermissionValue(role, collection, 'selfControl')}
+                            checked={role.permissions[collection]?.selfControl || false}
                             onChange={(e) => updatePermission(roleIndex, collection, 'selfControl', e.target.checked)}
                             className="mr-1 h-3 w-3"
                           />
@@ -276,11 +308,11 @@ export const SettingsPage: React.FC = () => {
       <div className="mt-6 bg-blue-50 p-4 rounded-lg">
         <h3 className="font-semibold text-blue-900 mb-2">Permission Types:</h3>
         <ul className="text-sm text-blue-800 space-y-1">
-          <li><strong>View:</strong> Show collection in admin panel/nav only if this is enabled for user's role</li>
-          <li><strong>Create:</strong> Allow action only if corresponding privilege is enabled</li>
-          <li><strong>Edit:</strong> Allow action only if corresponding privilege is enabled</li>
-          <li><strong>Delete:</strong> Allow action only if corresponding privilege is enabled</li>
-          <li><strong>Self-Control:</strong> Restrict access to entries created by (or assigned to) the logged-in user. Combine with other privileges as needed</li>
+          <li><strong>Create:</strong> Permission to create new records</li>
+          <li><strong>Read:</strong> Permission to view records</li>
+          <li><strong>Update:</strong> Permission to modify records</li>
+          <li><strong>Delete:</strong> Permission to delete records</li>
+          <li><strong>Self-Control:</strong> Permission to manage only their own data (e.g., universities can manage their own page)</li>
         </ul>
       </div>
     </div>

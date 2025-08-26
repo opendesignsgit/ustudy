@@ -3,7 +3,6 @@ import type { CollectionConfig } from 'payload'
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { hideFromUniversityRole } from '../../access/isAdminOrUniversityAdmin'
-import { roleBasedAccess, roleBasedAdminVisibility } from '../../access/roleBasedAccess'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
@@ -26,10 +25,10 @@ import {
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
   access: {
-    create: roleBasedAccess('pages', 'create'),
-    delete: roleBasedAccess('pages', 'delete'),
+    create: authenticated,
+    delete: authenticated,
     read: authenticatedOrPublished,
-    update: roleBasedAccess('pages', 'edit'),
+    update: authenticated,
   },
   // This config controls what's populated by default when a page is referenced
   // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
@@ -40,7 +39,7 @@ export const Pages: CollectionConfig<'pages'> = {
   },
   admin: {
     defaultColumns: ['title', 'slug', 'updatedAt'],
-    hidden: roleBasedAdminVisibility('pages'),
+    hidden: hideFromUniversityRole,
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({

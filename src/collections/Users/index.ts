@@ -2,7 +2,6 @@ import type { CollectionConfig } from 'payload'
 
 import { isAdmin, isAdminFieldLevel } from '../../access/isAdmin'
 import { isAdminOrSelf } from '../../access/isAdminOrSelf'
-import { roleBasedAccess, roleBasedAdminVisibility } from '../../access/roleBasedAccess'
 import type { User } from '@/payload-types'
 
 export const Users: CollectionConfig = {
@@ -12,16 +11,14 @@ export const Users: CollectionConfig = {
       (user?.collection === 'users' && ((user as User)?.role === 'admin' || (user as User)?.role === 'university-role')) ||
       user?.collection === 'universities'
     ),
-    create: roleBasedAccess('users', 'create'),
-    delete: roleBasedAccess('users', 'delete'),
+    create: isAdmin,
+    delete: isAdmin,
     read: isAdminOrSelf,
     update: isAdminOrSelf,
   },
   admin: {
     defaultColumns: ['name', 'email', 'role'],
     useAsTitle: 'name',
-    group: 'User Management',
-    hidden: roleBasedAdminVisibility('users'),
   },
   auth: {
     // Include role and university in JWT for access control
@@ -34,9 +31,9 @@ export const Users: CollectionConfig = {
     },
     {
       name: 'role',
-      type: 'relationship',
-      relationTo: 'roles',
+      type: 'select',
       required: true,
+      defaultValue: 'editor',
       // Save this field to JWT so we can use from `req.user`
       saveToJWT: true,
       access: {
@@ -44,9 +41,24 @@ export const Users: CollectionConfig = {
         create: isAdminFieldLevel,
         update: isAdminFieldLevel,
       },
-      admin: {
-        description: 'Select the role for this user from the Roles collection',
-      },
+      options: [
+        {
+          label: 'Admin',
+          value: 'admin',
+        },
+        {
+          label: 'Editor', 
+          value: 'editor',
+        },
+        {
+          label: 'University Role',
+          value: 'university-role',
+        },
+        {
+          label: 'Post Editor',
+          value: 'post-editor',
+        },
+      ],
     },
     {
       name: 'university',
