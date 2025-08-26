@@ -150,7 +150,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const login = async (credentials: { email: string; password: string }, type: 'student' | 'university' = 'student') => {
         try {
             setLoading(true);
-            let endpoint = type === 'student' ? '/api/students/login' : '/api/users/login';
+            const endpoint = type === 'student' ? '/api/students/login' : '/api/users/login';
             
             // For university login, we need to authenticate through the Users collection
             if (type === 'university') {
