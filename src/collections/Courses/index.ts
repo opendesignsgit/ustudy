@@ -13,7 +13,6 @@ import {
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { canAccessOwnUniversityCourses, filterCoursesForOwnUniversity } from '../../access/canAccessOwnUniversityCourses'
-import { createRoleBasedAccess, createRoleBasedFilter, createRoleBasedAdminAccess } from '../../access/roleBasedAccess'
 import { Banner } from '@/blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { Archive } from '../../blocks/ArchiveBlock/config'
@@ -76,11 +75,10 @@ export const Courses: CollectionConfig<'courses'> = {
   slug: 'courses',
   // endpoints: [withFiltersEndpoint],
   access: {
-    create: createRoleBasedAccess('courses', 'create'),
-    delete: createRoleBasedAccess('courses', 'delete'),
-    read: createRoleBasedFilter('courses'),
-    update: createRoleBasedAccess('courses', 'update'),
-    admin: createRoleBasedAdminAccess('courses'),
+    create: canAccessOwnUniversityCourses,
+    delete: canAccessOwnUniversityCourses,
+    read: filterCoursesForOwnUniversity,
+    update: canAccessOwnUniversityCourses,
   },
   defaultPopulate: {
     title: true,
