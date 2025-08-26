@@ -155,11 +155,11 @@ export const createRoleBasedAccess = (
       return true
     }
 
-    let userRole = null
+    let userRole: string | null = null
     
     // Determine user role
     if (user?.collection === 'users') {
-      userRole = (user as User)?.role
+      userRole = (user as User)?.role || null
     } else if (user?.collection === 'universities') {
       userRole = 'university-role'
     } else if (user?.collection === 'students') {
@@ -181,7 +181,7 @@ export const createRoleBasedAccess = (
 
     // If selfControl is enabled, check if user can access this specific content
     if (collectionPermissions.selfControl === true) {
-      return await checkSelfControl(user, collectionSlug, payload, id, data)
+      return await checkSelfControl(user, collectionSlug, payload, typeof id === 'string' ? id : id?.toString(), data)
     }
 
     return true
@@ -190,7 +190,7 @@ export const createRoleBasedAccess = (
 
 // Create role-based query filter for read operations
 export const createRoleBasedFilter = (collectionSlug: string): Access => {
-  return async ({ req: { user, payload } }) => {
+  return async ({ req: { user, payload } }): Promise<boolean | any> => {
     if (!user) return false
 
     // Admin always has access to everything
@@ -198,11 +198,11 @@ export const createRoleBasedFilter = (collectionSlug: string): Access => {
       return true
     }
 
-    let userRole = null
+    let userRole: string | null = null
     
     // Determine user role
     if (user?.collection === 'users') {
-      userRole = (user as User)?.role
+      userRole = (user as User)?.role || null
     } else if (user?.collection === 'universities') {
       userRole = 'university-role'
     } else if (user?.collection === 'students') {
@@ -226,8 +226,8 @@ export const createRoleBasedFilter = (collectionSlug: string): Access => {
           if (user?.collection === 'universities') {
             return {
               id: {
-                equals: user.id,
-              },
+                equals: Number(user.id),
+              }
             }
           }
           if (user?.collection === 'users' && user?.university) {
@@ -235,8 +235,8 @@ export const createRoleBasedFilter = (collectionSlug: string): Access => {
             const userUniversityId = typeof userUniversity === 'object' ? userUniversity.id : userUniversity
             return {
               id: {
-                equals: userUniversityId,
-              },
+                equals: Number(userUniversityId),
+              }
             }
           }
           return false
@@ -246,8 +246,8 @@ export const createRoleBasedFilter = (collectionSlug: string): Access => {
           if (universityId) {
             return {
               university: {
-                equals: universityId,
-              },
+                equals: Number(universityId),
+              }
             }
           }
           return false
@@ -257,8 +257,8 @@ export const createRoleBasedFilter = (collectionSlug: string): Access => {
             // Filter bookings for courses that belong to user's university
             return {
               'course.university': {
-                equals: universityId,
-              },
+                equals: Number(universityId),
+              }
             }
           }
           return false
@@ -266,16 +266,16 @@ export const createRoleBasedFilter = (collectionSlug: string): Access => {
         case 'users':
           return {
             id: {
-              equals: user.id,
-            },
+              equals: Number(user.id),
+            }
           }
 
         case 'students':
           if (user?.collection === 'students') {
             return {
               id: {
-                equals: user.id,
-              },
+                equals: Number(user.id),
+              }
             }
           }
           return false
@@ -303,11 +303,11 @@ export const createRoleBasedFieldAccess = (
       return true
     }
 
-    let userRole = null
+    let userRole: string | null = null
     
     // Determine user role
     if (user?.collection === 'users') {
-      userRole = (user as User)?.role
+      userRole = (user as User)?.role || null
     } else if (user?.collection === 'universities') {
       userRole = 'university-role'
     } else if (user?.collection === 'students') {
@@ -327,9 +327,9 @@ export const createRoleBasedFieldAccess = (
   }
 }
 
-// Admin panel access
-export const createRoleBasedAdminAccess = (collectionSlug: string): Access => {
-  return async ({ req: { user, payload } }) => {
+// Admin panel access - simplified to return boolean only
+export const createRoleBasedAdminAccess = (collectionSlug: string) => {
+  return async ({ req: { user, payload } }: { req: { user: any, payload: any } }): Promise<boolean> => {
     if (!user) return false
 
     // Admin always has access
@@ -337,11 +337,11 @@ export const createRoleBasedAdminAccess = (collectionSlug: string): Access => {
       return true
     }
 
-    let userRole = null
+    let userRole: string | null = null
     
     // Determine user role
     if (user?.collection === 'users') {
-      userRole = (user as User)?.role
+      userRole = (user as User)?.role || null
     } else if (user?.collection === 'universities') {
       userRole = 'university-role'
     } else if (user?.collection === 'students') {
@@ -355,11 +355,11 @@ export const createRoleBasedAdminAccess = (collectionSlug: string): Access => {
     const collectionPermissions = permissions[collectionSlug]
 
     // User can access admin panel for this collection if they have any permission
-    return collectionPermissions && (
+    return !!(collectionPermissions && (
       collectionPermissions.create ||
       collectionPermissions.read ||
       collectionPermissions.update ||
       collectionPermissions.delete
-    )
+    ))
   }
 }
