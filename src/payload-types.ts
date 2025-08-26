@@ -517,6 +517,9 @@ export interface University {
   slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
+  /**
+   * Email is read-only as it serves as the unique identifier for login.
+   */
   email: string;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
@@ -1072,6 +1075,10 @@ export interface UniversityPage {
    * The university this page belongs to
    */
   university: number | University;
+  /**
+   * Parent page (for creating hierarchical page structure)
+   */
+  parent?: (number | null) | UniversityPage;
   content?: {
     root: {
       type: string;
@@ -1961,6 +1968,7 @@ export interface UniversityPagesSelect<T extends boolean = true> {
   slug?: T;
   slugLock?: T;
   university?: T;
+  parent?: T;
   content?: T;
   showInMenu?: T;
   menuOrder?: T;
