@@ -12,6 +12,7 @@ import {
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { hideFromUniversityRole } from '../../access/isAdminOrUniversityAdmin'
+import { roleBasedAccess, roleBasedAdminVisibility } from '../../access/roleBasedAccess'
 import { Banner } from '../../blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
@@ -31,10 +32,10 @@ import { slugField } from '@/fields/slug'
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
   access: {
-    create: authenticated,
-    delete: authenticated,
+    create: roleBasedAccess('posts', 'create'),
+    delete: roleBasedAccess('posts', 'delete'),
     read: authenticatedOrPublished,
-    update: authenticated,
+    update: roleBasedAccess('posts', 'edit'),
   },
   // This config controls what's populated by default when a post is referenced
   // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
@@ -50,7 +51,7 @@ export const Posts: CollectionConfig<'posts'> = {
   },
   admin: {
     defaultColumns: ['title', 'slug', 'updatedAt'],
-    hidden: hideFromUniversityRole,
+    hidden: roleBasedAdminVisibility('posts'),
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({

@@ -12,6 +12,7 @@ import { slugField } from '@/fields/slug'
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
 import { hideFromUniversityRole } from '../access/isAdminOrUniversityAdmin'
+import { roleBasedAccess, roleBasedAdminVisibility } from '../access/roleBasedAccess'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -19,13 +20,13 @@ const dirname = path.dirname(filename)
 export const Media: CollectionConfig = {
   slug: 'media',
   access: {
-    create: authenticated,
-    delete: authenticated,
+    create: roleBasedAccess('media', 'create'),
+    delete: roleBasedAccess('media', 'delete'),
     read: anyone,
-    update: authenticated,
+    update: roleBasedAccess('media', 'edit'),
   },
   admin: {
-    hidden: hideFromUniversityRole,
+    hidden: roleBasedAdminVisibility('media'),
   },
   fields: [
     {
