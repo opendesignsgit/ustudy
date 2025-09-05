@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { LoginForm } from "./LoginForm";
+import toast, { Toaster } from 'react-hot-toast';
 
 const THEME_COLOR = "#34c3ec";
 const OTP_TIMER = 120;
@@ -44,6 +45,10 @@ export const RegisterForm = ({
     const [emailOtpSent, setEmailOtpSent] = useState(false);
     const [phoneOtpTimer, setPhoneOtpTimer] = useState(0);
     const [emailOtpTimer, setEmailOtpTimer] = useState(0);
+    const [phoneVerifyLoading, setPhoneVerifyLoading] = useState(false);
+    const [emailVerifyLoading, setEmailVerifyLoading] = useState(false);
+    const [phoneOtpLoading, setPhoneOtpLoading] = useState(false);
+    const [emailOtpLoading, setEmailOtpLoading] = useState(false);
     const phoneOtpInterval = useRef<NodeJS.Timeout | null>(null);
     const emailOtpInterval = useRef<NodeJS.Timeout | null>(null);
     const [error, setError] = useState("");
@@ -161,44 +166,76 @@ export const RegisterForm = ({
     const handleSendOtp = async (type: "phone" | "email") => {
         setError("");
         setSuccess("");
+        
+        // Set loading state for verify button
         if (type === "phone") {
-            if (!isValidPhone(formData.phone)) {
-                setError("Enter valid phone number.");
-                return;
-            }
-            const exists = await checkStudentExists(formData.phone, "");
-            if (exists) {
-                setError("User already exists. Please login.");
-                setShowLoginInstead(true);
-                return;
-            }
-            setPhoneOtpSent(true);
-            setPhoneOtpTimer(OTP_TIMER);
-            setStage("phone-otp");
-            await fetch("/api/send-otp", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ phone: formData.phone }),
-            });
+            setPhoneVerifyLoading(true);
         } else {
-            if (!isValidEmail(formData.email)) {
-                setError("Enter valid email.");
-                return;
+            setEmailVerifyLoading(true);
+        }
+        
+        try {
+            if (type === "phone") {
+                if (!isValidPhone(formData.phone)) {
+                    toast.error("Enter valid phone number.");
+                    return;
+                }
+                const exists = await checkStudentExists(formData.phone, "");
+                if (exists) {
+                    toast.error("User already exists. Please login.");
+                    setShowLoginInstead(true);
+                    return;
+                }
+                
+                const response = await fetch("/api/send-otp", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ phone: formData.phone }),
+                });
+                
+                if (response.ok) {
+                    setPhoneOtpSent(true);
+                    setPhoneOtpTimer(OTP_TIMER);
+                    setStage("phone-otp");
+                    toast.success("OTP sent to your phone!");
+                } else {
+                    throw new Error("Failed to send OTP");
+                }
+            } else {
+                if (!isValidEmail(formData.email)) {
+                    toast.error("Enter valid email.");
+                    return;
+                }
+                const exists = await checkStudentExists("", formData.email);
+                if (exists) {
+                    toast.error("User already exists. Please login.");
+                    setShowLoginInstead(true);
+                    return;
+                }
+                
+                const response = await fetch("/api/send-otp", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: formData.email }),
+                });
+                
+                if (response.ok) {
+                    setEmailOtpSent(true);
+                    setEmailOtpTimer(OTP_TIMER);
+                    setStage("email-otp");
+                    toast.success("OTP sent to your email!");
+                } else {
+                    throw new Error("Failed to send OTP");
+                }
             }
-            const exists = await checkStudentExists("", formData.email);
-            if (exists) {
-                setError("User already exists. Please login.");
-                setShowLoginInstead(true);
-                return;
+        } catch (error: any) {
+            toast.error(error.message || "Failed to send OTP");
+        } finally {
+            if (type === "phone") {
+                setPhoneVerifyLoading(false);
+            } else {
+                setEmailVerifyLoading(false);
             }
-            setEmailOtpSent(true);
-            setEmailOtpTimer(OTP_TIMER);
-            setStage("email-otp");
-            await fetch("/api/send-otp", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: formData.email }),
-            });
         }
     };
 
@@ -206,21 +243,46 @@ export const RegisterForm = ({
         setError("");
         setSuccess("");
         const value = type === "phone" ? phoneOtp : emailOtp;
-        let payload: any = { otp: value, medium: type };
-        if (type === "phone") payload.phone = formData.phone;
-        else payload.email = formData.email;
-        const res = await fetch("/api/check-otp", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-        });
-        const json = await res.json();
-        if (json.message === "OTP verified successfully") {
-            setFieldVer((v) => ({ ...v, [type]: true }));
-            setSuccess(type === "phone" ? "Phone verified!" : "Email verified!");
-            setStage("fields");
+        
+        if (!value || value.length !== 6) {
+            toast.error("Please enter a valid 6-digit OTP");
+            return;
+        }
+        
+        // Set loading state
+        if (type === "phone") {
+            setPhoneOtpLoading(true);
         } else {
-            setError(json.message || "OTP verification failed");
+            setEmailOtpLoading(true);
+        }
+        
+        try {
+            let payload: any = { otp: value, medium: type };
+            if (type === "phone") payload.phone = formData.phone;
+            else payload.email = formData.email;
+            
+            const res = await fetch("/api/check-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+            const json = await res.json();
+            
+            if (json.message === "OTP verified successfully") {
+                setFieldVer((v) => ({ ...v, [type]: true }));
+                toast.success(type === "phone" ? "Phone verified!" : "Email verified!");
+                setStage("fields");
+            } else {
+                toast.error(json.message || "OTP verification failed");
+            }
+        } catch (error: any) {
+            toast.error(error.message || "OTP verification failed");
+        } finally {
+            if (type === "phone") {
+                setPhoneOtpLoading(false);
+            } else {
+                setEmailOtpLoading(false);
+            }
         }
     };
 
@@ -261,7 +323,7 @@ export const RegisterForm = ({
         setLoading(true);
 
         if (!fieldVer.phone || !fieldVer.email) {
-            setError("Please verify phone and email.");
+            toast.error("Please verify both phone and email before registering.");
             setLoading(false);
             return;
         }
@@ -455,15 +517,17 @@ export const RegisterForm = ({
                     {!fieldVer.phone && (
                         <button
                             type="button"
-                            className="absolute right-3 top-9 px-3 py-1 rounded text-white font-bold bg-[#34c3ec] hover:bg-[#34b2d7]"
+                            className="absolute right-3 top-9 px-3 py-1 rounded text-white font-bold bg-[#34c3ec] hover:bg-[#34b2d7] disabled:opacity-50"
                             style={{
-                                opacity: isValidPhone(formData.phone) && !phoneOtpSent ? 1 : 0.5,
+                                opacity: (isValidPhone(formData.phone) && !phoneOtpSent && !phoneVerifyLoading) ? 1 : 0.5,
                                 transition: "background 0.2s",
                                 zIndex: 2
                             }}
-                            disabled={!isValidPhone(formData.phone) || phoneOtpSent}
+                            disabled={!isValidPhone(formData.phone) || phoneOtpSent || phoneVerifyLoading}
                             onClick={() => handleSendOtp("phone")}
-                        >Verify</button>
+                        >
+                            {phoneVerifyLoading ? "Sending..." : "Verify"}
+                        </button>
                     )}
                     {fieldVer.phone && (
                         <button
@@ -495,7 +559,7 @@ export const RegisterForm = ({
                             }
                         </span>
                     )}
-                    {stage === "phone-otp" && !fieldVer.phone && (
+                    {phoneOtpSent && !fieldVer.phone && (
                         <div className="transition-all duration-300 mt-3">
                             <input
                                 type="text"
@@ -507,10 +571,12 @@ export const RegisterForm = ({
                             />
                             <button
                                 type="button"
-                                className="w-full mt-2 bg-[#34c3ec] hover:bg-[#34b2d7] text-white font-bold py-2 px-4 rounded"
-                                disabled={phoneOtp.length !== 6}
+                                className="w-full mt-2 bg-[#34c3ec] hover:bg-[#34b2d7] text-white font-bold py-2 px-4 rounded disabled:opacity-50"
+                                disabled={phoneOtp.length !== 6 || phoneOtpLoading}
                                 onClick={() => handleVerifyOtp("phone")}
-                            >Verify OTP</button>
+                            >
+                                {phoneOtpLoading ? "Verifying..." : "Verify OTP"}
+                            </button>
                         </div>
                     )}
                 </div>
@@ -537,15 +603,17 @@ export const RegisterForm = ({
                     {!fieldVer.email && (
                         <button
                             type="button"
-                            className="absolute right-3 top-9 px-3 py-1 rounded text-white font-bold bg-[#34c3ec] hover:bg-[#34b2d7]"
+                            className="absolute right-3 top-9 px-3 py-1 rounded text-white font-bold bg-[#34c3ec] hover:bg-[#34b2d7] disabled:opacity-50"
                             style={{
-                                opacity: isValidEmail(formData.email) && !emailOtpSent ? 1 : 0.5,
+                                opacity: (isValidEmail(formData.email) && !emailOtpSent && !emailVerifyLoading) ? 1 : 0.5,
                                 transition: "background 0.2s",
                                 zIndex: 2
                             }}
-                            disabled={!isValidEmail(formData.email) || emailOtpSent}
+                            disabled={!isValidEmail(formData.email) || emailOtpSent || emailVerifyLoading}
                             onClick={() => handleSendOtp("email")}
-                        >Verify</button>
+                        >
+                            {emailVerifyLoading ? "Sending..." : "Verify"}
+                        </button>
                     )}
                     {fieldVer.email && (
                         <button
@@ -577,7 +645,7 @@ export const RegisterForm = ({
                             }
                         </span>
                     )}
-                    {stage === "email-otp" && !fieldVer.email && (
+                    {emailOtpSent && !fieldVer.email && (
                         <div className="transition-all duration-300 mt-3">
                             <input
                                 type="text"
@@ -589,10 +657,12 @@ export const RegisterForm = ({
                             />
                             <button
                                 type="button"
-                                className="w-full mt-2 bg-[#34c3ec] hover:bg-[#34b2d7] text-white font-bold py-2 px-4 rounded"
-                                disabled={emailOtp.length !== 6}
+                                className="w-full mt-2 bg-[#34c3ec] hover:bg-[#34b2d7] text-white font-bold py-2 px-4 rounded disabled:opacity-50"
+                                disabled={emailOtp.length !== 6 || emailOtpLoading}
                                 onClick={() => handleVerifyOtp("email")}
-                            >Verify OTP</button>
+                            >
+                                {emailOtpLoading ? "Verifying..." : "Verify OTP"}
+                            </button>
                         </div>
                     )}
                 </div>
@@ -832,6 +902,7 @@ export const RegisterForm = ({
                     Login
                 </button>
             </p>
+            <Toaster position="top-right" />
         </form>
     );
 };
