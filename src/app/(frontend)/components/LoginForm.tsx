@@ -70,7 +70,7 @@ export const LoginForm = ({
             const res = await fetch(`/api/students?where[phone][equals]=${loginEmail}`);
             const data = await res.json();
             if (!data.docs || !data.docs[0]) {
-                setErrorMessage("No user with this phone number");
+                toast.error("No user with this phone number");
                 return;
             }
             loginEmail = data.docs[0].email;
@@ -88,7 +88,7 @@ export const LoginForm = ({
                 const userCheckData = await userCheckRes.json();
                 
                 if (!userCheckData.docs || userCheckData.docs.length === 0) {
-                    setErrorMessage("No university account found with this email. Please contact support.");
+                    toast.error("No university account found with this email. Please contact support.");
                     return;
                 }
             }
@@ -100,7 +100,7 @@ export const LoginForm = ({
             });
             if (res.ok) {
                 const json = await res.json();
-                setSuccessMessage("Login successful");
+                toast.success("Login successful! Redirecting...");
                 localStorage.setItem("token", json.token);
                 localStorage.setItem("userType", userType);
                 
@@ -137,10 +137,10 @@ export const LoginForm = ({
                 router.push("/dashboard");
             } else {
                 const errorData = await res.json();
-                setErrorMessage(errorData.message || "Invalid credentials");
+                toast.error(errorData.message || "Invalid credentials");
             }
         } catch (error: any) {
-            setErrorMessage("Error: " + error.message);
+            toast.error("Error: " + error.message);
         }
     };
 
@@ -160,15 +160,15 @@ export const LoginForm = ({
             });
             const json = await res.json();
             if (res.ok) {
-                setForgotSuccess(json.message || "OTP sent successfully.");
+                toast.success(json.message || "OTP sent successfully.");
                 setForgotOtpSent(true);
                 setForgotOtpTimer(OTP_TIMER);
                 setForgotStep("otp");
             } else {
-                setForgotError(json.message || "Failed to send OTP");
+                toast.error(json.message || "Failed to send OTP");
             }
         } catch (err: any) {
-            setForgotError(err.message || "Failed to send OTP");
+            toast.error(err.message || "Failed to send OTP");
         }
     };
 
@@ -193,12 +193,12 @@ export const LoginForm = ({
             const json = await res.json();
             if (json.message === "OTP verified successfully") {
                 setForgotStep("reset");
-                setForgotSuccess("OTP verified. Please enter new password.");
+                toast.success("OTP verified. Please enter new password.");
             } else {
-                setForgotError(json.message || "OTP verification failed");
+                toast.error(json.message || "OTP verification failed");
             }
         } catch (err: any) {
-            setForgotError(err.message || "OTP verification failed");
+            toast.error(err.message || "OTP verification failed");
         }
     };
 
@@ -218,13 +218,13 @@ export const LoginForm = ({
             });
             const json = await res.json();
             if (res.ok) {
-                setForgotSuccess("Password reset successfully! Please login.");
+                toast.success("Password reset successfully! Please login.");
                 setForgotStep("done");
             } else {
-                setForgotError(json.message || "Reset failed");
+                toast.error(json.message || "Reset failed");
             }
         } catch (err: any) {
-            setForgotError(err.message || "Reset failed");
+            toast.error(err.message || "Reset failed");
         }
     };
 

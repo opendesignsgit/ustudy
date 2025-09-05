@@ -282,7 +282,7 @@ export const RegisterForm = ({
             } else {
                 toast.error(json.message || "OTP verification failed");
             }
-        } catch (err: any) {
+        } catch (_error) {
             toast.error("Verification failed. Please try again.");
         } finally {
             if (type === "phone") {
