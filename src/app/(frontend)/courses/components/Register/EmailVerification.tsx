@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 
+const INTERNAL_API_TOKEN = "internal-api-secret-2024"; // Match the token from API
+
 type EmailVerificationProps = {
     email: string;
     onVerified: () => void;
@@ -67,7 +69,10 @@ export const EmailVerification = ({
             setIsSendingOtp(true);
             const response = await fetch('/api/send-otp', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${INTERNAL_API_TOKEN}`
+                },
                 body: JSON.stringify({ email }),
             });
 
@@ -90,7 +95,10 @@ export const EmailVerification = ({
             setIsSendingOtp(true);
             const response = await fetch('/api/send-otp', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${INTERNAL_API_TOKEN}`
+                },
                 body: JSON.stringify({ email }),
             });
 
@@ -119,7 +127,10 @@ export const EmailVerification = ({
         try {
             const response = await fetch('/api/check-otp', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${INTERNAL_API_TOKEN}`
+                },
                 body: JSON.stringify({
                     medium: 'email',
                     email,

@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 
+const INTERNAL_API_TOKEN = "internal-api-secret-2024"; // Match the token from API
+
 type PhoneVerificationProps = {
     phone: string;
     onVerified: () => void;
@@ -65,7 +67,10 @@ export const PhoneVerification = ({
             setIsSendingOtp(true);
             const response = await fetch('/api/send-otp', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${INTERNAL_API_TOKEN}`
+                },
                 body: JSON.stringify({ phone }),
             });
 
@@ -88,7 +93,10 @@ export const PhoneVerification = ({
             setIsSendingOtp(true);
             const response = await fetch('/api/send-otp', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${INTERNAL_API_TOKEN}`
+                },
                 body: JSON.stringify({ phone }),
             });
 
@@ -117,7 +125,10 @@ export const PhoneVerification = ({
         try {
             const response = await fetch('/api/check-otp', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${INTERNAL_API_TOKEN}`
+                },
                 body: JSON.stringify({
                     medium: 'phone',
                     phone,
