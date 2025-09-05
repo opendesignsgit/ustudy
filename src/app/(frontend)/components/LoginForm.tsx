@@ -23,6 +23,7 @@ export const LoginForm = ({
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
+    const [loading, setLoading] = useState(false);
     const [showForgot, setShowForgot] = useState(false);
     const [forgotStep, setForgotStep] = useState<"input" | "otp" | "reset" | "done">("input");
     const [forgotEmailOrPhone, setForgotEmailOrPhone] = useState("");
@@ -33,6 +34,7 @@ export const LoginForm = ({
     const [forgotNewPassword, setForgotNewPassword] = useState("");
     const [forgotError, setForgotError] = useState("");
     const [forgotSuccess, setForgotSuccess] = useState("");
+    const [forgotLoading, setForgotLoading] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -61,12 +63,14 @@ export const LoginForm = ({
         e.preventDefault();
         setErrorMessage("");
         setSuccessMessage("");
+        setLoading(true);
         let loginEmail = emailOrPhone.trim();
         if (/^[0-9]{10}$/.test(loginEmail)) {
             const res = await fetch(`/api/students?where[phone][equals]=${loginEmail}`);
             const data = await res.json();
             if (!data.docs || !data.docs[0]) {
                 setErrorMessage("No user with this phone number");
+                setLoading(false);
                 return;
             }
             loginEmail = data.docs[0].email;
@@ -96,12 +100,15 @@ export const LoginForm = ({
             const errorMessage = "Error: " + error.message;
             toast.error(errorMessage);
             setErrorMessage(errorMessage);
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleForgotSendOtp = async () => {
         setForgotError("");
         setForgotSuccess("");
+        setForgotLoading(true);
         const input = forgotEmailOrPhone.trim();
         const payload: any = {};
         if (/^[0-9]{10}$/.test(input)) payload.phone = input;
@@ -129,12 +136,15 @@ export const LoginForm = ({
             const errorMessage = err.message || "Failed to send OTP";
             toast.error(errorMessage);
             setForgotError(errorMessage);
+        } finally {
+            setForgotLoading(false);
         }
     };
 
     const handleForgotVerifyOtp = async () => {
         setForgotError("");
         setForgotSuccess("");
+        setForgotLoading(true);
         const input = forgotEmailOrPhone.trim();
         const payload: any = { otp: forgotOtp };
         if (/^[0-9]{10}$/.test(input)) {
@@ -164,12 +174,15 @@ export const LoginForm = ({
             const errorMessage = err.message || "OTP verification failed";
             toast.error(errorMessage);
             setForgotError(errorMessage);
+        } finally {
+            setForgotLoading(false);
         }
     };
 
     const handleForgotResetPassword = async () => {
         setForgotError("");
         setForgotSuccess("");
+        setForgotLoading(true);
         const input = forgotEmailOrPhone.trim();
         const payload: any = { password: forgotNewPassword };
         if (/^[0-9]{10}$/.test(input)) payload.phone = input;
@@ -195,6 +208,8 @@ export const LoginForm = ({
             const errorMessage = err.message || "Reset failed";
             toast.error(errorMessage);
             setForgotError(errorMessage);
+        } finally {
+            setForgotLoading(false);
         }
     };
 
@@ -223,9 +238,10 @@ export const LoginForm = ({
             </div>
             <button
                 type="submit"
-                className="w-full bg-[#34c3ec] hover:bg-[#34b2d7] text-white p-2 rounded"
+                disabled={loading}
+                className="w-full bg-[#34c3ec] hover:bg-[#34b2d7] text-white p-2 rounded disabled:opacity-50"
             >
-                Login
+                {loading ? "Logging in..." : "Login"}
             </button>
             {showForgotPassword && (
                 <p className="mt-2 text-right">
@@ -266,12 +282,13 @@ export const LoginForm = ({
                                     className="w-full border rounded p-2 mb-3 text-black"
                                 />
                                 <button
-                                    className="w-full mb-2 bg-[#34c3ec] text-white p-2 rounded"
+                                    className="w-full mb-2 bg-[#34c3ec] text-white p-2 rounded disabled:opacity-50"
                                     onClick={handleForgotSendOtp}
-                                    disabled={forgotOtpSent && forgotOtpTimer > 0}
+                                    disabled={(forgotOtpSent && forgotOtpTimer > 0) || forgotLoading}
                                     type="button"
                                 >
-                                    {forgotOtpSent && forgotOtpTimer > 0
+                                    {forgotLoading ? "Sending..." : 
+                                     forgotOtpSent && forgotOtpTimer > 0
                                         ? `Resend in ${Math.floor(forgotOtpTimer / 60)}:${(forgotOtpTimer % 60).toString().padStart(2, "0")}`
                                         : "Send OTP"}
                                 </button>
@@ -288,17 +305,19 @@ export const LoginForm = ({
                                     className="w-full border rounded p-2 mb-3 text-black"
                                 />
                                 <button
-                                    className="w-full mb-2 bg-[#34c3ec] text-white p-2 rounded"
+                                    className="w-full mb-2 bg-[#34c3ec] text-white p-2 rounded disabled:opacity-50"
                                     type="button"
+                                    disabled={forgotLoading}
                                     onClick={handleForgotVerifyOtp}
-                                >Verify OTP</button>
+                                >{forgotLoading ? "Verifying..." : "Verify OTP"}</button>
                                 <button
-                                    className="text-xs underline text-[#34c3ec]"
+                                    className="text-xs underline text-[#34c3ec] disabled:opacity-50"
                                     type="button"
-                                    disabled={forgotOtpTimer > 0}
+                                    disabled={forgotOtpTimer > 0 || forgotLoading}
                                     onClick={handleForgotSendOtp}
                                 >
-                                    {forgotOtpTimer > 0
+                                    {forgotLoading ? "Sending..." :
+                                     forgotOtpTimer > 0
                                         ? `Resend in ${Math.floor(forgotOtpTimer / 60)}:${(forgotOtpTimer % 60).toString().padStart(2, "0")}`
                                         : "Resend OTP"}
                                 </button>
@@ -314,10 +333,11 @@ export const LoginForm = ({
                                     className="w-full border rounded p-2 mb-3 text-black"
                                 />
                                 <button
-                                    className="w-full bg-[#34c3ec] text-white p-2 rounded"
+                                    className="w-full bg-[#34c3ec] text-white p-2 rounded disabled:opacity-50"
                                     type="button"
+                                    disabled={forgotLoading}
                                     onClick={handleForgotResetPassword}
-                                >Reset Password</button>
+                                >{forgotLoading ? "Resetting..." : "Reset Password"}</button>
                             </>
                         )}
                         {forgotStep === "done" && (
