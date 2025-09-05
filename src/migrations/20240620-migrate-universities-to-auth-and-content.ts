@@ -72,18 +72,19 @@ export async function up({ payload }: MigrateUpArgs): Promise<void> {
   `);
 
   // Step 7: Assign default template to existing universities
-  const defaultTemplate = await payload.find({
-    collection: 'university-templates',
-    limit: 1
-  });
+  // TODO: Fix collection slug reference
+  // const defaultTemplate = await payload.find({
+  //   collection: 'university-templates',
+  //   limit: 1
+  // });
 
-  if (defaultTemplate.docs.length > 0) {
-    await payload.db.drizzle.execute(sql`
-      UPDATE "universities" 
-      SET "template" = ${defaultTemplate.docs[0].id}
-      WHERE "template" IS NULL;
-    `);
-  }
+  // if (defaultTemplate.docs.length > 0) {
+  //   await payload.db.drizzle.execute(sql`
+  //     UPDATE "universities" 
+  //     SET "template" = ${defaultTemplate.docs[0].id}
+  //     WHERE "template" IS NULL;
+  //   `);
+  // }
 
   // Step 8: Now make template required
   await payload.db.drizzle.execute(sql`
