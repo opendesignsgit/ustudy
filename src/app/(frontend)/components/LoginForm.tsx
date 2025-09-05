@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "@/utilities/toast";
 
 const THEME_COLOR = "#34c3ec";
 const OTP_TIMER = 120;
