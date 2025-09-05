@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
+import toast from 'react-hot-toast';
 
 type PhoneVerificationProps = {
     phone: string;
@@ -68,14 +69,19 @@ export const PhoneVerification = ({
             }
 
             setTimer(120);
+            toast.success('OTP resent to your phone!');
         } catch (err: any) {
-            setError(err.message || 'Failed to resend OTP');
+            const errorMsg = err.message || 'Failed to resend OTP';
+            setError(errorMsg);
+            toast.error(errorMsg);
         }
     };
 
     const handleVerify = async () => {
         if (otp.length !== 6) {
-            setError('Please enter a 6-digit OTP');
+            const errorMsg = 'Please enter a 6-digit OTP';
+            setError(errorMsg);
+            toast.error(errorMsg);
             return;
         }
 
@@ -97,9 +103,12 @@ export const PhoneVerification = ({
                 throw new Error('Invalid OTP');
             }
 
+            toast.success('Phone verified successfully!');
             onVerified(); // This moves to email verification
         } catch (err: any) {
-            setError(err.message || 'Verification failed');
+            const errorMsg = err.message || 'Verification failed';
+            setError(errorMsg);
+            toast.error(errorMsg);
         } finally {
             setIsVerifying(false);
         }
