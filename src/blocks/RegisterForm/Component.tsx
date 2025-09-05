@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import IntlTelInput from 'react-intl-tel-input';
 import 'react-intl-tel-input/dist/main.css';
 import { LoginFormModal } from '@/components/LoginFormModal';
+
+const INTERNAL_API_TOKEN = "internal-api-secret-2024"; // Match the token from API
 // import { FaRegClock, FaRupeeSign } from 'react-icons/fa';
 // import { useDocumentInfo } from '@payloadcms/ui'
 
@@ -282,6 +284,7 @@ export const RegisterFormBlock: React.FC<Props> = ({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${INTERNAL_API_TOKEN}`
         },
         body: JSON.stringify({ phone }),
       });
@@ -315,6 +318,7 @@ export const RegisterFormBlock: React.FC<Props> = ({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${INTERNAL_API_TOKEN}`
         },
         body: JSON.stringify({ email }),
       });
@@ -370,7 +374,10 @@ export const RegisterFormBlock: React.FC<Props> = ({
     try {
       const response = await fetch('/api/check-otp', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${INTERNAL_API_TOKEN}`
+        },
         body: JSON.stringify(payload),
       });
       const result = await response.json();

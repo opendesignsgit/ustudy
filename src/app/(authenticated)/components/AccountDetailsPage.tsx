@@ -5,6 +5,7 @@ import { useAuth } from '@/providers/Auth';
 
 const THEME_COLOR = "#34c3ec";
 const OTP_TIMER = 120;
+const INTERNAL_API_TOKEN = "internal-api-secret-2024"; // Match the token from API
 
 export default function AccountDetails() {
   const { user, refreshUser, updateUser } = useAuth();
@@ -141,7 +142,11 @@ export default function AccountDetails() {
       setPhoneOtpTimer(OTP_TIMER);
       await fetch("/api/send-otp", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
+        headers: { 
+          "Content-Type": "application/json", 
+          "Authorization": `Bearer ${INTERNAL_API_TOKEN}`,
+          "X-User-Token": localStorage.getItem('token') || ""
+        },
         body: JSON.stringify({ phone: formData.phone, purpose: "verification" }),
       });
     } else {
@@ -157,7 +162,11 @@ export default function AccountDetails() {
       setEmailOtpTimer(OTP_TIMER);
       await fetch("/api/send-otp", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
+        headers: { 
+          "Content-Type": "application/json", 
+          "Authorization": `Bearer ${INTERNAL_API_TOKEN}`,
+          "X-User-Token": localStorage.getItem('token') || ""
+        },
         body: JSON.stringify({ email: formData.email, purpose: "verification" }),
       });
     }
@@ -172,7 +181,11 @@ export default function AccountDetails() {
     else payload.email = formData.email;
     const res = await fetch("/api/check-otp", {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
+      headers: { 
+        "Content-Type": "application/json", 
+        "Authorization": `Bearer ${INTERNAL_API_TOKEN}`,
+        "X-User-Token": localStorage.getItem('token') || ""
+      },
       body: JSON.stringify(payload),
     });
     const json = await res.json();
