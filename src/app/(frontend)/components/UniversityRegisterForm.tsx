@@ -29,7 +29,7 @@ export const UniversityRegisterForm = ({ onToggle }: { onToggle: () => void }) =
         setLoading(true);
 
         try {
-            await register(formData, 'university');
+            await register(formData);
             setSuccess("Registration successful! Redirecting to dashboard...");
             router.push("/university-dashboard");
         } catch (err: any) {

@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "@/utilities/toast";
 
 const THEME_COLOR = "#34c3ec";
 const OTP_TIMER = 120;
@@ -78,6 +79,7 @@ export const LoginForm = ({
             });
             if (res.ok) {
                 const json = await res.json();
+                toast.success("Login successful! Welcome back!");
                 setSuccessMessage("Login successful");
                 localStorage.setItem("token", json.token);
                 localStorage.setItem("user", JSON.stringify(json.user));
@@ -86,10 +88,14 @@ export const LoginForm = ({
                 router.push("/dashboard");
             } else {
                 const errorData = await res.json();
-                setErrorMessage(errorData.message || "Invalid credentials");
+                const errorMessage = errorData.message || "Invalid credentials";
+                toast.error(errorMessage);
+                setErrorMessage(errorMessage);
             }
         } catch (error: any) {
-            setErrorMessage("Error: " + error.message);
+            const errorMessage = "Error: " + error.message;
+            toast.error(errorMessage);
+            setErrorMessage(errorMessage);
         }
     };
 
@@ -109,15 +115,20 @@ export const LoginForm = ({
             });
             const json = await res.json();
             if (res.ok) {
+                toast.success("OTP sent successfully to your email/phone.");
                 setForgotSuccess(json.message || "OTP sent successfully.");
                 setForgotOtpSent(true);
                 setForgotOtpTimer(OTP_TIMER);
                 setForgotStep("otp");
             } else {
-                setForgotError(json.message || "Failed to send OTP");
+                const errorMessage = json.message || "Failed to send OTP";
+                toast.error(errorMessage);
+                setForgotError(errorMessage);
             }
         } catch (err: any) {
-            setForgotError(err.message || "Failed to send OTP");
+            const errorMessage = err.message || "Failed to send OTP";
+            toast.error(errorMessage);
+            setForgotError(errorMessage);
         }
     };
 
@@ -141,13 +152,18 @@ export const LoginForm = ({
             });
             const json = await res.json();
             if (json.message === "OTP verified successfully") {
+                toast.success("OTP verified successfully!");
                 setForgotStep("reset");
                 setForgotSuccess("OTP verified. Please enter new password.");
             } else {
-                setForgotError(json.message || "OTP verification failed");
+                const errorMessage = json.message || "OTP verification failed";
+                toast.error(errorMessage);
+                setForgotError(errorMessage);
             }
         } catch (err: any) {
-            setForgotError(err.message || "OTP verification failed");
+            const errorMessage = err.message || "OTP verification failed";
+            toast.error(errorMessage);
+            setForgotError(errorMessage);
         }
     };
 
@@ -167,13 +183,18 @@ export const LoginForm = ({
             });
             const json = await res.json();
             if (res.ok) {
+                toast.success("Password reset successfully! You can now login with your new password.");
                 setForgotSuccess("Password reset successfully! Please login.");
                 setForgotStep("done");
             } else {
-                setForgotError(json.message || "Reset failed");
+                const errorMessage = json.message || "Reset failed";
+                toast.error(errorMessage);
+                setForgotError(errorMessage);
             }
         } catch (err: any) {
-            setForgotError(err.message || "Reset failed");
+            const errorMessage = err.message || "Reset failed";
+            toast.error(errorMessage);
+            setForgotError(errorMessage);
         }
     };
 

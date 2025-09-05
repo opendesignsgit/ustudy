@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { LoginForm } from "./LoginForm";
+import { toast } from "@/utilities/toast";
 
 const THEME_COLOR = "#34c3ec";
 const OTP_TIMER = 120;
@@ -177,6 +178,7 @@ export const RegisterForm = ({ onToggle }: { onToggle: () => void }) => {
         setLoading(true);
 
         if (!fieldVer.phone || !fieldVer.email) {
+            toast.error("Please verify both phone and email before registering.");
             setError("Please verify phone and email.");
             setLoading(false);
             return;
@@ -199,6 +201,7 @@ export const RegisterForm = ({ onToggle }: { onToggle: () => void }) => {
                 body: JSON.stringify(sendData),
             });
             if (response.ok) {
+                toast.success("Registration successful! Welcome to UStudy!");
                 setSuccess("Registration successful! Logging you in...");
 
                 // Send Welcome Email
@@ -236,10 +239,14 @@ export const RegisterForm = ({ onToggle }: { onToggle: () => void }) => {
                 }
             } else {
                 const errorData = await response.json();
-                setError(errorData.message || "Failed to register");
+                const errorMessage = errorData.message || "Failed to register";
+                toast.error(errorMessage);
+                setError(errorMessage);
             }
         } catch (err: any) {
-            setError(err.message || "Failed to register");
+            const errorMessage = err.message || "Failed to register";
+            toast.error(errorMessage);
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }

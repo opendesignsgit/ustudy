@@ -3,6 +3,28 @@ import { sendOTPEmail } from '@/utilities/sendOTPEmail';
 import { sendOTPPhone } from '@/utilities/sendOTPPhone';
 import { generateAndStoreOTP } from '@/utilities/fileStore';
 
+// Simple rate limiting storage (in production, use Redis or similar)
+const rateLimitStore: { [key: string]: { count: number; resetTime: number } } = {};
+const RATE_LIMIT_MAX_ATTEMPTS = 3;
+const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
+
+const checkRateLimit = (identifier: string): boolean => {
+  const now = Date.now();
+  const entry = rateLimitStore[identifier];
+  
+  if (!entry || now > entry.resetTime) {
+    rateLimitStore[identifier] = { count: 1, resetTime: now + RATE_LIMIT_WINDOW };
+    return true;
+  }
+  
+  if (entry.count >= RATE_LIMIT_MAX_ATTEMPTS) {
+    return false;
+  }
+  
+  entry.count++;
+  return true;
+};
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
@@ -12,6 +34,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (!email && !phone) {
     return res.status(400).json({ message: 'Email or phone is required' });
+  }
+
+  // Basic validation
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ message: 'Invalid email format' });
+  }
+
+  if (phone && !/^[6-9][0-9]{9}$/.test(phone)) {
+    return res.status(400).json({ message: 'Invalid phone number format' });
+  }
+
+  // Rate limiting
+  const identifier = email || phone;
+  if (!checkRateLimit(identifier)) {
+    return res.status(429).json({ 
+      message: 'Too many OTP requests. Please try again after 15 minutes.' 
+    });
   }
 
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
