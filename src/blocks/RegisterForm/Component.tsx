@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import IntlTelInput from 'react-intl-tel-input';
 import 'react-intl-tel-input/dist/main.css';
 import { LoginFormModal } from '@/components/LoginFormModal';
+import toast, { Toaster } from 'react-hot-toast';
 // import { FaRegClock, FaRupeeSign } from 'react-icons/fa';
 // import { useDocumentInfo } from '@payloadcms/ui'
 
@@ -387,8 +388,14 @@ export const RegisterFormBlock: React.FC<Props> = ({
           localStorage.setItem('is_email_verified', '1');
         }
         // Optionally, display a success message.
+        if (medium === 'phone') {
+          toast.success('Phone verified successfully!');
+        } else {
+          toast.success('Email verified successfully!');
+        }
       } else {
         // Handle error – show error message and reset verification if necessary.
+        toast.error(result.message || 'OTP verification failed');
         if (medium === 'phone') {
           setIsPhoneVerified(false);
           localStorage.setItem('is_phone_verified', '0');
@@ -399,6 +406,7 @@ export const RegisterFormBlock: React.FC<Props> = ({
       }
     } catch (error: any) {
       console.error('Error verifying OTP:', error.message);
+      toast.error('Error verifying OTP');
     }
   };
 
@@ -409,10 +417,12 @@ export const RegisterFormBlock: React.FC<Props> = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isPhoneVerified && selectedCountry === 'in') {
+      toast.error('Please verify your phone number before enrolling.');
       setErrorMessage('Please verify your phone number before enrolling.');
       return;
     }
     if (!isEmailVerified) {
+      toast.error('Please verify your email before enrolling.');
       setErrorMessage('Please verify your email before enrolling.');
       return;
     }
@@ -852,6 +862,7 @@ export const RegisterFormBlock: React.FC<Props> = ({
         onLogin={handleLogin}
         email={formData.email}
       />
+      <Toaster position="top-right" />
     </div>
   );
 };

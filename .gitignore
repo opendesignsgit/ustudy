@@ -11,3 +11,4 @@ node_modules
 public/robots.txt
 public/sitemap*.xml
 echo "*.zip" >> .gitignore
+test-otp-changes.html
