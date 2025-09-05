@@ -65,7 +65,6 @@
     "react-countup": "^6.5.3",
     "react-dom": "^19.0.0",
     "react-hook-form": "7.45.4",
-    "react-hot-toast": "^2.6.0",
     "react-intl-tel-input": "^8.2.0",
     "react-slick": "^0.30.3",
     "sass": "^1.85.1",
