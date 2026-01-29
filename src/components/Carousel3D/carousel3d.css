@@ -215,14 +215,20 @@
     margin-top: -175px;
   }
 
-  .carousel-3d-item.left-1,
-  .carousel-3d-item.right-1 {
-    transform: translateX(±300px) translateZ(-50px) rotateY(±25deg) scale(0.85);
+  .carousel-3d-item.left-1 {
+    transform: translateX(-300px) translateZ(-50px) rotateY(25deg) scale(0.85);
   }
 
-  .carousel-3d-item.left-2,
+  .carousel-3d-item.right-1 {
+    transform: translateX(300px) translateZ(-50px) rotateY(-25deg) scale(0.85);
+  }
+
+  .carousel-3d-item.left-2 {
+    transform: translateX(-450px) translateZ(-100px) rotateY(35deg) scale(0.7);
+  }
+
   .carousel-3d-item.right-2 {
-    transform: translateX(±450px) translateZ(-100px) rotateY(±35deg) scale(0.7);
+    transform: translateX(450px) translateZ(-100px) rotateY(-35deg) scale(0.7);
   }
 
   .carousel-3d-item.left-3,
@@ -248,9 +254,12 @@
     transform: translateX(0) translateZ(50px) scale(1.1);
   }
 
-  .carousel-3d-item.left-1,
+  .carousel-3d-item.left-1 {
+    transform: translateX(-220px) translateZ(-30px) rotateY(20deg) scale(0.8);
+  }
+
   .carousel-3d-item.right-1 {
-    transform: translateX(±220px) translateZ(-30px) rotateY(±20deg) scale(0.8);
+    transform: translateX(220px) translateZ(-30px) rotateY(-20deg) scale(0.8);
   }
 
   .carousel-3d-item.left-2,
@@ -284,9 +293,12 @@
     transform: translateX(0) translateZ(30px) scale(1);
   }
 
-  .carousel-3d-item.left-1,
+  .carousel-3d-item.left-1 {
+    transform: translateX(-190px) translateZ(-20px) rotateY(15deg) scale(0.75);
+  }
+
   .carousel-3d-item.right-1 {
-    transform: translateX(±190px) translateZ(-20px) rotateY(±15deg) scale(0.75);
+    transform: translateX(190px) translateZ(-20px) rotateY(-15deg) scale(0.75);
   }
 
   .carousel-3d-controls {

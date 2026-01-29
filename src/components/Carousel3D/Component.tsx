@@ -3,8 +3,13 @@
 import React, { useEffect, useRef } from 'react'
 import './carousel3d.css'
 
-// Declare jQuery for TypeScript
-declare const $: any
+// Extend Window interface for jQuery
+declare global {
+  interface Window {
+    $: any
+    jQuery: any
+  }
+}
 
 export interface Carousel3DItem {
   id: number
@@ -38,8 +43,8 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
           // Import jQuery
           const jQuery = await import('jquery')
           // Make jQuery available globally
-          ;(window as any).$ = jQuery.default
-          ;(window as any).jQuery = jQuery.default
+          ;(window as any).$ = jQuery
+          ;(window as any).jQuery = jQuery
 
           initializeCarousel()
         } catch (error) {
@@ -58,7 +63,7 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
   }, [])
 
   const initializeCarousel = () => {
-    if (!window.$ || !carouselRef.current) return
+    if (!window.$ || !carouselRef.current || items.length === 0) return
 
     const $ = window.$
 

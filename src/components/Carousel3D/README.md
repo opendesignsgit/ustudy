@@ -142,7 +142,7 @@ public/carousel-demo/
 ### 3D Transform Logic
 
 The carousel uses CSS 3D transforms to create depth and perspective:
-- `perspective: 1200px` on the container creates the 3D viewing space
+- `perspective: 1000px` on the container creates the 3D viewing space
 - `transform-style: preserve-3d` maintains 3D positioning of child elements
 - Individual items use `translateX`, `translateZ`, `rotateY`, and `scale` transforms
 - Position is calculated based on distance from center
