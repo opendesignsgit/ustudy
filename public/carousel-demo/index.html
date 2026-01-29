@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Carousel Center Mode Demo - jQuery, HTML, CSS</title>
+    <style>
+        /* General styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        /* 3D Carousel styles */
+        .carousel-3d-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            perspective: 1200px;
+            margin: 50px 0;
+        }
+
+        .carousel-3d-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+
+        .carousel-3d-item {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 300px;
+            height: 400px;
+            margin-left: -150px;
+            margin-top: -200px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .carousel-3d-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .carousel-3d-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Center item */
+        .carousel-3d-item.center {
+            transform: translateX(0) translateZ(150px) scale(1.3);
+            z-index: 10;
+            opacity: 1;
+            filter: brightness(1.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Left positions */
+        .carousel-3d-item.left-1 {
+            transform: translateX(-400px) translateZ(-80px) rotateY(30deg) scale(0.9);
+            z-index: 5;
+            opacity: 0.8;
+            filter: brightness(0.85);
+        }
+
+        .carousel-3d-item.left-2 {
+            transform: translateX(-600px) translateZ(-150px) rotateY(40deg) scale(0.75);
+            z-index: 3;
+            opacity: 0.6;
+            filter: brightness(0.7);
+        }
+
+        .carousel-3d-item.left-3 {
+            transform: translateX(-750px) translateZ(-200px) rotateY(50deg) scale(0.6);
+            z-index: 1;
+            opacity: 0.3;
+            filter: brightness(0.5);
+        }
+
+        /* Right positions */
+        .carousel-3d-item.right-1 {
+            transform: translateX(400px) translateZ(-80px) rotateY(-30deg) scale(0.9);
+            z-index: 5;
+            opacity: 0.8;
+            filter: brightness(0.85);
+        }
+
+        .carousel-3d-item.right-2 {
+            transform: translateX(600px) translateZ(-150px) rotateY(-40deg) scale(0.75);
+            z-index: 3;
+            opacity: 0.6;
+            filter: brightness(0.7);
+        }
+
+        .carousel-3d-item.right-3 {
+            transform: translateX(750px) translateZ(-200px) rotateY(-50deg) scale(0.6);
+            z-index: 1;
+            opacity: 0.3;
+            filter: brightness(0.5);
+        }
+
+        /* Content overlay */
+        .carousel-3d-item-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 25px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-3d-item.center .carousel-3d-item-content {
+            transform: translateY(0);
+        }
+
+        .carousel-3d-item-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        .carousel-3d-item-description {
+            font-size: 15px;
+            opacity: 0.95;
+            line-height: 1.4;
+        }
+
+        /* Navigation controls */
+        .carousel-3d-controls {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .carousel-3d-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #667eea;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            pointer-events: all;
+        }
+
+        .carousel-3d-btn:hover {
+            background: #fff;
+            transform: scale(1.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .carousel-3d-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Indicators */
+        .carousel-3d-indicators {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 20;
+        }
+
+        .carousel-3d-indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-3d-indicator.active {
+            background: white;
+            transform: scale(1.4);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+        .carousel-3d-indicator:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Features section */
+        .features {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-top: 80px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .features h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 2em;
+        }
+
+        .features ul {
+            list-style: none;
+        }
+
+        .features li {
+            padding: 12px 0;
+            font-size: 1.1em;
+            color: #333;
+            border-bottom: 1px solid #eee;
+        }
+
+        .features li:last-child {
+            border-bottom: none;
+        }
+
+        .features li strong {
+            color: #667eea;
+        }
+
+        .check-icon {
+            color: #4CAF50;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-3d-container {
+                height: 400px;
+            }
+
+            .carousel-3d-item {
+                width: 220px;
+                height: 320px;
+                margin-left: -110px;
+                margin-top: -160px;
+            }
+
+            .carousel-3d-item.center {
+                transform: translateX(0) translateZ(80px) scale(1.15);
+            }
+
+            .carousel-3d-item.left-1,
+            .carousel-3d-item.right-1 {
+                transform: translateX(±250px) translateZ(-50px) rotateY(±25deg) scale(0.85);
+            }
+
+            .carousel-3d-item.left-2,
+            .carousel-3d-item.right-2,
+            .carousel-3d-item.left-3,
+            .carousel-3d-item.right-3 {
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            .carousel-3d-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 24px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="header">
+            <h1>🎡 3D Carousel Center Mode</h1>
+            <p>Built with jQuery, HTML & CSS</p>
+        </div>
+
+        <div class="carousel-3d-container" id="carousel3d">
+            <div class="carousel-3d-wrapper">
+                <div class="carousel-3d-item center" data-index="0">
+                    <img src="../media/home/hstuwwImg.jpg" alt="University 1" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22%3E%3Crect fill=%22%23667eea%22 width=%22300%22 height=%22400%22/%3E%3Ctext fill=%22%23fff%22 font-size=%2224%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22%3EUniversity 1%3C/text%3E%3C/svg%3E'">
+                    <div class="carousel-3d-item-content">
+                        <div class="carousel-3d-item-title">Harvard University</div>
+                        <div class="carousel-3d-item-description">Excellence in education and research</div>
+                    </div>
+                </div>
+                <div class="carousel-3d-item right-1" data-index="1">
+                    <img src="../media/home/h-bac-singapore-img.jpg" alt="University 2" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22%3E%3Crect fill=%22%23764ba2%22 width=%22300%22 height=%22400%22/%3E%3Ctext fill=%22%23fff%22 font-size=%2224%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22%3EUniversity 2%3C/text%3E%3C/svg%3E'">
+                    <div class="carousel-3d-item-content">
+                        <div class="carousel-3d-item-title">MIT</div>
+                        <div class="carousel-3d-item-description">Innovation and technology leadership</div>
+                    </div>
+                </div>
+                <div class="carousel-3d-item right-2" data-index="2">
+                    <img src="../media/home/h-veritas-malaysia-img.jpg" alt="University 3" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22%3E%3Crect fill=%22%23ff6b6b%22 width=%22300%22 height=%22400%22/%3E%3Ctext fill=%22%23fff%22 font-size=%2224%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22%3EUniversity 3%3C/text%3E%3C/svg%3E'">
+                    <div class="carousel-3d-item-content">
+                        <div class="carousel-3d-item-title">Stanford University</div>
+                        <div class="carousel-3d-item-description">Leading research and entrepreneurship</div>
+                    </div>
+                </div>
+                <div class="carousel-3d-item right-3" data-index="3">
+                    <img src="../media/home/hstuwwImg.jpg" alt="University 4" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22%3E%3Crect fill=%22%234ecdc4%22 width=%22300%22 height=%22400%22/%3E%3Ctext fill=%22%23fff%22 font-size=%2224%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22%3EUniversity 4%3C/text%3E%3C/svg%3E'">
+                    <div class="carousel-3d-item-content">
+                        <div class="carousel-3d-item-title">Oxford University</div>
+                        <div class="carousel-3d-item-description">Historic excellence in education</div>
+                    </div>
+                </div>
+                <div class="carousel-3d-item left-3" data-index="4">
+                    <img src="../media/home/h-bac-singapore-img.jpg" alt="University 5" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22%3E%3Crect fill=%22%23f9ca24%22 width=%22300%22 height=%22400%22/%3E%3Ctext fill=%22%23fff%22 font-size=%2224%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22%3EUniversity 5%3C/text%3E%3C/svg%3E'">
+                    <div class="carousel-3d-item-content">
+                        <div class="carousel-3d-item-title">Cambridge University</div>
+                        <div class="carousel-3d-item-description">World-class academic programs</div>
+                    </div>
+                </div>
+                <div class="carousel-3d-item left-2" data-index="5">
+                    <img src="../media/home/h-veritas-malaysia-img.jpg" alt="University 6" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22%3E%3Crect fill=%22%236c5ce7%22 width=%22300%22 height=%22400%22/%3E%3Ctext fill=%22%23fff%22 font-size=%2224%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22%3EUniversity 6%3C/text%3E%3C/svg%3E'">
+                    <div class="carousel-3d-item-content">
+                        <div class="carousel-3d-item-title">Yale University</div>
+                        <div class="carousel-3d-item-description">Liberal arts and professional education</div>
+                    </div>
+                </div>
+                <div class="carousel-3d-item left-1" data-index="6">
+                    <img src="../media/home/hstuwwImg.jpg" alt="University 7" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22%3E%3Crect fill=%22%2300b894%22 width=%22300%22 height=%22400%22/%3E%3Ctext fill=%22%23fff%22 font-size=%2224%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22%3EUniversity 7%3C/text%3E%3C/svg%3E'">
+                    <div class="carousel-3d-item-content">
+                        <div class="carousel-3d-item-title">Princeton University</div>
+                        <div class="carousel-3d-item-description">Academic excellence and innovation</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-3d-controls">
+                <button class="carousel-3d-btn" id="prevBtn">‹</button>
+                <button class="carousel-3d-btn" id="nextBtn">›</button>
+            </div>
+
+            <div class="carousel-3d-indicators" id="indicators">
+                <button class="carousel-3d-indicator active" data-index="0"></button>
+                <button class="carousel-3d-indicator" data-index="1"></button>
+                <button class="carousel-3d-indicator" data-index="2"></button>
+                <button class="carousel-3d-indicator" data-index="3"></button>
+                <button class="carousel-3d-indicator" data-index="4"></button>
+                <button class="carousel-3d-indicator" data-index="5"></button>
+                <button class="carousel-3d-indicator" data-index="6"></button>
+            </div>
+        </div>
+
+        <div class="features">
+            <h2>✨ Features</h2>
+            <ul>
+                <li><span class="check-icon">✓</span><strong>3D Transform Effects:</strong> Items rotate and scale in 3D space with perspective</li>
+                <li><span class="check-icon">✓</span><strong>Center Mode:</strong> The center item is highlighted and scaled larger for focus</li>
+                <li><span class="check-icon">✓</span><strong>jQuery Powered:</strong> Smooth animations and interactions powered by jQuery</li>
+                <li><span class="check-icon">✓</span><strong>Auto-play:</strong> Automatically cycles through items every 4 seconds</li>
+                <li><span class="check-icon">✓</span><strong>Navigation Controls:</strong> Previous/Next buttons and dot indicators</li>
+                <li><span class="check-icon">✓</span><strong>Responsive Design:</strong> Adapts seamlessly to different screen sizes</li>
+                <li><span class="check-icon">✓</span><strong>Click to Focus:</strong> Click any visible item to bring it to center</li>
+                <li><span class="check-icon">✓</span><strong>Smooth Transitions:</strong> Cubic-bezier easing for natural movement</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="jquery.min.js"></script>
+    
+    <!-- Carousel jQuery Script -->
+    <script>
+        $(document).ready(function() {
+            let currentIndex = 0;
+            const totalItems = 7;
+            let autoPlayTimer;
+
+            // Position classes mapping
+            const positions = ['center', 'right-1', 'right-2', 'right-3', 'left-3', 'left-2', 'left-1'];
+
+            function updateCarousel(centerIdx) {
+                $('.carousel-3d-item').each(function() {
+                    const itemIndex = parseInt($(this).data('index'));
+                    let position = itemIndex - centerIdx;
+
+                    // Wrap position
+                    if (position > totalItems / 2) {
+                        position -= totalItems;
+                    } else if (position < -totalItems / 2) {
+                        position += totalItems;
+                    }
+
+                    // Remove all position classes
+                    $(this).removeClass('center left-1 left-2 left-3 right-1 right-2 right-3');
+
+                    // Add appropriate class
+                    if (position === 0) {
+                        $(this).addClass('center');
+                    } else if (position === 1) {
+                        $(this).addClass('right-1');
+                    } else if (position === 2) {
+                        $(this).addClass('right-2');
+                    } else if (position >= 3) {
+                        $(this).addClass('right-3');
+                    } else if (position === -1) {
+                        $(this).addClass('left-1');
+                    } else if (position === -2) {
+                        $(this).addClass('left-2');
+                    } else if (position <= -3) {
+                        $(this).addClass('left-3');
+                    }
+                });
+
+                // Update indicators
+                $('.carousel-3d-indicator').removeClass('active');
+                $('.carousel-3d-indicator').eq(centerIdx).addClass('active');
+            }
+
+            function rotateCarousel(direction) {
+                if (direction === 'next') {
+                    currentIndex = (currentIndex + 1) % totalItems;
+                } else {
+                    currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+                }
+                updateCarousel(currentIndex);
+            }
+
+            function startAutoPlay() {
+                autoPlayTimer = setInterval(function() {
+                    rotateCarousel('next');
+                }, 4000);
+            }
+
+            function resetAutoPlay() {
+                clearInterval(autoPlayTimer);
+                startAutoPlay();
+            }
+
+            // Next button
+            $('#nextBtn').on('click', function() {
+                rotateCarousel('next');
+                resetAutoPlay();
+            });
+
+            // Previous button
+            $('#prevBtn').on('click', function() {
+                rotateCarousel('prev');
+                resetAutoPlay();
+            });
+
+            // Click on items
+            $('.carousel-3d-item').on('click', function() {
+                const clickedIndex = parseInt($(this).data('index'));
+                if (clickedIndex !== currentIndex) {
+                    currentIndex = clickedIndex;
+                    updateCarousel(currentIndex);
+                    resetAutoPlay();
+                }
+            });
+
+            // Indicator clicks
+            $('.carousel-3d-indicator').on('click', function() {
+                const clickedIndex = parseInt($(this).data('index'));
+                currentIndex = clickedIndex;
+                updateCarousel(currentIndex);
+                resetAutoPlay();
+            });
+
+            // Start auto-play
+            startAutoPlay();
+        });
+    </script>
+</body>
+</html>
